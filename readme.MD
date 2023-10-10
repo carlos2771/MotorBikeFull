@@ -6,3 +6,4 @@
 // la mayoria de middlewares estan en app.js 
 
 // token: es un string que recibe el frontend y cuando el quiera pedir algo tiene que devolverme ese string para validar que tenga validacion
+// el zod sirve para validar el schema
