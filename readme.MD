@@ -11,3 +11,4 @@
 // para las rutas de react es react router dom
 // ponerle fecha a las tareas que para cuando la tenga que hacer aparezca una notificacion
 // el contexto se crea para pasar props entre componentes sin tener que hacerlo manualmente 
+// context para evitar el prop driling
