@@ -5,9 +5,11 @@ import authRoutes from "./routes/auth.routes.js"
 import cookieParser from "cookie-parser"
 import taskRoutes from "./routes/tasks.routes.js"
 import clientesRoutes from "./routes/clientes.routes.js"
+import cors  from 'cors'
 const app = express()
 
 
+app.use(cors())
 app.use(morgan("dev"))
 app.use(express.json()) // para que me lea las solicitudes y los req.body en formato json
 app.use(cookieParser())
