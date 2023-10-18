@@ -1,0 +1,9 @@
+/*clases de tailwind*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  background-color: #202020;
+  color: white;
+}
