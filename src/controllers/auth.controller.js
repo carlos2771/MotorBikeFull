@@ -1,6 +1,8 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import createAccessToken from "../libs/jwt.js";
+import jwt from "jsonwebtoken";
+import { TOKEN_SECRET } from "../config.js";
 
 export const register = async (req, res) => {
   const { email, password, username } = req.body;
@@ -53,7 +55,10 @@ export const login = async (req, res) => {
 
     const token = await createAccessToken({ id: userFound._id }); // del usuario encontrado creeme un token con el id del usuario encontrado
 
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: process.env.NODE_ENV !== "development",
+      secure: true,
+      sameSite: "none",});
     res.json({
       // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use
       username: userFound.username,
@@ -85,6 +90,24 @@ export const profile = async(req, res) => {
     createdAt: userFound.createdAt,
     updateAt: userFound.updatedAt,
   });
-  console.log(req.user); // para ver el token del usuario, que se trae de validateToken
-  res.send("profile");
+  // console.log(req.user); // para ver el token del usuario, que se trae de validateToken
+  // res.send("profile");
 };
+
+export const verifyToken = async(req, res) =>{
+  const {token} = req.cookies
+  if(!token) return res.status(401).json({message: "no autorizado"})
+  
+  jwt.verify(token, TOKEN_SECRET, async(err, user)=>{
+    if(err) return res.status(401).json({message: "no autorizado"})
+
+    const userFound = await User.findById(user.id)
+    if(!userFound) return res.status(401).json({message: "no autorizado"})
+
+    return res.json({
+      id: userFound._id,
+      username: userFound.username,
+      email: userFound.email,
+    });
+  })
+}

@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 
 
 
@@ -19,7 +18,6 @@ export default function registerPage() {
   const onSubmit = handleSubmit((values) => {
     signup(values)
     console.log(values); // para que me  muestre los valores ingresados del formulario
-    
   })
   console.log(registerErrors);
 
@@ -66,6 +64,9 @@ export default function registerPage() {
         }
         <button type="submit">Register</button>
       </form>
+      <p className='flex gap-x-2 justify-between'>
+         tienes cuenta ? <Link to='/login' className='text-sky-500'>Login</Link>
+      </p>
     </div>
   );
 }

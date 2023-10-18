@@ -3,5 +3,5 @@ import { connectDB } from "./db.js"; // have keys for that exportation is withou
 
 connectDB() // inicialice la conexion
 
-app.listen(3000)
-console.log("server port", 3000);
+app.listen(3001)
+console.log("server port", 3001);
