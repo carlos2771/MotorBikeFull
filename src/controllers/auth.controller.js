@@ -59,6 +59,7 @@ export const login = async (req, res) => {
       httpOnly: process.env.NODE_ENV !== "development",
       secure: true,
       sameSite: "none",});
+    res.cookie("token", token)
     res.json({
       // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use
       username: userFound.username,
