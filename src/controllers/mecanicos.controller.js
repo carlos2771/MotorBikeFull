@@ -1,4 +1,5 @@
 import  Mecanico from "../models/mecanico.model.js"
+
 export const getMecanico = async(req, res) =>{
     const mecanicos = await Mecanico.find()
     if(!mecanicos) return res.status(404).json({message: "Mecanicos no encontrados"})
