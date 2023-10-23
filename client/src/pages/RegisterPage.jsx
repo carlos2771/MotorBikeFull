@@ -9,6 +9,8 @@ export default function registerPage() {
   const { register, handleSubmit, formState:{errors} } = useForm();
   const {signup, isAuthenticated, errors: registerErrors} = useAuth() // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
   const navigate = useNavigate()
+
+  console.log("authh",isAuthenticated);
   useEffect(()=> { // para acuatilizar el estado del componente
     if (isAuthenticated) navigate("/tasks") // si esta authenticado que lo envie a   las tareas
     

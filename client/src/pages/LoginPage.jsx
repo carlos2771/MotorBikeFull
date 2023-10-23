@@ -1,22 +1,25 @@
-import React from 'react'
+import React, { useEffect} from 'react'
 import { useForm } from "react-hook-form";
 import { useAuth } from '../hooks/useAuth';
 import { EmailRequired, PasswordRequire } from '../utils/validations';
-import { Link } from 'react-router-dom';
-
+import { Link,  useNavigate } from 'react-router-dom';
 
 
 export default function loginPage() {
 
   const {register, handleSubmit, formState: {errors}} = useForm()
-  const {signin, errors: signinErrors} = useAuth()
+  const {signin, isAuthenticated, errors: signinErrors} = useAuth()
+  const navigate = useNavigate()
 
   const onSubmit = handleSubmit((values) =>{
-    console.log(values);
     signin(values)
   })
 
-  console.log(errors)
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/tasks");
+    }
+  }, [isAuthenticated]);
 
 
   return (
