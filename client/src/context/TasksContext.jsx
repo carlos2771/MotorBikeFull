@@ -45,6 +45,7 @@ export function TaskProvider({ children }) {
       await updateTasksRequest(id, task);
     } catch (error) {
       console.error(error);
+      console.log("errores");
     }
   };
 
