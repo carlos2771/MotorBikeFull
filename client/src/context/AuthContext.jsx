@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }) => {
       const response = await registerRequest(user);
       console.log(response);
       setUser(response); // Actualizar el usuario con los datos recibidos
-      
       setIsAuthenticated(true); // Establecer la autenticacións a true
     } catch (error) {
       console.log(error.response.data);

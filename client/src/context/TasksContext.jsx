@@ -21,7 +21,7 @@ export function TaskProvider({ children }) {
     try {
       const res = await getTasksRequest();
       console.log("tareas:", res);
-      setTasks(res.data);
+      setTasks(res);
     } catch (error) {
       console.error("error de ob", error);
     }
