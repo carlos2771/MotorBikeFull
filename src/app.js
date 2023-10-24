@@ -4,6 +4,8 @@ import authRoutes from "./routes/auth.routes.js"
 import cookieParser from "cookie-parser"
 import taskRoutes from "./routes/tasks.routes.js"
 import clientesRoutes from "./routes/clientes.routes.js"
+import mecanicosRoutes from "./routes/mecanicos.routes.js"
+import marcaRoutes from "./routes/marca.routes.js"
 import cors  from 'cors'
 
 const app = express()
@@ -26,5 +28,7 @@ app.use(cookieParser())
 app.use("/api",authRoutes)
 app.use("/api", taskRoutes)
 app.use("/api", clientesRoutes)
+app.use("/api", mecanicosRoutes )
+app.use("/api", marcaRoutes )
 
 export default app;
