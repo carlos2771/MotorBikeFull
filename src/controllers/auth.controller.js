@@ -8,11 +8,10 @@ export const register = async (req, res) => {
   const { email, password, username } = req.body;
 
   try {
-
-     const userFound = await User.findOne({email}) // para validar en el frontend si el usuario ya existe 
-     if(userFound){
-      return res.status(400).json(["el correo ya existe"])
-     }
+    const userFound = await User.findOne({ email }); // para validar en el frontend si el usuario ya existe
+    if (userFound) {
+      return res.status(400).json({message:["el correo ya existe"]});
+    }
     const passwordHash = await bcrypt.hash(password, 10);
 
     const newUser = new User({
@@ -25,7 +24,13 @@ export const register = async (req, res) => {
     const userSaved = await newUser.save();
     // esta parte es para traer el token
     const token = await createAccessToken({ id: userSaved._id });
-    res.cookie("token", token);
+    // res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: process.env.NODE_ENV !== "development",
+      secure: true,
+      sameSite: "none",
+    });
+
     res.json({
       // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use
       id: userSaved._id,
@@ -42,24 +47,32 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
     const userFound = await User.findOne({ email });
-    if (!userFound)
-      return res.status(400).json({ message: "Usuario no encontrado" });
+    if (!userFound)return res.status(400).json({ message: ["Usuario no encontrado"] });
 
     const isMatch = await bcrypt.compare(password, userFound.password); // comparemelo con la contraseña que acaba de ingresar el usuario con la otra que esta guardada en la base de datos
     if (!isMatch)
-      return res.status(400).json({ message: "Contraseña incorrecta" });
+      return res.status(400).json({ message: ["Contraseña incorrecta"] });
 
-    const token = await createAccessToken({ id: userFound._id }); // del usuario encontrado creeme un token con el id del usuario encontrado
+    const token = await createAccessToken({
+      id: userFound._id,
+      username: userFound.username,
+    }); // del usuario encontrado creeme un token con el id del usuario encontrado
 
+    //tokent frontend y backend
     res.cookie("token", token, {
       httpOnly: process.env.NODE_ENV !== "development",
       secure: true,
+<<<<<<< HEAD
       sameSite: "none",});
     res.cookie("token", token)
+=======
+      sameSite: "none",
+    });
+    // res.cookie("token", token)
+>>>>>>> main
     res.json({
       // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use
       username: userFound.username,
@@ -80,7 +93,7 @@ export const logout = (req, res) => {
   return res.sendStatus(200);
 };
 
-export const profile = async(req, res) => {
+export const profile = async (req, res) => {
   const userFound = await User.findById(req.user.id);
   if (!userFound) return res.status(400).json({ message: "User not found" });
 
@@ -95,20 +108,20 @@ export const profile = async(req, res) => {
   // res.send("profile");
 };
 
-export const verifyToken = async(req, res) =>{
-  const {token} = req.cookies
-  if(!token) return res.status(401).json({message: "no autorizado"})
-  
-  jwt.verify(token, TOKEN_SECRET, async(err, user)=>{
-    if(err) return res.status(401).json({message: "no autorizado"})
+export const verifyToken = async (req, res) => {
+  const { token } = req.cookies;
+  if (!token) return res.send(false);
 
-    const userFound = await User.findById(user.id)
-    if(!userFound) return res.status(401).json({message: "no autorizado"})
+  jwt.verify(token, TOKEN_SECRET, async (error, user) => {
+    if (error) return res.sendStatus(401);
+
+    const userFound = await User.findById(user.id);
+    if (!userFound) return res.sendStatus(401);
 
     return res.json({
       id: userFound._id,
       username: userFound.username,
       email: userFound.email,
     });
-  })
-}
+  });
+};
