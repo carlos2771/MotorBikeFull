@@ -15,7 +15,7 @@ export default function Navbar() {
         {isAuthenticated ? (
           <>
            <li>
-                Bienvenido 
+                Bienvenido {user.username}
             </li>
             <li>
                 <Link to="/add-task">Agregar Tarea</Link>

@@ -1,75 +1,96 @@
 import { createContext, useEffect, useState } from "react";
-import { registerRequest, loginRequest, verifyTokentRequet } from "../api/auth";
-import axios from "axios";
-import Cookies from "js-cookie"
+import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth"; // Corregí "verifyTokentRequet" a "verifyTokenRequest".
+import Cookies from "js-cookie";
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [errors, setErrors] = useState([])
+  const [errors, setErrors] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const signup = async (userData) => { // Registrarse
+  // const signup = async (user) => {
+  //   try {
+  //     const res = await registerRequest(user);
+  //     if (res.status === 200) {
+  //       setUser(res.data);
+  //       setIsAuthenticated(true);
+  //       console.log("authh.res",isAuthenticated);
+  //     }
+  //   } catch (error) {
+  //     console.log(error.response.data);
+  //     setErrors(error.response.data.message);
+  //   }
+  // };
+  const signup = async (user) => { // Registrarse
     try {
       // Realizar la solicitud de registro y obtener los datos del usuario
-      const response = await registerRequest(userData);
+      const response = await registerRequest(user);
       console.log(response);
       setUser(response); // Actualizar el usuario con los datos recibidos
       setIsAuthenticated(true); // Establecer la autenticacións a true
-      
     } catch (error) {
-      console.log(error);
-      if(axios.isAxiosError(error)) setErrors(error.response.data)  
+      console.log(error.response.data);
+      setErrors(error.response.data.message); 
     } 
   };
 
-  const signin = async (user) =>{
+  const signin = async (user) => {
     try {
-      const res =  await loginRequest(user)
-      console.log(res);
+      const response = await loginRequest(user);
+      setUser(response);
+      // setUser(response.data); si tiene algun error en el login, pruebe esto
       setIsAuthenticated(true);
-      setUser(res.data) // estos son los datos del usuario
+      console.log("data",response);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error);
-        if(Array.isArray(error.response.data)) return setErrors(error.response.data)
-        setErrors([error.response.data.message])
-      }
+      console.log(error);
+      setErrors(error.response.data.message);
     }
-  }
+  };
 
-  useEffect(()=>{ // si hay errores y ya pasaron 3 segundos eliminese el alerta
-    const timer = setTimeout(()=>{
-      setErrors([])
-    }, 3000)
-    return () => clearTimeout(timer)
-  })
+  const logout = () => {
+    Cookies.remove("token");
+    setUser(null);
+    setIsAuthenticated(false);
+  };
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors]);
 
-  useEffect(()=>{
-    const checkLogin = async() => {
-      console.log('entro')
-      const cookies = Cookies.get()
-      console.log(cookies)
-    if(cookies.token) {
+  useEffect(() => {
+    const checkLogin = async () => {
+      console.log('entro');
+      const cookies = Cookies.get();
+
+      if (!cookies.token) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
       try {
-        const res = await verifyTokentRequet(cookies.token)
-        console.log(res);
-        if(!res.data) return setIsAuthenticated(false)
-        
-        setIsAuthenticated(true)
-        setUser(res.data)
+        const res = await verifyTokenRequest(cookies.token); // Corregí "verifyTokentRequet" a "verifyTokenRequest".
+        if (!res.data) return setIsAuthenticated(false);
+        setIsAuthenticated(true);
+        setUser(res.data);
+        setLoading(false);
       } catch (error) {
-        console.log(error)
-        setIsAuthenticated(false)
-        setUser(null)
+        console.log(error);
+        setIsAuthenticated(false);
+        setLoading(false);
       }
-    }
-    }
-    checkLogin()
-  },[])
+    };
+
+    checkLogin();
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ signup, signin, user, isAuthenticated, errors }}>
+    <AuthContext.Provider value={{ signup, signin,logout, loading, user, isAuthenticated, errors }}>
       {children}
     </AuthContext.Provider>
   );
