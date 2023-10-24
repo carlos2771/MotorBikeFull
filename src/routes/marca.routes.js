@@ -11,7 +11,7 @@ const router = Router()
 router.get("/marcas",authRequired, getMarca) 
 router.post("/marcas", authRequired, validateSchema(marcaSchema), createMarca) 
 router.delete("/marcas/:id", authRequired, deleteMarca) 
-router.put("/marcas/:id", authRequiredvalidateSchema(marcaSchema), updateMarca) 
+router.put("/marcas/:id", authRequired, validateSchema(marcaSchema), updateMarca) 
 
 // Exporta el enrutador configurado
 export default router
