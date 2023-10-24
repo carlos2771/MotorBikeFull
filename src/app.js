@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"
 import taskRoutes from "./routes/tasks.routes.js"
 import clientesRoutes from "./routes/clientes.routes.js"
 import mecanicosRoutes from "./routes/mecanicos.routes.js"
+import ventas_serviciosRoutes from "./routes/ventas_servicios.routes.js"
 import marcaRoutes from "./routes/marca.routes.js"
 import cors  from 'cors'
 
@@ -30,5 +31,6 @@ app.use("/api", taskRoutes)
 app.use("/api", clientesRoutes)
 app.use("/api", mecanicosRoutes )
 app.use("/api", marcaRoutes )
+app.use("/api", ventas_serviciosRoutes)
 
 export default app;
