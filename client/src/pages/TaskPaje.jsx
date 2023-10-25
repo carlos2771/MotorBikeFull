@@ -11,7 +11,7 @@ export default function TaskPaje() {
 
   if (tasks.length === 0) return <h1>No hay tareas</h1>;
   return (
-    <div className="grid grid-cols-3 gap-5">
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-1">
       {tasks.map((task) => (
         <TaskCard task={task} key={task._id} />
       ))}
