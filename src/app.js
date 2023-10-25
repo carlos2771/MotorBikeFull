@@ -7,6 +7,7 @@ import clientesRoutes from "./routes/clientes.routes.js"
 import mecanicosRoutes from "./routes/mecanicos.routes.js"
 import ventas_serviciosRoutes from "./routes/ventas_servicios.routes.js"
 import marcaRoutes from "./routes/marca.routes.js"
+import repuestosRoutes from "./routes/repuestos.routes.js"
 import cors  from 'cors'
 
 const app = express()
@@ -32,5 +33,6 @@ app.use("/api", clientesRoutes)
 app.use("/api", mecanicosRoutes )
 app.use("/api", marcaRoutes )
 app.use("/api", ventas_serviciosRoutes)
+app.use("/api", repuestosRoutes)
 
 export default app;
