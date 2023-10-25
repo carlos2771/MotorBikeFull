@@ -32,7 +32,7 @@ export default function loginPage() {
         </div>
       ))
       }
-        <h1 className='text-2xl font-bold'>Login</h1>
+        <h1 className='text-3xl font-bold my-2'>Login</h1>
 
       <form
         onSubmit={onSubmit}
@@ -56,7 +56,9 @@ export default function loginPage() {
         {
           errors.password &&( <p className="text-red-500">{errors.password.message}</p>)
         }
-        <button type="submit">Login</button>
+        <button 
+        className="bg-sky-500 text-white px-4 py-2 rounded-md"
+        type="submit">Login</button>
       </form>
       <p className='flex gap-x-2 justify-between'>
         No tienes cuenta ? <Link to='/register' className='text-sky-500'>Registrate</Link>
