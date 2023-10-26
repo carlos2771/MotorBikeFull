@@ -32,13 +32,6 @@ export const createVentas_Servicios = async (req, res) => {
         res.status(500).json({ message: 'Error al crear la venta de servicio', error });
     }
 };
-
-  
-  
-  
-  
-  
-  
   
 
 export const deleteVentas_Servicios = async(req, res) =>{

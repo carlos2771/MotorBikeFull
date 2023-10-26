@@ -3,64 +3,77 @@ import  Cliente from "../models/cliente.model.js"
 
 // Obtiene todos los clientes
 export const getClientes = async(req, res) =>{
-     // Consulta todos los clientes en la base de datos
-    const clientes = await Cliente.find()
-
-    // Si no se encuentran los clientes, devuelve un código de estado 404 y un mensaje de error
-    if(!clientes) return res.status(404).json({message: "Clientes no encontrados"})
-
-    // Devuelve los clientes encontrados en formato JSON
-    res.json(clientes)
+    try {
+        const cliente = await Cliente.find();
+        if (!cliente) {
+          return res.status(404).json({ message: "cliente no encontrados" });
+        }
+        res.json(cliente);
+      } catch (error) {
+        return res.status(500).json({ message: "Error al obtener cliente", error });
+      }
 
 }
+
+export const getCliente = async (req, res) => {
+    try {
+      const cliente = await Cliente.findById(req.params.id)
+      if (!cliente) {
+        return res.status(404).json({ message: "cliente not found" });
+      }
+      res.json(cliente);
+    } catch (error) {
+      return res.status(500).json({ message: "Error al obtener la cliente", error });
+    }
+  };
 
 // Crea un nuevo cliente
 export const createCliente = async(req, res) =>{
      // Extrae los datos del cliente, del cuerpo de la solicitud
-    const  {nombre_cliente, email_cliente, telefono_cliente, cedula} = req.body
-
-    // para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
-    console.log(req.user) 
-
-    // Crea una nueva instancia del modelo 'Cliente' con los datos del cliente
-    const newCliente = new Cliente({
-        nombre_cliente, email_cliente, telefono_cliente, cedula
-    })
-
-    // Guarda el nuevo cliente en la base de datos
-    const saveCliente =  await newCliente.save()
-
-    // Devuelve el cliente creado en formato JSON
-    res.json(saveCliente)
+   try {
+     const  {nombre_cliente, email_cliente, telefono_cliente, cedula} = req.body
+ 
+     // para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
+     console.log(req.user) 
+ 
+     // Crea una nueva instancia del modelo 'Cliente' con los datos del cliente
+     const newCliente = new Cliente({
+         nombre_cliente, email_cliente, telefono_cliente, cedula
+     })
+ 
+     // Guarda el nuevo cliente en la base de datos
+     const saveCliente =  await newCliente.save()
+ 
+     // Devuelve el cliente creado en formato JSON
+     res.status(201).json(saveCliente)
+   } catch (error) {
+    return res.status(500).json({ message: "Error al cliente", error });
+   }
 }
 
 // Actualiza un cliente por su ID
-export const updateCliente= async(req, res) =>{
-
-    // Busca el cliente por su ID y actualíza con los datos proporcionados en el cuerpo de la solicitud
-    const cliente = await Cliente.findByIdAndUpdate(req.params.id, req.body,{
-
-         // New y true son para que el guarde los datos nuevos que ingrese el usuario
-        new: true
-    })
-    // Si el cliente no se encuentra, devuelve un código de estado 404 y un mensaje de error
-    if(!cliente) return res.status(404).json({message: "Cliente no encontrado"})
-
-    // Devuelve el cliente actualizado en formato JSON
-    res.json(cliente)
-}
-
-// Elimina un cliente por su ID
-export const deleteCliente = async(req, res) =>{
-
-    // Busca el cliente por su ID y lo elimina
-    const cliente = await Cliente.findByIdAndDelete(req.params.id)
-
-    // Si el cliente no se encuentra, devuelve un código de estado 404 y un mensaje de error
-    if(!cliente) return res.status(404).json({message: "cliente no encontrado"})
-
-    // Devuelve un código de estado 204 (Sin contenido) para indicar que el cliente se eliminó con éxito
-    return res.sendStatus(204)
-}
+export const updateCliente = async (req, res) => {
+    try {
+      const cliente = await Cliente.findByIdAndUpdate(req.params.id, req.body, {
+        new: true, // Para que guarde los datos nuevos que ingrese el usuario
+      });
+      if (!cliente) return res.status(404).json({ message: "Cliente not found" });
+      res.json(cliente);
+    } catch (error) {
+      return res.status(500).json({ message: "Error al actualizar el cliente", error });
+    }
+  };
+  
+  
+  export const deleteCliente = async(req, res) =>{
+    try {
+      const deletedcliente = await Cliente.findByIdAndDelete(req.params.id);
+      if (!deletedcliente)
+        return res.status(404).json({ message: "cliente not found" });
+      return res.sendStatus(204);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
 
 

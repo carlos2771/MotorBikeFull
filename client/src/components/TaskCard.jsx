@@ -13,15 +13,16 @@ export default function TaskCard({ task }) {
         <h1 className="text-2xl font-bold">{task.title}</h1>
         <div className="flex gap-x-2 items-center">
           <button
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2"
+          className="px-4 py-1 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent   "
             onClick={() => {
               deleteTask(task._id)
             }}
           >
             delete
           </button>
+          
           <Link 
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2"
+          className="px-4 py-1 text-sm text-white font-semibold rounded-full border border-green-500  hover:text-white hover:bg-green-600 focus:outline-none focus:ring-2  focus:ring-offset-2"
           to= {`/tasks/${task._id}`}>Editar</Link>
         </div>
       </header>
