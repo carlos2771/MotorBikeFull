@@ -9,11 +9,11 @@ import { clienteSchema } from "../schemas/clientes.schema.js";
 const router = Router()
 
 // Configura rutas y controladores
-router.get("/clientes", authRequired, getClientes) 
-router.get("/clientes/:id", authRequired, getCliente) 
-router.post("/clientes", authRequired,validateSchema(clienteSchema), createCliente) 
-router.delete("/clientes/:id", authRequired, deleteCliente ) 
-router.put("/clientes/:id", authRequired,validateSchema(clienteSchema) ,updateCliente) 
+router.get("/clientes", authRequired,  getClientes) 
+router.get("/clientes/:id", authRequired,  getCliente) 
+router.post("/clientes", authRequired,  createCliente) 
+router.put("/clientes/:id", authRequired, updateCliente) 
+router.delete("/clientes/:id", authRequired,  deleteCliente ) 
 
 // Exporta el enrutador configurado
 export default router
