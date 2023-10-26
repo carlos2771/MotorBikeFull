@@ -7,6 +7,8 @@ import clientesRoutes from "./routes/clientes.routes.js"
 import mecanicosRoutes from "./routes/mecanicos.routes.js"
 import ventas_serviciosRoutes from "./routes/ventas_servicios.routes.js"
 import marcaRoutes from "./routes/marca.routes.js"
+import repuestosRoutes from "./routes/repuestos.routes.js"
+import ventas_repuestosRoutes from "./routes/ventas_repuestos.routes.js"
 import cors  from 'cors'
 
 const app = express()
@@ -19,7 +21,7 @@ const app = express()
 //     next();
 //   });
 app.use(cors({
-    origin:'http://localhost:5173', // Reemplaza esto con la URL de tu aplicación React
+    origin:'http://127.0.0.1:5173', // Reemplaza esto con la URL de tu aplicación React
     credentials: true,
 }
 ))
@@ -32,5 +34,7 @@ app.use("/api", clientesRoutes)
 app.use("/api", mecanicosRoutes )
 app.use("/api", marcaRoutes )
 app.use("/api", ventas_serviciosRoutes)
+app.use("/api", repuestosRoutes)
+app.use("/api", ventas_repuestosRoutes)
 
 export default app;
