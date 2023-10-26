@@ -1,8 +1,8 @@
 // Importa el modelo de datos 'Mecanicos' desde "../models/mecanicos.model.js"
 import  Mecanico from "../models/mecanico.model.js"
 
-// Obtiene todos los clientes
-export const getMecanico = async(req, res) =>{
+// Obtiene todos los mecanicos
+export const getMecanicos = async(req, res) =>{
 
     try {
         // Consulta todos los mecanicos en la base de datos
@@ -18,6 +18,25 @@ export const getMecanico = async(req, res) =>{
         res.status(500).json({ message: "Error al obtener los mecanicos", error: error.message });
         }
 }
+
+//Obtener un mecanico en especifico
+export const getMecanico = async (req, res) => {
+    try {
+      // Consulta el mecanico en especifico en la base de datos por medio del id
+      const mecanic = await Mecanico.findById(req.params.id);
+
+      // Si no se encuentra el mecanico, devuelve un código de estado 404 y un mensaje de error
+      if (!mecanic) return res.status(404).json({ message: "No se ha encontrado el mecanico" });
+
+      // Devuelve el mecanico encontrado en formato JSON
+      res.json(mecanic);
+
+    } catch (error) {
+        // En caso de error, maneja la excepción y devuelve un código de estado 500 (Error del servidor) con un mensaje de error
+      return res.status(500).json({ message: "Mecanico no encontrado" });
+    }
+  };
+
 
 // Crea un nuevo mecanico
 export const createMecanico = async(req, res) =>{

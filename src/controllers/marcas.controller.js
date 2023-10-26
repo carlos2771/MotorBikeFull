@@ -2,22 +2,40 @@
 import  Marca from "../models/marca.model.js"
 
 // Obtiene todas las marcas
-export const getMarca = async(req, res) =>{
+export const getMarcas = async(req, res) =>{
 
     try {
         // Consulta todas las marcas en la base de datos
-        const marca = await Marca.find()
+        const marcas = await Marca.find()
 
         // Si no se encuentran marcas, devuelve un código de estado 404 y un mensaje de error
-        if(!marca) return res.status(404).json({message: "Marcas no encontradas"})
+        if(!marcas) return res.status(404).json({message: "Marcas no encontradas"})
 
         // Devuelve las marcas encontradas en formato JSON
-        res.json(marca)
+        res.json(marcas)
     }catch (error) {
         // En caso de error, maneja la excepción y devuelve un código de estado 500 (Error del servidor) con un mensaje de error
         res.status(500).json({ message: "Error al obtener marcas", error: error.message });
       }
 };
+
+//Obtener una marca en especifico
+export const getMarca = async (req, res) => {
+    try {
+      // Consulta la marca en especifico en la base de datos por medio del id
+      const marca = await Marca.findById(req.params.id);
+
+      // Si no se encuentra la marca, devuelve un código de estado 404 y un mensaje de error
+      if (!marca) return res.status(404).json({ message: "No se ha encontrado el mecanico" });
+
+      // Devuelve la marca encontrado en formato JSON
+      res.json(marca);
+
+    } catch (error) {
+        // En caso de error, maneja la excepción y devuelve un código de estado 500 (Error del servidor) con un mensaje de error
+      return res.status(500).json({ message: "Mecanico no encontrado" });
+    }
+  };
 
 // Crea una nueva marca
 export const createMarca = async(req, res) =>{

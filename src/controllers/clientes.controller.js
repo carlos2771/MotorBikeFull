@@ -15,10 +15,28 @@ export const getClientes = async(req, res) =>{
         res.json(clientes)
     }catch (error) {
         // En caso de error, maneja la excepción y devuelve un código de estado 500 (Error del servidor) con un mensaje de error
-        res.status(500).json({ message: "Error al obtener los clientes", error: error.message });
+        return res.status(500).json({ message: "Error al obtener los clientes", error: error.message });
       }
 
 }
+
+//Obtener un cliente en especifico
+export const getCliente = async (req, res) => {
+    try {
+      // Consulta el cliente en especifico en la base de datos por medio del id
+      const client = await Cliente.findById(req.params.id);
+
+      // Si no se encuentra el cliente, devuelve un código de estado 404 y un mensaje de error
+      if (!client) return res.status(404).json({ message: "No se ha encontrado el cliente" });
+
+      // Devuelve el cliente encontrado en formato JSON
+      res.json(client);
+
+    } catch (error) {
+        // En caso de error, maneja la excepción y devuelve un código de estado 500 (Error del servidor) con un mensaje de error
+      return res.status(500).json({ message: "Cliente no encontrado" });
+    }
+  };
 
 // Crea un nuevo cliente
 export const createCliente = async(req, res) =>{
@@ -43,7 +61,7 @@ export const createCliente = async(req, res) =>{
 
     }catch (error) {
         // En caso de error, maneja la excepción y devuelve un código de estado 500 (Error del servidor) con un mensaje de error
-        res.status(500).json({ message: "Error al crear cliente", error: error.message });
+        return res.status(500).json({ message: "Error al crear cliente", error: error.message });
       }
 }
 
@@ -64,7 +82,7 @@ export const updateCliente= async(req, res) =>{
         res.json(cliente)
     } catch (error) {
         // En caso de error, maneja la excepción y devuelve un código de estado 500 (Error del servidor) con un mensaje de error
-        res.status(500).json({ message: "Error al actualizar cliente", error: error.message });
+        return res.status(500).json({ message: "Error al actualizar cliente", error: error.message });
             }
 }
 
@@ -83,7 +101,7 @@ export const deleteCliente = async(req, res) =>{
 
     } catch (error) {
         // En caso de error, maneja la excepción y devuelve un código de estado 500 (Error del servidor) con un mensaje de error
-        res.status(500).json({ message: "Error al eliminar cliente", error: error.message });
+        return res.status(500).json({ message: "Error al eliminar cliente", error: error.message });
       }
 }
 
