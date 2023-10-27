@@ -29,9 +29,12 @@ export const getCliente = async (req, res) => {
 
 // Crea un nuevo cliente
 export const createCliente = async(req, res) =>{
-     // Extrae los datos del cliente, del cuerpo de la solicitud
-   try {
+  try {
      const  {nombre_cliente, email_cliente, telefono_cliente, cedula} = req.body
+
+     const clientFound = await Cliente.findOne({email_cliente})
+     if(clientFound) return res.status(400).json({message:["el correo del cliente ya existe"]});
+     
  
      // para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
      console.log(req.user) 
@@ -47,7 +50,7 @@ export const createCliente = async(req, res) =>{
      // Devuelve el cliente creado en formato JSON
      res.status(201).json(saveCliente)
    } catch (error) {
-    return res.status(500).json({ message: "Error al cliente", error });
+    res.status(500).json({ message: error.message });
    }
 }
 

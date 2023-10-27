@@ -21,7 +21,8 @@ const clienteSchema = new mongoose.Schema({
     cedula:{
         type: String, //Tipo String
         required: true, //Es requerido
-        unique: true //Unico
+        unique: true
+        
     },
 },{
     //Sirve para agregar automáticamente campos createdAt y updatedAt a los documentos, lo que permite realizar un seguimiento de cuándo se crearon y modificaron.

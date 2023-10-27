@@ -11,6 +11,7 @@ import { TaskProvider } from "./context/TasksContext";
 import Navbar from "./components/Navbar";
 import ClientesPage from "./pages/clientes/ClientesPage";
 import { ClienteProvider } from "./context/ClientContext";
+import FormCliente from "./pages/clientes/FormCliente";
 
 export default function App() {
   return (
@@ -34,6 +35,8 @@ export default function App() {
                     <Route path="/tasks/:id" element={<TaskFormPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/clientes" element={<ClientesPage />} />
+                    <Route path="/add-cliente" element={<FormCliente />} />
+                    <Route path="/cliente/:id" element={<FormCliente />} />
                   </Route>
                 </Routes>
               </main>
