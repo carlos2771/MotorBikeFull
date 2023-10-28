@@ -15,6 +15,7 @@ export const getClientes = async(req, res) =>{
 
 }
 
+// Obtener un solo cliente
 export const getCliente = async (req, res) => {
     try {
       const cliente = await Cliente.findById(req.params.id)

@@ -1,15 +1,18 @@
+//Importa modulo para trabajar MongoDB en NodeJS
 import mongoose from "mongoose";
 
+// Estructurar los datos que representan a los permisos en la base de datos.
 const permisoSchema = new mongoose.Schema({
     nombre_permiso: {
-        type: String,
-        required: true
+        type: String, //Tipo de dato
+        required: true // Es requerido
     },
     estado:{
-        type: String,
-        required: true
+        type: String, // Tipo de dato
+        required: true // Es requerido
     }
 },{
+    //Sirve para agregar automáticamente campos createdAt y updatedAt a los documentos, lo que permite realizar un seguimiento de cuándo se crearon y modificaron.
     timestamps: true
 })
 // se puede poner un max lend, buscar en la documentacion
