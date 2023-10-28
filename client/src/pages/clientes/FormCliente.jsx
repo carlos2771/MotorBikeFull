@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form"
 import { useClientes } from "../../context/ClientContext"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
+import { NombreRequired ,EmailRequired, TelefonoRequired, CedulaRequired } from "../../utils/validations"
 
 
 export default function FormCliente() {
@@ -43,33 +44,34 @@ export default function FormCliente() {
           </div>
         ))}
       <form onSubmit={onSubmit}>
-        <label htmlFor="nombreCliente">Nombre Cliente</label>
+        <label>Nombre Cliente</label>
         <input 
         type="text" 
         placeholder='Nombre Cliente' 
-        {...register("nombre_cliente")}
+        {...register("nombre_cliente", NombreRequired)}
         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
         autoFocus
         />
-        <label htmlFor="emailCliente">Email Cliente</label>
+        <label >Email Cliente</label>
         <input 
         placeholder='Email Cliente'
-        {...register("email_cliente")}
+        type="email"
+        {...register("email_cliente", EmailRequired)}
         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
         />
-        <label htmlFor="telefonoCliente">Telefono Cliente</label>
+        <label>Telefono Cliente</label>
         <input 
         placeholder='Telefono Cliente'
-        {...register("telefono_cliente")}
+        {...register("telefono_cliente", TelefonoRequired)}
         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
         />
-        <label htmlFor="cedula">Cedula</label>
+        <label>Cedula</label>
         <input 
         placeholder='Cedula'
-        {...register("cedula")}
+        {...register("cedula", CedulaRequired)}
         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
         />
-        <button className='bg-indigo-500 px-3 py-2 rounded-md'>
+        <button className='bg-indigo-500 px-3 py-2 rounded-md' type="submit">
           Guardar
         </button>
       </form>
