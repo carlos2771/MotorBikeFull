@@ -4,7 +4,7 @@ import Cliente from "../models/cliente.model.js";
 
 export const getVentas_Repuestos = async (req, res) => {
   try {
-    const ventas_repuestos = await Ventas_Repuestos.find();
+    const ventas_repuestos = await Ventas_Repuestos.find().populate({ path: 'cliente', select: 'nombre_cliente' }) .populate({ path: 'repuesto', select: 'nombre_repuesto' });
     if (!ventas_repuestos) {
       return res.status(404).json({ message: "Venta_Repuestos no encontrados" });
     }
@@ -34,7 +34,6 @@ export const createVentas_Repuestos = async (req, res) => {
       precio_unitario,
       precio_total,
       cliente: clienteId,
-      date,
     } = req.body;
 
     // Verifica si el cliente existe
@@ -46,6 +45,17 @@ export const createVentas_Repuestos = async (req, res) => {
     if (!repuestoEncontrado) {
       return res.status(404).json({ message: "Repuesto no encontrado" });
     }
+    // Obtiene la cantidad actual del repuesto
+    const cantidadActualRepuesto = repuestoEncontrado.cantidad;
+  
+    // Verifica si hay suficiente cantidad disponible del repuesto
+    if (cantidadActualRepuesto < cantidad_repuesto) {
+      return res.status(400).json({ message: ["Cantidad insuficiente del repuesto"] });
+    }
+
+    // Resta la cantidad vendida de la cantidad actual del repuesto
+    const cantidadRestanteRepuesto = cantidadActualRepuesto - cantidad_repuesto;
+    await Repuesto.findByIdAndUpdate(repuestoId, { cantidad: cantidadRestanteRepuesto });
 
     // Crea una nueva venta de servicio asociada al cliente
     const nuevaVentaRepuesto = new Ventas_Repuestos({
@@ -54,7 +64,6 @@ export const createVentas_Repuestos = async (req, res) => {
       precio_unitario,
       precio_total,
       cliente: clienteId,
-      date,
     });
 
     // Guarda la venta de servicio en la base de datos

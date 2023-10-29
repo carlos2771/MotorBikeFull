@@ -1,4 +1,4 @@
-import { useContext, useState, createContext } from "react";
+import { useContext, useState, createContext, useEffect } from "react";
 import {
   getClientesRequest,
   getClienteRequest,
@@ -6,6 +6,7 @@ import {
   updateClientesRequest,
   deleteClientesRequest
 } from "../api/clientes";
+
 
 const ClienteContext = createContext();
 
@@ -17,21 +18,28 @@ export const useClientes = () => {
 
 export function ClienteProvider({ children }) {
   const [clientes, setClientes] = useState([]);
+  // const [cliente, setCliente] = useState(null)
+  const [errors, setErrors] = useState([]);
 
   const getClientes = async () => {
     try {
       const res = await getClientesRequest();
       console.log(res);
-      setClientes(res);
+      setClientes(res)
     } catch (error) {
       console.error(error);
     }
   };
 
   const createCliente = async (cliente) => {
-    const res = await createClientesRequest(cliente);
-    console.log(res);
-  };
+      try {
+        const response = await createClientesRequest(cliente);
+        console.log("clientes:",response)
+      } catch (error) {
+        setErrors(error.response.data.message);
+      }
+    
+  }
 
   const getCliente = async (id) => {
     try {
@@ -47,6 +55,7 @@ export function ClienteProvider({ children }) {
       await updateClientesRequest(id, cliente);
     } catch (error) {
       console.error(error);
+      setErrors(error.response.data.message)
     }
   };
 
@@ -54,16 +63,30 @@ export function ClienteProvider({ children }) {
     try {
       const res = await deleteClientesRequest(id);
       console.log(res);
-      if (res.status === 204) setClientes(clientes.filter((c) => c._id !== id));
+      if (res.status === 204) setClientes(clientes.filter((cliente) => cliente._id !== id));
     } catch (error) {
       console.error(error);
     }
   };
 
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors]);
+
+
+  
+
   return (
     <ClienteContext.Provider
       value={{
         clientes,
+        // cliente,
+        errors,
         getClientes,
         createCliente,
         updateCliente,

@@ -25,6 +25,9 @@ export default function Navbar() {
             <li>
                 <Link to="/clientes">Clientes</Link>
             </li>
+            <li>
+                <Link to="/ventas-respuestos">Ventas Repuestos</Link>
+            </li>
             <li >
                 <Link className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent"
                 to="/" onClick={()=>{
