@@ -11,7 +11,6 @@ export default function ClientesPage() {
       getClientes();
     } catch (error) {
       console.error("Error al obtener clientes:", error);
-      // Puedes mostrar un mensaje de error al usuario aquí
     }
   }, []);
 

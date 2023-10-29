@@ -2,28 +2,28 @@ import { useForm } from "react-hook-form"
 import { useClientes } from "../../context/ClientContext"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
+import { NombreRequired ,EmailRequired, TelefonoRequired, CedulaRequired } from "../../utils/validations"
 
 
 export default function FormCliente() {
-  const {register, handleSubmit, setValue} = useForm()
+  const {register, handleSubmit, setValue, formState: {errors}} = useForm()
   const {createCliente, getCliente, updateCliente, errors: clientesErrors} = useClientes()
-  const navigate = useNavigate()
+  const navigate = useNavigate()  
   const params = useParams()
 
-  useEffect(()=>{
+  useEffect(() => {
     (async () => {
-      if(params.id){
-        const cliente = await getCliente(params.id)
+      if (params.id) {
+        const cliente = await getCliente(params.id);
         console.log("cliente por params", cliente);
-        setValue("nombre_cliente", cliente.nombre_cliente)
-        setValue("email_cliente", cliente.email_cliente)
-        setValue("telefono_cliente", cliente.telefono_cliente)
-        setValue("cedula", cliente.cedula)
+        setValue("nombre_cliente", cliente.nombre_cliente);
+        setValue("email_cliente", cliente.email_cliente);
+        setValue("telefono_cliente", cliente.telefono_cliente);
+        setValue("cedula", cliente.cedula);
       }
-    })
-    ()
-  },[])
-
+    })();
+  }, []);
+  
   const onSubmit = handleSubmit((data) => {
     if(params.id){
       updateCliente(params.id, data)
@@ -32,7 +32,6 @@ export default function FormCliente() {
     }
     navigate("/clientes")
   })
-  console.log(clientesErrors);
 
   return (
     <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
@@ -43,33 +42,38 @@ export default function FormCliente() {
           </div>
         ))}
       <form onSubmit={onSubmit}>
-        <label htmlFor="nombreCliente">Nombre Cliente</label>
+        <label>Nombre Cliente</label>
         <input 
         type="text" 
         placeholder='Nombre Cliente' 
-        {...register("nombre_cliente")}
+        {...register("nombre_cliente", NombreRequired)}
         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
         autoFocus
         />
-        <label htmlFor="emailCliente">Email Cliente</label>
+        {errors.nombre_cliente && <p className="text-red-500">{errors.nombre_cliente.message}</p>}
+        <label >Email Cliente</label>
         <input 
         placeholder='Email Cliente'
-        {...register("email_cliente")}
+        type="email"
+        {...register("email_cliente", EmailRequired)}
         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
         />
-        <label htmlFor="telefonoCliente">Telefono Cliente</label>
+        {errors.email_cliente && <p className="text-red-500">{errors.email_cliente.message}</p>}
+        <label>Telefono Cliente</label>
         <input 
         placeholder='Telefono Cliente'
-        {...register("telefono_cliente")}
+        {...register("telefono_cliente", TelefonoRequired)}
         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
         />
-        <label htmlFor="cedula">Cedula</label>
+        {errors.telefono_cliente && <p className="text-red-500">{errors.telefono_cliente.message}</p>}
+        <label>Cedula</label>
         <input 
         placeholder='Cedula'
-        {...register("cedula")}
+        {...register("cedula", CedulaRequired)}
         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
         />
-        <button className='bg-indigo-500 px-3 py-2 rounded-md'>
+        {errors.cedula && <p className="text-red-500">{errors.cedula.message}</p>}
+        <button className='bg-indigo-500 px-3 py-2 rounded-md' type="submit">
           Guardar
         </button>
       </form>
