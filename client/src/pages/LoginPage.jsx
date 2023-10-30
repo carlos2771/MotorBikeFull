@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from '../hooks/useAuth';
 import { EmailRequired, PasswordRequire } from '../utils/validations';
 import { Link,  useNavigate } from 'react-router-dom';
+import { Alert } from "@material-tailwind/react";
 
 
 export default function loginPage() {
@@ -27,9 +28,9 @@ export default function loginPage() {
       <div className='bg-zinc-800 max-w-md w-full p-10 rounded-md'>
       {
       signinErrors.map((error, i ) => (
-        <div className="bg-red-500 p-2 text-white" key={i}>
+        <Alert className="bg-red-500 p-2 text-white" key={i}>
           {error}
-        </div>
+        </Alert>
       ))
       }
         <h1 className='text-3xl font-bold my-2'>Login</h1>
@@ -57,7 +58,7 @@ export default function loginPage() {
           errors.password &&( <p className="text-red-500">{errors.password.message}</p>)
         }
         <button 
-        className="bg-sky-500 text-white px-4 py-2 rounded-md"
+        className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
         type="submit">Login</button>
       </form>
       <p className='flex gap-x-2 justify-between'>

@@ -62,8 +62,11 @@ export default function registerPage() {
             <p className="text-red-500">Password es requerido</p>
           )}
           <button
-          className="bg-sky-500 text-white px-4 py-2 rounded-md"
-           type="submit">Register</button>
+            className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
+            type="submit"
+          >
+            Register
+          </button>
         </form>
         <p className="flex gap-x-2 justify-between">
           tienes cuenta ?{" "}
