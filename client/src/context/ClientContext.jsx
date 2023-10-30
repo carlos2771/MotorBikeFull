@@ -54,7 +54,7 @@ export function ClienteProvider({ children }) {
 
   const updateCliente = async (id, cliente) => {
     try {
-      await updateClientesRequest(id, cliente);
+      return await updateClientesRequest(id, cliente);
     } catch (error) {
       console.error(error);
       setErrors(error.response.data.message)
