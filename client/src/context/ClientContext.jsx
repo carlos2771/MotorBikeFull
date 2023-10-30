@@ -33,9 +33,11 @@ export function ClienteProvider({ children }) {
 
   const createCliente = async (cliente) => {
       try {
-        const response = await createClientesRequest(cliente);
+        return await createClientesRequest(cliente);
+        // return response
         console.log("clientes:",response)
       } catch (error) {
+        console.log(error);
         setErrors(error.response.data.message);
       }
     
