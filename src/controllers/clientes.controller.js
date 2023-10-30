@@ -35,6 +35,8 @@ export const createCliente = async(req, res) =>{
 
      const clientFound = await Cliente.findOne({email_cliente})
      if(clientFound) return res.status(400).json({message:["el correo del cliente ya existe"]});
+     const cedulaFound = await Cliente.findOne({cedula})
+     if(cedulaFound) return res.status(400).json({message:["cedula cliente ya existe"]});
      
  
      // para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado

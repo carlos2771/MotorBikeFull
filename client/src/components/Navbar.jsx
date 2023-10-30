@@ -7,7 +7,7 @@ export default function Navbar() {
   console.log(user);
 
   return (
-    <nav className="bg-zinc-700 my-2 flex justify-between py-5 px-10 rounded-lg">
+    <nav className="bg-zinc-700 my-2 flex justify-between py-5 px-10 rounded-lg ">
       <Link to={
         isAuthenticated ? "/tasks" : "/"
       }>
@@ -25,26 +25,33 @@ export default function Navbar() {
             <li>
                 <Link to="/clientes">Clientes</Link>
             </li>
+            <li>
+                <Link to="/ventas-respuestos" className="">Ventas Repuestos</Link>
+            </li>
             <li >
-                <Link className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent"
+                <Link className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
                 to="/" onClick={()=>{
                     logout()
                 }}>Logout</Link>
             </li>
+           
+            
           </>
         ) : (
           <>
             <li>
-              <Link className="bg-indigo-500 px-4 py-1 rounded-sm" 
+              <Link className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent shadow-lg shadow-zinc-300/30" 
               to="/login">Login</Link>
             </li>
             <li>
-              <Link className="bg-indigo-500 px-4 py-1 rounded-sm"
+              <Link className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent shadow-lg shadow-zinc-300/30"
                to="/register">Register</Link>
             </li>
           </>
         )}
       </ul>
     </nav>
+
+    
   );
 }

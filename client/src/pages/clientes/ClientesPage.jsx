@@ -11,7 +11,6 @@ export default function ClientesPage() {
       getClientes();
     } catch (error) {
       console.error("Error al obtener clientes:", error);
-      // Puedes mostrar un mensaje de error al usuario aquí
     }
   }, []);
 
@@ -34,6 +33,7 @@ export default function ClientesPage() {
           return tableMeta.rowIndex + 1; // Comenzar el conteo en 1 en lugar de 0
         },
       },
+      
     },
     {
       name: "nombre_cliente",
@@ -99,14 +99,14 @@ export default function ClientesPage() {
           return (
             <div>
               <button
-                className="px-4 py-1 text-sm text-black font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent"
+                className="px-4 py-1 text-sm text-black font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-950/30 "
                 onClick={() => {
                   deleteCliente(clientes[tableMeta.rowIndex]._id);
                 }}
               >
                 Eliminar
               </button>
-              <button className="px-4 py-1 m-1 text-sm text-black font-semibold rounded-full border border-green-500  hover:text-white hover:bg-green-600 focus:outline-none focus:ring-2  focus:ring-offset-2">
+              <button className="px-4 py-1 m-1 text-sm text-black font-semibold rounded-full border border-green-500  hover:text-white hover:bg-green-600 focus:outline-none focus:ring-2  focus:ring-offset-2 shadow-lg shadow-zinc-950/30">
                 <Link to={`/cliente/${clientes[tableMeta.rowIndex]._id}`}>
                   Editar
                 </Link>
@@ -120,7 +120,7 @@ export default function ClientesPage() {
 
   return (
     <div>
-      <button className="px-4 py-2 m-2 text-sm text-white font-semibold rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent">
+      <button className="px-5 py-1 m-2 text-sm text-white font-semibold rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent shadow-lg shadow-zinc-300/30">
         <Link to={"/add-cliente"}>Añadir Cliente</Link>
       </button>
       <MuiDataTable
