@@ -10,8 +10,10 @@ import ProtectedRoute from "./ProtectedRoute";
 import { TaskProvider } from "./context/TasksContext";
 import Navbar from "./components/Navbar";
 import ClientesPage from "./pages/clientes/ClientesPage";
+import MecanicosPage from "./pages/mecanicos/MecanicosPage";
 import { ClienteProvider } from "./context/ClientContext";
 import FormCliente from "./pages/clientes/FormCliente";
+import FormMecanico from "./pages/mecanicos/FormMecanico";
 import FormVentaRepuesto from "./pages/ventasRepuestos/FormVentaRepuesto";
 import VentasRepuestosPage from "./pages/ventasRepuestos/VentasRepuestosPage";
 import { VentasRepuestoProvider} from "./context/VentasRepuestoContex"
@@ -45,6 +47,9 @@ export default function App() {
                       <Route path="/clientes" element={<ClientesPage />} />
                       <Route path="/add-cliente" element={<FormCliente />} />
                       <Route path="/cliente/:id" element={<FormCliente />} />
+                      <Route path="/mecanicos" element={<MecanicosPage />} />
+                      <Route path="/add-mecanico" element={<FormMecanico />} />
+                      <Route path="/mecanico/:id" element={<FormMecanico />} />
                       <Route path="/ventas-respuestos" element={<VentasRepuestosPage/>} />
                       <Route path="/add-venta-respuesto" element={<FormVentaRepuesto />} />
                       <Route path="/venta-respuesto/:id" element={<FormVentaRepuesto />} />
