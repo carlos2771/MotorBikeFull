@@ -10,7 +10,7 @@ export const getPermisos = async(req, res) =>{
         } 
         res.json(permisos)
     }catch (error){
-        return res.status(500).json({ message: "Error al obtener cliente", error });
+        return res.status(500).json({ message: "Error al obtener el permiso", error });
     }
 }
 
