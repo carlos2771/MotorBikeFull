@@ -65,7 +65,7 @@ export const updateCliente = async (req, res) => {
       if (!cliente) return res.status(404).json({ message: "Cliente not found" });
       res.json(cliente);
     } catch (error) {
-      return res.status(500).json({ message: "Error al actualizar el cliente", error });
+      return res.status(500).json({ message: " Error al actualizar el cliente", error });
     }
   };
   
