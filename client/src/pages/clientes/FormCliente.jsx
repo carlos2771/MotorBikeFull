@@ -24,14 +24,16 @@ export default function FormCliente() {
     })();
   }, []);
   
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async(data) => {
     if(params.id){
       updateCliente(params.id, data)
     }else{
-      createCliente(data)
+      const res = await createCliente(data)
+      if(res) navigate('/clientes')
     }
-    navigate("/clientes")
+    
   })
+
 
   return (
     <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
@@ -73,7 +75,7 @@ export default function FormCliente() {
         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
         />
         {errors.cedula && <p className="text-red-500">{errors.cedula.message}</p>}
-        <button className='bg-indigo-500 px-3 py-2 rounded-md' type="submit">
+        <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
         </button>
       </form>

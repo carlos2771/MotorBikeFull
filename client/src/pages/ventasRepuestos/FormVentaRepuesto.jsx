@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useRepuestos } from "../../context/RepuestosContext";
+import { NombreRequired, RepuestoRequired } from "../../utils/validations";
 
 export default function FormVentaRepuesto() {
   const {
@@ -58,19 +59,23 @@ export default function FormVentaRepuesto() {
     }
   }, [selectedRepuesto]);
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async(data) => {
     // Calcular el precio total antes de enviar el formulario
     data.precio_total = data.cantidad_repuesto * data.precio_unitario;
 
     if (params.id) {
       updateVentaRepuesto(params.id, data);
     } else {
-      createVentaRepuesto(data);
+      await createVentaRepuesto(data);
+      
     }
     navigate("/ventas-respuestos");
   });
 
   console.log(ventasRepuestosErrors);
+
+
+  
   return (
     <div className="flex h-[calc(100vh-100px)] items-center justify-center">
       <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
@@ -97,7 +102,7 @@ export default function FormVentaRepuesto() {
           <input
             placeholder="Cantidad"
             type="number"
-            {...register("cantidad_repuesto")}
+            {...register("cantidad_repuesto", NombreRequired )}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
             onChange={(e) => {
               const cantidad = parseFloat(e.target.value);
@@ -108,21 +113,22 @@ export default function FormVentaRepuesto() {
               setValue("precio_total", precioTotal);
             }}
           />
+          {errors.cantidad_repuesto && <p className="text-red-500">{errors.cantidad_repuesto.message}</p>}
           <label>Precio De Repuesto</label>
           <input
             placeholder="Precio_repuesto"
             {...register("precio_unitario")}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
           />
-          <label>Precio total</label>
-          <input
+          {/* <label>Precio total</label> */}
+          {/* <input
             placeholder="Precio Total"
             {...register("precio_total")}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-          />
+          /> */}
           <label>Cliente</label>
           <select
-            {...register("cliente")}
+            {...register("cliente",NombreRequired )}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
           >
             <option value="">Selecciona un cliente</option>
@@ -132,7 +138,8 @@ export default function FormVentaRepuesto() {
               </option>
             ))}
           </select>
-          <button className="bg-indigo-500 px-3 py-2 rounded-md" type="submit">
+            {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
+          <button className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d" type="submit">
             Guardar
           </button>
         </form>
