@@ -1,9 +1,9 @@
 //Importa modulo para trabajar MongoDB en NodeJS
 import mongoose from "mongoose";
 
-// Estructurar los datos que representan a los permisos en la base de datos.
-const permisoSchema = new mongoose.Schema({
-    nombre_permiso: {
+// Estructurar los datos que representan a los roles en la base de datos.
+const rolSchema = new mongoose.Schema({
+    nombre_rol: {
         type: String, //Tipo de dato
         required: true // Es requerido
     },
@@ -16,5 +16,5 @@ const permisoSchema = new mongoose.Schema({
     timestamps: true
 })
 // se puede poner un max lend, buscar en la documentacion
-export default mongoose.model("permisos", permisoSchema) // se va guardar en user 1 primer parametro el segundo es 
+export default mongoose.model("roles", rolSchema) // se va guardar en user 1 primer parametro el segundo es 
 //el establecimiento del schema tambien es el nombre de la coleccion y se crea automaticamente
