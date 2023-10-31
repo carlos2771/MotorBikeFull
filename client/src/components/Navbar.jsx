@@ -26,9 +26,6 @@ export default function Navbar() {
                 <Link to="/clientes">Clientes</Link>
             </li>
             <li>
-                <Link to="/mecanicos">Mecanicos</Link>
-            </li>
-            <li>
                 <Link to="/ventas-respuestos" className="">Ventas Repuestos</Link>
             </li>
             <li >
