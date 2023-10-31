@@ -18,7 +18,7 @@ export default function TaskCard({ task }) {
               deleteTask(task._id)
             }}
           >
-            delete
+            Eliminar
           </button>
           
           <Link 
