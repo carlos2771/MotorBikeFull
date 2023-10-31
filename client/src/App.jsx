@@ -14,16 +14,15 @@ import ClientesPage from "./pages/clientes/ClientesPage"; // Para traer las vist
 import { ClienteProvider } from "./context/ClientContext";
 import FormCliente from "./pages/clientes/FormCliente";
 
-import PermisosPage from "./pages/Permisos/PermisosPage";
-import { PermisoProvider } from "./context/PermisosContext";
-import FormPermisos from "./pages/Permisos/FormPermiso";
-
 import FormVentaRepuesto from "./pages/ventasRepuestos/FormVentaRepuesto";
 import VentasRepuestosPage from "./pages/ventasRepuestos/VentasRepuestosPage";
 import { VentasRepuestoProvider} from "./context/VentasRepuestoContex"
 
 import { RepuestoProvider } from "./context/RepuestosContext";
 
+import PermisosPage from "./pages/Permisos/PermisosPage";
+import { PermisoProvider } from "./context/PermisosContext";
+import FormPermisos from "./pages/Permisos/FormPermiso";
 
 export default function App() {
   return (
@@ -34,7 +33,7 @@ export default function App() {
           <ClienteProvider>
             <VentasRepuestoProvider>
               <RepuestoProvider>
-              <PermisoProvider>
+                <PermisoProvider>
                   {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
                   <BrowserRouter>
                     <main className="container mx-auto px-10">
@@ -64,7 +63,7 @@ export default function App() {
                       </Routes>
                     </main>
                   </BrowserRouter>
-              </PermisoProvider>
+                </PermisoProvider>
               </RepuestoProvider>
             </VentasRepuestoProvider>
           </ClienteProvider>
