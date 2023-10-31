@@ -26,7 +26,8 @@ export default function FormCliente() {
   
   const onSubmit = handleSubmit(async(data) => {
     if(params.id){
-      updateCliente(params.id, data)
+       updateCliente(params.id, data)
+       navigate("/clientes")
     }else{
       const res = await createCliente(data)
       if(res) navigate('/clientes')

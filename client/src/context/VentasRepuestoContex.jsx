@@ -34,8 +34,8 @@ export function VentasRepuestoProvider({ children }) {
 
   const createVentaRepuesto = async (venta) => {
     try {
-      const response = await createVentasRepuestosRequest(venta);
-      console.log("ventas:", response);
+      return  await createVentasRepuestosRequest(venta);
+      // console.log("ventas:", response);
     } catch (error) {
       setErrors(error.response.data.message);
       console.log(error);
@@ -53,7 +53,7 @@ export function VentasRepuestoProvider({ children }) {
 
   const updateVentaRepuesto = async (id, venta) => {
     try {
-      await updateVentasRepuestosRequest(id, venta);
+      return await updateVentasRepuestosRequest(id, venta);
     } catch (error) {
       console.error(error);
       setErrors(error.response.data.message);

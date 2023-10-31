@@ -4,11 +4,12 @@ import { useTasks } from '../context/TasksContext'
 import { useNavigate, useParams } from 'react-router-dom'
 import utc from "dayjs/plugin/utc"
 import dayjs from 'dayjs'
+import { NombreRequired } from '../utils/validations'
 dayjs.extend(utc)
 //dayjs es para modificar la fecha a tipo string
 
 export default function TaskFormPage() {
-  const {register, handleSubmit, setValue } = useForm() 
+  const {register, handleSubmit, setValue, formState: {errors} } = useForm() 
   const {createTask, getTask, updateTask} = useTasks()
   const navigate = useNavigate()
   const params = useParams()
@@ -48,17 +49,19 @@ export default function TaskFormPage() {
         <input 
         type="text" 
         placeholder='Titulo' 
-        {...register("title")}
+        {...register("title", NombreRequired)}
         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
         autoFocus
         />
+        {errors.title && <p className="text-red-500">{errors.title.message}</p>}
         <label htmlFor="description">Descripcion</label>
         <textarea 
         rows="3" 
         placeholder='Descripcion'
-        {...register("description")}
+        {...register("description", NombreRequired)}
         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
         ></textarea>
+        {errors.description && <p className="text-red-500">{errors.description.message}</p>}
         <label htmlFor="date">Date</label>
         <input className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2' type="date"{...register("date")} />
         <button className='bg-indigo-500 px-3 py-2 rounded-md'>

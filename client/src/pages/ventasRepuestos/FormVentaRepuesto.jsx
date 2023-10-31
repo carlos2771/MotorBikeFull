@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useRepuestos } from "../../context/RepuestosContext";
-import { NombreRequired, RepuestoRequired } from "../../utils/validations";
+import { NegativeRequired, NombreRequired, RepuestoRequired } from "../../utils/validations";
 
 export default function FormVentaRepuesto() {
   const {
@@ -32,6 +32,8 @@ export default function FormVentaRepuesto() {
         setValue("repuesto", ventaRepuesto.repuesto);
         setSelectedRepuesto(ventaRepuesto.repuesto);
         setValue("cantidad_repuesto", ventaRepuesto.cantidad_repuesto);
+        setValue("cantidad", ventaRepuesto.cantidad);
+        setSelectedRepuesto(ventaRepuesto.cantidad);
         setValue("precio_unitario", ventaRepuesto.precio_unitario);
         setValue("precio_total", ventaRepuesto.precio_total);
         setValue("cliente", ventaRepuesto.cliente);
@@ -55,21 +57,23 @@ export default function FormVentaRepuesto() {
       );
       if (selectedRepuestoData) {
         setValue("precio_unitario", selectedRepuestoData.precio);
+        setValue("cantidad", selectedRepuestoData.cantidad);
       }
     }
   }, [selectedRepuesto]);
 
   const onSubmit = handleSubmit(async(data) => {
-    // Calcular el precio total antes de enviar el formulario
     data.precio_total = data.cantidad_repuesto * data.precio_unitario;
 
     if (params.id) {
-      updateVentaRepuesto(params.id, data);
+      const res = updateVentaRepuesto(params.id, data);
+        if(res) navigate("/ventas-respuestos")
     } else {
-      await createVentaRepuesto(data);
+      const res = await createVentaRepuesto(data);
+        if(res) navigate("/ventas-respuestos")
       
     }
-    navigate("/ventas-respuestos");
+    
   });
 
   console.log(ventasRepuestosErrors);
@@ -87,7 +91,7 @@ export default function FormVentaRepuesto() {
         <form onSubmit={onSubmit}>
           <label>Repuestos</label>
           <select
-            {...register("repuesto")}
+            {...register("repuesto", NombreRequired)}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
             onChange={(e) => setSelectedRepuesto(e.target.value)}
           >
@@ -98,11 +102,19 @@ export default function FormVentaRepuesto() {
               </option>
             ))}
           </select>
-          <label>Cantidad</label>
+          {errors.repuesto && <p className="text-red-500">{errors.repuesto.message}</p>}
+          <label>Cantidad existente</label>
+          <input
+            placeholder="cantidad"
+            {...register("cantidad")}
+            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+           disabled
+          />
+          <label>Cantidad a vender</label>
           <input
             placeholder="Cantidad"
             type="number"
-            {...register("cantidad_repuesto", NombreRequired )}
+            {...register("cantidad_repuesto", NegativeRequired )}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
             onChange={(e) => {
               const cantidad = parseFloat(e.target.value);
