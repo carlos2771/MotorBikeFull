@@ -25,11 +25,11 @@ export default function FormPermisos() {
   const onSubmit = handleSubmit(async(data) => {
     if(params.id){
       updatePermiso(params.id, data)
+      navigate("/permisos")
     }else{
       const res = await createPermiso(data)
       if(res) navigate('/permisos')
     }
-    
   })
 
 

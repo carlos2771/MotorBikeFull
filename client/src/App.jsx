@@ -34,8 +34,8 @@ export default function App() {
         <TaskProvider>
           <ClienteProvider>
             <VentasRepuestoProvider>
+              <RepuestoProvider>
               <PermisoProvider>
-                <RepuestoProvider>
                   {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
                   <BrowserRouter>
                     <main className="container mx-auto px-10">
@@ -65,8 +65,8 @@ export default function App() {
                       </Routes>
                     </main>
                   </BrowserRouter>
-                </RepuestoProvider>
               </PermisoProvider>
+              </RepuestoProvider>
             </VentasRepuestoProvider>
           </ClienteProvider>
         </TaskProvider>

@@ -4,7 +4,7 @@ import MuiDataTable from "mui-datatables";
 import { usePermisos } from "../../context/PermisosContext";
 
 export default function PermisosPage() {
-  const { permisos, getPermisos, deletePermiso } = usePermisos();
+  const { Permisos, getPermisos, deletePermiso } = usePermisos();
 
   useEffect(() => {
     try {
@@ -55,13 +55,13 @@ export default function PermisosPage() {
               <button
                 className="px-4 py-1 text-sm text-black font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-950/30 "
                 onClick={() => {
-                  deletePermiso(permisos[tableMeta.rowIndex]._id);
+                  deletePermiso(Permisos[tableMeta.rowIndex]._id);
                 }}
               >
                 Eliminar
               </button>
               <button className="px-4 py-1 m-1 text-sm text-black font-semibold rounded-full border border-green-500  hover:text-white hover:bg-green-600 focus:outline-none focus:ring-2  focus:ring-offset-2 shadow-lg shadow-zinc-950/30">
-                <Link to={`/permisos/${permisos[tableMeta.rowIndex]._id}`}>
+                <Link to={`/permiso/${Permisos[tableMeta.rowIndex]._id}`}>
                   Editar
                 </Link>
               </button>
@@ -79,7 +79,7 @@ export default function PermisosPage() {
       </button>
       <MuiDataTable
         title={"Permisos"}
-        data={permisos}
+        data={Permisos}
         columns={columns}
         options={{ selectableRows: "none" }}
       />

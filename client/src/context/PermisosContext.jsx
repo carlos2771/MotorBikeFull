@@ -19,7 +19,7 @@ export const usePermisos = () => {
 };
 
 export function PermisoProvider({ children }) {
-  const [Permisos, setPermisos] = useState([]);
+  const [permisos, setPermisos] = useState([]);
   const [errors, setErrors] = useState([]);
 
   const getPermisos = async () => {
@@ -32,10 +32,10 @@ export function PermisoProvider({ children }) {
     }
   };
 
-  const createPermiso = async (venta) => {
+  const createPermiso = async (permisos) => {
     try {
-      const response = await createPermisosRequest(venta);
-      console.log("ventas:", response);
+      return await createPermisosRequest(permisos);
+      console.log("permisos:", response);
     } catch (error) {
       setErrors(error.response.data.message);
       console.log(error);
@@ -51,9 +51,9 @@ export function PermisoProvider({ children }) {
     }
   };
 
-  const updatePermiso = async (id, venta) => {
+  const updatePermiso = async (id, permisos) => {
     try {
-      await updatePermisosRequest(id, venta);
+      await updatePermisosRequest(id, permisos);
     } catch (error) {
       console.error(error);
       setErrors(error.response.data.message);
@@ -65,7 +65,7 @@ export function PermisoProvider({ children }) {
       const res = await deletePermisosRequest(id);
       console.log(res);
       if (res.status === 204) {
-        setPermisos(Permisos.filter((venta) => venta._id !== id));
+        setPermisos(permisos.filter((permisos) => permisos._id !== id));
       }
     } catch (error) {
       console.error(error);
@@ -84,7 +84,7 @@ export function PermisoProvider({ children }) {
   return (
     <PermisoContext.Provider
       value={{
-        Permisos,
+        permisos,
         errors,
         getPermisos,
         createPermiso,

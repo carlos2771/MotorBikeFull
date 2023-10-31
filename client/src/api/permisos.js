@@ -10,13 +10,13 @@ export const getPermisoRequest = async (id) => {
   return response.data;
 };
 
-export const createPermisosRequest = async (cliente) => {
-  const response = await axiosClient.post("/permisos", cliente);
+export const createPermisosRequest = async (permisos) => {
+  const response = await axiosClient.post("/permisos", permisos);
   return response.data;
 };
 
-export const updatePermisosRequest = async (id,clientes) => {
-  const response = await axiosClient.put(`/permisos/${id}`,clientes);
+export const updatePermisosRequest = async (id,permisos) => {
+  const response = await axiosClient.put(`/permisos/${id}`,permisos);
   return response.data;
 };
 
