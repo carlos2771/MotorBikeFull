@@ -53,11 +53,33 @@ export default function FormPermisos() {
         {errors.nombre_permiso && <p className="text-red-500">{errors.nombre_permiso.message}</p>}
         
         <label>Estado</label>
-        <input 
-        placeholder='Estado'
-        {...register("estado", EstadoRequired)}
-        className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
-        />
+        <select
+
+          placeholder='Estado'
+          {...register("estado", EstadoRequired)}
+          className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
+          >
+            <option value="" disabled>Seleccione el estado</option>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+
+          </select>
+        
+
+{/* <select
+            {...register("repuesto", NombreRequired)}
+            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            onChange={(e) => setSelectedRepuesto(e.target.value)}
+          >
+            <option value="">Selecciona un repuesto</option>
+            {repuestos.map((repuesto) => (
+              <option key={repuesto._id} value={repuesto._id}>
+                {repuesto.nombre_repuesto}
+              </option>
+            ))}
+          </select> */}
+
+        
         {errors.estado && <p className="text-red-500">{errors.estado.message}</p>}
         <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
