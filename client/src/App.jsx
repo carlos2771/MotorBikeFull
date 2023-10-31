@@ -30,10 +30,10 @@ export default function App() {
       <AuthProvider>
         {/* Para validar las rutas de las tareas */}
         <TaskProvider>
-          <MecanicoProvider>
-            <ClienteProvider>
-              <VentasRepuestoProvider>
-                <RepuestoProvider>
+          <ClienteProvider>
+            <VentasRepuestoProvider>
+              <RepuestoProvider>
+                <MecanicoProvider>
                   {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
                   <BrowserRouter>
                     <main className="container mx-auto px-10">
@@ -51,20 +51,20 @@ export default function App() {
                           <Route path="/clientes" element={<ClientesPage />} />
                           <Route path="/add-cliente" element={<FormCliente />} />
                           <Route path="/cliente/:id" element={<FormCliente />} />
-                          <Route path="/mecanicos" element={<MecanicosPage />} />
-                          <Route path="/add-mecanico" element={<FormMecanico />} />
-                          <Route path="/mecanico/:id" element={<FormMecanico />} />
                           <Route path="/ventas-respuestos" element={<VentasRepuestosPage/>} />
                           <Route path="/add-venta-respuesto" element={<FormVentaRepuesto />} />
                           <Route path="/venta-respuesto/:id" element={<FormVentaRepuesto />} />
+                          <Route path="/mecanicos" element={<MecanicosPage />} />
+                          <Route path="/add-mecanico" element={<FormMecanico />} />
+                          <Route path="/mecanico/:id" element={<FormMecanico />} />
                         </Route>
                       </Routes>
                     </main>
                   </BrowserRouter>
-                </RepuestoProvider>
-              </VentasRepuestoProvider>
-            </ClienteProvider>
-          </MecanicoProvider>
+                </MecanicoProvider>
+              </RepuestoProvider>
+            </VentasRepuestoProvider>
+          </ClienteProvider>
         </TaskProvider>
       </AuthProvider>
     </div>
