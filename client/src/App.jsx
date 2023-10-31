@@ -18,7 +18,6 @@ import { VentasRepuestoProvider} from "./context/VentasRepuestoContex"
 import { RepuestoProvider } from "./context/RepuestosContext";
 
 
-
 export default function App() {
   return (
     <div>
@@ -41,6 +40,7 @@ export default function App() {
                       <Route path="/tasks" element={<TaskPaje />} />
                       <Route path="/add-task" element={<TaskFormPage />} />
                       <Route path="/tasks/:id" element={<TaskFormPage />} />
+
                       <Route path="/profile" element={<ProfilePage />} />
                       <Route path="/clientes" element={<ClientesPage />} />
                       <Route path="/add-cliente" element={<FormCliente />} />

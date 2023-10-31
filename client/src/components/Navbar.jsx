@@ -23,6 +23,9 @@ export default function Navbar() {
                 <Link to="/tasks">Tareas</Link>
             </li>
             <li>
+                <Link to="/add-task">agg Tareas</Link>
+            </li>
+            <li>
                 <Link to="/clientes">Clientes</Link>
             </li>
             <li>
