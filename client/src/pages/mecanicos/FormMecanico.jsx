@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import { useMecanicos } from "../../context/MecanicoContext"
+import { useMecanicos } from "../../context/MecanicosContext"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { NombreRequired , TelefonoRequired, CedulaRequired } from "../../utils/validations"
@@ -52,6 +52,7 @@ export default function FormMecanico() {
         />
         {errors.nombre_mecanico && <p className="text-red-500">{errors.nombre_mecanico.message}</p>}
         <label>Cedula Mecánico</label>
+        
         <input 
         placeholder='Cedula Mecánico'
         {...register("cedula_mecanico", CedulaRequired)}

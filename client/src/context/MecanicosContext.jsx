@@ -6,6 +6,7 @@ import {
   updateMecanicosRequest,
   deleteMecanicosRequest
 } from "../api/mecanicos";
+import axios from "axios";
 
 //Se crea un contexto para compartir datos y funciones relacionadas con los mecanicos
 const MecanicoContext = createContext();
