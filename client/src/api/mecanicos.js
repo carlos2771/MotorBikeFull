@@ -16,7 +16,7 @@ export const getMecanicoRequest = async (id) => {
 // Esta función toma un objeto "mecanico" como parámetro, que representa la información de un nuevo mecánico que se va a crear.
 // Realiza una solicitud POST a la ruta /mecanicos con el cuerpo de la solicitud configurado como el objeto mecanico.
 export const createMecanicosRequest = async (mecanico) => {
-  const response = await axiosMecanico.post("/mecanico", mecanico);
+  const response = await axiosMecanico.post("/mecanicos", mecanico);
   return response.data; //Después de recibir la respuesta, la función devuelve los datos de respuesta 
 };
 
