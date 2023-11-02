@@ -25,6 +25,9 @@ export default function Navbar() {
                 <Link to="/tasks">Tareas</Link>
             </li>
             <li>
+                <Link to="/add-task">agg Tareas</Link>
+            </li>
+            <li>
                 <Link to="/clientes">Clientes</Link>
             </li>
             <li>
@@ -35,6 +38,9 @@ export default function Navbar() {
             </li>
             <li>
                 <Link to="/ventas-respuestos" className="">Ventas Repuestos</Link>
+            </li>
+            <li>
+                <Link to="/permisos" className="">Permisos</Link>
             </li>
             <li >
                 <Link className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
