@@ -12,7 +12,6 @@ import Navbar from "./components/Navbar";
 
 import ClientesPage from "./pages/clientes/ClientesPage"; // Para traer las vistas de la pagina Cliente
 import { ClienteProvider } from "./context/ClientContext";
-import ClientesPage from "./pages/clientes/ClientesPage";
 import FormCliente from "./pages/clientes/FormCliente";
 
 import FormVentaRepuesto from "./pages/ventasRepuestos/FormVentaRepuesto";
