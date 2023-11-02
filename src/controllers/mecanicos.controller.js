@@ -13,10 +13,9 @@ export const getMecanicos = async(req, res) =>{
 
         // Devuelve los mecanicos encontrados en formato JSON
         res.json(mecanicos)
-    }catch (error) {
-        // En caso de error, maneja la excepción y devuelve un código de estado 500 (Error del servidor) con un mensaje de error
-        res.status(500).json({ message: "Error al obtener los mecanicos", error: error.message });
-        }
+    } catch (error) {
+        return res.status(500).json({ message: "Error al obtener mecanicos", error });
+      }
 }
 
 //Obtener un mecanico en especifico
@@ -33,8 +32,8 @@ export const getMecanico = async (req, res) => {
 
     } catch (error) {
         // En caso de error, maneja la excepción y devuelve un código de estado 500 (Error del servidor) con un mensaje de error
-      return res.status(500).json({ message: "Mecanico no encontrado" });
-    }
+        return res.status(500).json({ message: "Error al obtener el mecanico", error });
+      }
   };
 
 
@@ -60,7 +59,7 @@ export const createMecanico = async(req, res) =>{
         res.json(saveMecanico)
     }catch (error) {
         // En caso de error, maneja la excepción y devuelve un código de estado 500 (Error del servidor) con un mensaje de error
-        res.status(500).json({ message: "Error al crear mecanico", error: error.message });
+        res.status(500).json({ message: error.message }); 
       }
 }
 
@@ -82,7 +81,7 @@ export const updateMecanico= async(req, res) =>{
         res.json(mecanico)
     } catch (error) {
         // En caso de error, maneja la excepción y devuelve un código de estado 500 (Error del servidor) con un mensaje de error
-        res.status(500).json({ message: "Error al actualizar mecanico", error: error.message });
+        return res.status(500).json({ message: "Error al actualizar el mecanico", error });
         }
 }
 

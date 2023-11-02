@@ -29,6 +29,9 @@ export default function Navbar() {
                 <Link to="/mecanicos">Mecanicos</Link>
             </li>
             <li>
+                <Link to="/marcas">Marcas</Link>
+            </li>
+            <li>
                 <Link to="/ventas-respuestos" className="">Ventas Repuestos</Link>
             </li>
             <li >

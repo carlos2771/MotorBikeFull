@@ -6,6 +6,7 @@ import {
   updateMecanicosRequest,
   deleteMecanicosRequest
 } from "../api/mecanicos";
+import axios from "axios";
 
 //Se crea un contexto para compartir datos y funciones relacionadas con los mecanicos
 const MecanicoContext = createContext();
@@ -76,14 +77,14 @@ export function MecanicoProvider({ children }) {
     }
   };
   // Utiliza useEffect para limpiar los errores después de un tiempo.
-  useEffect(() => {
-    if (errors.length > 0) {
-      const timer = setTimeout(() => {
-        setErrors([]);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [errors]);
+  // useEffect(() => {
+  //   if (errors.length > 0) {
+  //     const timer = setTimeout(() => {
+  //       setErrors([]);
+  //     }, 3000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [errors]);
 
 
   

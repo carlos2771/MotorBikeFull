@@ -15,5 +15,11 @@ const axiosMecanico = axios.create({
   
 })
 
+const axiosMarca = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true, // para poder leer las cookies
+  
+})
+
 //Exportación de las instancias de Axios
-export {axiosClient, axiosMecanico}
+export {axiosClient, axiosMecanico, axiosMarca}

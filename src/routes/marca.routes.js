@@ -9,10 +9,10 @@ const router = Router()
 
 // Configura rutas y controladores
 router.get("/marcas",authRequired, getMarcas) 
-router.get("/marcas/:id",authRequired, getMarca) 
-router.post("/marcas", authRequired, validateSchema(marcaSchema), createMarca) 
-router.delete("/marcas/:id", authRequired, deleteMarca) 
-router.put("/marcas/:id", authRequired, validateSchema(marcaSchema), updateMarca) 
+router.get("/marca/:id",authRequired, getMarca) 
+router.post("/marca", authRequired, validateSchema(marcaSchema), createMarca) 
+router.delete("/marca/:id", authRequired, deleteMarca) 
+router.put("/marca/:id", authRequired, validateSchema(marcaSchema), updateMarca) 
 
 // Exporta el enrutador configurado
 export default router
