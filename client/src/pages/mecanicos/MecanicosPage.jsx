@@ -30,7 +30,6 @@ export default function MecanicosPage() {
           return tableMeta.rowIndex + 1; // Comenzar el conteo en 1 en lugar de 0
         },
       },
-      
     },
     {
       name: "nombre_mecanico",

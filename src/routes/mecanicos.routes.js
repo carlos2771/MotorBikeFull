@@ -9,10 +9,10 @@ const router = Router()
 
 // Configura rutas y controladores
 router.get("/mecanicos", authRequired, getMecanicos) 
-router.get("/mecanicos/:id", authRequired, getMecanico) 
+router.get("/mecanico/:id", authRequired, getMecanico) 
 router.post("/mecanicos", authRequired, validateSchema(mecanicoSchema) ,createMecanico) 
-router.delete("/mecanicos/:id", authRequired, deleteMecanico) 
-router.put("/mecanicos/:id", authRequired, validateSchema(mecanicoSchema), updateMecanico) 
+router.delete("/mecanico/:id", authRequired, deleteMecanico) 
+router.put("/mecanico/:id", authRequired, validateSchema(mecanicoSchema), updateMecanico) 
 
 // Exporta el enrutador configurado
 export default router

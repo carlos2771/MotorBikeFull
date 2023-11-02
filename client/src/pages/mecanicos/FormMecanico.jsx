@@ -7,7 +7,7 @@ import { NombreRequired , TelefonoRequired, CedulaRequired } from "../../utils/v
 
 export default function FormMecanico() {
   const {register, handleSubmit, setValue, formState: {errors}} = useForm()
-  const {createMecanico, getMecanico, updateMecanico, errors: mecanicosErrors} = useMecanicos()
+  const {createMecanico, getMecanico, updateMecanico} = useMecanicos()
   const navigate = useNavigate()  
   const params = useParams()
 
@@ -28,9 +28,11 @@ export default function FormMecanico() {
   const onSubmit = handleSubmit(async(data) => {
     if(params.id){
         updateMecanico(params.id, data)
+        navigate("/mecanicos");
     }else{
-      const res = await createMecanico(data)
-      if(res) navigate('/mecanicos')
+       const res = await createMecanico(data)
+        if(res) navigate('/mecanicos')
+
     }
     
   })
@@ -39,11 +41,6 @@ export default function FormMecanico() {
   return (
     <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
     <div className='bg-zinc-800 max-w-md w-full p-10 rounded-md'>
-    {mecanicosErrors.map((error, i) => (
-          <div className="bg-red-500 p-2 text-white" key={i}>
-            {error}
-          </div>
-        ))}
       <form onSubmit={onSubmit}>
         <label>Nombre Mecánico</label>
         <input 

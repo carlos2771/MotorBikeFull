@@ -5,7 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 export default function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
   console.log(user);
-
+  
   return (
     <nav className="bg-zinc-700 my-2 flex justify-between py-5 px-10 rounded-lg ">
       <Link to={
@@ -13,9 +13,11 @@ export default function Navbar() {
       }>
         <h1 className="text-2xl font-bold">Motor Bike</h1>
       </Link>
+      
       <ul className="flex gap-x-2">
         {isAuthenticated ? (
           <>
+            
            <li>
                 Bienvenido {user.username}
             </li>
@@ -37,7 +39,7 @@ export default function Navbar() {
                     logout()
                 }}>Logout</Link>
             </li>
-           
+            
             
           </>
         ) : (
@@ -53,6 +55,7 @@ export default function Navbar() {
           </>
         )}
       </ul>
+      
     </nav>
 
     

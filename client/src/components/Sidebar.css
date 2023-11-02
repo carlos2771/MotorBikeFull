@@ -1,0 +1,25 @@
+.sidebar {
+    width: 250px; /* Ancho del menú lateral */
+    height: 100%;
+    background-color: #888; /* Fondo gris */
+    position: fixed;
+    top: 0;
+    left: -250px; /* Oculta inicialmente el menú fuera de la pantalla */
+    z-index: 1;
+    transition: left 0.3s ease;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  
+  .show-sidebar {
+    left: 0; /* Muestra el menú cuando se aplica la clase show-sidebar */
+  }
+  

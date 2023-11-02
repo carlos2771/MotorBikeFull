@@ -76,14 +76,14 @@ export function MecanicoProvider({ children }) {
     }
   };
   // Utiliza useEffect para limpiar los errores después de un tiempo.
-  useEffect(() => {
-    if (errors.length > 0) {
-      const timer = setTimeout(() => {
-        setErrors([]);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [errors]);
+  // useEffect(() => {
+  //   if (errors.length > 0) {
+  //     const timer = setTimeout(() => {
+  //       setErrors([]);
+  //     }, 3000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [errors]);
 
 
   
