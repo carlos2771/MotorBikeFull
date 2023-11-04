@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
 export default function registerPage() {
   const {
@@ -27,7 +28,9 @@ export default function registerPage() {
   console.log(registerErrors);
 
   return (
-    <div className="flex h-[calc(100vh-100px)] items-center justify-center">
+    <div>
+      
+      <div className="flex h-[calc(100vh-100px)] items-center justify-center">
       <div className="bg-zinc-800 max-w-md p-10 rounded-md">
         {registerErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
@@ -75,6 +78,7 @@ export default function registerPage() {
           </Link>
         </p>
       </div>
+    </div>
     </div>
   );
 }

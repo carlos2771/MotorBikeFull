@@ -8,6 +8,8 @@ import mecanicosRoutes from "./routes/mecanicos.routes.js"
 import ventas_serviciosRoutes from "./routes/ventas_servicios.routes.js"
 import marcaRoutes from "./routes/marca.routes.js"
 import repuestosRoutes from "./routes/repuestos.routes.js"
+import permisosRoutes from "./routes/permisos.routes.js"
+import rolesRoutes from "./routes/roles.routes.js"
 import ventas_repuestosRoutes from "./routes/ventas_repuestos.routes.js"
 import cors  from 'cors'
 
@@ -35,6 +37,8 @@ app.use("/api", mecanicosRoutes )
 app.use("/api", marcaRoutes )
 app.use("/api", ventas_serviciosRoutes)
 app.use("/api", repuestosRoutes)
+app.use("/api", permisosRoutes)
+app.use("/api", rolesRoutes)
 app.use("/api", ventas_repuestosRoutes)
 
 export default app;

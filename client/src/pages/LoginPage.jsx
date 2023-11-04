@@ -6,6 +6,7 @@ import { Link,  useNavigate } from 'react-router-dom';
 import { Alert } from "@material-tailwind/react";
 
 
+
 export default function loginPage() {
 
   const {register, handleSubmit, formState: {errors}} = useForm()
@@ -24,7 +25,8 @@ export default function loginPage() {
 
 
   return (
-    <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
+    <div>
+      <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
       <div className='bg-zinc-800 max-w-md w-full p-10 rounded-md'>
       {
       signinErrors.map((error, i ) => (
@@ -66,5 +68,7 @@ export default function loginPage() {
       </p>
       </div>
     </div>
+    </div>
+    
   )
 }
