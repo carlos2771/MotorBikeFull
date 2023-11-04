@@ -12,8 +12,10 @@ export default function TaskPaje() {
 
   if (tasks.length === 0) return <h1>No hay tareas</h1>;
   return (
-    <div>
-      <button className="px-5 py-1 m-2 text-sm text-withe font-semibold rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent shadow-lg shadow-zinc-300/30"><Link to={"/add-task"}>Añadir tarea</Link></button>
+    <div className="my-20 mx-16">
+      <button 
+      className="px-5 py-1 m-2 text-sm text-withe font-semibold rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent shadow-lg shadow-zinc-300/30">
+        <Link to={"/add-task"}>Añadir tarea</Link></button>
     <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
       {tasks.map((task) => (
         <TaskCard task={task} key={task._id} />

@@ -118,11 +118,11 @@ export default   function VentasRepuestosPage() {
       ];
     
       return (
-        <div>
+        <div className="mt-16">
           <button className="px-5 py-1 m-2 text-sm text-white font-semibold rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent shadow-lg shadow-zinc-300/30">
             <Link to={"/add-venta-respuesto"}>Añadir Venta</Link>
           </button>
-          <MuiDataTable
+          <MuiDataTable className="my-16"
             title={"Ventas Repuestos"}
             data={ventasRepuestos}
             columns={columns}
