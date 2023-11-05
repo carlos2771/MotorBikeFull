@@ -23,6 +23,11 @@ import { RepuestoProvider } from "./context/RepuestosContext";
 import PermisosPage from "./pages/Permisos/PermisosPage";
 import { PermisoProvider } from "./context/PermisosContext";
 import FormPermisos from "./pages/Permisos/FormPermiso";
+import PageClientes from "./pages/clientes/PageClientes";
+
+
+
+
 
 import { MecanicoProvider } from "./context/MecanicosContext";
 import MecanicosPage from "./pages/mecanicos/MecanicosPage";
@@ -34,21 +39,23 @@ import MarcasPage  from "./pages/marcas/MarcasPage";
 import FormMarca from "./pages/marcas/FormMarca";
 
 export default function App() {
+
   return (
     <div>
       <AuthProvider>
         {/* Para validar las rutas de las tareas */}
+
         <TaskProvider>
           <ClienteProvider>
             <VentasRepuestoProvider>
               <RepuestoProvider>
                 <PermisoProvider>
                   <MecanicoProvider>
-                    <MarcasProvider>
+                    <MarcasProvider>  
                       {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
                       <BrowserRouter>
-                        <main className="container mx-auto px-10">
-                          <Navbar />
+                        <main className="">  
+                          <Navbar/>
                           <Routes>
                             <Route path="/" element={<HomePage />} />
                             <Route path="/login" element={<LoginPage />} />
@@ -59,24 +66,24 @@ export default function App() {
                               <Route path="/add-task" element={<TaskFormPage />} />
                               <Route path="/tasks/:id" element={<TaskFormPage />} />
                               <Route path="/profile" element={<ProfilePage />} />
-                              <Route path="/clientes" element={<ClientesPage />} />
+                              <Route path="/clientes" element={<PageClientes />} />
                               <Route path="/add-cliente" element={<FormCliente />} />
                               <Route path="/cliente/:id" element={<FormCliente />} />
 
-                              <Route path="/permisos" element={<PermisosPage />} />
-                              <Route path="/add-permiso" element={<FormPermisos />} />
-                              <Route path="/permiso/:id" element={<FormPermisos />} />
+                                  <Route path="/permisos" element={<PermisosPage />} />
+                                  <Route path="/add-permiso" element={<FormPermisos />} />
+                                  <Route path="/permiso/:id" element={<FormPermisos />} />
 
-                              <Route path="/mecanicos" element={<MecanicosPage />} />
-                              <Route path="/add-mecanico" element={<FormMecanico />} />
-                              <Route path="/mecanico/:id" element={<FormMecanico />} />
-                              <Route path="/marcas" element={<MarcasPage />} />
-                              <Route path="/add-marca" element={<FormMarca />} />
-                              <Route path="/marca/:id" element={<FormMarca />} />
+                                  <Route path="/mecanicos" element={<MecanicosPage />} />
+                                  <Route path="/add-mecanico" element={<FormMecanico />} />
+                                  <Route path="/mecanico/:id" element={<FormMecanico />} />
+                                  <Route path="/marcas" element={<MarcasPage />} />
+                                  <Route path="/add-marca" element={<FormMarca />} />
+                                  <Route path="/marca/:id" element={<FormMarca />} />
 
-                              <Route path="/ventas-respuestos" element={<VentasRepuestosPage/>} />
-                              <Route path="/add-venta-respuesto" element={<FormVentaRepuesto />} />
-                              <Route path="/venta-respuesto/:id" element={<FormVentaRepuesto />} />
+                                  <Route path="/ventas-respuestos" element={<VentasRepuestosPage/>} />
+                                  <Route path="/add-venta-respuesto" element={<FormVentaRepuesto />} />
+                                  <Route path="/venta-respuesto/:id" element={<FormVentaRepuesto />} />
                             </Route>
                           </Routes>
                         </main>
