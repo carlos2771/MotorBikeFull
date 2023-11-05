@@ -8,3 +8,7 @@ body{
   color: white;
   
 }
+.custom-header {
+  font-size: 19px; /* Tamaño de fuente personalizado */
+  font-weight: bold; /* Otras propiedades de estilo según sea necesario */
+}

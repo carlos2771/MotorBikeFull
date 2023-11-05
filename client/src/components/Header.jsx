@@ -14,7 +14,7 @@ function classNames(...classes) {
 
 export default function Header() {
   return (
-    <Disclosure as="nav" className="bg-zinc-800">
+    <Disclosure as="nav" className="bg-zinc-700 mb-5 fixed top-0 left-0 right-0 shadow-md ">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -32,7 +32,7 @@ export default function Header() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <h1>Motor bike</h1> {/*Logo de motor bike a futuro */}
+                  <h1 className="text-3xl">Motor bike</h1> {/*Logo de motor bike a futuro */}
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4 ">
@@ -42,8 +42,8 @@ export default function Header() {
                         href={item.href}
                         className={classNames(
                           item.current
-                            ? "no-underline bg-sky-700 text-white  "
-                            : "no-underline text-gray-300 hover:bg-sky-700 hover:text-white",
+                            ? "no-underline bg-sky-700 text-white text-xl "
+                            : "no-underline text-gray-300 hover:bg-sky-700 hover:text-white text-xl",
                           "rounded-md px-3 py-2 text-sm font-medium"
                         )}
                         aria-current={item.current ? "page" : undefined}

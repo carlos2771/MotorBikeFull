@@ -6,14 +6,14 @@ import Header from "./Header";
 
 export default function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   console.log(user);
 
   return (
     <div>
       {isAuthenticated ? (
         <>
-          <div className="bg-zinc-700 py-3 fixed top-0 left-0 right-0 shadow-md" style={{ zIndex: 1000 }}>
+          <div className="bg-zinc-700 py-3 fixed top-0 left-0 right-0 shadow-md " style={{ zIndex: 1000 }}>
             <button className="ml-4" onClick={() => setOpen(true)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
