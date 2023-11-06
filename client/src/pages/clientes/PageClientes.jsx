@@ -99,7 +99,7 @@ export default function PageClientes() {
       </div>
       <Box sx={{ width: "100%" }}>
         <DataGrid
-          className="bg-neutral-700 mx-16 my-4"
+          className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
           rows={clientes}
           columns={columns}
           getRowId={(row) => row._id}

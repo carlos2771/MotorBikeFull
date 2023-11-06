@@ -44,7 +44,7 @@ export default function App() {
                 <PermisoProvider>
                   {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
                   <BrowserRouter>
-                    <main className="container mx-auto  ">  
+                    <main className="container mx-auto   ">  
                       <Navbar/>
                       <Routes>
                         <Route path="/" element={<HomePage />} />
