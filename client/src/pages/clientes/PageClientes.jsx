@@ -19,32 +19,37 @@ export default function PageClientes() {
     {
       field: "nombre_cliente",
       headerName: "Nombre",
-      width: 450,
+      width: 190,
       editable: true,
+      headerClassName: 'custom-header',
     },
     {
       field: "email_cliente",
       headerName: "Email",
-      width: 450,
+      width: 240,
       editable: true,
+      headerClassName: 'custom-header',
     },
     {
       field: "telefono_cliente",
       headerName: "Telefono",
-      width: 290,
+      width: 200,
       editable: true,
+      headerClassName: 'custom-header',
     },
     {
       field: "cedula",
       headerName: "Cedula",
-      width: 450,
+      width: 200,
       editable: true,
+      headerClassName: 'custom-header',
     },
     {
       field: "createdAt",
       headerName: "Fecha Creacion",
-      width: 450,
+      width: 240,
       editable: true,
+      headerClassName: 'custom-header',
       renderCell: (params) => {
         const date = new Date(params.value);
         const formattedDate = date.toLocaleDateString("es-ES", {
@@ -59,6 +64,7 @@ export default function PageClientes() {
       field: "acciones",
       headerName: "Acciones",
       width: 200,
+      headerClassName: 'custom-header',
       renderCell: (params) => {
         return (
           <div>
@@ -93,7 +99,7 @@ export default function PageClientes() {
       </div>
       <Box sx={{ width: "100%" }}>
         <DataGrid
-          className="bg-neutral-700 mx-16 my-4"
+          className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
           rows={clientes}
           columns={columns}
           getRowId={(row) => row._id}
@@ -109,6 +115,9 @@ export default function PageClientes() {
           disableRowSelectionOnClick
           sx={{
             color: "white",
+            '& .MuiDataGrid-cell': {
+              fontSize: '18px', // Cambia el tamaño de fuente aquí
+            },
           }}
           slots={{ toolbar: GridToolbar }}
         />

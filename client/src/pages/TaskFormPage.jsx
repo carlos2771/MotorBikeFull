@@ -42,15 +42,15 @@ export default function TaskFormPage() {
     navigate("/tasks")
   })
   return (
-    <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
-    <div className='bg-zinc-800 max-w-md w-full p-10 rounded-md'>
+    <div className='flex h-[calc(100vh-100px)] items-center justify-center  '>
+    <div className='bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40 '>
       <form onSubmit={onSubmit}>
         <label htmlFor="title">Titulo</label>
         <input 
         type="text" 
         placeholder='Titulo' 
         {...register("title", NombreRequired)}
-        className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
+        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         autoFocus
         />
         {errors.title && <p className="text-red-500">{errors.title.message}</p>}
@@ -59,14 +59,16 @@ export default function TaskFormPage() {
         rows="3" 
         placeholder='Descripcion'
         {...register("description", NombreRequired)}
-        className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
+        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         ></textarea>
         {errors.description && <p className="text-red-500">{errors.description.message}</p>}
         <label htmlFor="date">Date</label>
-        <input className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2' type="date"{...register("date")} />
-        <button className='bg-indigo-500 px-3 py-2 rounded-md'>
+        <input className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' type="date"{...register("date")} />
+        <div className='justify-end flex mt-6'>
+          <button className='bg-blue-600 px-3 py-2 rounded-md  '>
           Guardar
         </button>
+        </div>
       </form>
     </div>
     </div>
