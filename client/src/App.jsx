@@ -30,12 +30,12 @@ import PageClientes from "./pages/clientes/PageClientes";
 
 
 import { MecanicoProvider } from "./context/MecanicosContext";
-import MecanicosPage from "./pages/mecanicos/MecanicosPage";
+import MecanicosPage from "./pages/mecanicos/PageMecanicos";
 import FormMecanico from "./pages/mecanicos/FormMecanico";
 
 
 import { MarcasProvider } from "./context/MarcasContext";
-import MarcasPage  from "./pages/marcas/MarcasPage";
+import PageMarcas  from "./pages/marcas/PageMarcas";
 import FormMarca from "./pages/marcas/FormMarca";
 
 export default function App() {
@@ -77,7 +77,7 @@ export default function App() {
                                   <Route path="/mecanicos" element={<MecanicosPage />} />
                                   <Route path="/add-mecanico" element={<FormMecanico />} />
                                   <Route path="/mecanico/:id" element={<FormMecanico />} />
-                                  <Route path="/marcas" element={<MarcasPage />} />
+                                  <Route path="/marcas" element={<PageMarcas />} />
                                   <Route path="/add-marca" element={<FormMarca />} />
                                   <Route path="/marca/:id" element={<FormMarca />} />
 

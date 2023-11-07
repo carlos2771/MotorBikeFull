@@ -73,6 +73,12 @@ export default function Navbar() {
                   <Link to="/clientes">clientes</Link>
                 </Render>
                 <Render>
+                  <Link to="/mecanicos">Mecanicos</Link>
+                </Render>
+                <Render>
+                  <Link to="/marcas">Marcas</Link>
+                </Render>
+                <Render>
                   <Link to="/ventas-respuestos" className="">
                     Ventas Repuestos
                   </Link>
