@@ -6,14 +6,14 @@ import Header from "./Header";
 
 export default function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   console.log(user);
   
   return (
     <div>
       {isAuthenticated ? (
         <>
-          <div className="bg-zinc-700 py-3 fixed top-0 left-0 right-0 shadow-md" style={{ zIndex: 1000 }}>
+          <div className="bg-slate-700  py-3 fixed top-0 left-0 right-0 shadow-md " style={{ zIndex: 1000 }}>
             <button className="ml-4" onClick={() => setOpen(true)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +41,7 @@ export default function Navbar() {
             <div
               className={`${
                 open ? "w-80" : "w-0"
-              } bg-cyan-600 min-h-screen fixed top-0 left-0 transition-all duration-300`}
+              } bg-slate-700 min-h-screen fixed top-0 left-0 transition-all duration-300`}
             >
               <div className={`${!open && "hidden"} pt-3`}>
                 <button
@@ -64,6 +64,7 @@ export default function Navbar() {
                   </svg>
                 </button>
                 <Render>
+                  
                   <Link to="/tasks">Tareas</Link>
                 </Render>
                 <Render>

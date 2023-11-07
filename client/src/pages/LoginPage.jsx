@@ -26,8 +26,8 @@ export default function loginPage() {
 
   return (
     <div>
-      <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
-      <div className='bg-zinc-800 max-w-md w-full p-10 rounded-md'>
+      <div className='flex h-[calc(100vh-100px)] items-center justify-center '>
+      <div className='bg-gradient-to-r from-slate-800 via-slate-600 to-slate-900 max-w-md w-full p-10 rounded-md  '>
       {
       signinErrors.map((error, i ) => (
         <Alert className="bg-red-500 p-2 text-white" key={i}>
@@ -43,7 +43,7 @@ export default function loginPage() {
         <input
           type="email"
           {...register("email", EmailRequired )}
-          className="w-full bg-zinc-700 text-white px-4 py-2 rounded2 my-2"
+          className="w-full bg-gradient-to-r from-slate-900 via-slate-700 to-slate-950 border-0 border-b-2 border-sky-500 text-white px-4 py-2 rounded2 my-2"
           placeholder="Email"
         />
         {
@@ -53,14 +53,14 @@ export default function loginPage() {
        <input
           type="password"
           {...register("password", PasswordRequire)}
-          className="w-full bg-zinc-700 text-white px-4 py-2 rounded2 my-2"
+          className="w-full bg-gradient-to-r from-slate-900 via-slate-700 to-slate-950 border-0 border-b-2 border-sky-500 text-white px-4 py-2 rounded2 my-2"
           placeholder="Password"
         />
         {
           errors.password &&( <p className="text-red-500">{errors.password.message}</p>)
         }
         <button 
-        className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
+        className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
         type="submit">Login</button>
       </form>
       <p className='flex gap-x-2 justify-between'>
