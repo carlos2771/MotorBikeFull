@@ -1,30 +1,30 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import MuiDataTable from "mui-datatables";
-import { useClientes } from "../../context/ClientContext";
+import { useMarcas } from "../../context/MarcasContext";
 
-export default function ClientesPage() {
-  // Obtiene los datos y funciones relacionados con los clientes desde el contexto.
-  const { clientes, getClientes, deleteCliente } = useClientes();
+export default function MarcasPage() {
+  // Obtiene los datos y funciones relacionados con los marca desde el contexto.
+  const { marcas, getMarcas, deleteMarca } = useMarcas();
   
-  // Utiliza useEffect para cargar la lista de clientes al cargar la página.
+  // Utiliza useEffect para cargar la lista de marcas al cargar la página.
   useEffect(() => {
     try {
-      getClientes();
+      getMarcas();
     } catch (error) {
-      console.error("Error al obtener clientes:", error);
+      console.error("Error al obtener marcas:", error);
     }
   }, []);
 
   // Función para generar colores aleatorios en formato hexadecimal
-  function getRandomColor() {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
+//   function getRandomColor() {
+//     const letters = "0123456789ABCDEF";
+//     let color = "#";
+//     for (let i = 0; i < 6; i++) {
+//       color += letters[Math.floor(Math.random() * 16)];
+//     }
+//     return color;
+//   }
 
   const columns = [
     {
@@ -37,51 +37,39 @@ export default function ClientesPage() {
       },
       
     },
+    // {
+    //   name: "nombre_cliente",
+    //   label: "Avatar",
+    //   options: {
+    //     customBodyRender: (value, tableMeta) => {
+    //       // Genera un color aleatorio
+    //       const randomColor = getRandomColor();
+    //       const firstLetter = value.charAt(0).toUpperCase();
+    //       return (
+    //         <div
+    //           style={{
+    //             width: "40px",
+    //             height: "40px",
+    //             display: "flex",
+    //             justifyContent: "center",
+    //             alignItems: "center",
+    //             backgroundColor: randomColor, // Color de fondo del avatar aleatorio
+    //             color: "#fff", // Color del texto en el avatar
+    //             borderRadius: "50%",
+    //           }}
+    //         >
+    //           {firstLetter}
+    //         </div>
+    //       );
+    //     },
+    //   },
+    // },
     {
-      name: "nombre_cliente",
-      label: "Avatar",
-      options: {
-        customBodyRender: (value, tableMeta) => {
-          // Genera un color aleatorio
-          const randomColor = getRandomColor();
-          const firstLetter = value.charAt(0).toUpperCase();
-          return (
-            <div
-              style={{
-                width: "40px",
-                height: "40px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: randomColor, // Color de fondo del avatar aleatorio
-                color: "#fff", // Color del texto en el avatar
-                borderRadius: "50%",
-              }}
-            >
-              {firstLetter}
-            </div>
-          );
-        },
-      },
+      name: "nombre_marca",
+      label: "Nombre Marca",
     },
     {
-      name: "nombre_cliente",
-      label: "Nombre",
-    },
-    {
-      name: "email_cliente",
-      label: "Email",
-    },
-    {
-      name: "telefono_cliente",
-      label: "Telefono",
-    },
-    {
-      name: "cedula",
-      label: "Cedula",
-    },
-    {
-      name: "updatedAt",
+      name: "createdAt",
       label: "Fecha Creacion",
       options: {
         customBodyRender: (value) => {
@@ -103,13 +91,13 @@ export default function ClientesPage() {
               <button
                 className="px-4 py-1 text-sm text-black font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-950/30 "
                 onClick={() => {
-                  deleteCliente(clientes[tableMeta.rowIndex]._id);
+                    deleteMarca(marcas[tableMeta.rowIndex]._id);
                 }}
               >
                 Eliminar
               </button>
               <button className="px-4 py-1 m-1 text-sm text-black font-semibold rounded-full border border-green-500  hover:text-white hover:bg-green-600 focus:outline-none focus:ring-2  focus:ring-offset-2 shadow-lg shadow-zinc-950/30">
-                <Link to={`/cliente/${clientes[tableMeta.rowIndex]._id}`}>
+                <Link to={`/marca/${marcas[tableMeta.rowIndex]._id}`}>
                   Editar
                 </Link>
               </button>
@@ -123,11 +111,11 @@ export default function ClientesPage() {
   return (
     <div>
       <button className="px-5 py-1 m-2 text-sm text-white font-semibold rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent shadow-lg shadow-zinc-300/30">
-        <Link to={"/add-cliente"}>Añadir Cliente</Link>
+        <Link to={"/add-marca"}>Añadir Marcas</Link>
       </button>
       <MuiDataTable
-        title={"Clientes"}
-        data={clientes}
+        title={"Marcas"}
+        data={marcas}
         columns={columns}
         options={{ selectableRows: "none" }}
       />
