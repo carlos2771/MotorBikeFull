@@ -10,12 +10,12 @@ import ProtectedRoute from "./ProtectedRoute";
 import { TaskProvider } from "./context/TasksContext";
 import Navbar from "./components/Navbar";
 
-import ClientesPage from "./pages/clientes/ClientesPage"; // Para traer las vistas de la pagina Cliente
+
 import { ClienteProvider } from "./context/ClientContext";
 import FormCliente from "./pages/clientes/FormCliente";
 
 import FormVentaRepuesto from "./pages/ventasRepuestos/FormVentaRepuesto";
-import VentasRepuestosPage from "./pages/ventasRepuestos/VentasRepuestosPage";
+
 import { VentasRepuestoProvider} from "./context/VentasRepuestoContex"
 
 import { RepuestoProvider } from "./context/RepuestosContext";
@@ -24,6 +24,7 @@ import PermisosPage from "./pages/Permisos/PermisosPage";
 import { PermisoProvider } from "./context/PermisosContext";
 import FormPermisos from "./pages/Permisos/FormPermiso";
 import PageClientes from "./pages/clientes/PageClientes";
+import PageVentaRepuestos from "./pages/ventasRepuestos/PageVentaRepuestos";
 
 
 
@@ -43,7 +44,7 @@ export default function App() {
                 <PermisoProvider>
                   {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
                   <BrowserRouter>
-                    <main className="">  
+                    <main className="container mx-auto   ">  
                       <Navbar/>
                       <Routes>
                         <Route path="/" element={<HomePage />} />
@@ -54,6 +55,7 @@ export default function App() {
                           <Route path="/tasks" element={<TaskPaje />} />
                           <Route path="/add-task" element={<TaskFormPage />} />
                           <Route path="/tasks/:id" element={<TaskFormPage />} />
+                          
                           <Route path="/profile" element={<ProfilePage />} />
                           <Route path="/clientes" element={<PageClientes />} />
                           <Route path="/add-cliente" element={<FormCliente />} />
@@ -63,7 +65,7 @@ export default function App() {
                           <Route path="/add-permiso" element={<FormPermisos />} />
                           <Route path="/permiso/:id" element={<FormPermisos />} />
 
-                          <Route path="/ventas-respuestos" element={<VentasRepuestosPage/>} />
+                          <Route path="/ventas-respuestos" element={<PageVentaRepuestos/>} />
                           <Route path="/add-venta-respuesto" element={<FormVentaRepuesto />} />
                           <Route path="/venta-respuesto/:id" element={<FormVentaRepuesto />} />
                         </Route>
