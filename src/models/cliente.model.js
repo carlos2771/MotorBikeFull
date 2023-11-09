@@ -18,6 +18,10 @@ const clienteSchema = new mongoose.Schema({
         type: String, //Tipo String
         required: true  //Es requerido
     },
+    estado:{
+        type: String,
+        required: true
+    },
     cedula:{
         type: String, //Tipo String
         required: true, //Es requerido
