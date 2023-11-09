@@ -61,13 +61,13 @@ export const login = async (req, res) => {
       username: userFound.username,
     }); // del usuario encontrado creeme un token con el id del usuario encontrado
 
-    //tokent frontend y backend
-    res.cookie("token", token, {
-      httpOnly: process.env.NODE_ENV !== "development",
-      secure: true,
-      sameSite: "none",
-    });
-    // res.cookie("token", token)
+    // tokent frontend y backend
+    // res.cookie("token", token, {
+    //   httpOnly: process.env.NODE_ENV !== "development",
+    //   secure: true,
+    //   sameSite: "none",
+    // });
+    res.cookie("token", token)
     res.json({
       // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use
       username: userFound.username,
@@ -120,3 +120,4 @@ export const verifyToken = async (req, res) => {
     });
   });
 };
+
