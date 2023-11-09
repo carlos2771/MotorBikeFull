@@ -8,7 +8,7 @@ export default function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
   const [open, setOpen] = useState(true);
   console.log(user);
-  
+
   return (
     <div>
       {isAuthenticated ? (
@@ -72,12 +72,6 @@ export default function Navbar() {
                 </Render>
                 <Render>
                   <Link to="/clientes">clientes</Link>
-                </Render>
-                <Render>
-                  <Link to="/mecanicos">Mecanicos</Link>
-                </Render>
-                <Render>
-                  <Link to="/marcas">Marcas</Link>
                 </Render>
                 <Render>
                   <Link to="/ventas-respuestos" className="">

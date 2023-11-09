@@ -1,8 +1,9 @@
 import { z } from "zod";
 
 export const marcaSchema = z.object({
-    nombre_marca : z.string().refine((value) => {
-        return /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/.test(value);},{
-        message: "El nombre de la marca no es válido. Debe contener solo letras y no estar vacío.",
-    }),
+    nombre_marca: z.string().refine(value => value.trim() !== "", { 
+        message: "El nombre de la marca no puede estar vacío"
+    }).refine(value => /^[A-Za-z\s]*$/.test(value), {
+        message: "El nombre de la marca debe contener solo letras y espacios"
+    })
 });

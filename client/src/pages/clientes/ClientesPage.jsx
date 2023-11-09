@@ -4,10 +4,8 @@ import MuiDataTable from "mui-datatables";
 import { useClientes } from "../../context/ClientContext";
 
 export default function ClientesPage() {
-  // Obtiene los datos y funciones relacionados con los clientes desde el contexto.
   const { clientes, getClientes, deleteCliente } = useClientes();
-  
-  // Utiliza useEffect para cargar la lista de clientes al cargar la página.
+
   useEffect(() => {
     try {
       getClientes();
