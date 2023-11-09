@@ -32,7 +32,7 @@ export default function registerPage() {
     <div>
       
       <div className="flex h-[calc(100vh-100px)] items-center justify-center ">
-      <div className="bg-gradient-to-r from-slate-800 via-slate-600 to-slate-900 max-w-md p-10 rounded-md ">
+      <div className="bg-gradient-to-r from-slate-800 via-slate-600 to-slate-900 w-full max-w-md p-10 rounded-md ">
         {registerErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
