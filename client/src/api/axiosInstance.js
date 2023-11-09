@@ -8,18 +8,7 @@ const axiosClient = axios.create({
   withCredentials: true, //Para poder leer las cookies
   
 })
-
-const axiosMecanico = axios.create({
-  baseURL: BASE_URL,
-  withCredentials: true, // para poder leer las cookies
   
-})
-
-const axiosMarca = axios.create({
-  baseURL: BASE_URL,
-  withCredentials: true, // para poder leer las cookies
-  
-})
 
 //Exportación de las instancias de Axios
-export {axiosClient, axiosMecanico, axiosMarca}
+export {axiosClient}
