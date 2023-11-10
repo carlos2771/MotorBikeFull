@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { useClientes } from "../../context/ClientContext";
@@ -50,6 +50,12 @@ export default function PageClientes() {
     {
       field: "nombre_cliente",
       headerName: "Nombre",
+      width: 190,
+
+    },
+    {
+      field: "sexo",
+      headerName: "Sexo",
       width: 190,
 
     },
