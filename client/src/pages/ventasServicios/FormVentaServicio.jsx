@@ -83,6 +83,9 @@ const onSubmit = handleSubmit(async (data) => {
             ))}
           </select>
           {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
+
+          
+          
           {/* <label>Mecánico</label> */}
           {/* <select
             {...register("mecanico", NombreRequired)}
@@ -95,7 +98,7 @@ const onSubmit = handleSubmit(async (data) => {
               </option>
             ))}
           </select> */}
-          {errors.mecanico && <p className="text-red-500">{errors.mecanico.message}</p>}
+          {/* {errors.mecanico && <p className="text-red-500">{errors.mecanico.message}</p>} */}
           <label>Precio del Servicio</label>
           <input
             type="number"

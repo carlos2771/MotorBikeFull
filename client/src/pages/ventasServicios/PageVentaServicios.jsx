@@ -18,15 +18,15 @@ export default function PageVentaServicios() {
       
       
       const columns = [
-        {
-          field: "nombre_mecanico",
-          headerName: "Mecanico",
-          width: 160,   
-          editable: true,
-          headerClassName: 'custom-header',
-          valueGetter: (params) => params.row.mecanico.nombre_mecanico,
+        // {
+        //   field: "nombre_mecanico",
+        //   headerName: "Mecanico",
+        //   width: 160,   
+        //   editable: true,
+        //   headerClassName: 'custom-header',
+        //   valueGetter: (params) => params.row.mecanico.nombre_mecanico,
          
-        },
+        // },
         {
           field: "nombre_cliente",
           headerName: "Cliente",
