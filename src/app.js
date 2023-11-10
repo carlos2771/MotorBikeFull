@@ -43,4 +43,5 @@ app.use("/api", rolesRoutes)
 app.use("/api", roles_permisosRoutes)
 app.use("/api", ventas_repuestosRoutes)
 
+
 export default app;

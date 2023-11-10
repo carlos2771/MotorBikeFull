@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 // Conecta a la base de datos
 const ventas_serviciosSchema = new mongoose.Schema({
   
-    // mecanico: {
-    //     type: mongoose.Schema.Types.ObjectId, //para traer el _id
-    //     ref: "mecanicos", 
-    //     required: true
-    // },
+     mecanico: {
+        type: mongoose.Schema.Types.ObjectId, //para traer el _id
+        ref: "mecanicos", 
+        required: true
+    },
     cliente: {
         type: mongoose.Schema.Types.ObjectId, //para traer el _id
         ref: "clientes", 

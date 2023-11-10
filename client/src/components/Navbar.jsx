@@ -79,8 +79,8 @@ export default function Navbar() {
                   </Link>
                 </Render>
                 <Render>
-                  <Link to="/permisos" className="">
-                    Permisos
+                  <Link to="/ventas_servicios" className="">
+                    Ventas Servicios
                   </Link>
                 </Render>
                 <Render>

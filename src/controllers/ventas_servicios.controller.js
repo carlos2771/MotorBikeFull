@@ -1,49 +1,89 @@
 import  Ventas_Servicios from "../models/ventas_servicios.model.js"
+import Mecanico from "../models/mecanico.model.js"
 import  Cliente from "../models/cliente.model.js"
-export const getVentas_Servicios = async(req, res) =>{
-    const ventas_servicios = await Ventas_Servicios.find()
-    if(!ventas_servicios) return res.status(404).json({message: "Venta_Servicios no encontrados"})
-    res.json(ventas_servicios)
 
-}
+export const getVentas_Servicios = async (req, res) => {
+    try {
+      const ventas_servicios = await Ventas_Servicios.find();
+      if (!ventas_servicios) {
+        return res.status(404).json({ message: "Venta_servicios no encontrados" });
+      }
+      res.json(ventas_servicios);
+    } catch (error) {
+      return res.status(500).json({ message: "Error al obtener ventas de servicios", error });
+    }
+  };
+
+  export const getVenta_Servicio = async (req, res) => {
+    try {
+      const venta_servicio = await Ventas_Repuestos.findById(req.params.id)
+      if (!venta_servicio) {
+        return res.status(404).json({ message: "venta_servicio not found" });
+      }
+      res.json(venta_servicio);
+    } catch (error) {
+      return res.status(500).json({ message: "Error al obtener la venta de servicio", error });
+    }
+  };
 
 export const createVentas_Servicios = async (req, res) => {
     try {
-        const { cliente: clienteId, precio_servicio, descripcion } = req.body;
+        const {
+            mecanico: mecanicoId,
+            cliente: clienteId,
+            precio_servicio,
+            descripcion 
+        } = req.body;
 
         // Verifica si el cliente existe
-        const clienteEncontrado = await Cliente.findById(clienteId);
-        if (!clienteEncontrado) {
-            return res.status(404).json({ message: 'Cliente no encontrado' });
-        }
+    const clienteEncontrado = await Cliente.findById(clienteId);
+    if (!clienteEncontrado) {
+      return res.status(404).json({ message: "Cliente no encontrado" });
+    }
+
+    //verifica si el mecanico existe
+    const mecanicoEncontrado = await Mecanico.findById(mecanicoId);
+    if (!mecanicoEncontrado) {
+      return res.status(404).json({ message: "Mecanico no encontrado" });
+    }
 
         // Crea una nueva venta de servicio asociada al cliente
-        const nuevaVentaServicio = new Ventas_Servicios({
-            cliente: clienteEncontrado,
-            precio_servicio,
-            descripcion
+    const nuevaVentaServicio = new Ventas_Servicios({
+        mecanico: mecanicoId,
+        cliente: clienteId,
+        precio_servicio,
+        descripcion
         });
 
         // Guarda la venta de servicio en la base de datos
         const ventaServicioGuardada = await nuevaVentaServicio.save();
 
         res.status(201).json(ventaServicioGuardada);
-    } catch (error) {
-        res.status(500).json({ message: 'Error al crear la venta de servicio', error });
-    }
+  } catch (error) {
+    return res.status(500).json({ message: "Error al crear la venta de servicio", error });
+  }
 };
   
-
-export const deleteVentas_Servicios = async(req, res) =>{
-    const ventas_servicios = await Ventas_Servicios.findByIdAndDelete(req.params.id)
-    if(!ventas_servicios) return res.status(404).json({message: "ventas_servicios not found"})
-    return res.sendStatus(204)
-}
-
 export const updateVentas_Servicios= async(req, res) =>{
-    const ventas_servicios = await Ventas_Servicios.findByIdAndUpdate(req.params.id, req.body,{ // new y true son para que el guarde los datos nuevos que ingrese el usuario
-        new: true
-    })
-    if(!ventas_servicios) return res.status(404).json({message: "ventas_servicios not found"})
-    res.json(ventas_servicios)
-}
+    try {
+      const venta_servicio = await Ventas_Servicios.findByIdAndUpdate(req.params.id, req.body, {
+        // new y true son para que el guarde los datos nuevos que ingrese el usuario
+        new: true,
+      });
+      if (!venta_servicio) return res.status(404).json({ message: "venta servicio not found" });
+      res.json(venta_servicio);
+    } catch (error) {
+      return res.status(500).json({ message: "venta servicio no encontrada" });
+    }
+  }
+
+  export const deleteVentas_Servicios = async(req, res) =>{
+    try {
+      const deletedVenta_servicio = await Ventas_Repuestos.findByIdAndDelete(req.params.id);
+      if (!deletedVenta_servicio)
+        return res.status(404).json({ message: "Venta  not found" });
+      return res.sendStatus(204);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }

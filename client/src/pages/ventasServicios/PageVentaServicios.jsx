@@ -1,0 +1,130 @@
+import React, { useEffect } from 'react'
+import { useVentasServicios } from '../../context/VentasServicioContex'
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import Box from "@mui/material/Box";
+import { Link } from 'react-router-dom';
+
+export default function PageVentaServicios() {
+    const {ventasServicios, getVentasServicios, deleteVentaServicio} = useVentasServicios()
+    useEffect(() => {
+        try {
+            getVentasServicios();
+            
+        } catch (error) {
+          console.error("Error al obtener clientes:", error);
+        }
+      }, []);
+    
+      const columns = [
+        {
+          field: "nombre_mecanico",
+          headerName: "Mecanico",
+          width: 160,   
+          editable: true,
+          headerClassName: 'custom-header',
+          valueGetter: (params) => params.row.mecanico.nombre_mecanico,
+         
+        },
+        {
+          field: "nombre_cliente",
+          headerName: "Cliente",
+          width: 170,
+          editable: true,
+          headerClassName: 'custom-header',
+          valueGetter: (params) => params.row.cliente.nombre_cliente,
+        },
+        {
+          field: "precio_servicio",
+          headerName: "Precio servicio ",
+          width: 185,
+          editable: true,
+          headerClassName: 'custom-header',
+        },
+        {
+          field: "descripcion",
+          headerName: "Descripcion",
+          width: 170,
+          editable: true,
+          headerClassName: 'custom-header',
+        },
+        {
+          field: "createdAt",
+          headerName: "Fecha Creacion",
+          width: 300,
+          editable: true,
+          headerClassName: 'custom-header',
+          renderCell: (params) => {
+            const date = new Date(params.value);
+            const formattedDate = date.toLocaleDateString("es-ES", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            });
+            return <div>{formattedDate}</div>;
+          },
+        },
+        {
+          field: "acciones",
+          headerName: "Acciones",
+          width: 200,
+          headerClassName: 'custom-header',
+          renderCell: (params) => {
+            return (
+              <div>
+                <button
+                  className="px-4 py-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
+                  onClick={() => {
+                    deleteVentaServicio(params.row._id);
+                  }}
+                >
+                  Eliminar
+                </button>
+                <button
+                  className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-600"
+                >
+                  <Link to={`/venta_servicio/${params.row._id}`}>Editar</Link>
+                </button>
+              </div>
+            );
+          },
+        },
+      ];
+    
+      return (
+        <div className="mt-16 ">
+          <h1 className="text-2xl text-center mx-auto">Ventas Servicios</h1>
+          <div className="mx-10 justify-end flex ">
+            <Link to="/add-venta_servicio">
+              <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
+                Agregar Servicio
+              </button>
+            </Link>
+          </div>
+          <Box sx={{ width: "100%" }}>
+            <DataGrid
+              className="bg-neutral-700 mx-16 my-4"
+              rows={ventasServicios}
+              columns={columns}
+              getRowId={(row) => row._id}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              checkboxSelection
+              disableRowSelectionOnClick
+              sx={{
+                color: "white",
+                '& .MuiDataGrid-cell': {
+                  fontSize: '18px', // Cambia el tamaño de fuente aquí
+                },
+              }}
+              slots={{ toolbar: GridToolbar }}
+            />
+          </Box>
+        </div>
+      );
+    }
