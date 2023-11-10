@@ -29,7 +29,8 @@ import PageVentaRepuestos from "./pages/ventasRepuestos/PageVentaRepuestos";
 
 import PageVentaServicios from "./pages/ventasServicios/PageVentaServicios";
 import { VentasServicioProvider } from "./context/VentasServicioContex";
-import FormVentaServicio from "./pages/ventasServicios/formVentaServicio";
+import FormVentaServicio from "./pages/ventasServicios/FormVentaServicio";
+// import VentasServicioPage from "./pages/ventasServicios/VentasServiciosPage";
 
 
 export default function App() {

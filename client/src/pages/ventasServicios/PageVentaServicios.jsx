@@ -6,15 +6,17 @@ import { Link } from 'react-router-dom';
 
 export default function PageVentaServicios() {
     const {ventasServicios, getVentasServicios, deleteVentaServicio} = useVentasServicios()
+   
     useEffect(() => {
         try {
             getVentasServicios();
             
         } catch (error) {
-          console.error("Error al obtener clientes:", error);
+          console.error("Error al obtener las ventas:", error);
         }
       }, []);
-    
+      
+      
       const columns = [
         {
           field: "nombre_mecanico",

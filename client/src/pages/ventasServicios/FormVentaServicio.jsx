@@ -20,7 +20,7 @@ export default function FormVentaServicio() {
     errors: ventasServiciosErrors,
   } = useVentasServicios();
   const { clientes, getClientes } = useClientes();
-  const { mecanicos, getMecanicos } = useMecanicos();
+  // const { mecanicos, getMecanicos } = useMecanicos();
   const navigate = useNavigate();
   const params = useParams();
   
@@ -28,7 +28,7 @@ export default function FormVentaServicio() {
     (async () => {
       if (params.id) {
         const ventaServicio = await getVentaServicio(params.id);
-        setValue("mecanico", ventaServicio.mecanico);
+        // setValue("mecanico", ventaServicio.mecanico);
         setValue("cliente", ventaServicio.cliente);
         setValue("precio_servicio", ventaServicio.precio_servicio);
         setValue("descripcion", ventaServicio.descripcion);
@@ -40,7 +40,7 @@ export default function FormVentaServicio() {
   useEffect(() => {
     try {
       getClientes();
-      getMecanicos();
+      // getMecanicos();
     } catch (error) {
       console.error("Error al obtener clientes y mecánicos:", error);
     }
@@ -83,8 +83,8 @@ const onSubmit = handleSubmit(async (data) => {
             ))}
           </select>
           {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
-          <label>Mecánico</label>
-          <select
+          {/* <label>Mecánico</label> */}
+          {/* <select
             {...register("mecanico", NombreRequired)}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
           >
@@ -94,7 +94,7 @@ const onSubmit = handleSubmit(async (data) => {
                 {mecanico.nombre_mecanico}
               </option>
             ))}
-          </select>
+          </select> */}
           {errors.mecanico && <p className="text-red-500">{errors.mecanico.message}</p>}
           <label>Precio del Servicio</label>
           <input
@@ -109,12 +109,22 @@ const onSubmit = handleSubmit(async (data) => {
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
           />
           {errors.descripcion && <p className="text-red-500">{errors.descripcion.message}</p>}
-          <button
-            className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d"
-            type="submit"
-          >
-            Guardar
-          </button>
+          
+          <select
+        {...register("estado")}
+        className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+        >
+          <option value={"Activo"} >
+            Activo
+          </option>
+          <option value={"Inactivo"} >
+            Inactivo
+          </option>
+
+        </select>
+          <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
+          Guardar
+        </button>
         </form>
       </div>
     </div>
