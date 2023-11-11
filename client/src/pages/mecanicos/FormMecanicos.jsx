@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form"
 import { useMecanicos } from "../../context/MecanicosContext"
+import { Link } from "react-router-dom"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { NombreRequired, CedulaRequired, TelefonoRequired } from "../../utils/validations"
@@ -95,8 +96,8 @@ export default function FormMecanico() {
             Guardar
             </button>
             <button className='px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-3  '>
-          <Link to="/mecanicos">Cancelar</Link>
-        </button>
+            <Link to="/mecanicos">Cancelar</Link>
+            </button>
         </form>
     </div>
     </div>
