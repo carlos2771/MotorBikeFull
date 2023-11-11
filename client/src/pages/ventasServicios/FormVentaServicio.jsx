@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useVentasServicios } from "../../context/VentasServicioContex";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link,useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useMecanicos } from "../../context/MecanicosContext";
@@ -28,7 +28,7 @@ export default function FormVentaServicio() {
     (async () => {
       if (params.id) {
         const ventaServicio = await getVentaServicio(params.id);
-        setValue("mecanico", ventaServicio.nombre);
+        setValue("mecanico", ventaServicio.mecanico);
         setValue("cliente", ventaServicio.cliente);
         setValue("precio_servicio", ventaServicio.precio_servicio);
         setValue("descripcion", ventaServicio.descripcion);
@@ -68,17 +68,18 @@ const onSubmit = handleSubmit(async (data) => {
 
   return (
     <div className="flex h-[calc(100vh-100px)] items-center justify-center">
-      <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
+       <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
         {ventasServiciosErrors?.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
         ))}
-        <form onSubmit={onSubmit}>
+        <h1 className="text-2xl flex justify-center ">Agregar Venta servicio </h1>
+        <form className="mt-10" onSubmit={onSubmit}>
           <label>Cliente</label>
           <select
             {...register("cliente", NombreRequired)}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value="">Selecciona un cliente</option>
             {clientes.map((cliente) => (
@@ -86,10 +87,7 @@ const onSubmit = handleSubmit(async (data) => {
                 {cliente.nombre_cliente}
               </option>
             ))}
-          </select>
-          {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
-
-          
+          </select>          
           
           <label>Mecánico</label>
           { <select
@@ -133,6 +131,9 @@ const onSubmit = handleSubmit(async (data) => {
            {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
         <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
+        </button>
+        <button className='px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  '>
+          <Link to="/ventas-servicios">Cancelar</Link>
         </button>
         </form>
       </div>
