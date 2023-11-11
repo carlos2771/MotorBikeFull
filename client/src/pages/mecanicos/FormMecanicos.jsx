@@ -83,6 +83,7 @@ export default function FormMecanico() {
             autoFocus
             />
             {errors.direccion_mecanico && <p className="text-red-500">{errors.direccion_mecanico.message}</p>}
+            <label>Estado</label>
             <select
             {...register("estado")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
