@@ -39,7 +39,7 @@ export const createRepuesto = async(req, res) =>{
  
      // Crea una nueva instancia del modelo 'Cliente' con los datos del cliente
      const newRepuesto = new Repuesto({
-         nombre_repuesto, cantidad, precio, estado
+         nombre_repuesto, cantidad, precio , estado
      })
  
      // Guarda el nuevo cliente en la base de datos

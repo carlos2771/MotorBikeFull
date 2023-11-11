@@ -15,8 +15,8 @@ export const createVentasServiciosRequest = async (servicio) => {
   return response.data;
 };
 
-export const updateVentasServiciosRequest = async (id, servicio) => {
-  const response = await axiosClient.put(`/ventas_servicios/${id}`, servicio);
+export const updateVentasServiciosRequest = async (id,servicios) => {
+  const response = await axiosClient.put(`/ventas_servicios/${id}`,servicios);
   return response.data;
 };
 

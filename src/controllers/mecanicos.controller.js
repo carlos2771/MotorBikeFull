@@ -1,4 +1,4 @@
-// Importa el modelo de datos 'Mecanicos' desde "../models/mecanicos.model.js"
+// Importa el modelo de datos 'Mecanico' desde "../models/clientes.model.js"
 import  Mecanico from "../models/mecanico.model.js"
 
 // Obtiene todos los clientes

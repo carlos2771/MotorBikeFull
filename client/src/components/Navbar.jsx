@@ -64,28 +64,29 @@ export default function Navbar() {
                   </svg>
                 </button>
                 <Render>
-                  
-                  <Link to="/tasks">Tareas</Link>
+                  <Link to="/tasks" className="flex justify-center p-4">Tareas</Link>
                 </Render>
                 <Render>
-                  <Link to="/add-task">agg Tareas</Link>
+                  <Link to="/clientes" className="flex justify-center p-4">Clientes</Link>
                 </Render>
                 <Render>
-                  <Link to="/clientes">Clientes</Link>
+                  <Link to="/marcas" className="flex justify-center p-4">
+                    Marcas
+                  </Link>
                 </Render>
                 <Render>
-                  <Link to="/repuestos">Repuestos</Link>
+                  <Link to="/repuestos" className="flex justify-center p-4">Repuestos</Link>
                 </Render>
                 <Render>
-                  <Link to="/mecanicos">Mecanicos</Link>
+                  <Link to="/mecanicos" className="flex justify-center p-4">Mecanicos</Link>
                 </Render>
                 <Render>
-                  <Link to="/ventas-repuestos" className="">
+                  <Link to="/ventas-repuestos" className="flex justify-center p-4">
                     Ventas Repuestos
                   </Link>
                 </Render>
                 <Render>
-                  <Link to="/ventas_servicios" className="">
+                  <Link to="/ventas-servicios" className="flex justify-center p-4">
                     Ventas Servicios
                   </Link>
                 </Render>
@@ -98,7 +99,7 @@ export default function Navbar() {
                 <Link 
                 to="/" onClick={()=>{
                     logout()
-                }}>Logout</Link>
+                }} className="flex justify-center p-4">Logout</Link>
                 </Render>
               </div>
             </div>
@@ -112,3 +113,4 @@ export default function Navbar() {
     </div>
   );
 }
+
