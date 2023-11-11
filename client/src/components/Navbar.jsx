@@ -70,6 +70,11 @@ export default function Navbar() {
                   <Link to="/clientes" className="flex justify-center p-4">Clientes</Link>
                 </Render>
                 <Render>
+                  <Link to="/marcas" className="flex justify-center p-4">
+                    Marcas
+                  </Link>
+                </Render>
+                <Render>
                   <Link to="/repuestos" className="flex justify-center p-4">Repuestos</Link>
                 </Render>
                 <Render>
