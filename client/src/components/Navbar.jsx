@@ -77,6 +77,9 @@ export default function Navbar() {
                   <Link to="/repuestos">Repuestos</Link>
                 </Render>
                 <Render>
+                  <Link to="/mecanicos">Mecanicos</Link>
+                </Render>
+                <Render>
                   <Link to="/ventas-repuestos" className="">
                     Ventas Repuestos
                   </Link>

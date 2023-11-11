@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 
 //Estructurar los datos que representan a los mecanicos en la base de datos.
 const mecanicoSchema = new mongoose.Schema({
+   
     nombre_mecanico: {
         type: String, //Tipo String
         required: true, //Es requerido
@@ -22,6 +23,10 @@ const mecanicoSchema = new mongoose.Schema({
         type: String,  //Tipo String
         required: true, //Es requerido
         
+    },
+    estado:{
+        type: String,
+        required: true
     },
 },{
     //Sirve para agregar automáticamente campos createdAt y updatedAt a los documentos, lo que permite realizar un seguimiento de cuándo se crearon y modificaron.

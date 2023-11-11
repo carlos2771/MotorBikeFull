@@ -1,19 +1,19 @@
-import React, { useEffect, } from "react";
+import React, { useEffect } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
-import { useClientes } from "../../context/ClientContext";
+import { useMecanicos } from "../../context/MecanicosContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
-export default function PageClientes() {
-  const { clientes, getClientes, deleteCliente,updateCliente } = useClientes();
+export default function PageMecanico() {
+  const { mecanicos, getMecanicos, deleteMecanico,updateMecanico } = useMecanicos();
   
   
   useEffect(() => {
     try {
-      getClientes();
+        getMecanicos();
     } catch (error) {
-      console.error("Error al obtener clientes:", error);
+      console.error("Error al obtener mecanicos:", error);
     }
   }, []);
 
@@ -34,46 +34,41 @@ export default function PageClientes() {
     }).then((result) => {
       if (result.isConfirmed) {
         cambiarEstado(id, estado);
-        Swal.fire(`${texto}`, `El cliente ha sido ${texto} `, "success");
+        Swal.fire(`${texto}`, `El mecanico ha sido ${texto} `, "success");
       }
     });
   };
 
   const cambiarEstado = (id, estado) => {
     const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
-    updateCliente(id, { estado: nuevoEstado }).then(() => {
-      getClientes();
+    updateMecanico(id, { estado: nuevoEstado }).then(() => {
+      getMecanicos();
     });
   };
 
   const columns = [
+
     {
-      field: "nombre_cliente",
+        field: "cedula_mecanico",
+        headerName: "Cedula",
+        width: 200,
+       
+    },
+    {
+      field: "nombre_mecanico",
       headerName: "Nombre",
       width: 190,
 
     },
     {
-      field: "sexo",
-      headerName: "Sexo",
-      width: 190,
-
-    },
-    {
-      field: "email_cliente",
-      headerName: "Email",
-      width: 240,
- 
-    },
-    {
-      field: "telefono_cliente",
+      field: "telefono_mecanico",
       headerName: "Telefono",
       width: 200,
      
     },
     {
-      field: "cedula",
-      headerName: "Cedula",
+      field: "direccion_mecanico",
+      headerName: "Direccion",
       width: 200,
      
     },
@@ -104,13 +99,13 @@ export default function PageClientes() {
       width: 200,
       renderCell: (params) => {
         const estado = params.row.estado;
-        console.log("estadin", estado);
+        console.log("Estado", estado);
         return (
           <div>
           <button
-            className={estado === " Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" : "hidden"}
+            className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" : "hidden"}
           >
-            <Link to={`/cliente/${params.row._id}`}>Editar</Link>
+            <Link to={`/mecanico/${params.row._id}`}>Editar</Link>
           </button>
           {/* <button
             className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
@@ -132,21 +127,20 @@ export default function PageClientes() {
 
   return (
     <div className="mt-16">
-      <h1 className="text-2xl text-center mx-auto">Clientes</h1>
+      <h1 className="text-2xl text-center mx-auto">Mecánicos</h1>
       <div className="mx-10 justify-end flex">
-        <Link to="/add-cliente">
+        <Link to="/add-mecanico">
           <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
-            Agregar Cliente
+            Agregar Mecánico
           </button>
         </Link>
       </div>
       <Box sx={{ width: "100%" }}>
         <DataGrid
           className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
-          rows={clientes}
+          rows={mecanicos}
           columns={columns}
           getRowId={(row) => row._id}
-         
           initialState={{
             pagination: {
               paginationModel: {

@@ -15,5 +15,9 @@ export const mecanicoSchema = z.object({
         message: "La cédula del mecanico no puede estar vacía"
     }).refine(value => /^[0-9]{10}$/.test(value), {
         message: "La cédula debe contener solo números contener exactamente 10 dígitos"
+    }),
+    direccion_mecanico: z.string().refine(value => value.trim() !== "", {
+        message: "La dirección del mecanico no puede estar vacía"
     })
+
 });
