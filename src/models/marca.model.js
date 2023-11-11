@@ -7,7 +7,11 @@
          type: String, // Tipo String
          required: true, //Es requerido
          trim: true, // limpiar espacios de los inputs
-     }
+     },
+     estado:{
+        type: String,
+        required: true
+    },
  },{
      //Sirve para agregar automáticamente campos createdAt y updatedAt a los documentos, lo que permite realizar un seguimiento de cuándo se crearon y modificaron.
      timestamps: true
