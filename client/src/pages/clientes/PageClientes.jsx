@@ -104,11 +104,11 @@ export default function PageClientes() {
       width: 200,
       renderCell: (params) => {
         const estado = params.row.estado;
-        console.log("estadin", estado);
+        console.log("estado", estado);
         return (
           <div>
           <button
-            className={estado === " Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" : "hidden"}
+            className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" : "hidden"}
           >
             <Link to={`/cliente/${params.row._id}`}>Editar</Link>
           </button>
