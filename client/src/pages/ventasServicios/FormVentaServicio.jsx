@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useVentasServicios } from "../../context/VentasServicioContex";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link,useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useMecanicos } from "../../context/MecanicosContext";
@@ -23,7 +23,6 @@ export default function FormVentaServicio() {
   const { mecanicos, getMecanicos } = useMecanicos();
   const navigate = useNavigate();
   const params = useParams();
-  const [selectedServicio, setselectedServicio] = useState(null);
   
   useEffect(() => {
     (async () => {
@@ -33,7 +32,6 @@ export default function FormVentaServicio() {
         setValue("cliente", ventaServicio.cliente);
         setValue("precio_servicio", ventaServicio.precio_servicio);
         setValue("descripcion", ventaServicio.descripcion);
-
       }
     })();
   }, []);
@@ -47,16 +45,20 @@ export default function FormVentaServicio() {
     }
   }, []);
 
-  
-
-  
+ 
 const onSubmit = handleSubmit(async (data) => {
+  
     if (params.id) {
       const res = updateVentaServicio(params.id, data);
-      if (res) navigate("/ventas_servicios");
+      if (res) navigate("/ventas-servicios");
     } else {
-      const res = await createVentaServicio(data);
-      if (res) navigate("/ventas_servicios");
+      const transformData={
+        ...data,
+        precio_servicio: Number(data.precio_servicio)///AQUI CONVIERTO EL STRING DE PRECIO A UN TIPO NUMBER PARA QUE NO ME DE ERROR
+      }
+      console.log(typeof(data.precio_servicio))/// AQUI MIRO QUE TIPO DE DATO ES PRECIO_SERVICIO
+      const res = await createVentaServicio(transformData);//AQUI TRASFORMO LOS DATOS Y LOS GUARDO EN TRANSFORM
+      if (res) navigate("/ventas-servicios");
     }
   });
 
@@ -64,17 +66,18 @@ const onSubmit = handleSubmit(async (data) => {
 
   return (
     <div className="flex h-[calc(100vh-100px)] items-center justify-center">
-      <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
-        {ventasServiciosErrors.map((error, i) => (
+       <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
+        {ventasServiciosErrors?.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
         ))}
-        <form onSubmit={onSubmit}>
+        <h1 className="text-2xl flex justify-center ">Agregar Venta servicio </h1>
+        <form className="mt-10" onSubmit={onSubmit}>
           <label>Cliente</label>
           <select
             {...register("cliente", NombreRequired)}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value="">Selecciona un cliente</option>
             {clientes.map((cliente) => (
@@ -82,10 +85,10 @@ const onSubmit = handleSubmit(async (data) => {
                 {cliente.nombre_cliente}
               </option>
             ))}
-          </select>
-          {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
+          </select>          
+          
           <label>Mecánico</label>
-          <select
+          { <select
             {...register("mecanico", NombreRequired)}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
           >
@@ -95,8 +98,8 @@ const onSubmit = handleSubmit(async (data) => {
                 {mecanico.nombre_mecanico}
               </option>
             ))}
-          </select>
-          {errors.mecanico && <p className="text-red-500">{errors.mecanico.message}</p>}
+          </select> }
+           {errors.mecanico && <p className="text-red-500">{errors.mecanico.message}</p>}
           <label>Precio del Servicio</label>
           <input
             type="number"
@@ -110,12 +113,26 @@ const onSubmit = handleSubmit(async (data) => {
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
           />
           {errors.descripcion && <p className="text-red-500">{errors.descripcion.message}</p>}
-          <button
-            className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d"
-            type="submit"
-          >
-            Guardar
-          </button>
+          <label>Estado</label>
+          <select
+        {...register("estado")}
+        className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+        >
+          <option value={"Activo"} >
+            Activo
+          </option>
+          <option value={"Inactivo"} >
+            Inactivo
+          </option>
+
+        </select>
+           {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
+        <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
+          Guardar
+        </button>
+        <button className='px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  '>
+          <Link to="/ventas-servicios">Cancelar</Link>
+        </button>
         </form>
       </div>
     </div>

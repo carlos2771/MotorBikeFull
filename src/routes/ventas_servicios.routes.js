@@ -8,7 +8,7 @@ const router = Router()
 router.get("/ventas_servicios", authRequired, getVentas_Servicios)
 router.get("/ventas_servicios/:id", authRequired,  getVenta_Servicio) 
 router.post("/ventas_servicios", authRequired,validateSchema(ventas_serviciosSchema), createVentas_Servicios) 
-router.put("/ventas_servicios/:id", authRequired,validateSchema(ventas_serviciosSchema), updateVentas_Servicios) 
+router.put("/ventas_servicios/:id", authRequired,updateVentas_Servicios) 
 router.delete("/ventas_servicios/:id", authRequired, deleteVentas_Servicios ) 
 
 export default router

@@ -81,7 +81,7 @@ export default function Navbar() {
                   </Link>
                 </Render>
                 <Render>
-                  <Link to="/ventas_servicios" className="flex justify-center p-4">
+                  <Link to="/ventas-servicios" className="flex justify-center p-4">
                     Ventas Servicios
                   </Link>
                 </Render>
@@ -103,3 +103,4 @@ export default function Navbar() {
     </div>
   );
 }
+

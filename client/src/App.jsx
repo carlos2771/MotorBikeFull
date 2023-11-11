@@ -24,7 +24,8 @@ import FormPermisos from "./pages/Permisos/FormPermiso";
 
 import PageVentaServicios from "./pages/ventasServicios/PageVentaServicios";
 import { VentasServicioProvider } from "./context/VentasServicioContex";
-import FormVentaServicio from "./pages/ventasServicios/formVentaServicio";
+import FormVentaServicio from "./pages/ventasServicios/FormVentaServicio";
+// import VentasServicioPage from "./pages/ventasServicios/VentasServiciosPage";
 
 import PageRepuestos from "./pages/repuestos/PageRepuestos";
 import { RepuestoProvider } from "./context/RepuestosContext";
@@ -77,8 +78,8 @@ export default function App() {
                                 <Route path="/venta-repuesto/:id" element={<FormVentaRepuesto />} />
 
                                 <Route path="/ventas-servicios" element={<PageVentaServicios/>} />
-                                <Route path="/add-venta_servicio" element={<FormVentaServicio />} />
-                                <Route path="/venta-servicio/:id" element={<FormVentaServicio />} />
+                                <Route path="/add-venta-servicio" element={<FormVentaServicio />} />
+                                <Route path="/ventas-servicios/:id" element={<FormVentaServicio />} />
 
                                 <Route path="/repuestos" element={<PageRepuestos/>} />
                                 <Route path="/add-repuesto" element={<FormRepuesto/>} />

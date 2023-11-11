@@ -4,7 +4,7 @@ import  Cliente from "../models/cliente.model.js"
 
 export const getVentas_Servicios = async (req, res) => {
     try {
-      const ventas_servicios = await Ventas_Servicios.find();
+      const ventas_servicios = await Ventas_Servicios.find().populate({ path: 'cliente', select: 'nombre_cliente' }).populate({ path: 'mecanico', select: 'nombre_mecanico' });
       if (!ventas_servicios) {
         return res.status(404).json({ message: "Venta_servicios no encontrados" });
       }
@@ -16,7 +16,7 @@ export const getVentas_Servicios = async (req, res) => {
 
   export const getVenta_Servicio = async (req, res) => {
     try {
-      const venta_servicio = await Ventas_Repuestos.findById(req.params.id)
+      const venta_servicio = await Ventas_Servicios.findById(req.params.id)
       if (!venta_servicio) {
         return res.status(404).json({ message: "venta_servicio not found" });
       }
@@ -32,7 +32,8 @@ export const createVentas_Servicios = async (req, res) => {
             mecanico: mecanicoId,
             cliente: clienteId,
             precio_servicio,
-            descripcion 
+            descripcion,
+            estado
         } = req.body;
 
         // Verifica si el cliente existe
@@ -52,7 +53,8 @@ export const createVentas_Servicios = async (req, res) => {
         mecanico: mecanicoId,
         cliente: clienteId,
         precio_servicio,
-        descripcion
+        descripcion,
+        estado
         });
 
         // Guarda la venta de servicio en la base de datos
@@ -79,7 +81,7 @@ export const updateVentas_Servicios= async(req, res) =>{
 
   export const deleteVentas_Servicios = async(req, res) =>{
     try {
-      const deletedVenta_servicio = await Ventas_Repuestos.findByIdAndDelete(req.params.id);
+      const deletedVenta_servicio = await Ventas_Servicios.findByIdAndDelete(req.params.id);
       if (!deletedVenta_servicio)
         return res.status(404).json({ message: "Venta  not found" });
       return res.sendStatus(204);
