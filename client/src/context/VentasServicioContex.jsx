@@ -72,7 +72,7 @@ export function VentasServicioProvider({ children }) {
   };
 
   useEffect(() => {
-    if (errors.length > 0) {
+    if (errors?.length > 0) {
       const timer = setTimeout(() => {
         setErrors([]);
       }, 3000);

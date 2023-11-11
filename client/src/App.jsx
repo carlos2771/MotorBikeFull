@@ -32,6 +32,9 @@ import { VentasServicioProvider } from "./context/VentasServicioContex";
 import FormVentaServicio from "./pages/ventasServicios/FormVentaServicio";
 // import VentasServicioPage from "./pages/ventasServicios/VentasServiciosPage";
 
+import { MecanicoProvider } from "./context/MecanicosContext";
+import FormMecanico from "./pages/mecanicos/FormMecanico";
+import PageMecanicos from "./pages/mecanicos/PageMecanicos";
 
 export default function App() {
 
@@ -46,6 +49,7 @@ export default function App() {
               <RepuestoProvider>
                 <PermisoProvider>
                   <VentasServicioProvider>
+                  <MecanicoProvider>
                     {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
                     <BrowserRouter>
                       <main className="container mx-auto   ">  
@@ -73,14 +77,19 @@ export default function App() {
                             <Route path="/add-venta-respuesto" element={<FormVentaRepuesto />} />
                             <Route path="/venta-respuesto/:id" element={<FormVentaRepuesto />} />
 
-                            <Route path="/ventas_servicios" element={<PageVentaServicios/>} />
-                            <Route path="/add-venta_servicio" element={<FormVentaServicio />} />
-                            <Route path="/venta_servicio/:id" element={<FormVentaServicio />} />
+                            <Route path="/ventas-servicios" element={<PageVentaServicios/>} />
+                            <Route path="/add-venta-servicio" element={<FormVentaServicio />} />
+                            <Route path="/venta-servicio/:id" element={<FormVentaServicio />} />
+
+                            <Route path="/mecanicos" element={<PageMecanicos />} />
+                            <Route path="/add-mecanico" element={<FormMecanico />} />
+                            <Route path="/mecanico/:id" element={<FormMecanico />} />
 
                           </Route>
                         </Routes>
                       </main>
                     </BrowserRouter>
+                    </MecanicoProvider>
                   </VentasServicioProvider> 
                 </PermisoProvider>
               </RepuestoProvider>

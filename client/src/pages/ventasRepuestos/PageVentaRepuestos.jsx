@@ -15,6 +15,7 @@ export default function PageVentaRepuestos() {
         }
       }, []);
     
+      
       const columns = [
         {
           field: "repuesto",

@@ -4,7 +4,7 @@ import  Cliente from "../models/cliente.model.js"
 
 export const getVentas_Servicios = async (req, res) => {
     try {
-      const ventas_servicios = await Ventas_Servicios.find();
+      const ventas_servicios = await Ventas_Servicios.find().populate({ path: 'cliente', select: 'nombre_cliente' }).populate({ path: 'mecanico', select: 'nombre_mecanico' });
       if (!ventas_servicios) {
         return res.status(404).json({ message: "Venta_servicios no encontrados" });
       }
@@ -16,7 +16,7 @@ export const getVentas_Servicios = async (req, res) => {
 
   export const getVenta_Servicio = async (req, res) => {
     try {
-      const venta_servicio = await Ventas_Repuestos.findById(req.params.id)
+      const venta_servicio = await Ventas_Repuestos.findById(req.params.id).populate({ path: 'cliente', select: 'nombre_cliente' }).populate({ path: 'mecanico', select: 'nombre_mecanico' });
       if (!venta_servicio) {
         return res.status(404).json({ message: "venta_servicio not found" });
       }

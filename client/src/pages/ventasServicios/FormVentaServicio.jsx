@@ -3,7 +3,7 @@ import { useVentasServicios } from "../../context/VentasServicioContex";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
-//import { useMecanicos } from "../../context/MecanicosContext";
+import { useMecanicos } from "../../context/MecanicosContext";
 import { NegativeRequired, NombreRequired } from "../../utils/validations";
 
 export default function FormVentaServicio() {
@@ -20,7 +20,7 @@ export default function FormVentaServicio() {
     errors: ventasServiciosErrors,
   } = useVentasServicios();
   const { clientes, getClientes } = useClientes();
-  // const { mecanicos, getMecanicos } = useMecanicos();
+  const { mecanicos, getMecanicos } = useMecanicos();
   const navigate = useNavigate();
   const params = useParams();
   
@@ -28,7 +28,7 @@ export default function FormVentaServicio() {
     (async () => {
       if (params.id) {
         const ventaServicio = await getVentaServicio(params.id);
-        // setValue("mecanico", ventaServicio.mecanico);
+        setValue("mecanico", ventaServicio.nombre);
         setValue("cliente", ventaServicio.cliente);
         setValue("precio_servicio", ventaServicio.precio_servicio);
         setValue("descripcion", ventaServicio.descripcion);
@@ -40,7 +40,7 @@ export default function FormVentaServicio() {
   useEffect(() => {
     try {
       getClientes();
-      // getMecanicos();
+      getMecanicos();
     } catch (error) {
       console.error("Error al obtener clientes y mecánicos:", error);
     }
@@ -52,10 +52,15 @@ export default function FormVentaServicio() {
 const onSubmit = handleSubmit(async (data) => {
     if (params.id) {
       const res = updateVentaServicio(params.id, data);
-      if (res) navigate("/ventas_servicios");
+      if (res) navigate("/ventas-servicios");
     } else {
-      const res = await createVentaServicio(data);
-      if (res) navigate("/ventas_servicios");
+      const transformData={
+        ...data,
+        precio_servicio: Number(data.precio_servicio)///AQUI CONVIERTO EL STRING DE PRECIO A UN TIPO NUMBER PARA QUE NO ME DE ERROR
+      }
+      console.log(typeof(data.precio_servicio))/// AQUI MIRO QUE TIPO DE DATO ES PRECIO_SERVICIO
+      const res = await createVentaServicio(transformData);//AQUI TRASFORMO LOS DATOS Y LOS GUARDO EN TRANSFORM
+      if (res) navigate("/ventas-servicios");
     }
   });
 
@@ -64,7 +69,7 @@ const onSubmit = handleSubmit(async (data) => {
   return (
     <div className="flex h-[calc(100vh-100px)] items-center justify-center">
       <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
-        {ventasServiciosErrors.map((error, i) => (
+        {ventasServiciosErrors?.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
@@ -86,8 +91,8 @@ const onSubmit = handleSubmit(async (data) => {
 
           
           
-          {/* <label>Mecánico</label> */}
-          {/* <select
+          <label>Mecánico</label>
+          { <select
             {...register("mecanico", NombreRequired)}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
           >
@@ -97,8 +102,8 @@ const onSubmit = handleSubmit(async (data) => {
                 {mecanico.nombre_mecanico}
               </option>
             ))}
-          </select> */}
-          {/* {errors.mecanico && <p className="text-red-500">{errors.mecanico.message}</p>} */}
+          </select> }
+           {errors.mecanico && <p className="text-red-500">{errors.mecanico.message}</p>}
           <label>Precio del Servicio</label>
           <input
             type="number"
@@ -125,7 +130,8 @@ const onSubmit = handleSubmit(async (data) => {
           </option>
 
         </select>
-          <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
+           {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
+        <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
         </button>
         </form>

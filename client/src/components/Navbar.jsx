@@ -79,8 +79,13 @@ export default function Navbar() {
                   </Link>
                 </Render>
                 <Render>
-                  <Link to="/ventas_servicios" className="">
+                  <Link to="/ventas-servicios" className="">
                     Ventas Servicios
+                  </Link>
+                </Render>
+                <Render>
+                  <Link to="/mecanicos" className="">
+                    Mecanicos
                   </Link>
                 </Render>
                 <Render>
@@ -101,3 +106,4 @@ export default function Navbar() {
     </div>
   );
 }
+
