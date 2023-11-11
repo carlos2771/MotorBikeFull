@@ -31,7 +31,7 @@ export const getRepuesto = async (req, res) => {
 // Crea un nuevo repuesto
 export const createRepuesto = async(req, res) =>{
   try {
-     const  {nombre_repuesto, cantidad, precio} = req.body
+     const  {nombre_repuesto, cantidad, precio, estado} = req.body
 
  
      // para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
@@ -39,7 +39,7 @@ export const createRepuesto = async(req, res) =>{
  
      // Crea una nueva instancia del modelo 'Cliente' con los datos del cliente
      const newRepuesto = new Repuesto({
-         nombre_repuesto, cantidad, precio
+         nombre_repuesto, cantidad, precio , estado
      })
  
      // Guarda el nuevo cliente en la base de datos

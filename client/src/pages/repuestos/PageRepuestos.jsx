@@ -3,9 +3,11 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { useRepuestos } from "../../context/RepuestosContext";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2"
+
 
 export default function PageRepuestos() {
-  const { repuestos, getRepuestos, deleteRepuesto } = useRepuestos();
+  const { repuestos, getRepuestos, deleteRepuesto, updateRepuesto} = useRepuestos();
 
   useEffect(() => {
     try {
@@ -15,34 +17,66 @@ export default function PageRepuestos() {
     }
   }, []);
 
+  const mostrarAlerta = (id, estado) => {
+    const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
+    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar el cliente?" : "¿Estás seguro de habilitar el cliente?";
+    const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
+
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        cambiarEstado(id, estado);
+        Swal.fire(`${texto}`, `El repuesto ha sido ${texto} `, "success");
+      }
+    });
+  };
+
+  const cambiarEstado = (id, estado) => {
+    const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
+    updateRepuesto(id, { estado: nuevoEstado }).then(() => {
+      getRepuestos();
+    });
+  };
+
+
   const columns = [
     {
       field: "nombre_repuesto",
       headerName: "Nombre",
       width: 190,
       editable: true,
-      headerClassName: 'custom-header',
     },
     {
       field: "cantidad",
       headerName: "cantidad",
       width: 240,
       editable: true,
-      headerClassName: 'custom-header',
     },
     {
       field: "precio",
       headerName: "precio",
       width: 200,
       editable: true,
-      headerClassName: 'custom-header',
+    },
+    {
+      field: "estado",
+      headerName: "Estado",
+      width: 100,
+
     },
     {
       field: "createdAt",
       headerName: "Fecha Creacion",
       width: 240,
       editable: true,
-      headerClassName: 'custom-header',
       renderCell: (params) => {
         const date = new Date(params.value);
         const formattedDate = date.toLocaleDateString("es-ES", {
@@ -57,22 +91,29 @@ export default function PageRepuestos() {
       field: "acciones",
       headerName: "Acciones",
       width: 200,
-      headerClassName: 'custom-header',
       renderCell: (params) => {
+        const estado = params.row.estado;
+        console.log("estado", estado);
         return (
           <div>
             <button
+            className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" : "hidden"}
+          >
+              <Link to={`/repuestos/${params.row._id}`}>Editar</Link>
+            </button>
+            {/* <button
               className="px-4 py-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
               onClick={() => {
                 deleteRepuesto(params.row._id); // Suponiendo que params.row contiene la información del cliente
               }}
             >
               Eliminar
-            </button>
+            </button> */}
             <button
-              className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-600"
+              className={estado === "Activo" ?  "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500" : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-yellow-500 hover:text-white hover:bg-yellow-500"}
+              onClick={() => mostrarAlerta(params.row._id, estado)}
             >
-              <Link to={`/repuestos/${params.row._id}`}>Editar</Link>
+              {estado === "Activo" ? "Inhabilitar" : "Habilitar"}
             </button>
           </div>
         );

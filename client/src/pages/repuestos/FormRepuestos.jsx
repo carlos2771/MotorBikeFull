@@ -19,7 +19,6 @@ export default function FormRepuesto() {
         setValue("nombre_repuesto", repuesto.nombre_repuesto);
         setValue("cantidad", repuesto.cantidad);
         setValue("precio", repuesto.precio);
-        
       }
     })();
   }, []);
@@ -70,7 +69,19 @@ export default function FormRepuesto() {
         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
         />
         {errors.precio && <p className="text-red-500">{errors.precio.message}</p>}
+        <label >Estado</label>
+        <select
+        {...register("estado")}
+        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+        > 
+          <option value={"Activo"} >
+            Activo
+          </option>
+          <option value={"Inactivo"} >
+            Inactivo
+          </option>
 
+        </select>
         <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
         </button>
