@@ -23,6 +23,7 @@ export default function FormVentaServicio() {
   const { mecanicos, getMecanicos } = useMecanicos();
   const navigate = useNavigate();
   const params = useParams();
+
   
   useEffect(() => {
     (async () => {
@@ -32,7 +33,6 @@ export default function FormVentaServicio() {
         setValue("cliente", ventaServicio.cliente);
         setValue("precio_servicio", ventaServicio.precio_servicio);
         setValue("descripcion", ventaServicio.descripcion);
-
       }
     })();
   }, []);
@@ -46,10 +46,9 @@ export default function FormVentaServicio() {
     }
   }, []);
 
-  
-
-  
+ 
 const onSubmit = handleSubmit(async (data) => {
+  
     if (params.id) {
       const res = updateVentaServicio(params.id, data);
       if (res) navigate("/ventas-servicios");
@@ -115,7 +114,7 @@ const onSubmit = handleSubmit(async (data) => {
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
           />
           {errors.descripcion && <p className="text-red-500">{errors.descripcion.message}</p>}
-          
+          <label>Estado</label>
           <select
         {...register("estado")}
         className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"

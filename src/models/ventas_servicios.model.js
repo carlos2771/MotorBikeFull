@@ -20,6 +20,10 @@ const ventas_serviciosSchema = new mongoose.Schema({
         type: String,
         
     },
+    estado: {
+        type: String,
+        required: true
+      }
     
 },{
     timestamps: true

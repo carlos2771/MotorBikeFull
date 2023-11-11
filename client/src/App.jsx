@@ -77,13 +77,15 @@ export default function App() {
                             <Route path="/add-venta-repuesto" element={<FormVentaRepuesto />} />
                             <Route path="/venta-repuesto/:id" element={<FormVentaRepuesto />} />
 
-                            <Route path="/ventas-servicios" element={<PageVentaServicios/>} />
-                            <Route path="/add-venta-servicio" element={<FormVentaServicio />} />
-                            <Route path="/venta-servicio/:id" element={<FormVentaServicio />} />
 
                             <Route path="/mecanicos" element={<PageMecanicos />} />
                             <Route path="/add-mecanico" element={<FormMecanico />} />
                             <Route path="/mecanico/:id" element={<FormMecanico />} />
+
+
+                            <Route path="/ventas-servicios" element={<PageVentaServicios/>} />
+                            <Route path="/add-venta-servicio" element={<FormVentaServicio />} />
+                            <Route path="/ventas-servicios/:id" element={<FormVentaServicio />} />
 
                           </Route>
                         </Routes>

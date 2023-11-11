@@ -47,6 +47,7 @@ export function VentasServicioProvider({ children }) {
       return res;
     } catch (error) {
       console.error(error);
+      
     }
   };
 
