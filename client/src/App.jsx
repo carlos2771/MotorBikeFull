@@ -73,9 +73,9 @@ export default function App() {
                             <Route path="/add-permiso" element={<FormPermisos />} />
                             <Route path="/permiso/:id" element={<FormPermisos />} />
 
-                            <Route path="/ventas-respuestos" element={<PageVentaRepuestos/>} />
-                            <Route path="/add-venta-respuesto" element={<FormVentaRepuesto />} />
-                            <Route path="/venta-respuesto/:id" element={<FormVentaRepuesto />} />
+                            <Route path="/ventas-repuestos" element={<PageVentaRepuestos/>} />
+                            <Route path="/add-venta-repuesto" element={<FormVentaRepuesto />} />
+                            <Route path="/venta-repuesto/:id" element={<FormVentaRepuesto />} />
 
                             <Route path="/ventas-servicios" element={<PageVentaServicios/>} />
                             <Route path="/add-venta-servicio" element={<FormVentaServicio />} />

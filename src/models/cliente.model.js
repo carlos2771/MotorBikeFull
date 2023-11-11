@@ -8,6 +8,10 @@ const clienteSchema = new mongoose.Schema({
         required: true, //Es requerido
         trim: true // Limpiar espacios de los inputs
     },
+    sexo: {
+        type: String,
+        required: true
+    },
     email_cliente: {
         type: String, //Tipo String
         required: true, //Es requerido
