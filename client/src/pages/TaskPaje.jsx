@@ -10,7 +10,8 @@ export default function TaskPaje() {
     getTasks();
   }, []);
 
-  if (tasks.length === 0) return <h1>No hay tareas</h1>;
+  if (tasks.length === 0) return (
+    <h1 className="mt-12 mx-2">No hay tareas<br></br><br></br><span className=""><Link to={"/add-task"} className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md border">Agregar Tarea</Link></span></h1>);
   return (
     <div className="my-20 mx-16 ">
       <div className="justify-end flex my-1">

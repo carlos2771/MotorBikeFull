@@ -3,7 +3,7 @@ import { useVentasServicios } from "../../context/VentasServicioContex";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
-//import { useMecanicos } from "../../context/MecanicosContext";
+import { useMecanicos } from "../../context/MecanicosContext";
 import { NegativeRequired, NombreRequired } from "../../utils/validations";
 
 export default function FormVentaServicio() {
@@ -23,6 +23,7 @@ export default function FormVentaServicio() {
   const { mecanicos, getMecanicos } = useMecanicos();
   const navigate = useNavigate();
   const params = useParams();
+  const [selectedServicio, setselectedServicio] = useState(null);
   
   useEffect(() => {
     (async () => {

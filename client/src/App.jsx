@@ -51,7 +51,7 @@ export default function App() {
                       <MecanicoProvider>
                         {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
                         <BrowserRouter>
-                          <main className="container mx-auto   ">  
+                          <main className='min-h-screen bg-gradient-to-tr from-[#1E293B] via-[#0f172a] to-[#1E293B] px-8 md:px-14 lg:px-36 pb-10 pt-7'>  
                             <Navbar/>
                             <Routes>
                               <Route path="/" element={<HomePage />} />
@@ -76,9 +76,9 @@ export default function App() {
                                 <Route path="/add-venta-repuesto" element={<FormVentaRepuesto />} />
                                 <Route path="/venta-repuesto/:id" element={<FormVentaRepuesto />} />
 
-                                <Route path="/ventas_servicios" element={<PageVentaServicios/>} />
+                                <Route path="/ventas-servicios" element={<PageVentaServicios/>} />
                                 <Route path="/add-venta_servicio" element={<FormVentaServicio />} />
-                                <Route path="/venta_servicio/:id" element={<FormVentaServicio />} />
+                                <Route path="/venta-servicio/:id" element={<FormVentaServicio />} />
 
                                 <Route path="/repuestos" element={<PageRepuestos/>} />
                                 <Route path="/add-repuesto" element={<FormRepuesto/>} />
