@@ -16,7 +16,7 @@ import FormCliente from "./pages/clientes/FormCliente";
 
 import PageVentaRepuestos from "./pages/ventasRepuestos/PageVentaRepuestos";
 import FormVentaRepuesto from "./pages/ventasRepuestos/FormVentaRepuesto";
-import { VentasRepuestoProvider} from "./context/VentasRepuestoContex"
+import { VentasRepuestoProvider } from "./context/VentasRepuestoContex"
 
 import PermisosPage from "./pages/Permisos/PermisosPage";
 import { PermisoProvider } from "./context/PermisosContext";
@@ -34,6 +34,13 @@ import { MecanicoProvider } from "./context/MecanicosContext";
 import PageMecanico from "./pages/mecanicos/PageMecanicos";
 import FormMecanico from "./pages/mecanicos/FormMecanicos";
 
+
+
+import { ComprasProvider } from "./context/ComprasContext";
+import PageCompras from "./pages/Compras/PageCompras";
+import FormCompras from "./pages/Compras/FormCompras";
+
+
 export default function App() {
 
   return (
@@ -49,52 +56,58 @@ export default function App() {
                   <VentasServicioProvider>
                     <RepuestoProvider>
                       <MecanicoProvider>
-                        {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
-                        <BrowserRouter>
-                          <main className="container mx-auto   ">  
-                            <Navbar/>
-                            <Routes>
-                              <Route path="/" element={<HomePage />} />
-                              <Route path="/login" element={<LoginPage />} />
-                              <Route path="/register" element={<RegisterPage />} />
-                              {/* rutas protegidas se envuelven en otro Route */}
-                              <Route element={<ProtectedRoute />}>
-                                <Route path="/tasks" element={<TaskPaje />} />
-                                <Route path="/add-task" element={<TaskFormPage />} />
-                                <Route path="/tasks/:id" element={<TaskFormPage />} />
-                                
-                                <Route path="/profile" element={<ProfilePage />} />
-                                <Route path="/clientes" element={<PageClientes />} />
-                                <Route path="/add-cliente" element={<FormCliente />} />
-                                <Route path="/cliente/:id" element={<FormCliente />} />
+                        <ComprasProvider>
+                          {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
+                          <BrowserRouter>
+                            <main className="container mx-auto   ">
+                              <Navbar />
+                              <Routes>
+                                <Route path="/" element={<HomePage />} />
+                                <Route path="/login" element={<LoginPage />} />
+                                <Route path="/register" element={<RegisterPage />} />
+                                {/* rutas protegidas se envuelven en otro Route */}
+                                <Route element={<ProtectedRoute />}>
+                                  <Route path="/tasks" element={<TaskPaje />} />
+                                  <Route path="/add-task" element={<TaskFormPage />} />
+                                  <Route path="/tasks/:id" element={<TaskFormPage />} />
 
-                                <Route path="/permisos" element={<PermisosPage />} />
-                                <Route path="/add-permiso" element={<FormPermisos />} />
-                                <Route path="/permiso/:id" element={<FormPermisos />} />
+                                  <Route path="/profile" element={<ProfilePage />} />
+                                  <Route path="/clientes" element={<PageClientes />} />
+                                  <Route path="/add-cliente" element={<FormCliente />} />
+                                  <Route path="/cliente/:id" element={<FormCliente />} />
 
-                                <Route path="/ventas-repuestos" element={<PageVentaRepuestos/>} />
-                                <Route path="/add-venta-repuesto" element={<FormVentaRepuesto />} />
-                                <Route path="/venta-repuesto/:id" element={<FormVentaRepuesto />} />
+                                  <Route path="/permisos" element={<PermisosPage />} />
+                                  <Route path="/add-permiso" element={<FormPermisos />} />
+                                  <Route path="/permiso/:id" element={<FormPermisos />} />
 
-                                <Route path="/ventas_servicios" element={<PageVentaServicios/>} />
-                                <Route path="/add-venta_servicio" element={<FormVentaServicio />} />
-                                <Route path="/venta_servicio/:id" element={<FormVentaServicio />} />
+                                  <Route path="/ventas-repuestos" element={<PageVentaRepuestos />} />
+                                  <Route path="/add-venta-repuesto" element={<FormVentaRepuesto />} />
+                                  <Route path="/venta-repuesto/:id" element={<FormVentaRepuesto />} />
 
-                                <Route path="/repuestos" element={<PageRepuestos/>} />
-                                <Route path="/add-repuesto" element={<FormRepuesto/>} />
-                                <Route path="/repuestos/:id" element={<FormRepuesto/>} />
+                                  <Route path="/ventas_servicios" element={<PageVentaServicios />} />
+                                  <Route path="/add-venta_servicio" element={<FormVentaServicio />} />
+                                  <Route path="/venta_servicio/:id" element={<FormVentaServicio />} />
 
-                                <Route path="/mecanicos" element={<PageMecanico />} />
-                                <Route path="/add-mecanico" element={<FormMecanico />} />
-                                <Route path="/mecanico/:id" element={<FormMecanico />} />
+                                  <Route path="/repuestos" element={<PageRepuestos />} />
+                                  <Route path="/add-repuesto" element={<FormRepuesto />} />
+                                  <Route path="/repuestos/:id" element={<FormRepuesto />} />
 
-                              </Route>
-                            </Routes>
-                          </main>
-                        </BrowserRouter>
+                                  <Route path="/mecanicos" element={<PageMecanico />} />
+                                  <Route path="/add-mecanico" element={<FormMecanico />} />
+                                  <Route path="/mecanico/:id" element={<FormMecanico />} />
+
+                                  <Route path="/compras" element={<PageCompras />} />
+                                  <Route path="/add-compra" element={<FormCompras />} />
+                                  <Route path="/compras/:id" element={<FormCompras />} />
+
+                                </Route>
+                              </Routes>
+                            </main>
+                          </BrowserRouter>
+                        </ComprasProvider>
                       </MecanicoProvider>
-                    </RepuestoProvider>  
-                  </VentasServicioProvider> 
+                    </RepuestoProvider>
+                  </VentasServicioProvider>
                 </PermisoProvider>
               </RepuestoProvider>
             </VentasRepuestoProvider>

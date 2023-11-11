@@ -12,6 +12,7 @@ import repuestosRoutes from "./routes/repuestos.routes.js"
 import rolesRoutes from "./routes/roles.routes.js"
 import roles_permisosRoutes from "./routes/roles_permisos.routes.js"
 import ventas_repuestosRoutes from "./routes/ventas_repuestos.routes.js"
+import comprasRoutes from "./routes/compras.routes.js"
 import cors  from 'cors'
 
 const app = express()
@@ -42,6 +43,7 @@ app.use("/api", repuestosRoutes)
 app.use("/api", rolesRoutes)
 app.use("/api", roles_permisosRoutes)
 app.use("/api", ventas_repuestosRoutes)
+app.use("/api", comprasRoutes)
 
 
 export default app;

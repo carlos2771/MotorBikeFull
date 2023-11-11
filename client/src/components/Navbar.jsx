@@ -90,6 +90,11 @@ export default function Navbar() {
                   </Link>
                 </Render>
                 <Render>
+                  <Link to="/compras" className="">
+                    Compras
+                  </Link>
+                </Render>
+                <Render>
                 <Link 
                 to="/" onClick={()=>{
                     logout()
