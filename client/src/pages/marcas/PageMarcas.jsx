@@ -84,7 +84,7 @@ export default function PageMarcas() {
         return (
           <div>
             <button
-                className={estado === " Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" : "hidden"}
+                className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" : "hidden"}
             >
                 <Link to={`/marca/${params.row._id}`}>Editar</Link>
             </button>
