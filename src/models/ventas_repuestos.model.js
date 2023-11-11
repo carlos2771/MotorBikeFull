@@ -24,6 +24,10 @@ const ventas_repuestosSchema = new mongoose.Schema(
       ref: "clientes",
       required: true,
     },
+    estado: {
+      type: String,
+      required: true
+    }
     // date: {
     //   type: Date,
     //   default: Date.now,

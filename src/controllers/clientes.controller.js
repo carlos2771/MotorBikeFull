@@ -31,7 +31,7 @@ export const getCliente = async (req, res) => {
 // Crea un nuevo cliente
 export const createCliente = async(req, res) =>{
   try {
-     const  {nombre_cliente, email_cliente, telefono_cliente, cedula, estado} = req.body
+     const  {nombre_cliente, email_cliente, telefono_cliente, cedula, sexo, estado} = req.body
 
      const clientFound = await Cliente.findOne({email_cliente})
      if(clientFound) return res.status(400).json({message:["el correo del cliente ya existe"]});
@@ -44,7 +44,7 @@ export const createCliente = async(req, res) =>{
  
      // Crea una nueva instancia del modelo 'Cliente' con los datos del cliente
      const newCliente = new Cliente({
-         nombre_cliente, email_cliente, telefono_cliente, cedula, estado
+         nombre_cliente, email_cliente, telefono_cliente, cedula, sexo, estado
      })
  
      // Guarda el nuevo cliente en la base de datos

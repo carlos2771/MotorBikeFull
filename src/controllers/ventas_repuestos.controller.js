@@ -34,6 +34,7 @@ export const createVentas_Repuestos = async (req, res) => {
       precio_unitario,
       precio_total,
       cliente: clienteId,
+      estado
     } = req.body;
 
     // Verifica si el cliente existe
@@ -64,6 +65,7 @@ export const createVentas_Repuestos = async (req, res) => {
       precio_unitario,
       precio_total,
       cliente: clienteId,
+      estado
     });
 
     // Guarda la venta de servicio en la base de datos
