@@ -11,12 +11,10 @@
      cantidad: {
          type: Number, //Tipo String
          required: true, //Es requerido
-         trim: true, // Limpiar espacios de los inputs
      },
      precio: {
          type: Number, //Tipo String
          required: true, //Es requerido
-         trim: true
      },
  },{
      //Sirve para agregar automáticamente campos createdAt y updatedAt a los documentos, lo que permite realizar un seguimiento de cuándo se crearon y modificaron.

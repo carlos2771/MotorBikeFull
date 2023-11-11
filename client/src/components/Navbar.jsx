@@ -71,7 +71,10 @@ export default function Navbar() {
                   <Link to="/add-task">agg Tareas</Link>
                 </Render>
                 <Render>
-                  <Link to="/clientes">clientes</Link>
+                  <Link to="/clientes">Clientes</Link>
+                </Render>
+                <Render>
+                  <Link to="/repuestos">Repuestos</Link>
                 </Render>
                 <Render>
                   <Link to="/ventas-repuestos" className="">
