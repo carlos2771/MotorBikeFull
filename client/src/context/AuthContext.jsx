@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth"; // Corregí "verifyTokentRequet" a "verifyTokenRequest".
+import { registerRequest, loginRequest, verifyTokenRequest ,             enviarTokenRequest, validarTokenRequest, actualizarPasswordRequest, } from "../api/auth"; // Corregí "verifyTokentRequet" a "verifyTokenRequest".
 import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
@@ -54,6 +54,39 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setIsAuthenticated(false);
   };
+
+  const enviarToken = async (email) => {
+    try {
+      const response = await enviarTokenRequest(email);
+      console.log(response);
+      console.log("se creo correctamente el token")
+      console.log("se envio correctamente el email")
+    } catch (error) {
+      console.log(error.response.data);
+      setErrors(error.response.data.message);
+    }
+  };
+  const validarToken = async (token) => {
+    try {
+      const response = await validarTokenRequest(token);
+      console.log(response);
+      console.log();
+    } catch (error) {
+      console.log(error.response.data);
+      setErrors(error.response.data.message);
+    }
+  };
+  const actualizarPassword = async (token, password, confirmPassword) => {
+    try {
+      const response = await actualizarPasswordRequest(token, password, confirmPassword);
+      console.log(response);
+    } catch (error) {
+      console.log(error.response.data);
+      setErrors(error.response.data.message);
+    }
+  };
+
+
   useEffect(() => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
@@ -90,7 +123,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ signup, signin,logout, loading, user, isAuthenticated, errors }}>
+    <AuthContext.Provider value={{ signup, signin, logout, enviarToken,
+      validarToken, actualizarPassword, loading, user, isAuthenticated, errors }}>
       {children}
     </AuthContext.Provider>
   );

@@ -20,6 +20,20 @@ export const verifyTokenRequest= async() => {
 //     return res.data
 // }
 
+export const enviarTokenRequest = async(email) => {
+    const res = await axiosClient.post("/reestablecer", {email});
+    return res.data
+}
+
+export const validarTokenRequest = async(token) => {
+    const res = await axiosClient.get(`/restablecer-password/${token}`);
+    return res.data
+}
+
+export const actualizarPasswordRequest = async(token) => {
+    const res = await axiosClient.get(`/restablecer-password/${token}`, {password, confirmPassword});
+    return res.data
+}
 
 
 

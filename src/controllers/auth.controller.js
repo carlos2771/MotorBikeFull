@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import createAccessToken from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
+import { secretKey } from "../config.js";
+import nodemailer from "nodemailer";
 
 export const register = async (req, res) => {
   const { email, password, username } = req.body;
@@ -121,3 +123,123 @@ export const verifyToken = async (req, res) => {
   });
 };
 
+export const enviarToken = async (req, res) => {
+
+  try {
+      const { email } = req.body;
+
+      // Verificar si el correo electrónico existe en la base de datos
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
+      // Generar un token con una duración limitada
+      const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
+      console.log(token);
+
+      // Almacenar el token en el usuario en la base de datos
+      user.resetToken = token;
+      user.resetTokenExpires = new Date(Date.now() + 3600000); // 1 hora de expiración
+      await user.save();
+
+      // Almacenar el token en una cookie
+      res.cookie('token2', token, { httpOnly: true });
+
+      // Enviar un correo electrónico con el enlace de recuperación
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USER || 'saritalop789@gmail.com',
+        pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
+        },
+      });
+
+      const resetLink = `http://localhost:3000/api/restablecer-password/${token}`;
+      const mailOptions = {
+        to: email,
+        subject: 'Recuperación de contraseña',
+        html: `Haga clic en el siguiente enlace para restablecer su contraseña: <a href="${resetLink}">${resetLink}</a>`
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error(error);
+          return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
+        }
+        console.log('Correo electrónico enviado:', info.response);
+        res.status(200).json({ message: 'Correo electrónico enviado con éxito' });
+      });
+ 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+
+};
+
+
+export const validarToken = async (req, res) => {
+  const token = req.params.token;
+
+  try {
+    // Decodificar el token para obtener la información del usuario
+    const decodedToken = jwt.verify(token, 'secreto'); // Reemplaza la clave secreta utilizada para firmar el token
+
+    // Buscar al usuario en la base de datos usando la información del token
+    const usuario = await User.findOne({ _id: decodedToken.userId });
+
+    if (!usuario) {
+      return res.status(400).json({ message: "Usuario no válido" });
+    }
+
+    // Devolver la información del usuario en formato JSON
+    return res.status(200).json({
+      username: usuario.username,
+      email: usuario.email,
+      password: usuario.password,
+      createdAt: usuario.createdAt,
+      updatedAt: usuario.updatedAt,
+      resetTokenExpires: usuario.resetTokenExpires
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ message: "Token inválido" });
+  }
+};
+
+export const actualizarPassword = async (req, res) => {
+  try {
+    // Verificar el token según la fecha de expiración
+    const usuario = await User.findOne({
+      resetToken: req.params.token,
+      resetTokenExpires: { $gt: Date.now() },
+    });
+
+    // Verificar que el usuario exista
+    if (!usuario) {
+      return res.status(400).json({ message: "Token inválido o expirado" });
+    }
+
+    // Verificar que se proporciona una nueva contraseña y que coincide con la confirmación
+    if (!req.body.password || !req.body.confirmPassword || req.body.password !== req.body.confirmPassword) {
+      return res.status(400).json({ message: "Las contraseñas no coinciden" });
+    }
+
+    // Generar el hash de la nueva contraseña
+    const newPasswordHash = await bcrypt.hash(req.body.password, 10);
+
+    // Blanqueando los parámetros
+    usuario.resetToken = null;
+    usuario.resetTokenExpires = null;
+    usuario.password = newPasswordHash;
+
+    // Guardar la nueva contraseña encriptada
+    await usuario.save();
+
+    return res.status(200).json({ message: "Contraseña actualizada con éxito" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
