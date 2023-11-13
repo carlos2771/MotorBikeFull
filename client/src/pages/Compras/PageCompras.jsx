@@ -6,14 +6,14 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function PageCompras() {
-  const { compras, getCompras, deleteCompras, updateCompras } =
+  const { compras, getCompras, deleteCompra, updateCompra } =
     useCompras();
 
   useEffect(() => {
     try {
       getCompras();
     } catch (error) {
-      console.error("Error al obtener compras:", error);
+      console.error("Error al obtener clientes:", error);
     }
   }, []);
 
@@ -41,7 +41,7 @@ export default function PageCompras() {
 
   const cambiarEstado = (id, estado) => {
     const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
-    updateCompras(id, { estado: nuevoEstado }).then(() => {
+    updateCompra(id, { estado: nuevoEstado }).then(() => {
       getCompras();
     });
   };
@@ -49,14 +49,14 @@ export default function PageCompras() {
   const columns = [
     {
       field: "repuesto",
-      headerName: "Repuesto",
+      headerName: "repuesto",
       width: 160,
       headerClassName: "custom-header",
-      valueGetter: (params) => params.row.repuesto.nombre_repuesto,
+      valueGetter: (params) => params.row.repuesto?.nombre_repuesto || params.row.repuesto,
     },
     {
-      field: "cantidad_repuesto",
-      headerName: "Cantidad Repuesto",
+      field: "cantidad",
+      headerName: "cantidad",
       width: 185,
       headerClassName: "custom-header",
     },

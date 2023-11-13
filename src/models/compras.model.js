@@ -23,6 +23,10 @@ const comprasSchema = new mongoose.Schema(
             type: Date,
             required: true
         },
+        estado: {
+            type: String,
+            required: true
+        }
         // date: {
         //   type: Date,
         //   default: Date.now,

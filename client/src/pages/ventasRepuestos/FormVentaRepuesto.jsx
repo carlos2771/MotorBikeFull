@@ -33,11 +33,11 @@ export default function FormVentaRepuesto() {
         setValue("repuesto", ventaRepuesto.repuesto);
         setSelectedRepuesto(ventaRepuesto.repuesto);
         setValue("cantidad_repuesto", ventaRepuesto.cantidad_repuesto);
-        setValue("cantidad", ventaRepuesto.cantidad);
+        setValue("cantidad", ventaRepuesto.repuestos.cantidad);
         setSelectedRepuesto(ventaRepuesto.cantidad);
         setValue("precio_unitario", ventaRepuesto.precio_unitario);
         setValue("precio_total", ventaRepuesto.precio_total);
-        setValue("cliente", ventaRepuesto.cliente);
+        setValue("cliente", ventaRepuesto.cliente._id);
       }
     })();
   }, []);

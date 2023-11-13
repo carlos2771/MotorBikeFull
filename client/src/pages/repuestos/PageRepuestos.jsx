@@ -51,19 +51,16 @@ export default function PageRepuestos() {
       field: "nombre_repuesto",
       headerName: "Nombre",
       width: 190,
-      editable: true,
     },
     {
       field: "cantidad",
       headerName: "cantidad",
       width: 240,
-      editable: true,
     },
     {
       field: "precio",
       headerName: "precio",
       width: 200,
-      editable: true,
     },
     {
       field: "estado",
@@ -75,7 +72,6 @@ export default function PageRepuestos() {
       field: "createdAt",
       headerName: "Fecha Creacion",
       width: 240,
-      editable: true,
       renderCell: (params) => {
         const date = new Date(params.value);
         const formattedDate = date.toLocaleDateString("es-ES", {

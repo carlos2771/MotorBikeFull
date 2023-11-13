@@ -1,10 +1,10 @@
 import { useContext, useState, createContext, useEffect } from "react";
 import {
   createComprasRequest,
-  deleteComprasRequest, 
-  getCompraRequest, 
-  getComprasRequest, 
-  updateComprasRequest
+  deleteComprasRequest,
+  getCompraRequest,
+  updateComprasRequest,
+  getComprasRequest
 } from "../api/compras";
 
 const ComprasContext = createContext();
@@ -32,9 +32,9 @@ export function ComprasProvider({ children }) {
     }
   };
 
-  const createCompras = async (compra) => {
+  const createCompra = async (compra) => {
     try {
-      return  await createComprasRequest(compra);
+      return await createComprasRequest(compra);
       // console.log("ventas:", response);
     } catch (error) {
       setErrors(error.response.data.message);
@@ -51,7 +51,7 @@ export function ComprasProvider({ children }) {
     }
   };
 
-  const updateCompras = async (id, compra) => {
+  const updateCompra = async (id, compra) => {
     try {
       return await updateComprasRequest(id, compra);
     } catch (error) {
@@ -59,13 +59,13 @@ export function ComprasProvider({ children }) {
       setErrors(error.response.data.message);
     }
   };
-  
-  const deleteCompras = async (id) => {
+
+  const deleteCompra = async (id) => {
     try {
       const res = await deleteComprasRequest(id);
       console.log(res);
       if (res.status === 204) {
-        setCompras(compras.filter((compra) => compra._id !== id));
+        setCompras(compras.filter((compra) => compra ._id !== id));
       }
     } catch (error) {
       console.error(error);
@@ -87,10 +87,10 @@ export function ComprasProvider({ children }) {
         compras,
         errors,
         getCompras,
-        createCompras,
+        createCompra,
         getCompra,
-        updateCompras,
-        deleteCompras
+        updateCompra,
+        deleteCompra
       }}
     >
       {children}
