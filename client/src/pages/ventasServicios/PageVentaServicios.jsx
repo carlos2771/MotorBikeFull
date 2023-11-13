@@ -154,7 +154,7 @@ export default function PageVentaServicios() {
           </div>
           <Box sx={{ width: "100%" }}>
             <DataGrid
-              className="bg-neutral-700 mx-16 my-4"
+              className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
               rows={ventasServicios}
               columns={columns}
               getRowId={(row) => row._id}
@@ -166,7 +166,6 @@ export default function PageVentaServicios() {
                 },
               }}
               pageSizeOptions={[5]}
-              checkboxSelection
               disableRowSelectionOnClick
               sx={{
                 color: "white",

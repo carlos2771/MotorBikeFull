@@ -145,7 +145,7 @@ export default function PageRepuestos() {
             },
           }}
           pageSizeOptions={[5]}
-          checkboxSelection
+
           disableRowSelectionOnClick
           sx={{
             color: "white",

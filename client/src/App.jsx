@@ -61,7 +61,7 @@ export default function App() {
                           <main className='min-h-screen bg-gradient-to-tr from-[#1E293B] via-[#0f172a] to-[#1E293B] px-8 md:px-14 lg:px-36 pb-10 pt-7'>  
                             <Navbar/>
                             <Routes>
-                              <Route path="/" element={<HomePage />} />
+                              <Route path="/" element={<HomePage/>} />
                               <Route path="/login" element={<LoginPage />} />
                               <Route path="/register" element={<RegisterPage />} />
                               {/* rutas protegidas se envuelven en otro Route */}
