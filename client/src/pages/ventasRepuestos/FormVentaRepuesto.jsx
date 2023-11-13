@@ -24,7 +24,7 @@ export default function FormVentaRepuesto() {
   const { repuestos, getRepuestos } = useRepuestos();
   const navigate = useNavigate();
   const params = useParams();
-  const [selectedRepuesto, setSelectedRepuesto] = useState(null);
+  const [selectedRepuesto, setSelectedRepuesto] = useState();
 
   useEffect(() => {
     (async () => {

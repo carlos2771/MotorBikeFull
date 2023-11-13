@@ -141,7 +141,6 @@ export default function PageRepuestos() {
             },
           }}
           pageSizeOptions={[5]}
-         
           disableRowSelectionOnClick
           sx={{
             color: "white",

@@ -60,20 +60,24 @@ export default function App() {
                     <RepuestoProvider>
                       <MecanicoProvider>
                         <MarcaProvider>
-                          <ComprasProvider>
-                            {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
-                            <BrowserRouter>
-                              <main className='min-h-screen bg-gradient-to-tr from-[#1E293B] via-[#0f172a] to-[#1E293B] px-8 md:px-14 lg:px-36 pb-10 pt-7'>
-                                <Navbar />
-                                <Routes>
-                                  <Route path="/" element={<HomePage />} />
-                                  <Route path="/login" element={<LoginPage />} />
-                                  <Route path="/register" element={<RegisterPage />} />
-                                  {/* rutas protegidas se envuelven en otro Route */}
-                                  <Route element={<ProtectedRoute />}>
-                                    <Route path="/tasks" element={<TaskPaje />} />
-                                    <Route path="/add-task" element={<TaskFormPage />} />
-                                    <Route path="/tasks/:id" element={<TaskFormPage />} />
+                        {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
+                        <BrowserRouter>
+                          <main className='min-h-screen bg-gradient-to-tr from-[#1E293B] via-[#0f172a] to-[#1E293B] px-8 md:px-14 lg:px-36 pb-10 pt-7'>  
+                            <Navbar/>
+                            <Routes>
+                              <Route path="/" element={<HomePage/>} />
+                              <Route path="/login" element={<LoginPage />} />
+                              <Route path="/register" element={<RegisterPage />} />
+                              {/* rutas protegidas se envuelven en otro Route */}
+                              <Route element={<ProtectedRoute />}>
+                                <Route path="/tasks" element={<TaskPaje />} />
+                                <Route path="/add-task" element={<TaskFormPage />} />
+                                <Route path="/tasks/:id" element={<TaskFormPage />} />
+                                
+                                <Route path="/profile" element={<ProfilePage />} />
+                                <Route path="/clientes" element={<PageClientes />} />
+                                <Route path="/add-cliente" element={<FormCliente />} />
+                                <Route path="/cliente/:id" element={<FormCliente />} />
 
                                     <Route path="/profile" element={<ProfilePage />} />
                                     <Route path="/clientes" element={<PageClientes />} />

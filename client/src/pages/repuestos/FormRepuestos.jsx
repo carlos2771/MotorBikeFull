@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { useRepuestos } from "../../context/RepuestosContext"
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { NombreRequired, NegativeRequired} from "../../utils/validations"
 
@@ -37,19 +37,20 @@ export default function FormRepuesto() {
 
   return (
     <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
-    <div className='bg-zinc-800 max-w-md w-full p-10 rounded-md'>
+    <div className='bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40'>
     {repuestosErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
         ))}
-      <form onSubmit={onSubmit}>
+        <h1 className="text-2xl flex justify-center ">Agregar repuesto</h1>
+      <form className="mt-10" onSubmit={onSubmit}>
         <label>Nombre Repuesto</label>
         <input 
         type="text" 
         placeholder='Nombre Repuesto' 
         {...register("nombre_repuesto", NombreRequired)}
-        className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
+        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         autoFocus
         />
         {errors.nombre_repuesto && <p className="text-red-500">{errors.nombre_repuesto.message}</p>}
@@ -58,7 +59,7 @@ export default function FormRepuesto() {
         placeholder='Cantidad'
         type="number"
         {...register("cantidad", NegativeRequired)}
-        className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
+        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.cantidad && <p className="text-red-500">{errors.cantidad.message}</p>}
         <label>Precio</label>
@@ -66,7 +67,7 @@ export default function FormRepuesto() {
         placeholder='precio'
         type="number"
         {...register("precio", NegativeRequired)}
-        className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
+        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.precio && <p className="text-red-500">{errors.precio.message}</p>}
         <label >Estado</label>
@@ -82,8 +83,11 @@ export default function FormRepuesto() {
           </option>
 
         </select>
-        <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
+        <button className='px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
+        </button>
+        <button className='px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-3  '>
+          <Link to="/repuestos">Cancelar</Link>
         </button>
       </form>
     </div>

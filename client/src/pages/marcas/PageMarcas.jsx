@@ -50,19 +50,19 @@ export default function PageMarcas() {
     {
       field: "nombre_marca",
       headerName: "Nombre de Marca",
-      width: 190,
+      width: 250,
 
     },
     {
       field: "estado",
       headerName: "Estado",
-      width: 100,
+      width: 200,
 
     },
     {
       field: "createdAt",
       headerName: "Fecha Creacion",
-      width: 240,
+      width: 340,
  
       renderCell: (params) => {
         const date = new Date(params.value);

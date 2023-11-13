@@ -90,7 +90,7 @@ const onSubmit = handleSubmit(async (data) => {
           <label>Mecánico</label>
           { <select
             {...register("mecanico", NombreRequired)}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value="">Selecciona un mecánico</option>
             {mecanicos.map((mecanico) => (
@@ -104,19 +104,19 @@ const onSubmit = handleSubmit(async (data) => {
           <input
             type="number"
             {...register("precio_servicio", NegativeRequired)}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
           {errors.precio_servicio && <p className="text-red-500">{errors.precio_servicio.message}</p>}
           <label>Descripción</label>
           <textarea
             {...register("descripcion", NombreRequired)}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
           {errors.descripcion && <p className="text-red-500">{errors.descripcion.message}</p>}
           <label>Estado</label>
           <select
         {...register("estado")}
-        className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
         >
           <option value={"Activo"} >
             Activo

@@ -83,7 +83,7 @@ export default function PageVentaRepuestos() {
       field: "estado",
       headerName: "Estado",
       width: 100,
-
+      headerClassName: "custom-header",
     },
     {
       field: "createdAt",
