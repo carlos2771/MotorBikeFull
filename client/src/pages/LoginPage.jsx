@@ -1,4 +1,4 @@
-import React, { useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from "react-hook-form";
 import { useAuth } from '../hooks/useAuth';
 import { EmailRequired, PasswordRequire } from '../utils/validations';
@@ -29,7 +29,7 @@ export default function loginPage() {
       <div className='flex h-[calc(100vh-100px)] items-center justify-center '>
       <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md  '>
       {
-      signinErrors.map((error, i ) => (
+      signinErrors && Array.isArray(signinErrors) && signinErrors.map((error, i ) => (
         <Alert className="bg-red-500 p-2 text-white" key={i}>
           {error}
         </Alert>
@@ -65,7 +65,9 @@ export default function loginPage() {
           type="submit">Iniciar sesión</button>
           </div>
       </form>
-
+      <p className='flex gap-x-2 justify-center'>
+        ¿Olvidaste tu contraseña? <Link to='/reestablecer' className='text-sky-500 hover:text-yellow-200'>Recuperala aqui!</Link>
+      </p>
       <p className='flex gap-x-2 justify-center'>
         ¿No tienes cuenta? <Link to='/register' className='text-sky-500 hover:text-yellow-200'>Registrate</Link>
       </p>
