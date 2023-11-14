@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
 import { secretKey } from "../config.js";
 import nodemailer from "nodemailer";
+import base64String from "../img/base64Image.js";
 
 // Función para generar una cadena aleatoria de una longitud específica
 function generateRandomToken(length) {
@@ -171,11 +172,16 @@ export const enviarToken = async (req, res) => {
         },
       });
       const code = randomToken
-      const resetLink = `http://localhost:3000/api/restablecer-password/${token}`;
+      const resetLink = `http://localhost:3000/api/reestablecer-password/${code}`;
       const mailOptions = {
         to: email,
         subject: 'Recuperación de contraseña',
-        html: `Su codigo de recuperacion es: <p>${code}</p>`
+        html: `
+        <div style="font-family: 'Arial', sans-serif;">
+          <h2 style="color: #1477e4; font-size: 24px;">Recuperación de contraseña</h2>
+          <p style="font-size: 18px;">Su código de recuperación es: <strong>${code}</strong></p>
+          <p style="font-size: 18px;">¡Gracias!</p>
+        </div> `
       };
 
       transporter.sendMail(mailOptions, (error, info) => {
@@ -228,6 +234,7 @@ export const validarToken = async (req, res) => {
 };
 
 export const actualizarPassword = async (req, res) => {
+
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
   console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
@@ -247,20 +254,14 @@ export const actualizarPassword = async (req, res) => {
       return res.status(400).json({ message: ["codigo inválido o expirado"] });
     }
 
-   
     // Verificar que se proporciona una nueva contraseña y que coincide con la confirmación
-    
     console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
-
-
     if (!password || !confirmPassword || password !== confirmPassword) {
       console.error("Las contraseñas no coinciden");
       return res.status(400).json({
         message: ["Las contraseñas no coinciden"]
       });
     }
-    
-
     // Generar el hash de la nueva contraseña
     const newPasswordHash = await bcrypt.hash(req.body.password, 10);
 
@@ -273,7 +274,36 @@ export const actualizarPassword = async (req, res) => {
     // Guardar la nueva contraseña encriptada
     await usuario.save();
 
+      // Enviar un correo electrónico con el mensaje de exito
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USER || 'saritalop789@gmail.com',
+        pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
+        },
+      });
+      
+      const mailOptions = {
+        to: usuario.email,
+        subject: 'Recuperación de contraseña',
+        html: `
+        <div style="font-family: 'Arial', sans-serif;">
+          <h2 style="color: #1477e4; font-size: 24px;">Se ha reestablecido su contraseña con exito!!</h2>
+          <p style="font-size: 18px;">Para mas informacion, comunicate: <strong>3004020129</strong></p>
+          <p style="font-size: 18px;">¡Gracias!</p>
+        </div> `
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error(error);
+          return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
+        }
+        console.log('Correo electrónico enviado:', info.response);
+        res.status(200).json({ message: 'Correo electrónico enviado con éxito' });
+
     return res.status(200).json({ message: "Contraseña actualizada con éxito" });
+    });
   } catch (error) {
     console.error(error);
     console.error("Error en la solicitud de actualizar contraseña:", error);

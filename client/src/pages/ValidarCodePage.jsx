@@ -68,7 +68,7 @@ const ValidarCodePage = () => {
                 className="px-5 py-1 m-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
                 type="submit"
               >
-                Siguiente
+                Siguientes
               </button>
             </div>
           </form>
