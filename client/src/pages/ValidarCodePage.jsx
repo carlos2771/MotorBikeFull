@@ -7,7 +7,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert } from '@material-tailwind/react';
 
 const ValidarCodePage = () => {
-  // Utiliza useForm y useAuth
+
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { validarToken, errors: verificationErrors } = useAuth();
   const navigate = useNavigate();
@@ -19,22 +19,19 @@ const ValidarCodePage = () => {
     setEmail(userEmail);
   }, [params]);
   
-  
- 
-  // Configura la lógica de envío del código al backend
+
   const onSubmit = handleSubmit(async (values) => {
     try {
       console.log(email);
       const user = await validarToken(values.code);
       const userEmail = params.email
-      
-      
+    
       // Redirige a la página de actualización de contraseña con el código
       navigate(`/reestablecer-password/${values.code}`);
       
     } catch (error) {
       console.error(error);
-      // Maneja el error, por ejemplo, muestra un mensaje al usuario
+      
     }
   });
 

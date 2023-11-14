@@ -5,8 +5,6 @@ import { EmailRequired, PasswordRequire } from '../utils/validations';
 import { Link,  useNavigate, useParams } from 'react-router-dom';
 import { Alert } from "@material-tailwind/react";
 
-
-
 const PasswordPage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { enviarToken ,  isAuthenticated, errors: signinErrors} = useAuth();
@@ -20,7 +18,6 @@ const PasswordPage = () => {
             console.error(error);
           }
     });
-
 
   return (
     <div>

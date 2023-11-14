@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { registerRequest, loginRequest, verifyTokenRequest ,             enviarTokenRequest, validarTokenRequest, actualizarPasswordRequest, } from "../api/auth"; // Corregí "verifyTokentRequet" a "verifyTokenRequest".
+import { registerRequest, loginRequest, verifyTokenRequest , enviarTokenRequest, validarTokenRequest, actualizarPasswordRequest, } from "../api/auth"; // Corregí "verifyTokentRequet" a "verifyTokenRequest".
 import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
   };
   const actualizarPassword = async (code,  password, confirmPassword ) => {
     try {
-      console.log("Código:", code); // Verifica que el código esté presente
+      console.log("Código:", code);
       console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
       const response = await actualizarPasswordRequest(code,  password, confirmPassword);
       console.log(response);
@@ -109,7 +109,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       try {
-        const res = await verifyTokenRequest(cookies.token); // Corregí "verifyTokentRequet" a "verifyTokenRequest".
+        const res = await verifyTokenRequest(cookies.token); 
         if (!res.data) return setIsAuthenticated(false);
         setIsAuthenticated(true);
         setUser(res.data);

@@ -13,7 +13,7 @@ const ActualizarPassword = () => {
   const [passwordError, setPasswordError] = useState('');
 
   useEffect(() => {
-    // No necesitas establecer los valores aquí porque se establecen en las funciones de cambio
+    
   }, []);
 
   const onSubmit = async (values) => {
@@ -24,7 +24,7 @@ const ActualizarPassword = () => {
     }
 
     try {
-      console.log("Código:", params.code); // Asegúrate de que el código esté presente
+      console.log("Código:", params.code); 
       await actualizarPassword(params.code, values.password, values.confirmPassword);
       console.log("Contraseña actualizada correctamente");
       navigate(`/login`);

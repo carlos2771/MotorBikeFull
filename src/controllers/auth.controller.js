@@ -163,7 +163,7 @@ export const enviarToken = async (req, res) => {
       // Almacenar el token en una cookie
       res.cookie('token2', token, { httpOnly: true });
 
-      // Enviar un correo electrónico con el enlace de recuperación
+      // Enviar un correo electrónico con el codigo
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -172,7 +172,6 @@ export const enviarToken = async (req, res) => {
         },
       });
       const code = randomToken
-      const resetLink = `http://localhost:3000/api/reestablecer-password/${code}`;
       const mailOptions = {
         to: email,
         subject: 'Recuperación de contraseña',
@@ -207,12 +206,6 @@ export const validarToken = async (req, res) => {
 
   try {
     const usuario = await User.findOne({ code: code });
-
-    // Decodificar el token para obtener la información del usuario
-    // const decodedToken = jwt.verify(token, 'secreto'); // Reemplaza la clave secreta utilizada para firmar el token
-
-    // Buscar al usuario en la base de datos usando la información del token
-    // const usuario = await User.findOne({ _id: decodedToken.userId });
     console.log(usuario)
     if (!usuario) {
       return res.status(400).json({ message: "Código no válido" });
