@@ -6,6 +6,19 @@ import { TOKEN_SECRET } from "../config.js";
 import { secretKey } from "../config.js";
 import nodemailer from "nodemailer";
 
+// Función para generar una cadena aleatoria de una longitud específica
+function generateRandomToken(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let token = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    token += characters.charAt(randomIndex);
+  }
+
+  return token;
+}
+
 export const register = async (req, res) => {
   const { email, password, username } = req.body;
 
@@ -131,16 +144,19 @@ export const enviarToken = async (req, res) => {
       // Verificar si el correo electrónico existe en la base de datos
       const user = await User.findOne({ email });
       if (!user) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
+        return res.status(400).json({ message: ["Email no registrado"] });
       }
 
       // Generar un token con una duración limitada
       const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
-      console.log(token);
+      
+      const randomToken = generateRandomToken(5);
+      console.log(randomToken);
 
       // Almacenar el token en el usuario en la base de datos
       user.resetToken = token;
       user.resetTokenExpires = new Date(Date.now() + 3600000); // 1 hora de expiración
+      user.code = randomToken;
       await user.save();
 
       // Almacenar el token en una cookie
@@ -154,12 +170,12 @@ export const enviarToken = async (req, res) => {
         pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
         },
       });
-
+      const code = randomToken
       const resetLink = `http://localhost:3000/api/restablecer-password/${token}`;
       const mailOptions = {
         to: email,
         subject: 'Recuperación de contraseña',
-        html: `Haga clic en el siguiente enlace para restablecer su contraseña: <a href="${resetLink}">${resetLink}</a>`
+        html: `Su codigo de recuperacion es: <p>${code}</p>`
       };
 
       transporter.sendMail(mailOptions, (error, info) => {
@@ -180,17 +196,20 @@ export const enviarToken = async (req, res) => {
 
 
 export const validarToken = async (req, res) => {
-  const token = req.params.token;
+  // const token = req.params.token;
+  const code = req.params.code;
 
   try {
+    const usuario = await User.findOne({ code: code });
+
     // Decodificar el token para obtener la información del usuario
-    const decodedToken = jwt.verify(token, 'secreto'); // Reemplaza la clave secreta utilizada para firmar el token
+    // const decodedToken = jwt.verify(token, 'secreto'); // Reemplaza la clave secreta utilizada para firmar el token
 
     // Buscar al usuario en la base de datos usando la información del token
-    const usuario = await User.findOne({ _id: decodedToken.userId });
-
+    // const usuario = await User.findOne({ _id: decodedToken.userId });
+    console.log(usuario)
     if (!usuario) {
-      return res.status(400).json({ message: "Usuario no válido" });
+      return res.status(400).json({ message: "Código no válido" });
     }
 
     // Devolver la información del usuario en formato JSON
@@ -204,27 +223,43 @@ export const validarToken = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ message: "Token inválido" });
+    return res.status(400).json({ message: ["codigo inválido"] });
   }
 };
 
 export const actualizarPassword = async (req, res) => {
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+  console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
+  console.log("Cuerpo de la solicitud:", req.body);
   try {
+      console.log("Código recibido:", req.params.code); 
     // Verificar el token según la fecha de expiración
     const usuario = await User.findOne({
-      resetToken: req.params.token,
+      code: req.params.code,
+      // resetToken: req.params.token,
       resetTokenExpires: { $gt: Date.now() },
     });
+    console.log(usuario);
 
     // Verificar que el usuario exista
     if (!usuario) {
-      return res.status(400).json({ message: "Token inválido o expirado" });
+      return res.status(400).json({ message: ["codigo inválido o expirado"] });
     }
 
+   
     // Verificar que se proporciona una nueva contraseña y que coincide con la confirmación
-    if (!req.body.password || !req.body.confirmPassword || req.body.password !== req.body.confirmPassword) {
-      return res.status(400).json({ message: "Las contraseñas no coinciden" });
+    
+    console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
+
+
+    if (!password || !confirmPassword || password !== confirmPassword) {
+      console.error("Las contraseñas no coinciden");
+      return res.status(400).json({
+        message: ["Las contraseñas no coinciden"]
+      });
     }
+    
 
     // Generar el hash de la nueva contraseña
     const newPasswordHash = await bcrypt.hash(req.body.password, 10);
@@ -233,6 +268,7 @@ export const actualizarPassword = async (req, res) => {
     usuario.resetToken = null;
     usuario.resetTokenExpires = null;
     usuario.password = newPasswordHash;
+    usuario.code = null;
 
     // Guardar la nueva contraseña encriptada
     await usuario.save();
@@ -240,6 +276,7 @@ export const actualizarPassword = async (req, res) => {
     return res.status(200).json({ message: "Contraseña actualizada con éxito" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Error interno del servidor" });
+    console.error("Error en la solicitud de actualizar contraseña:", error);
+    return res.status(500).json({ message:[ "Error interno del servidor"] });
   }
 };

@@ -66,9 +66,9 @@ export const AuthProvider = ({ children }) => {
       setErrors(error.response.data.message);
     }
   };
-  const validarToken = async (token) => {
+  const validarToken = async (code) => {
     try {
-      const response = await validarTokenRequest(token);
+      const response = await validarTokenRequest(code);
       console.log(response);
       console.log();
     } catch (error) {
@@ -76,9 +76,11 @@ export const AuthProvider = ({ children }) => {
       setErrors(error.response.data.message);
     }
   };
-  const actualizarPassword = async (token, password, confirmPassword) => {
+  const actualizarPassword = async (code,  password, confirmPassword ) => {
     try {
-      const response = await actualizarPasswordRequest(token, password, confirmPassword);
+      console.log("Código:", code); // Verifica que el código esté presente
+      console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
+      const response = await actualizarPasswordRequest(code,  password, confirmPassword);
       console.log(response);
     } catch (error) {
       console.log(error.response.data);

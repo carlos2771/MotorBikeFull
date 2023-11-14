@@ -39,6 +39,9 @@ import { MarcaProvider } from "./context/MarcasContext";
 import PageMarcas from "./pages/marcas/PageMarcas";
 import FormMarca from "./pages/marcas/FormMarca";
 
+import PasswordPage from "./pages/PasswordPage";
+import ActualizarPassword from "./pages/ActualizarPassword";
+import ValidarCodePage from "./pages/ValidarCodePage";
 
 export default function App() {
 
@@ -64,6 +67,10 @@ export default function App() {
                               <Route path="/" element={<HomePage />} />
                               <Route path="/login" element={<LoginPage />} />
                               <Route path="/register" element={<RegisterPage />} />
+                              <Route path="/reestablecer" element={<PasswordPage />} />
+                              <Route path="/reestablecer-password/:code" element={<ActualizarPassword />} />
+                              <Route path="/restablecer-password/:code" element={<ValidarCodePage />} />
+                              {/* ... (otras rutas) */}
                               {/* rutas protegidas se envuelven en otro Route */}
                               <Route element={<ProtectedRoute />}>
                                 <Route path="/tasks" element={<TaskPaje />} />

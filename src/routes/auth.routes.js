@@ -15,7 +15,7 @@ router.get("/profile", authRequired, profile) // para las rutas protegidas, dond
 router.get("/verify", verifyToken)
 //cambiar password
 router.post("/reestablecer", enviarToken)
-router.get("/restablecer-password/:token", validarToken)
-router.post("/restablecer-password/:token", actualizarPassword)
+router.post("/restablecer-password/:code", validarToken)
+router.post("/reestablecer-password/:code", actualizarPassword)
 
 export default router
