@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@material-tailwind/react";
-import { EstadoRequired } from "../utils/validations";
+import { EmailRequired, EstadoRequired ,PasswordRequire } from "../utils/validations";
 
 export default function registerPage() {
   const {
@@ -52,7 +52,7 @@ export default function registerPage() {
           )}
           <input
             type="email"
-            {...register("email", EstadoRequired)}
+            {...register("email", EmailRequired)}
             className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white px-4 py-2 rounded2 my-2 border-0 border-b-2 border-sky-500 "
             placeholder="Email"
           />
@@ -62,7 +62,7 @@ export default function registerPage() {
         )}
           <input
             type="password"
-            {...register("password", EstadoRequired)}
+            {...register("password", PasswordRequire)}
             className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white px-4 py-2 rounded2 my-2 border-0 border-b-2 border-sky-500 "
             placeholder="Contraseña"
           />

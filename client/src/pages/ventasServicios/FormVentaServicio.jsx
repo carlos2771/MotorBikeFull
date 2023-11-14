@@ -65,7 +65,7 @@ const onSubmit = handleSubmit(async (data) => {
   console.log(ventasServiciosErrors);
 
   return (
-    <div className="flex h-[calc(100vh-100px)] items-center justify-center">
+    <div className="flex items-center justify-center pt-20">
        <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
         {ventasServiciosErrors?.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>

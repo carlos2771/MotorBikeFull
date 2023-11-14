@@ -1,4 +1,4 @@
-const EMAIL_REGEX = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+const EMAIL_REGEX = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,3}$/i;
 const numberPattern = /^[0-9]*$/;
 const negative = /^[1-9]\d*$/;
 
@@ -22,7 +22,11 @@ export const TelefonoRequired = {
   required: "Teléfono es requerido",
   maxLength: {
     value: 10,
-    message: "El teléfono solo debe tener 10 digitos",
+    message: "El máximo de digitos es de 10",
+  },
+  minLength:{
+    value: 7,
+    message: "El telefono debe tener entre 7 y 10 digitos"
   },
   pattern: {
     value: numberPattern,
@@ -33,9 +37,19 @@ export const CedulaRequired = {
   required: "Cédula es requerido",
   pattern: {
     value: numberPattern,
-    message: "Cédula solo contiene numeros",
+    message: "Por ahora solo son numeros",
   },
+  maxLength:{
+    value: 10,
+    message: "El maximo de caracteres es de 10"
+  },
+  minLength:{
+    value: 8,
+    message: "El minimo de caracteres es de 8"
+  }
 };
+
+
 export const NegativeRequired = {
   required: "campo requerido",
   pattern: {
