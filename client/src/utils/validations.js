@@ -19,21 +19,21 @@ export const PasswordRequire = {
 };
 
 export const TelefonoRequired = {
-  required: "Telefono es requerido",
+  required: "Teléfono es requerido",
   maxLength: {
     value: 10,
-    message: "el telefono solo debe tener 10 digitos",
+    message: "El teléfono solo debe tener 10 digitos",
   },
   pattern: {
     value: numberPattern,
-    message: "Telefono solo contiene numeros",
+    message: "Teléfono solo contiene numeros",
   },
 };
 export const CedulaRequired = {
-  required: "Cedula es requerido",
+  required: "Cédula es requerido",
   pattern: {
     value: numberPattern,
-    message: "Telefono solo contiene numeros",
+    message: "Cédula solo contiene numeros",
   },
 };
 export const NegativeRequired = {

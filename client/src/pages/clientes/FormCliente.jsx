@@ -54,6 +54,7 @@ export default function FormCliente() {
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         autoFocus
         />
+        {errors.nombre_cliente && <p className="text-red-500">{errors.nombre_cliente.message}</p>}
         <label >Sexo</label>
           <select
         {...register("sexo")}
@@ -68,25 +69,25 @@ export default function FormCliente() {
 
         </select>
 
-        {errors.nombre_cliente && <p className="text-red-500">{errors.nombre_cliente.message}</p>}
+        
         <label >Email Cliente</label>
         <input 
         placeholder='Email Cliente'
-        type="email"
+        type="text"
         {...register("email_cliente", EmailRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.email_cliente && <p className="text-red-500">{errors.email_cliente.message}</p>}
-        <label>Telefono Cliente</label>
+        <label>Teléfono Cliente</label>
         <input 
-        placeholder='Telefono Cliente'
+        placeholder='Teléfono Cliente'
         {...register("telefono_cliente", TelefonoRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.telefono_cliente && <p className="text-red-500">{errors.telefono_cliente.message}</p>}
-        <label>Cedula</label>
+        <label>Cédula</label>
         <input 
-        placeholder='Cedula'
+        placeholder='Cédula'
         {...register("cedula", CedulaRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
