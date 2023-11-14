@@ -42,8 +42,9 @@ export default function TaskFormPage() {
     navigate("/tasks")
   })
   return (
-    <div className='flex h-[calc(100vh-100px)] items-center justify-center  '>
-    <div className='bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40 '>
+    <div className='flex items-center justify-center pt-20'>
+    <div className='bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40'>
+    <h1 className="text-2xl flex justify-center mb-5">Agregar tarea </h1>
       <form onSubmit={onSubmit}>
         <label htmlFor="title">Titulo</label>
         <input 

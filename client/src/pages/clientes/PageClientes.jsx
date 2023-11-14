@@ -5,6 +5,7 @@ import { useClientes } from "../../context/ClientContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
+
 export default function PageClientes() {
   const { clientes, getClientes, deleteCliente,updateCliente } = useClientes();
   
