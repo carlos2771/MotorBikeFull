@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTasks } from '../context/TasksContext'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import utc from "dayjs/plugin/utc"
 import dayjs from 'dayjs'
 import { NombreRequired } from '../utils/validations'
@@ -66,8 +66,11 @@ export default function TaskFormPage() {
         <label htmlFor="date">Date</label>
         <input className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' type="date"{...register("date")} />
         <div className='justify-end flex mt-6'>
-          <button className='bg-blue-600 px-3 py-2 rounded-md  '>
+          <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d'>
           Guardar
+        </button>
+        <button className='px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-3  '>
+          <Link to="/tasks">Cancelar</Link>
         </button>
         </div>
       </form>

@@ -5,8 +5,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const navigation = [
   { name: "Iniciar sesión", href: "/login" },
-  { name: "Registrarse", href: "/Register" },
-  { name: "Inicio", href: "/" },
+  { name: "Registrarse", href: "/Register" }
 ];
 
 function classNames(...classes) {
@@ -42,7 +41,7 @@ export default function Header() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start ">
                 <div className="flex flex-shrink-0 items-center">
-                  <h1 className="text-[24px] font-bold text-white">Motor <span className='text-blue-300'>Bike</span></h1> {/* Logo de motor bike a futuro */}
+                  <a href="/"><h1 className="text-[24px] font-bold text-white">Motor <span className='text-blue-300'>Bike</span></h1> {/* Logo de motor bike a futuro */}</a>
                 </div>
               </div>
                 <div className="hidden sm:ml-6 sm:block ">
