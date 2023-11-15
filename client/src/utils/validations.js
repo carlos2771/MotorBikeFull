@@ -60,6 +60,13 @@ export const NegativeRequired = {
 export const NombreRequired = {
   required: "campo requerido ",
 };
+export const NombreRequiredM = {
+  required: "campo requerido ",
+  pattern: {
+    value: /^(?=.*[A-Za-z])[\w\s]+$/,
+    message: "Solo se permiten letras en el nombre"
+  }
+};
 export const RepuestoRequired = {
   required: "campo requeridos ",
 };

@@ -3,7 +3,7 @@ import { useMecanicos } from "../../context/MecanicosContext"
 import { Link } from "react-router-dom"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
-import { NombreRequired, CedulaRequired, TelefonoRequired } from "../../utils/validations"
+import { NombreRequired,NombreRequiredM, CedulaRequired, TelefonoRequired } from "../../utils/validations"
 
 
 export default function FormMecanico() {
@@ -45,9 +45,7 @@ export default function FormMecanico() {
             {error}
           </div>
         ))}
-           <br />
-           <br />
-           <br />
+        <br />
           <h1 className="text-2xl flex justify-center ">Agregar mecánico</h1>
         <form className="mt-10"  onSubmit={onSubmit}>
             <label >Cedula</label>
@@ -62,7 +60,7 @@ export default function FormMecanico() {
             <input 
             type="text" 
             placeholder='Nombre Mecanico' 
-            {...register("nombre_mecanico", NombreRequired)}
+            {...register("nombre_mecanico", NombreRequiredM)}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
             autoFocus
             />
