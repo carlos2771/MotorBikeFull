@@ -24,7 +24,7 @@ export default function Header() {
   }, [location]);
 
   return (
-    <Disclosure as="nav" className="bg-slate-700 fixed top-0 left-0 right-0 shadow-md z-10" >
+    <Disclosure as="nav" className="bg-slate-700 fixed top-0 left-0 right-0 shadow-md z-20" >
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
