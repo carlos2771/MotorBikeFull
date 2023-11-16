@@ -21,7 +21,6 @@ export default function PageMarcas() {
     const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
     const text = estado === "Activo" ? "¿Estás seguro de inhabilitar la marca?" : "¿Estás seguro de habilitar la marca?";
     const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
-
     Swal.fire({
       title: title,
       text: text,
@@ -29,14 +28,51 @@ export default function PageMarcas() {
       showCancelButton: true,
       confirmButtonText: "Sí",
       cancelButtonText: "No",
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#22c55e", 
+      cancelButtonColor: "#ef4444",
+      background: "#334155",
+      color: "white",
+      iconColor: "red",
+      customClass: {
+        confirmButton: 'color: red',
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         cambiarEstado(id, estado);
-        Swal.fire(`${texto}`, `La marca ha sido ${texto} `, "success");
-      }
-    });
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Se ha modificado"
+        });
+      }else {
+        const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "error",
+        title: "No se ha modificado"
+      });
+    }}
+    );
+    
   };
 
   const cambiarEstado = (id, estado) => {
