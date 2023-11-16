@@ -21,6 +21,7 @@ export default function PageMarcas() {
     const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
     const text = estado === "Activo" ? "¿Estás seguro de inhabilitar la marca?" : "¿Estás seguro de habilitar la marca?";
     const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
+    
     Swal.fire({
       title: title,
       text: text,
@@ -28,13 +29,13 @@ export default function PageMarcas() {
       showCancelButton: true,
       confirmButtonText: "Sí",
       cancelButtonText: "No",
-      confirmButtonColor: "#22c55e", 
-      cancelButtonColor: "#ef4444",
       background: "#334155",
       color: "white",
       iconColor: "red",
+      buttonsStyling: false,
       customClass: {
-        confirmButton: 'color: red',
+        confirmButton: "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+        cancelButton: "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500"
       }
     }).then((result) => {
       if (result.isConfirmed) {

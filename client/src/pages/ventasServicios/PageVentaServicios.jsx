@@ -29,11 +29,14 @@ export default function PageVentaServicios() {
           showCancelButton: true,
           confirmButtonText: "Sí",
           cancelButtonText: "No",
-          confirmButtonColor: "#22c55e", 
-          cancelButtonColor: "#ef4444",
           background: "#334155",
           color: "white",
-          iconColor: "red"
+          iconColor: "red",
+          buttonsStyling: false,
+          customClass: {
+            confirmButton: "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+            cancelButton: "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500"
+          }
         }).then((result) => {
           if (result.isConfirmed) {
             cambiarEstado(id, estado);
