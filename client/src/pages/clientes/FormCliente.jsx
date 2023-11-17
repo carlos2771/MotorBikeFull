@@ -37,8 +37,11 @@ export default function FormCliente() {
 
 
   return (
-    <div className='flex items-center justify-center pt-20'>
-    <div className='bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40'>
+    <div className='flex items-center justify-center pt-20 '>
+      <div className="grid sm:grid-cols-2">
+        
+      </div>
+    <div className='bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40 '>
     {clientesErrors.map((error, i) => (
       <div className="bg-red-500 p-2 text-white" key={i}>
             {error}

@@ -18,7 +18,7 @@ export default function Carousel({ slides }) {
 
 
   return (
-    <div className="z-0">
+    <div className="z-10">
         <div className="overflow-hidden relative">
             <div
                 className={`flex transition ease-out duration-1000 `}
@@ -27,7 +27,7 @@ export default function Carousel({ slides }) {
                 }}
             >
                 {slides.map((s) => {
-                return <img src={s} className="opacity-40 duration-75"/>;
+                return <img src={s} className="opacity-20 duration-75"/>;
                 })}
             </div>
 
