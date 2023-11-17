@@ -31,10 +31,10 @@ export default function PageVentaRepuestos() {
       cancelButtonText: "No",
       background: "#334155",
       color: "white",
-      iconColor: "red",
+      iconColor: "#2563eb",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+        confirmButton: "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
         cancelButton: "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500"
       }
     }).then((result) => {
@@ -147,7 +147,7 @@ export default function PageVentaRepuestos() {
         return (
           <div>
             <button
-            className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" : "hidden"}
+            className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500" : "hidden"}
           >
             <Link to={`/venta-repuesto/${params.row._id}`}>Editar</Link>
           </button>
@@ -164,7 +164,7 @@ export default function PageVentaRepuestos() {
               className={
                 estado === "Activo"
                   ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
-                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-yellow-500 hover:text-white hover:bg-yellow-500"
+                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
               }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >

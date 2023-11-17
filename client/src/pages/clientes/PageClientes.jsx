@@ -32,15 +32,15 @@ export default function PageClientes() {
       text: text,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Sí",
+      confirmButtonText: "Si",
       cancelButtonText: "No",
       background: "#334155",
       color: "white",
-      iconColor: "red",
+      iconColor: "#2563eb",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
-        cancelButton: "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500"
+        confirmButton: "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+        cancelButton:  "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500"
       }
     }).then((result) => {
       if (result.isConfirmed) {
@@ -152,7 +152,7 @@ export default function PageClientes() {
           <button
             className={estado === "Activo" ? "" : "hidden"}
           >
-            <Link className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" to={`/cliente/${params.row._id}`}>Editar</Link>
+            <Link className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500" to={`/cliente/${params.row._id}`}>Editar</Link>
           </button>
           {/* <button
             className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
@@ -161,7 +161,7 @@ export default function PageClientes() {
             Eliminar
           </button> */}
            <button
-              className={estado === "Activo" ?  "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500" : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-yellow-500 hover:text-white hover:bg-yellow-500"}
+              className={estado === "Activo" ?  "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500" : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"}
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
               {estado === "Activo" ? "Inhabilitar" : "Habilitar"}
