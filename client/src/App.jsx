@@ -34,6 +34,7 @@ import FormRepuesto from "./pages/repuestos/FormRepuestos";
 import { MecanicoProvider } from "./context/MecanicosContext";
 import PageMecanico from "./pages/mecanicos/PageMecanicos";
 import FormMecanico from "./pages/mecanicos/FormMecanicos";
+import VerMecanico from "./pages/mecanicos/verMecanico";
 
 import { MarcaProvider } from "./context/MarcasContext";
 import PageMarcas from "./pages/marcas/PageMarcas";
@@ -94,17 +95,19 @@ export default function App() {
                                 <Route path="/add-venta-servicio" element={<FormVentaServicio />} />
                                 <Route path="/ventas-servicios/:id" element={<FormVentaServicio />} />
 
-                                  <Route path="/repuestos" element={<PageRepuestos/>} />
-                                  <Route path="/add-repuesto" element={<FormRepuesto/>} />
-                                  <Route path="/repuestos/:id" element={<FormRepuesto/>} />
+                                <Route path="/repuestos" element={<PageRepuestos/>} />
+                                <Route path="/add-repuesto" element={<FormRepuesto/>} />
+                                <Route path="/repuestos/:id" element={<FormRepuesto/>} />
 
-                                  <Route path="/mecanicos" element={<PageMecanico />} />
-                                  <Route path="/add-mecanico" element={<FormMecanico />} />
-                                  <Route path="/mecanico/:id" element={<FormMecanico />} />
+                                <Route path="/mecanicos" element={<PageMecanico />} />
+                                <Route path="/add-mecanico" element={<FormMecanico />} />
+                                <Route path="/mecanico/:id" element={<FormMecanico />} />
 
-                                  <Route path="/marcas" element={<PageMarcas />} />
-                                  <Route path="/add-marca" element={<FormMarca />} />
-                                  <Route path="/marca/:id" element={<FormMarca />} />
+                                <Route path="/marcas" element={<PageMarcas />} />
+                                <Route path="/add-marca" element={<FormMarca />} />
+                                <Route path="/marca/:id" element={<FormMarca />} />
+
+                                <Route path="/mecanicos/:id" element={<VerMecanico />} />
 
                                 </Route>
                               </Routes>

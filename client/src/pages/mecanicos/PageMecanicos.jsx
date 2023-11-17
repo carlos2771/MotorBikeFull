@@ -96,12 +96,17 @@ export default function PageMecanico() {
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 200,
+      width: 300,
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("Estado", estado);
         return (
           <div>
+            <button
+            className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" : "hidden"}
+          >
+            <Link to={`/mecanicos/${params.row._id}`}>Ver</Link>
+          </button>
           <button
             className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" : "hidden"}
           >

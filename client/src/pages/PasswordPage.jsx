@@ -10,21 +10,31 @@ const PasswordPage = () => {
     const { enviarToken ,  isAuthenticated, errors: signinErrors} = useAuth();
     const navigate = useNavigate();
     const params = useParams();
-    const onSubmit = handleSubmit(async (values) => {
-        try {
-            await enviarToken(values.email);
-            navigate(`/restablecer-password/${values.email}`);
-          } catch (error) {
-            console.error(error);
-          }
-    });
+    // const onSubmit = handleSubmit(async (values) => {
+    //     try {
+    //         await enviarToken(values.email);
+    //         navigate(`/restablecer-password/${values.email}`);
+    //       } catch (error) {
+    //         console.error(error);
+    //       }
+    // });
+
+    const onSubmit = handleSubmit((values) =>{
+      enviarToken(values.email)
+    })
+  
+    useEffect(() => {
+      if (isAuthenticated) {
+        navigate(`/restablecer-password/${values.email}`);
+      }
+    }, [isAuthenticated]);
 
   return (
     <div>
       <div className='flex h-[calc(100vh-100px)] items-center justify-center '>
       <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md  '>
       {
-      signinErrors.map((error, i ) => (
+      signinErrors && Array.isArray(signinErrors) && signinErrors.map((error, i ) => (
         <Alert className="bg-red-500 p-2 text-white" key={i}>
           {error}
         </Alert>
