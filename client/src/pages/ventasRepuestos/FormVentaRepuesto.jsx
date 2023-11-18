@@ -154,7 +154,7 @@ export default function FormVentaRepuesto() {
             ))}
           </select>
           
-          <label >Estado</label>
+          {/* <label >Estado</label>
           <select
         {...register("estado")}
         className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
@@ -166,7 +166,7 @@ export default function FormVentaRepuesto() {
             Inactivo
           </option>
 
-        </select>
+        </select> */}
             {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
           <button className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d" type="submit">
             Guardar

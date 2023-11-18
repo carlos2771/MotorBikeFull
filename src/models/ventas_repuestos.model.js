@@ -24,10 +24,14 @@ const ventas_repuestosSchema = new mongoose.Schema(
       ref: "clientes",
       required: true,
     },
-    estado: {
-      type: String,
-      required: true
-    }
+    // estado: {
+    //   type: String,
+    //   required: true
+    // },
+    anulado: {
+      type: Boolean,
+      default: false,
+    },
     // date: {
     //   type: Date,
     //   default: Date.now,
