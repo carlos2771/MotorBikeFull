@@ -1,5 +1,4 @@
-// Importa las dependencias necesarias
-import React , { useEffect, useState }from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../hooks/useAuth';
 import { EstadoRequired } from '../utils/validations';
@@ -7,7 +6,6 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert } from '@material-tailwind/react';
 
 const ValidarCodePage = () => {
-
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { validarToken, errors: verificationErrors } = useAuth();
   const navigate = useNavigate();
@@ -18,20 +16,33 @@ const ValidarCodePage = () => {
     const userEmail = params.email;
     setEmail(userEmail);
   }, [params]);
-  
 
   const onSubmit = handleSubmit(async (values) => {
     try {
       console.log(email);
       const user = await validarToken(values.code);
-      const userEmail = params.email
-    
+      const userEmail = params.email;
+  
+      // Verifica si hay errores de verificación antes de redirigir
+      if (verificationErrors.length > 0) {
+        // Muestra la alerta de errores de verificación
+        setShowErrorAlert(true);
+        return;
+      }
+  
       // Redirige a la página de actualización de contraseña con el código
       navigate(`/reestablecer-password/${values.code}`);
-      
     } catch (error) {
-      console.error(error);
-      
+      console.error("Error al validar el token:", error);
+  
+      // Puedes agregar aquí un manejo más específico del error, por ejemplo:
+      if (error.response) {
+        console.error("Respuesta del servidor:", error.response.data);
+      } else {
+        console.error("Error sin respuesta del servidor:", error.message);
+      }
+  
+      // También puedes mostrar un mensaje de error al usuario si es necesario.
     }
   });
 
@@ -47,14 +58,14 @@ const ValidarCodePage = () => {
           ))}
 
           <h1 className='text-3xl font-bold my-2 text-center'>Recuperar Contraseña</h1>
-            {/* Mostrar el correo electrónico en el mensaje */}
-          <p className="text-white text-center mb-4">Hemos enviado un codigo de verificacion a tu correo electronico. Ingresa el codigo de verificación</p>
+          {/* Mostrar el correo electrónico en el mensaje */}
+          <p className="text-white text-center mb-4">Hemos enviado un código de verificación a tu correo electrónico. Ingresa el código de verificación</p>
           <form onSubmit={onSubmit}>
             <input
               type="text"
               {...register("code", EstadoRequired)}
               className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white px-4 py-2 rounded2 my-2 border-0 border-b-2 border-sky-500"
-              placeholder="Ingresa el codigo"
+              placeholder="Ingresa el código"
             />
             {errors.code && (
               <p className="text-red-500">{errors.code.message}</p>
@@ -65,11 +76,10 @@ const ValidarCodePage = () => {
                 className="px-5 py-1 m-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
                 type="submit"
               >
-                Siguientes
+                Siguiente
               </button>
             </div>
           </form>
-
         </div>
       </div>
     </div>
