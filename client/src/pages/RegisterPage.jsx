@@ -11,19 +11,20 @@ export default function registerPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signup, isAuthenticated, errors: registerErrors } = useAuth(); // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
+  const { signup, errors: registerErrors } = useAuth(); // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
   const navigate = useNavigate();
 
-  console.log("authh", isAuthenticated);
-  useEffect(() => {
-    // para acuatilizar el estado del componente
-    if (isAuthenticated) navigate("/tasks"); // si esta authenticado que lo envie a   las tareas
+  
+  // useEffect(() => {
+  //   // para acuatilizar el estado del componente
+  //   if (isAuthenticated) ; // si esta authenticado que lo envie a   las tareas
 
-    console.log("entro");
-  }, [isAuthenticated]);
+  //   console.log("entro");
+  // }, [isAuthenticated]);
 
   const onSubmit = handleSubmit((values) => {
     signup(values);
+    if(values) navigate("/login")
     console.log(values); // para que me  muestre los valores ingresados del formulario
   });
   console.log(registerErrors);

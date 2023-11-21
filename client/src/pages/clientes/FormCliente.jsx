@@ -47,7 +47,7 @@ export default function FormCliente() {
         ))}
         <h1 className="text-2xl flex justify-center ">Agregar cliente </h1>
       <form className="mt-10" onSubmit={onSubmit}>
-      <div className="grid xl:grid-cols-2 md:grid-cols-2 gap-4">
+      <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 gap-4">
       <div>
       <label>Cedula</label>
         <input 
