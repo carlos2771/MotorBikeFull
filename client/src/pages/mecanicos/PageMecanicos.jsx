@@ -140,9 +140,9 @@ export default function PageMecanico() {
         return (
           <div>
           <button
-            className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500" : "hidden"}
+            className={estado === "Activo" ? "" : "hidden"}
           >
-            <Link to={`/mecanico/${params.row._id}`}>Editar</Link>
+            <Link className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500" to={`/mecanico/${params.row._id}`}>Editar</Link>
           </button>
           {/* <button
             className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"

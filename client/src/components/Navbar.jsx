@@ -48,7 +48,7 @@ export default function Navbar() {
             >
               <div className={`${!open && "hidden"} pt-3`}>
                 <button
-                  className="ml-4 text-white mb-14"
+                  className="ml-4 text-white mb-4"
                   onClick={() => setOpen(false)}
                 >
                   <svg
@@ -117,7 +117,7 @@ export default function Navbar() {
                     onClick={() => {
                       logout();
                     }}
-                    className="flex justify-center p-3"
+                    className="absolute inset-x-0 bottom-0 hover:bg-zinc-400 hover:bg-opacity-90 p-3"
                   >
                     Logout
                   </Link>
