@@ -13,9 +13,12 @@ export default function PageCompras() {
     try {
       getCompras();
     } catch (error) {
-      console.error("Error al obtener clientes:", error);
+      console.error("Error al obtener Compras:", error);
     }
   }, []);
+
+
+
 
   const mostrarAlerta = (id, estado) => {
     const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
@@ -42,21 +45,29 @@ export default function PageCompras() {
   const cambiarEstado = (id, estado) => {
     const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
     updateCompra(id, { estado: nuevoEstado }).then(() => {
-      getCompras();
+      getVentasRepuestos();
     });
   };
+
+
+  // LÍNEAS DE CÓDIGO EN DONDE SE GENERA LA FECHA DE COMPRA. 
+  // LA FECHA DE COMPRA ES EL MISMO DÍA EN EL QUE SE GENERA UNA  NUEVA COMPRA
+  const currentDate = new Date();
+
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  const formattedDate = new Intl.DateTimeFormat('es-ES', options).format(currentDate);
 
   const columns = [
     {
       field: "repuesto",
-      headerName: "repuesto",
+      headerName: "Repuesto",
       width: 160,
       headerClassName: "custom-header",
-      valueGetter: (params) => params.row.repuesto?.nombre_repuesto || params.row.repuesto,
+      valueGetter: (params) => params.row.repuesto.nombre_repuesto,
     },
     {
-      field: "cantidad",
-      headerName: "cantidad",
+      field: "cantidad_repuesto",
+      headerName: "Cantidad Repuesto",
       width: 185,
       headerClassName: "custom-header",
     },
@@ -72,17 +83,28 @@ export default function PageCompras() {
       width: 170,
       headerClassName: "custom-header",
     },
+
     {
       field: "fecha",
-      headerName: "fecha",
-      width: 170,
+      headerName: "fecha compra",
+      width: 250,
       headerClassName: "custom-header",
+      renderCell: (params) => {
+        const date = new Date(params.value);
+        const localDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+        const formattedDate = localDate.toLocaleDateString("es-ES", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        return <div>{formattedDate}</div>;
+      },
     },
     {
       field: "estado",
       headerName: "Estado",
       width: 100,
-
+      headerClassName: "custom-header",
     },
     {
       field: "createdAt",

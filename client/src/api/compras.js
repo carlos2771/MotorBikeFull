@@ -10,13 +10,14 @@ export const getCompraRequest = async (id) => {
   return response.data;
 };
 
+// CAMBIAR POR SI ALGO => CLIENTE A COMPRA
 export const createComprasRequest = async (compra) => {
   const response = await axiosClient.post("/compras", compra);
   return response.data;
 };
 
-export const updateComprasRequest = async (id,compras) => {
-  const response = await axiosClient.put(`/compras/${id}`,compras);
+export const updateComprasRequest = async (id, compra) => {
+  const response = await axiosClient.put(`/compras/${id}`, compra);
   return response.data;
 };
 

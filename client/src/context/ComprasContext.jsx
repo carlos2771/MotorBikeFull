@@ -2,15 +2,15 @@ import { useContext, useState, createContext, useEffect } from "react";
 import {
   createComprasRequest,
   deleteComprasRequest,
-  getCompraRequest,
+  getComprasRequest,
   updateComprasRequest,
-  getComprasRequest
+  getCompraRequest
 } from "../api/compras";
 
-const ComprasContext = createContext();
+const CompraContext = createContext();
 
 export const useCompras = () => {
-  const context = useContext(ComprasContext);
+  const context = useContext(CompraContext);
   if (!context)
     throw new Error(
       "useVentasRepuestos debe ser usado en VentaRepuestoProvider"
@@ -18,7 +18,7 @@ export const useCompras = () => {
   return context;
 };
 
-export function ComprasProvider({ children }) {
+export function CompraProvider({ children }) {
   const [compras, setCompras] = useState([]);
   const [errors, setErrors] = useState([]);
 
@@ -34,7 +34,7 @@ export function ComprasProvider({ children }) {
 
   const createCompra = async (compra) => {
     try {
-      return await createComprasRequest(compra);
+      return  await createComprasRequest(compra);
       // console.log("ventas:", response);
     } catch (error) {
       setErrors(error.response.data.message);
@@ -59,13 +59,13 @@ export function ComprasProvider({ children }) {
       setErrors(error.response.data.message);
     }
   };
-
+  
   const deleteCompra = async (id) => {
     try {
       const res = await deleteComprasRequest(id);
       console.log(res);
       if (res.status === 204) {
-        setCompras(compras.filter((compra) => compra ._id !== id));
+        setCompras(compras.filter((compra) => compra._id !== id));
       }
     } catch (error) {
       console.error(error);
@@ -82,7 +82,7 @@ export function ComprasProvider({ children }) {
   }, [errors]);
 
   return (
-    <ComprasContext.Provider
+    <CompraContext.Provider
       value={{
         compras,
         errors,
@@ -94,6 +94,6 @@ export function ComprasProvider({ children }) {
       }}
     >
       {children}
-    </ComprasContext.Provider>
+    </CompraContext.Provider>
   );
 }

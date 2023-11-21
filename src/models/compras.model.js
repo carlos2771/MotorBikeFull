@@ -7,7 +7,7 @@ const comprasSchema = new mongoose.Schema(
             ref: "repuestos",
             required: true,
         },
-        cantidad: {
+        cantidad_repuesto: {
             type: Number,
             required: true,
         },
@@ -21,7 +21,6 @@ const comprasSchema = new mongoose.Schema(
         },
         fecha: {
             type: Date,
-            required: true
         },
         estado: {
             type: String,

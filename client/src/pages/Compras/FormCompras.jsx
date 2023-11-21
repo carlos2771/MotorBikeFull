@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useCompras } from "../../context/ComprasContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useClientes } from "../../context/ClientContext";
 import { useRepuestos } from "../../context/RepuestosContext";
 import { NegativeRequired, NombreRequired, RepuestoRequired } from "../../utils/validations";
 
 
-export default function FormCompras() {
+export default function FormCompra() {
   const {
     register,
     handleSubmit,
@@ -15,14 +16,14 @@ export default function FormCompras() {
   } = useForm();
   const {
     createCompra,
-    getCompra ,
+    getCompra,
     updateCompra,
     errors: comprasErrors,
   } = useCompras();
   const { repuestos, getRepuestos } = useRepuestos();
   const navigate = useNavigate();
   const params = useParams();
-  const [selectedRepuesto, setSelectedRepuesto] = useState(null);
+  const [selectedRepuesto, setSelectedRepuesto] = useState();
 
   useEffect(() => {
     (async () => {
@@ -32,11 +33,10 @@ export default function FormCompras() {
         setSelectedRepuesto(compra.repuesto);
         setValue("cantidad_repuesto", compra.cantidad_repuesto);
         setValue("cantidad", compra.repuestos.cantidad);
-        // setSelectedRepuesto(compra.cantidad);
+        setSelectedRepuesto(compra.cantidad);
         setValue("precio_unitario", compra.precio_unitario);
         setValue("precio_total", compra.precio_total);
-        setValue("fecha", compra.fecha);
-        setValue("estado", compra.estado);
+        setValue("fecha", dayjs(task.date).utc().format("YYYY-MM-DD"))
       }
     })();
   }, []);
@@ -45,7 +45,7 @@ export default function FormCompras() {
     try {
       getRepuestos();
     } catch (error) {
-      console.error("Error al obtener clientes:", error);
+      console.error("Error al obtener repuestos:", error);
     }
   }, []);
 
@@ -61,32 +61,33 @@ export default function FormCompras() {
     }
   }, [selectedRepuesto]);
 
-  const onSubmit = handleSubmit(async(data) => {
+  const onSubmit = handleSubmit(async (data) => {
     data.precio_total = data.cantidad_repuesto * data.precio_unitario;
 
     if (params.id) {
       const res = updateCompra(params.id, data);
-        if(res) navigate("/compras")
+      if (res) navigate("/compras")
     } else {
       const res = await createCompra(data);
-        if(res) navigate("/compras")
-      
+      if (res) navigate("/compras")
+
     }
-    
+
   });
 
   console.log(comprasErrors);
 
-  
+
+
   return (
-    <div className="flex h-[calc(100vh-100px)] items-center justify-center">
+    <div className="flex items-center justify-center mt-20">
       <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
         {comprasErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
         ))}
-        <h1 className="text-2xl flex justify-center ">Agregar Compra</h1>
+        <h1 className="text-2xl flex justify-center ">Agregar compra </h1>
         <form className="mt-10" onSubmit={onSubmit}>
           <label>Compras</label>
           <select
@@ -107,13 +108,13 @@ export default function FormCompras() {
             placeholder="cantidad"
             {...register("cantidad")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-           disabled
+            disabled
           />
-          <label>Cantidad a ingresar</label>
+          <label>Cantidad a comprar</label>
           <input
             placeholder="Cantidad"
             type="number"
-            {...register("cantidad_repuesto", NegativeRequired )}
+            {...register("cantidad_repuesto", NegativeRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             onChange={(e) => {
               const cantidad = parseFloat(e.target.value);
@@ -125,49 +126,58 @@ export default function FormCompras() {
             }}
           />
           {errors.cantidad_repuesto && <p className="text-red-500">{errors.cantidad_repuesto.message}</p>}
-          <label>Precio Repuesto</label>
+          <label>Precio De Repuesto</label>
           <input
             placeholder="Precio_repuesto"
             {...register("precio_unitario")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
-          {/* <label>Precio total</label> */}
-          {/* <input
-            placeholder="Precio Total"
-            {...register("precio_total")}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-          /> */}
-          <label>fecha</label>
-          
+          <label>Fecha Compra</label>
           <input
+          type="date"
             placeholder="fecha"
-            type="date"
             {...register("fecha")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
-           
 
+
+          {/* CAJA DE FECHA */}
+
+          {/* <label htmlFor="date">Fecha de compra</label>
+          <input className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
+           type="date"{...register("fecha")} />
+          <div className='justify-end flex mt-6'>
+
+          </div> */}
+          {/* <label htmlFor="fecha">Fecha</label>
+          <input className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
+          type="date"{...register("fecha")} /> */}
+          {/* Campo para mostrar la fecha de creación */}
+
+
+          {/* CAJA DE ESTADO */}
 
           <label >Estado</label>
           <select
-        {...register("estado")}
-        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-        >
-          <option value={"Activo"} >
-            Activo
-          </option>
-          <option value={"Inactivo"} >
-            Inactivo
-          </option>
+            {...register("estado")}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+          >
+            <option value={"Activo"} >
+              Activo
+            </option>
+            <option value={"Inactivo"} >
+              Inactivo
+            </option>
 
-        </select>
+          </select>
+
 
           <button className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d" type="submit">
             Guardar
           </button>
           <button className='px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  '>
-          <Link to="/compras ">Cancelar</Link>
-        </button>
+            <Link to="/compras">Cancelar</Link>
+          </button>
         </form>
       </div>
     </div>

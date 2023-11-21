@@ -78,6 +78,7 @@ export default function PageVentaRepuestos() {
       width: 170,
       headerClassName: "custom-header",
       valueGetter: (params) => params.row.cliente.nombre_cliente,
+      
     },
     {
       field: "estado",
