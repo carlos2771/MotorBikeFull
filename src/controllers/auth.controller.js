@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import createAccessToken from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
+import { getTemplate, sendEmail } from "./mail.controller.js";
 
 export const register = async (req, res) => {
   const { email, password, username } = req.body;
@@ -30,6 +31,9 @@ export const register = async (req, res) => {
       secure: true,
       sameSite: "none",
     });
+
+    const template = getTemplate(username, email)
+    await sendEmail(email, "Registro de MotorBike exitoso!!👽👍", template)
 
     res.json({
       // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use

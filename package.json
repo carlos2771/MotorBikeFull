@@ -30,6 +30,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.4",
     "morgan": "^1.10.0",
+    "nodemailer": "^6.9.7",
     "styled-components": "^6.1.0",
     "zod": "^3.22.4"
   },
