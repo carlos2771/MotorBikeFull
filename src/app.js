@@ -12,6 +12,7 @@ import repuestosRoutes from "./routes/repuestos.routes.js"
 import rolesRoutes from "./routes/roles.routes.js"
 import roles_permisosRoutes from "./routes/roles_permisos.routes.js"
 import ventas_repuestosRoutes from "./routes/ventas_repuestos.routes.js"
+import comprasRoutes from "./routes/compras.routes.js"
 import cors  from 'cors'
 
 const app = express()
@@ -24,7 +25,7 @@ const app = express()
 //     next();
 //   });
 app.use(cors({
-    origin:"http://127.0.0.1:5173", // Reemplaza esto con la URL de tu aplicación React
+    origin:"http://localhost:5173", // Reemplaza esto con la URL de tu aplicación React
     credentials: true,
 }
 ))
@@ -42,6 +43,7 @@ app.use("/api", repuestosRoutes)
 app.use("/api", rolesRoutes)
 app.use("/api", roles_permisosRoutes)
 app.use("/api", ventas_repuestosRoutes)
+app.use("/api", comprasRoutes)
 
 
 export default app;
