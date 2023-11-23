@@ -113,6 +113,14 @@ export default function Navbar() {
                 </Render>
                 <Render>
                   <Link
+                    to="/graficos"
+                    className="flex justify-center p-3"
+                  >
+                    Graficos
+                  </Link>
+                </Render>
+                <Render>
+                  <Link
                     to="/"
                     onClick={() => {
                       logout();

@@ -39,6 +39,9 @@ import { MarcaProvider } from "./context/MarcasContext";
 import PageMarcas from "./pages/marcas/PageMarcas";
 import FormMarca from "./pages/marcas/FormMarca";
 
+import Graficos from "./pages/graficos/Index";
+
+
 
 export default function App() {
 
@@ -98,6 +101,8 @@ export default function App() {
                                   <Route path="/marcas" element={<PageMarcas />} />
                                   <Route path="/add-marca" element={<FormMarca />} />
                                   <Route path="/marca/:id" element={<FormMarca />} />
+
+                                  <Route path="/graficos" element={<Graficos />} />
 
                                 </Route>
                               </Routes>
