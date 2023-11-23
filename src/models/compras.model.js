@@ -7,7 +7,7 @@ const comprasSchema = new mongoose.Schema(
             ref: "repuestos",
             required: true,
         },
-        cantidadAcomprar: {
+        cantidad_repuesto: {
             type: Number,
             required: true,
         },
@@ -20,17 +20,13 @@ const comprasSchema = new mongoose.Schema(
             required: true, // Corregido de "require" a "required"
         },
         fecha: {
-            type: Date, // para traer el _id
-            default: Date.now,
+            type: Date,
+            default: Date.now
         },
         // estado: {
-        //   type: String,
-        //   required: true
-        // },
-        anulado: {
-            type: Boolean,
-            default: false,
-        },
+        //     type: String,
+        //     required: true
+        // }
         // date: {
         //   type: Date,
         //   default: Date.now,
@@ -41,4 +37,4 @@ const comprasSchema = new mongoose.Schema(
     }
 );
 
-export default mongoose.model("compras",comprasSchema);
+export default mongoose.model("compras", comprasSchema);

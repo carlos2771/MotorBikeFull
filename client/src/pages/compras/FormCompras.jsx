@@ -36,6 +36,7 @@ export default function FormCompra() {
         const compra = await getCompra(params.id);
         setValue("repuesto", compra.repuesto);
         setSelectedRepuesto(compra.repuesto);
+        setValue("cantidad_repuesto", compra.cantidad_repuesto);
         setValue("cantidadAcomprar", compra.cantidadAcomprar);
         setValue("precio_unitario", compra.precio_unitario);
         setValue("precio_total", compra.precio_total);
