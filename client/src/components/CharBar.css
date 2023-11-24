@@ -1,0 +1,20 @@
+/* CharBar.css */
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.date-input-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Ajusta el ancho según sea necesario */
+    margin-top: 10px; /* Puedes ajustar el margen según sea necesario */
+}
+
+.date-input {
+    width: 65%; /* Ajusta el ancho según sea necesario */
+    color: black;
+}
+
