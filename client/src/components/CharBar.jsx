@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Chart as ChartJS, BarElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import "./CharBar.css";
+import Swal from 'sweetalert2';
 
 ChartJS.register(BarElement, Tooltip, Legend, CategoryScale, LinearScale);
 
@@ -18,8 +19,11 @@ export function CharBar() {
     try {
       if (startDate && endDate && startDate > endDate) {
         console.error("Error: La fecha de inicio no puede ser mayor que la fecha de fin");
-        // Puedes mostrar un mensaje de error al usuario, por ejemplo:
-        alert("La fecha de inicio no puede ser mayor que la fecha de fin");
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'La fecha de inicio no puede ser mayor que la fecha de fin',
+        });
         return;
       }
   
@@ -49,6 +53,7 @@ export function CharBar() {
     }
   };
 
+
   const sumarVentasPorMecanico = () => {
     const sumas = {};
   
@@ -57,37 +62,62 @@ export function CharBar() {
       const precioServicio = venta.precio_servicio;
       const fechaVenta = venta.createdAt ? new Date(venta.createdAt) : null;
   
-      if (startDate && endDate) {
-        const formattedStartDate = startDate.toISOString().split("T")[0];
-        const formattedEndDate = endDate.toISOString().split("T")[0];
+      if (fechaVenta) {
+        if (startDate && endDate) {
+          const formattedStartDate = formatDate(startDate);
+          const formattedEndDate = formatDate(endDate);
+          const formattedVentaDate = formatDate(fechaVenta);
   
-        if (
-          fechaVenta &&
-          formattedStartDate <= formatDate(fechaVenta) &&
-          formattedEndDate >= formatDate(fechaVenta)
-        ) {
-          if (sumas[nombreMecanico]) {
-            sumas[nombreMecanico] += precioServicio;
-          } else {
-            sumas[nombreMecanico] = precioServicio;
+          if (formattedVentaDate >= formattedStartDate && formattedVentaDate <= formattedEndDate) {
+            if (sumas[nombreMecanico]) {
+              sumas[nombreMecanico] += precioServicio;
+            } else {
+              sumas[nombreMecanico] = precioServicio;
+            }
           }
-        }
-      } else {
-        if (sumas[nombreMecanico]) {
-          sumas[nombreMecanico] += precioServicio;
-        } else {
-          sumas[nombreMecanico] = precioServicio;
+        } else if (startDate && !endDate) {
+          const formattedStartDate = formatDate(startDate);
+          const formattedVentaDate = formatDate(fechaVenta);
+  
+          if (formattedVentaDate >= formattedStartDate) {
+            if (sumas[nombreMecanico]) {
+              sumas[nombreMecanico] += precioServicio;
+            } else {
+              sumas[nombreMecanico] = precioServicio;
+            }
+          }
+        } else if (!startDate && endDate) {
+          const formattedEndDate = formatDate(endDate);
+          const formattedVentaDate = formatDate(fechaVenta);
+  
+          if (formattedVentaDate <= formattedEndDate) {
+            if (sumas[nombreMecanico]) {
+              sumas[nombreMecanico] += precioServicio;
+            } else {
+              sumas[nombreMecanico] = precioServicio;
+            }
+          }
+        } else if (!startDate && !endDate) {
+          const formattedToday = formatDate(new Date());
+  
+          if (formattedToday === formatDate(fechaVenta)) {
+            if (sumas[nombreMecanico]) {
+              sumas[nombreMecanico] += precioServicio;
+            } else {
+              sumas[nombreMecanico] = precioServicio;
+            }
+          }
         }
       }
     });
   
     return sumas;
   };
-
-  // Función para formatear una fecha como "YYYY-MM-DD"
-  const formatDate = (date) => {
-    return date.toISOString().split("T")[0];
-  };
+  
+  
+  
+  const formatDate = (date) => date.toISOString().split("T")[0];
+  
 
   const data = {
     labels: Object.keys(sumarVentasPorMecanico()),
@@ -113,13 +143,34 @@ export function CharBar() {
         ],
         borderWidth: 1,
         barThickness: 20,
-        
       },
     ],
   };
+  const options = {
+    scales: {
+      x: {
+        grid: {
+          color: 'gray', // Color de la línea de la cuadrícula en el eje X
+        },
+        ticks: {
+          color: 'gray', // Color de las marcas del eje X
+        },
+      },
+      y: {
+        grid: {
+          color: 'gray', // Color de la línea de la cuadrícula en el eje Y
+        },
+        ticks: {
+          color: 'gray', // Color de las marcas del eje Y
+        },
+      },
+    },
+  };
 
   return (
-    <div className="chart-container">
+    <div className="chart-container chart-position">
+  
+      <h2 className="chart-title">Servicios por Mecánico</h2>
       <div className="date-input-container">
         <div>
           <label>Fecha inicial: </label>
@@ -130,8 +181,10 @@ export function CharBar() {
           <input className="date-input" type="date" onChange={(e) => setEndDate(new Date(e.target.value))} />
         </div>
       </div>
-      <Bar data={data} />
+      <Bar data={data} options={options} />
     </div>
+    
+    
   );
 }
 

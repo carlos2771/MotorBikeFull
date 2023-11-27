@@ -1,10 +1,13 @@
 import { axiosClient } from "./axiosInstance";
 
+const formatDate = (date) => new Date(date).toISOString();
+
+
 export const getVentasServiciosRequest = async (startDate, endDate) => {
   let url = "/ventas_servicios";
 
   if (startDate && endDate) {
-    url += `?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
+    url += `?startDate=${formatDate(startDate)}&endDate=${formatDate(endDate)}`;
   }
 
   const response = await axiosClient.get(url);

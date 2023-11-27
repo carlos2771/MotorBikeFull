@@ -1,24 +1,27 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "./DateFilter.css";
+
+const colombianTimeZone = "America/Bogota";
+Intl.DateTimeFormat().resolvedOptions().timeZone = colombianTimeZone;
 
 export function DateFilter({ onDateChange }) {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const currentDate = new Date();
+  const [startDate, setStartDate] = useState(currentDate);
+  const [endDate, setEndDate] = useState(currentDate);
 
   const handleDateChange = () => {
-    if (startDate && endDate) {
-      onDateChange(startDate, endDate);
-    } else {
-      // Puedes manejar el caso en el que las fechas no estén seleccionadas
-      console.warn("Seleccione ambas fechas para filtrar");
-    }
+    const formattedStartDate = new Intl.DateTimeFormat("es-CO", { timeZone: colombianTimeZone }).format(startDate);
+    const formattedEndDate = new Intl.DateTimeFormat("es-CO", { timeZone: colombianTimeZone }).format(endDate);
+    onDateChange(formattedStartDate, formattedEndDate);
   };
 
   return (
-    <div>
-      <label>Fecha de Inicio:</label>
+    <div className="date-filter-container">
+      <label className="date-label">Fecha de Inicio:</label>
       <DatePicker
+        className="date-picker"
         selected={startDate}
         onChange={(date) => setStartDate(date)}
         selectsStart
@@ -28,8 +31,9 @@ export function DateFilter({ onDateChange }) {
         placeholderText="Seleccione fecha"
       />
 
-      <label>Fecha de Fin:</label>
+      <label className="date-label">Fecha de Fin:</label>
       <DatePicker
+        className="date-picker"
         selected={endDate}
         onChange={(date) => setEndDate(date)}
         selectsEnd
@@ -40,7 +44,9 @@ export function DateFilter({ onDateChange }) {
         placeholderText="Seleccione fecha"
       />
 
-      <button onClick={handleDateChange}>Filtrar</button>
+      <button className="filter-button" onClick={handleDateChange}>
+        Filtrar
+      </button>
     </div>
   );
 }
