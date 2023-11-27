@@ -168,17 +168,17 @@ export function CharBar() {
   };
 
   return (
-    <div className="chart-container chart-position">
+    <div className="chart-bar-container chart-position">
   
-      <h2 className="chart-title">Servicios por Mecánico</h2>
-      <div className="date-input-container">
+      <h2 className="chart-bar-title">Servicios por Mecánico</h2>
+      <div className="chart-bar-date-input-container">
         <div>
           <label>Fecha inicial: </label>
-          <input className="date-input" type="date" onChange={(e) => setStartDate(new Date(e.target.value))} />
+          <input className="chart-bar-date-input" type="date" onChange={(e) => setStartDate(new Date(e.target.value))} />
         </div>
         <div>
           <label>Fecha final: </label>
-          <input className="date-input" type="date" onChange={(e) => setEndDate(new Date(e.target.value))} />
+          <input className="chart-bar-date-input" type="date" onChange={(e) => setEndDate(new Date(e.target.value))} />
         </div>
       </div>
       <Bar data={data} options={options} />

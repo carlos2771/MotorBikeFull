@@ -1,6 +1,7 @@
 // import React, { useEffect, useState } from "react";
 // import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 // import { Pie } from "react-chartjs-2";
+// import "./CharPie.css";
 // import "chartjs-adapter-date-fns"; // <- Asegúrate de tener esta línea solo si la necesitas
 
 // ChartJS.register(ArcElement, Tooltip, Legend);
@@ -56,5 +57,10 @@
 //     ],
 //   };
 
-//   return <Pie data={data} />;
+//   return (
+//     <div className="chart-container chart-position">
+//       <h2 className="chart-title">Telefonos por Mecánico</h2>
+//       <Pie data={data} />
+//     </div>
+//   );
 // }
