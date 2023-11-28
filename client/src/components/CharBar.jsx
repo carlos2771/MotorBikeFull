@@ -22,7 +22,7 @@ export function CharBar() {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'La fecha de inicio no puede ser mayor que la fecha de fin',
+          text: 'La fecha de inicio no puede ser mayor que la fecha de final',
         });
         return;
       }
