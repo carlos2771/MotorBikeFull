@@ -1,4 +1,4 @@
-import React, { useEffect, } from "react";
+import React, { useEffect } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { useClientes } from "../../context/ClientContext";
@@ -6,11 +6,10 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import Detalle from "../../components/Detalle";
 
-
 export default function PageClientes() {
-  const { clientes, getClientes, deleteCliente,updateCliente } = useClientes();
-  
-  
+  const { clientes, getClientes, deleteCliente, updateCliente, getCliente } =
+    useClientes();
+
   useEffect(() => {
     try {
       getClientes();
@@ -18,15 +17,23 @@ export default function PageClientes() {
       console.error("Error al obtener clientes:", error);
     }
   }, []);
+  useEffect(() => {
+    try {
+      getCliente(id);
+    } catch (error) {
+      console.error("Error al obtener clientes:", error);
+    }
+  }, []);
 
   const mostrarAlerta = (id, estado) => {
     const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
-    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar el cliente?" : "¿Estás seguro de habilitar el cliente?";
+    const text =
+      estado === "Activo"
+        ? "¿Estás seguro de inhabilitar el cliente?"
+        : "¿Estás seguro de habilitar el cliente?";
     const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
 
-
-//"px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500 ",
- 
+    //"px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500 ",
 
     Swal.fire({
       title: title,
@@ -40,9 +47,11 @@ export default function PageClientes() {
       iconColor: "#2563eb",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
-        cancelButton:  "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500"
-      }
+        confirmButton:
+          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+        cancelButton:
+          "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         cambiarEstado(id, estado);
@@ -55,31 +64,30 @@ export default function PageClientes() {
           didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
-          }
+          },
         });
         Toast.fire({
           icon: "success",
-          title: "Se ha modificado"
+          title: "Se ha modificado",
         });
-      }else {
+      } else {
         const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        }
-      });
-      Toast.fire({
-        icon: "error",
-        title: "No se ha modificado"
-      });
-    }}
-    );
-    
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "No se ha modificado",
+        });
+      }
+    });
   };
 
   const cambiarEstado = (id, estado) => {
@@ -94,43 +102,37 @@ export default function PageClientes() {
       field: "nombre_cliente",
       headerName: "Nombre",
       width: 190,
-
     },
     {
       field: "sexo",
       headerName: "Sexo",
       width: 190,
-
     },
     {
       field: "email_cliente",
       headerName: "Email",
       width: 240,
- 
     },
     {
       field: "telefono_cliente",
       headerName: "Telefono",
       width: 200,
-     
     },
     {
       field: "cedula",
       headerName: "Cedula",
       width: 200,
-     
     },
     {
       field: "estado",
       headerName: "Estado",
       width: 100,
-
     },
     {
       field: "createdAt",
       headerName: "Fecha Creacion",
       width: 240,
- 
+
       renderCell: (params) => {
         const date = new Date(params.value);
         const formattedDate = date.toLocaleDateString("es-ES", {
@@ -150,31 +152,69 @@ export default function PageClientes() {
         console.log("estado", estado);
         return (
           <div>
-          <button
-            className={estado === "Activo" ? "" : "hidden"}
-          >
-            <Link className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500" to={`/cliente/${params.row._id}`}>Editar</Link>
-          </button>
-          
-         
-          {/* <button
+            <button className={estado === "Activo" ? "" : "hidden"}>
+              <Link
+                className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                to={`/cliente/${params.row._id}`}
+              >
+                Editar
+              </Link>
+            </button>
+
+            {/* <button
             className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
             onClick={() => mostrarAlerta(params.row._id)}
             >
             Eliminar
           </button> */}
-           <button
-              className={estado === "Activo" ?  "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500" : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"}
+            <button
+              className={
+                estado === "Activo"
+                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
+                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+              }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
               {estado === "Activo" ? "Inhabilitar" : "Habilitar"}
             </button>
             <button className={estado === "Activo" ? "" : "hidden"}>
-            <Detalle 
-            id = {params.row._id}
-            />
+              <Detalle
+                metodo={() => getCliente(params.row._id)}
+                id={params.row._id}
+              >
+                <p className="text-2xl">
+                  {
+                    clientes.find((cliente) => cliente._id === params.row._id)
+                      ?.nombre_cliente
+                  }
+                </p>
+                <p className="text-2xl">
+                  {
+                    clientes.find((cliente) => cliente._id === params.row._id)
+                      ?.sexo
+                  }
+                </p>
+                <p className="text-2xl">
+                  {
+                    clientes.find((cliente) => cliente._id === params.row._id)
+                      ?.email_cliente
+                  }
+                </p>
+                <p className="text-2xl">
+                  {
+                    clientes.find((cliente) => cliente._id === params.row._id)
+                      ?.telefono_cliente
+                  }
+                </p>
+                <p className="text-2xl">
+                  {
+                    clientes.find((cliente) => cliente._id === params.row._id)
+                      ?.cedula
+                  }
+                </p>
+              </Detalle>
             </button>
-        </div>
+          </div>
         );
       },
     },
@@ -196,7 +236,6 @@ export default function PageClientes() {
           rows={clientes}
           columns={columns}
           getRowId={(row) => row._id}
-         
           initialState={{
             pagination: {
               paginationModel: {
@@ -205,12 +244,11 @@ export default function PageClientes() {
             },
           }}
           pageSizeOptions={[5]}
-         
           disableRowSelectionOnClick
           sx={{
             color: "white",
-            '& .MuiDataGrid-cell': {
-              fontSize: '18px',
+            "& .MuiDataGrid-cell": {
+              fontSize: "18px",
             },
           }}
           slots={{ toolbar: GridToolbar }}
