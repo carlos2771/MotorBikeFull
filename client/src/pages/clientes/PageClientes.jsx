@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import { useClientes } from "../../context/ClientContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import Detalle from "../../components/Detalle";
 
 
 export default function PageClientes() {
@@ -143,7 +144,7 @@ export default function PageClientes() {
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 200,
+      width: 400,
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("estado", estado);
@@ -154,10 +155,12 @@ export default function PageClientes() {
           >
             <Link className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500" to={`/cliente/${params.row._id}`}>Editar</Link>
           </button>
+          
+         
           {/* <button
             className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
             onClick={() => mostrarAlerta(params.row._id)}
-          >
+            >
             Eliminar
           </button> */}
            <button
@@ -165,6 +168,11 @@ export default function PageClientes() {
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
               {estado === "Activo" ? "Inhabilitar" : "Habilitar"}
+            </button>
+            <button className={estado === "Activo" ? "" : "hidden"}>
+            <Detalle 
+            id = {params.row._id}
+            />
             </button>
         </div>
         );
