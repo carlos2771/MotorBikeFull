@@ -4,6 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@material-tailwind/react";
 import { EmailRequired, EstadoRequired ,PasswordRequire } from "../utils/validations";
+import { useSpring, animated } from 'react-spring';
 
 export default function registerPage() {
   const {
@@ -11,28 +12,33 @@ export default function registerPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signup, errors: registerErrors } = useAuth(); // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
+  const { signup, isAuthenticated, errors: registerErrors } = useAuth(); // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
   const navigate = useNavigate();
 
-  
-  // useEffect(() => {
-  //   // para acuatilizar el estado del componente
-  //   if (isAuthenticated) ; // si esta authenticado que lo envie a   las tareas
+  console.log("authh", isAuthenticated);
+  useEffect(() => {
+    // para acuatilizar el estado del componente
+    if (isAuthenticated) navigate("/tasks"); // si esta authenticado que lo envie a   las tareas
 
-  //   console.log("entro");
-  // }, [isAuthenticated]);
+    console.log("entro");
+  }, [isAuthenticated]);
 
   const onSubmit = handleSubmit((values) => {
     signup(values);
-    if(values) navigate("/login")
     console.log(values); // para que me  muestre los valores ingresados del formulario
   });
   console.log(registerErrors);
+
+  const formAnimation = useSpring({
+    from: { opacity: 0, transform: 'translateY(-50px)' },
+    to: { opacity: 1, transform: 'translateY(0)' },
+  });
 
   return (
     <div>
       
       <div className="flex h-[calc(100vh-100px)] items-center justify-center ">
+      <animated.div style={formAnimation} >
       <div className="bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] w-full max-w-md p-10 rounded-md ">
         {registerErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
@@ -85,6 +91,7 @@ export default function registerPage() {
           </Link>
         </p>
       </div>
+      </animated.div>
     </div>
     </div>
   );

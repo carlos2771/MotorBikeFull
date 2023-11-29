@@ -24,7 +24,7 @@ const app = express()
 //     next();
 //   });
 app.use(cors({
-    origin:"http://localhost:5173", // Reemplaza esto con la URL de tu aplicación React
+    origin:"http://127.0.0.1:5173", // Reemplaza esto con la URL de tu aplicación React
     credentials: true,
 }
 ))
