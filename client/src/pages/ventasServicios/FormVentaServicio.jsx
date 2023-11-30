@@ -4,7 +4,7 @@ import { Link,useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useMecanicos } from "../../context/MecanicosContext";
-import { NegativeRequired, ClienteRequired, MecanicoRequired, EstadoRequired} from "../../utils/validations";
+import { NegativeRequired, ClienteRequired, MecanicoRequired, EstadoRequired, NombreRequired} from "../../utils/validations";
 
 export default function FormVentaServicio() {
   const {
@@ -74,7 +74,7 @@ const onSubmit = handleSubmit(async (data) => {
         ))}
         <h1 className="text-2xl flex justify-center ">Agregar Venta servicio </h1>
         <form className="mt-10" onSubmit={onSubmit}>
-          <label>Cliente</label>
+          <label>Cliente<span className="text-red-500">*</span></label>
           <select
             {...register("cliente", ClienteRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
@@ -86,8 +86,8 @@ const onSubmit = handleSubmit(async (data) => {
               </option>
             ))}
           </select>          
-          
-          <label>Mecánico</label>
+          {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
+          <label>Mecánico<span className="text-red-500">*</span></label>
           { <select
             {...register("mecanico", MecanicoRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
@@ -100,22 +100,22 @@ const onSubmit = handleSubmit(async (data) => {
             ))}
           </select> }
            {errors.mecanico && <p className="text-red-500">{errors.mecanico.message}</p>}
-          <label>Precio del Servicio</label>
+          <label>Precio del Servicio<span className="text-red-500">*</span></label>
           <input
             type="number"
             {...register("precio_servicio", NegativeRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
           {errors.precio_servicio && <p className="text-red-500">{errors.precio_servicio.message}</p>}
-          <label>Descripción</label>
+          <label>Descripción<span className="text-red-500">*</span></label>
           <textarea
-            {...register("descripcion")}
+            {...register("descripcion", NombreRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
           {errors.descripcion && <p className="text-red-500">{errors.descripcion.message}</p>}
           <label>Estado</label>
           <select
-        {...register("estado", EstadoRequired)}
+        {...register("estado")}
         className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
         >
           <option value={"Activo"} >
@@ -126,7 +126,7 @@ const onSubmit = handleSubmit(async (data) => {
           </option>
 
         </select>
-           {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
+           
         <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
         </button>

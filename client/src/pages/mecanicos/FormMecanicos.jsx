@@ -50,7 +50,7 @@ export default function FormMecanico() {
            <br />
           <h1 className="text-2xl flex justify-center ">Agregar mecánico</h1>
         <form className="mt-10"  onSubmit={onSubmit}>
-            <label >Cedula</label>
+            <label >Cedula<span className="text-red-500">*</span></label>
             <input 
             placeholder='Cedula'
             {...register("cedula_mecanico", CedulaRequired)}
@@ -58,7 +58,7 @@ export default function FormMecanico() {
             autoFocus
             />
             {errors.cedula_mecanico && <p className="text-red-500">{errors.cedula_mecanico.message}</p>}
-            <label>Nombre Mecanico</label>
+            <label>Nombre Mecanico<span className="text-red-500">*</span></label>
             <input 
             type="text" 
             placeholder='Nombre Mecanico' 
@@ -68,14 +68,14 @@ export default function FormMecanico() {
             />
             {errors.nombre_mecanico && <p className="text-red-500">{errors.nombre_mecanico.message}</p>}
             
-            <label>Telefono Mecanico</label>
+            <label>Telefono Mecanico<span className="text-red-500">*</span></label>
             <input 
             placeholder='Telefono Mecanico'
             {...register("telefono_mecanico", TelefonoRequired)}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
             />
             {errors.telefono_mecanico && <p className="text-red-500">{errors.telefono_mecanico.message}</p>}
-            <label>Direccion</label>
+            <label>Direccion<span className="text-red-500">*</span></label>
             <input 
             placeholder='Direccion'
             {...register("direccion_mecanico", NombreRequired)}

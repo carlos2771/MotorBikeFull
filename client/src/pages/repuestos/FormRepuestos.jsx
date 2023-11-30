@@ -91,7 +91,7 @@ export default function FormRepuesto() {
 
 
 
-          <label>Nombre Repuesto</label>
+          <label>Nombre Repuesto<span className="text-red-500">*</span></label>
           <input
             type="text"
             placeholder='Nombre'
@@ -102,7 +102,7 @@ export default function FormRepuesto() {
           {errors.nombre_repuesto && <p className="text-red-500">{errors.nombre_repuesto.message}</p>}
 
 
-          <label>Marca</label>
+          <label>Marca<span className="text-red-500">*</span></label>
           <select
             {...register("marca", RepuestoRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
@@ -115,10 +115,10 @@ export default function FormRepuesto() {
               </option>
             ))}
           </select>
+          {errors.marca && <p className="text-red-500">{errors.marca.message}</p>}
 
 
-
-          <label>Cantidad</label>
+          <label>Cantidad<span className="text-red-500">*</span></label>
           <input
             type="text"
             placeholder='Cantidad'
@@ -129,7 +129,7 @@ export default function FormRepuesto() {
           {errors.cantidad && <p className="text-red-500">{errors.cantidad.message}</p>}
 
 
-          <label>Precio del repuesto</label>
+          <label>Precio del repuesto<span className="text-red-500">*</span></label>
           <input
             placeholder="precio"
             {...register("precio", NegativeRequired)}

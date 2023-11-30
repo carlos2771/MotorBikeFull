@@ -91,7 +91,7 @@ export default function FormVentaRepuesto() {
         ))}
         <h1 className="text-2xl flex justify-center ">Agregar Venta Repueso </h1>
         <form className="mt-10" onSubmit={onSubmit}>
-          <label>Repuestos</label>
+          <label>Repuestos<span className="text-red-500">*</span></label>
           <select
             {...register("repuesto", RepuestoRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
@@ -105,7 +105,7 @@ export default function FormVentaRepuesto() {
             ))}
           </select>
           {errors.repuesto && <p className="text-red-500">{errors.repuesto.message}</p>}
-          <label>Cantidad existente</label>
+          <label>Cantidad existente<span className="text-red-500">*</span></label>
           <input
             placeholder="cantidad"
             {...register("cantidad")}
@@ -113,7 +113,7 @@ export default function FormVentaRepuesto() {
            disabled
            
           />
-          <label>Cantidad a vender</label>
+          <label>Cantidad a vender<span className="text-red-500">*</span></label>
           <input
             placeholder="Cantidad"
             type="number"
@@ -129,7 +129,7 @@ export default function FormVentaRepuesto() {
             }}
           />
           {errors.cantidad_repuesto && <p className="text-red-500">{errors.cantidad_repuesto.message}</p>}
-          <label>Precio De Repuesto</label>
+          <label>Precio De Repuesto<span className="text-red-500">*</span></label>
           <input
             placeholder="Precio_repuesto"
             {...register("precio_unitario")}
@@ -141,7 +141,7 @@ export default function FormVentaRepuesto() {
             {...register("precio_total")}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
           /> */}
-          <label>Cliente</label>
+          <label>Cliente<span className="text-red-500">*</span></label>
           <select
             {...register("cliente", ClienteRequired )}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"

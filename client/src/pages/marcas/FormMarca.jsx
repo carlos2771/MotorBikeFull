@@ -42,7 +42,7 @@ export default function FormMecanico() {
         ))}
         <h1 className="text-2xl flex justify-center ">Agregar Marca </h1>
       <form className="mt-10" onSubmit={onSubmit}>
-        <label>Nombre de la Marca</label>
+        <label>Nombre de la Marca<span className="text-red-500">*</span></label>
         <input 
         type="text" 
         placeholder='Nombre Marca' 

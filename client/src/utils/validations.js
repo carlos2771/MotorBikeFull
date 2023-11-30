@@ -5,7 +5,7 @@ const negative = /^[1-9]\d*$/;
 
 
 export const EmailRequired = {
-  required: "Email es requerido",
+  required: "Campo requerido",
   pattern: {
     value: EMAIL_REGEX,
     message: "Email es invalido",
@@ -13,7 +13,7 @@ export const EmailRequired = {
 };
 
 export const PasswordRequire = {
-  required: "Password es requerido",
+  required: "Campo requerido",
   minLength: {
     value: 6,
     message: "Password debe tener minimo 6 caracteres",
@@ -21,7 +21,7 @@ export const PasswordRequire = {
 };
 
 export const TelefonoRequired = {
-  required: "Telefono es requerido",
+  required: "Campo requerido",
   maxLength: {
     value: 10,
     message: "El máximo de digitos es de 10",
@@ -36,7 +36,7 @@ export const TelefonoRequired = {
   },
 };
 export const CedulaRequired = {
-  required: "Cedula es requerido",
+  required: "Campo requerido",
   pattern: {
     value: numberPattern,
     message: "Cedula solo contiene numeros ",
@@ -53,7 +53,7 @@ export const CedulaRequired = {
 
 
 export const NegativeRequired = {
-  required: "campo requerido",
+  required: "Campo requerido",
   pattern: {
     value: negative,
     message: "Solo numeros positivos ",
@@ -61,16 +61,16 @@ export const NegativeRequired = {
 };
 
 export const NombreRequired = {
-  required: "campo requerido",
+  required: "Campo requerido",
 };
 
 
 export const RepuestoRequired = {
-  required: "campo requerido ",
+  required: "Campo requerido ",
 };
 
 export const ClienteRequired = {
-  required: "campo requerido ",
+  required: "Campo requerido ",
 };
 
 export const EstadoRequired = {
