@@ -73,6 +73,10 @@ export const RepuestoRequired = {
   required: "campo requerido ",
 };
 
+export const ClienteRequired = {
+  required: "campo requerido ",
+};
+
 export const EstadoRequired = {
   required: "Campo requerido",
 };

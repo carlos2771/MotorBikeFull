@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useRepuestos } from "../../context/RepuestosContext";
-import { NegativeRequired, NombreRequired, RepuestoRequired } from "../../utils/validations";
+import { NegativeRequired, NombreRequired, RepuestoRequired, ClienteRequired} from "../../utils/validations";
 
 
 export default function FormVentaRepuesto() {
@@ -93,7 +93,7 @@ export default function FormVentaRepuesto() {
         <form className="mt-10" onSubmit={onSubmit}>
           <label>Repuestos</label>
           <select
-            {...register("repuesto", NombreRequired)}
+            {...register("repuesto", RepuestoRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             onChange={(e) => setSelectedRepuesto(e.target.value)}
           >
@@ -143,7 +143,7 @@ export default function FormVentaRepuesto() {
           /> */}
           <label>Cliente</label>
           <select
-            {...register("cliente",NombreRequired )}
+            {...register("cliente", ClienteRequired )}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value="">Selecciona un cliente</option>
