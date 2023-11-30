@@ -13,7 +13,7 @@ export const useCompras = () => {
   const context = useContext(CompraContext);
   if (!context)
     throw new Error(
-      "useVentasRepuestos debe ser usado en VentaRepuestoProvider"
+      "useCompras debe ser usado en CompraProvider"
     );
   return context;
 };

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useCompras } from "../../context/ComprasContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import utc from "dayjs/plugin/utc"
+import dayjs from 'dayjs'
+dayjs.extend(utc)
+
 import { useForm } from "react-hook-form";
-import { useClientes } from "../../context/ClientContext";
 import { useRepuestos } from "../../context/RepuestosContext";
-import { NegativeRequired, NombreRequired, RepuestoRequired } from "../../utils/validations";
+import { NegativeRequired, NombreRequired, RepuestoRequired} from "../../utils/validations";
 
 
 export default function FormCompra() {
@@ -34,9 +37,11 @@ export default function FormCompra() {
         setValue("cantidad_repuesto", compra.cantidad_repuesto);
         setValue("cantidad", compra.repuestos.cantidad);
         setSelectedRepuesto(compra.cantidad);
+
+
         setValue("precio_unitario", compra.precio_unitario);
         setValue("precio_total", compra.precio_total);
-        setValue("fecha", dayjs(task.date).utc().format("YYYY-MM-DD"))
+        setValue("fecha", dayjs(compra.fecha).utc().format("YYYY-MM-DD"))
       }
     })();
   }, []);
@@ -45,7 +50,7 @@ export default function FormCompra() {
     try {
       getRepuestos();
     } catch (error) {
-      console.error("Error al obtener repuestos:", error);
+      console.error("Error al obtener clientes:", error);
     }
   }, []);
 
@@ -55,13 +60,19 @@ export default function FormCompra() {
         (repuesto) => repuesto._id === selectedRepuesto
       );
       if (selectedRepuestoData) {
-        setValue("precio_unitario", selectedRepuestoData.precio);
+        // setValue("precio_unitario", selectedRepuestoData.precio);
         setValue("cantidad", selectedRepuestoData.cantidad);
       }
     }
   }, [selectedRepuesto]);
 
   const onSubmit = handleSubmit(async (data) => {
+
+    // CUADRAR POR SI ALGO
+    if(!data.fecha){
+      data.fecha = dayjs().format("YYYY-MM-DD");
+    }
+
     data.precio_total = data.cantidad_repuesto * data.precio_unitario;
 
     if (params.id) {
@@ -80,18 +91,18 @@ export default function FormCompra() {
 
 
   return (
-    <div className="flex items-center justify-center mt-20">
+    <div className="flex items-center justify-center pt-20">
       <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
         {comprasErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
         ))}
-        <h1 className="text-2xl flex justify-center ">Agregar compra </h1>
+        <h1 className="text-2xl flex justify-center ">Agregar Compra </h1>
         <form className="mt-10" onSubmit={onSubmit}>
-          <label>Compras</label>
+          <label>Repuestos</label>
           <select
-            {...register("repuesto", NombreRequired)}
+            {...register("repuesto", RepuestoRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             onChange={(e) => setSelectedRepuesto(e.target.value)}
           >
@@ -109,16 +120,16 @@ export default function FormCompra() {
             {...register("cantidad")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             disabled
+
           />
           <label>Cantidad a comprar</label>
           <input
             placeholder="Cantidad"
-            type="number"
             {...register("cantidad_repuesto", NegativeRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             onChange={(e) => {
               const cantidad = parseFloat(e.target.value);
-              const precioUnitario = parseFloat(register("precio_unitario").value);
+              // const precioUnitario = parseFloat(register("precio_unitario").value);
               const precioTotal = isNaN(cantidad) || isNaN(precioUnitario)
                 ? ""
                 : (cantidad * precioUnitario).toFixed(2);
@@ -126,57 +137,47 @@ export default function FormCompra() {
             }}
           />
           {errors.cantidad_repuesto && <p className="text-red-500">{errors.cantidad_repuesto.message}</p>}
-          <label>Precio De Repuesto</label>
+
+
+          <label>Precio del repuesto</label>
           <input
             placeholder="Precio_repuesto"
-            {...register("precio_unitario")}
+            {...register("precio_unitario", NegativeRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
-          <label>Fecha Compra</label>
-          <input
-          type="date"
-            placeholder="fecha"
-            {...register("fecha")}
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-          />
+          {errors.precio_unitario && <p className="text-red-500">{errors.precio_unitario.message}</p>}
+          {/* <label>Precio total</label> */}
+          {/* <input
+            placeholder="Precio Total"
+            {...register("precio_total")}
+            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+          /> */}
+          <label htmlFor="fecha">Fecha</label>
+          <input type="date"
+          className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
+          {...register("fecha")} />
 
 
-          {/* CAJA DE FECHA */}
 
-          {/* <label htmlFor="date">Fecha de compra</label>
-          <input className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
-           type="date"{...register("fecha")} />
-          <div className='justify-end flex mt-6'>
-
-          </div> */}
-          {/* <label htmlFor="fecha">Fecha</label>
-          <input className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
-          type="date"{...register("fecha")} /> */}
-          {/* Campo para mostrar la fecha de creación */}
-
-
-          {/* CAJA DE ESTADO */}
-
-          <label >Estado</label>
+          {/* <label >Estado</label>
           <select
-            {...register("estado")}
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-          >
-            <option value={"Activo"} >
-              Activo
-            </option>
-            <option value={"Inactivo"} >
-              Inactivo
-            </option>
+        {...register("estado")}
+        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+        >
+          <option value={"Activo"} >
+            Activo
+          </option>
+          <option value={"Inactivo"} >
+            Inactivo
+          </option>
 
-          </select>
-
-
+        </select> */}
+          {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
           <button className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d" type="submit">
             Guardar
           </button>
-          <button className='px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  '>
-            <Link to="/compras">Cancelar</Link>
+          <button>
+            <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/compras">Cancelar</Link>
           </button>
         </form>
       </div>

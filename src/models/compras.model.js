@@ -21,10 +21,11 @@ const comprasSchema = new mongoose.Schema(
         },
         fecha: {
             type: Date,
+            default: Date.now,
         },
-        estado: {
-            type: String,
-            required: true
+        anulado: {
+            type: Boolean, 
+            default: false,
         }
         // date: {
         //   type: Date,

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@material-tailwind/react";
-import { EstadoRequired } from "../utils/validations";
+import { EmailRequired, EstadoRequired ,PasswordRequire } from "../utils/validations";
 
 export default function registerPage() {
   const {
@@ -11,19 +11,20 @@ export default function registerPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signup, isAuthenticated, errors: registerErrors } = useAuth(); // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
+  const { signup, errors: registerErrors } = useAuth(); // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
   const navigate = useNavigate();
 
-  console.log("authh", isAuthenticated);
-  useEffect(() => {
-    // para acuatilizar el estado del componente
-    if (isAuthenticated) navigate("/tasks"); // si esta authenticado que lo envie a   las tareas
+  
+  // useEffect(() => {
+  //   // para acuatilizar el estado del componente
+  //   if (isAuthenticated) ; // si esta authenticado que lo envie a   las tareas
 
-    console.log("entro");
-  }, [isAuthenticated]);
+  //   console.log("entro");
+  // }, [isAuthenticated]);
 
   const onSubmit = handleSubmit((values) => {
     signup(values);
+    if(values) navigate("/login")
     console.log(values); // para que me  muestre los valores ingresados del formulario
   });
   console.log(registerErrors);
@@ -52,7 +53,7 @@ export default function registerPage() {
           )}
           <input
             type="email"
-            {...register("email", EstadoRequired)}
+            {...register("email", EmailRequired)}
             className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white px-4 py-2 rounded2 my-2 border-0 border-b-2 border-sky-500 "
             placeholder="Email"
           />
@@ -62,7 +63,7 @@ export default function registerPage() {
         )}
           <input
             type="password"
-            {...register("password", EstadoRequired)}
+            {...register("password", PasswordRequire)}
             className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white px-4 py-2 rounded2 my-2 border-0 border-b-2 border-sky-500 "
             placeholder="Contraseña"
           />

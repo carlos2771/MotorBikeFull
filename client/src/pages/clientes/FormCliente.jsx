@@ -37,8 +37,9 @@ export default function FormCliente() {
 
 
   return (
-    <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
-    <div className='bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40'>
+    <div className='flex items-center justify-center pt-20 '>
+      
+    <div className='bg-slate-700 max-w-xl w-full p-10 shadow-lg shadow-blue-600/40 '>
     {clientesErrors.map((error, i) => (
       <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
@@ -46,6 +47,17 @@ export default function FormCliente() {
         ))}
         <h1 className="text-2xl flex justify-center ">Agregar cliente </h1>
       <form className="mt-10" onSubmit={onSubmit}>
+      <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 gap-4">
+      <div>
+      <label>Cedula</label>
+        <input 
+        placeholder='Cedula'
+        {...register("cedula", CedulaRequired)}
+        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
+        />
+        {errors.cedula && <p className="text-red-500">{errors.cedula.message}</p>}
+      </div>
+        <div>
         <label>Nombre Completo</label>
         <input 
         type="text" 
@@ -54,10 +66,13 @@ export default function FormCliente() {
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         autoFocus
         />
-        <label >Sexo</label>
+        {errors.nombre_cliente && <p className="text-red-500">{errors.nombre_cliente.message}</p>}
+        </div>
+      <div>
+      <label >Sexo</label>
           <select
         {...register("sexo")}
-        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-1"
+        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
         >
           <option value={"Masculino"} >
             Masculino
@@ -67,9 +82,9 @@ export default function FormCliente() {
           </option>
 
         </select>
-
-        {errors.nombre_cliente && <p className="text-red-500">{errors.nombre_cliente.message}</p>}
-        <label >Email Cliente</label>
+      </div>
+      <div>
+      <label >Email Cliente</label>
         <input 
         placeholder='Email Cliente'
         type="email"
@@ -77,22 +92,19 @@ export default function FormCliente() {
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.email_cliente && <p className="text-red-500">{errors.email_cliente.message}</p>}
-        <label>Telefono Cliente</label>
+      </div>
+      <div>
+      <label>Telefono Cliente</label>
         <input 
         placeholder='Telefono Cliente'
         {...register("telefono_cliente", TelefonoRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.telefono_cliente && <p className="text-red-500">{errors.telefono_cliente.message}</p>}
-        <label>Cedula</label>
-        <input 
-        placeholder='Cedula'
-        {...register("cedula", CedulaRequired)}
-        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
-        />
-        {errors.cedula && <p className="text-red-500">{errors.cedula.message}</p>}
-        
-        <label >Estado</label>
+      </div>
+      
+      <div>
+      <label >Estado</label>
         <select
         {...register("estado")}
         className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
@@ -105,13 +117,18 @@ export default function FormCliente() {
           </option>
 
         </select>
-        
-        <button className='px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
+      </div>
+        <div className="flex justify-center xl:ps-60">
+        <button className='px-5 p-1 text-sm ml-6 text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
         </button>
-        <button className='px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-3  '>
-          <Link to="/clientes">Cancelar</Link>
+        <button>
+          <Link className="px-5 py-1 ml-3 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30" to="/clientes">Cancelar</Link>
         </button>
+        </div>
+        </div>
+        
+        
       </form>
     </div>
     </div>

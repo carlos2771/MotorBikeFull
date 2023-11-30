@@ -40,7 +40,7 @@ export default function TaskPaje() {
       </button>
 
       </div>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
         {tasks.map((task) => (
           <TaskCard task={task} key={task._id} />
         ))}

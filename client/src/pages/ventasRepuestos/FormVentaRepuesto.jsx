@@ -82,7 +82,7 @@ export default function FormVentaRepuesto() {
 
   
   return (
-    <div className="flex h-[calc(100vh-100px)] items-center justify-center">
+    <div className="flex items-center justify-center pt-20">
       <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
         {ventasRepuestosErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
@@ -111,6 +111,7 @@ export default function FormVentaRepuesto() {
             {...register("cantidad")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
            disabled
+           
           />
           <label>Cantidad a vender</label>
           <input
@@ -153,7 +154,7 @@ export default function FormVentaRepuesto() {
             ))}
           </select>
           
-          <label >Estado</label>
+          {/* <label >Estado</label>
           <select
         {...register("estado")}
         className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
@@ -165,15 +166,13 @@ export default function FormVentaRepuesto() {
             Inactivo
           </option>
 
-        </select>
-
-        
+        </select> */}
             {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
           <button className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d" type="submit">
             Guardar
           </button>
-          <button className='px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  '>
-          <Link to="/ventas-repuestos">Cancelar</Link>
+          <button>
+          <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/ventas-repuestos">Cancelar</Link>
         </button>
         </form>
       </div>

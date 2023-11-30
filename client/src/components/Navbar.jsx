@@ -13,7 +13,10 @@ export default function Navbar() {
     <div>
       {isAuthenticated ? (
         <>
-          <div className="bg-slate-700  py-3 fixed top-0 left-0 right-0 shadow-md" style={{ zIndex: 1000 }}>
+          <div
+            className="bg-slate-700  py-3 fixed top-0 left-0 right-0 shadow-md"
+            style={{ zIndex: 1000 }}
+          >
             <button className="ml-4" onClick={() => setOpen(true)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +48,7 @@ export default function Navbar() {
             >
               <div className={`${!open && "hidden"} pt-3`}>
                 <button
-                  className="ml-4 text-white mb-14"
+                  className="ml-4 text-white mb-4"
                   onClick={() => setOpen(false)}
                 >
                   <svg
@@ -63,11 +66,19 @@ export default function Navbar() {
                     />
                   </svg>
                 </button>
+                <div onClick={() => setOpen(false)}>
                 <Render>
-                  <Link to="/tasks" className="flex justify-center p-3">Tareas</Link>
+                  <Link
+                    to="/tasks"
+                    className="flex justify-center p-3"
+                  >
+                    Tareas
+                  </Link>
                 </Render>
                 <Render>
-                  <Link to="/clientes" className="flex justify-center p-3">Clientes</Link>
+                  <Link to="/clientes" className="flex justify-center p-3">
+                    Clientes
+                  </Link>
                 </Render>
                 <Render>
                   <Link to="/marcas" className="flex justify-center p-3">
@@ -75,32 +86,52 @@ export default function Navbar() {
                   </Link>
                 </Render>
                 <Render>
-                  <Link to="/repuestos" className="flex justify-center p-3">Repuestos</Link>
+                  <Link to="/repuestos" className="flex justify-center p-3">
+                    Repuestos
+                  </Link>
                 </Render>
                 <Render>
-                  <Link to="/mecanicos" className="flex justify-center p-3">Mecanicos</Link>
+                  <Link to="/mecanicos" className="flex justify-center p-3">
+                    Mecanicos
+                  </Link>
                 </Render>
                 <Render>
-                  <Link to="/ventas-repuestos" className="flex justify-center p-3">
+                  <Link
+                    to="/ventas-repuestos"
+                    className="flex justify-center p-3"
+                  >
                     Ventas Repuestos
                   </Link>
                 </Render>
                 <Render>
-                  <Link to="/ventas-servicios" className="flex justify-center p-3">
+                  <Link
+                    to="/ventas-servicios"
+                    className="flex justify-center p-3"
+                  >
                     Ventas Servicios
                   </Link>
                 </Render>
                 <Render>
-                  <Link to="/compras" className="">
+                  <Link
+                    to="/compras"
+                    className="flex justify-center p-3"
+                  >
                     Compras
                   </Link>
                 </Render>
                 <Render>
-                <Link 
-                to="/" onClick={()=>{
-                    logout()
-                }} className="flex justify-center p-3">Logout</Link>
+                  <Link
+                    to="/"
+                    onClick={() => {
+                      logout();
+                    }}
+                    className="absolute inset-x-0 bottom-0 hover:bg-zinc-400 hover:bg-opacity-90 p-3"
+                  >
+                    Logout
+                  </Link>
                 </Render>
+                </div>
+                
               </div>
             </div>
           </div>
@@ -113,4 +144,3 @@ export default function Navbar() {
     </div>
   );
 }
-

@@ -5,57 +5,108 @@ import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.locale('es');
+dayjs.extend(utc);
+
+
+
 export default function PageCompras() {
-  const { compras, getCompras, deleteCompra, updateCompra } =
-    useCompras();
+  const {
+    compras,
+    getCompras,
+    deleteCompra,
+    updateCompra,
+  } = useCompras();
 
   useEffect(() => {
     try {
       getCompras();
     } catch (error) {
-      console.error("Error al obtener Compras:", error);
+      console.error("Error al obtener compras:", error);
     }
   }, []);
 
-
-
-
-  const mostrarAlerta = (id, estado) => {
-    const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
-    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar la venta ?" : "¿Estás seguro de habilitar la venta ?";
-    const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
+  const mostrarAlerta = (id, anulado) => {
+    const title = anulado ? "Anulado" : "Anular";
+    const text = anulado
+      ? "Esta compra ya ha sido anulada."
+      : "¿Estás seguro de anular la compra?";
+    const buttonText = anulado ? "Entendido" : "Sí";
 
     Swal.fire({
       title: title,
       text: text,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí",
+      icon: anulado ? "info" : "warning",
+      showCancelButton: !anulado,
+      confirmButtonText: buttonText,
       cancelButtonText: "No",
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      background: "#334155",
+      color: "white",
+      iconColor: "#2563eb",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-blue-600 hover:text-white hover:bg-blue-600",
+        cancelButton:
+          "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
+      },
     }).then((result) => {
-      if (result.isConfirmed) {
-        cambiarEstado(id, estado);
-        Swal.fire(`${texto}`, `la venta  ha sido ${texto} `, "success");
+      if (!anulado && result.isConfirmed) {
+        cambiarEstado(id, anulado);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Se ha modificado",
+        });
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "warning",
+          title: "No se ha modificado",
+        });
       }
     });
   };
 
-  const cambiarEstado = (id, estado) => {
-    const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
+  const cambiarEstado = (id, anulado) => {
+    const nuevoEstado = anulado ? "Activo" : "Inactivo";
     updateCompra(id, { estado: nuevoEstado }).then(() => {
-      getVentasRepuestos();
+      getCompras();
     });
   };
 
 
-  // LÍNEAS DE CÓDIGO EN DONDE SE GENERA LA FECHA DE COMPRA. 
-  // LA FECHA DE COMPRA ES EL MISMO DÍA EN EL QUE SE GENERA UNA  NUEVA COMPRA
-  const currentDate = new Date();
+  // FECHA
 
+  const currentDate = new Date();
   const options = { day: 'numeric', month: 'long', year: 'numeric' };
   const formattedDate = new Intl.DateTimeFormat('es-ES', options).format(currentDate);
+
+
 
   const columns = [
     {
@@ -70,6 +121,7 @@ export default function PageCompras() {
       headerName: "Cantidad Repuesto",
       width: 185,
       headerClassName: "custom-header",
+      // valueGetter: (params) => params.row.repuesto.cantidad,
     },
     {
       field: "precio_unitario",
@@ -86,41 +138,40 @@ export default function PageCompras() {
 
     {
       field: "fecha",
-      headerName: "fecha compra",
+      headerName: "Fecha",
       width: 250,
       headerClassName: "custom-header",
       renderCell: (params) => {
         const date = new Date(params.value);
-        const localDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-        const formattedDate = localDate.toLocaleDateString("es-ES", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
+        const formattedDate = dayjs.utc(date).locale('es').format("DD [de] MMMM [de] YYYY");
         return <div>{formattedDate}</div>;
       },
     },
-    {
-      field: "estado",
-      headerName: "Estado",
-      width: 100,
-      headerClassName: "custom-header",
-    },
-    {
-      field: "createdAt",
-      headerName: "Fecha Creacion",
-      width: 300,
-      headerClassName: "custom-header",
-      renderCell: (params) => {
-        const date = new Date(params.value);
-        const formattedDate = date.toLocaleDateString("es-ES", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
-        return <div>{formattedDate}</div>;
-      },
-    },
+    // ... Otras columnas
+
+
+
+    // {
+    //   field: "estado",
+    //   headerName: "Estado",
+    //   width: 100,
+    //   headerClassName: "custom-header",
+    // },
+    // {
+    //   field: "createdAt",
+    //   headerName: "Fecha Creacion",
+    //   width: 300,
+    //   headerClassName: "custom-header",
+    //   renderCell: (params) => {
+    //     const date = new Date(params.value);
+    //     const formattedDate = date.toLocaleDateString("es-ES", {
+    //       year: "numeric",
+    //       month: "long",
+    //       day: "numeric",
+    //     });
+    //     return <div>{formattedDate}</div>;
+    //   },
+    // },
     {
       field: "acciones",
       headerName: "Acciones",
@@ -130,29 +181,25 @@ export default function PageCompras() {
         const estado = params.row.estado;
         return (
           <div>
-            <button
-              className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" : "hidden"}
-            >
-              <Link to={`/compras/${params.row._id}`}>Editar</Link>
-            </button>
-
             {/* <button
-              className="px-4 py-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
-              onClick={() => {
-                deleteVentaRepuesto(params.row._id);
-              }}
+              className={
+                params.row.anulado
+                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                  : "hidden"
+              }
+
             >
-              Eliminar
+              <Link to={`/venta-repuesto/${params.row._id}`}>Editar</Link>
             </button> */}
             <button
               className={
-                estado === "Activo"
-                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
-                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-yellow-500 hover:text-white hover:bg-yellow-500"
+                params.row.anulado
+                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-orange-500 hover:text-white hover:bg-orange-500"
+                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-blue-600 hover:text-white hover:bg-blue-600"
               }
-              onClick={() => mostrarAlerta(params.row._id, estado)}
+              onClick={() => mostrarAlerta(params.row._id, params.row.anulado)}
             >
-              {estado === "Activo" ? "Inhabilitar" : "Habilitar"}
+              {params.row.anulado ? "Anulado" : "Anular"}
             </button>
           </div>
         );
@@ -161,9 +208,9 @@ export default function PageCompras() {
   ];
 
   return (
-    <div className="mt-16 ">
+    <div className="mt-16">
       <h1 className="text-2xl text-center mx-auto">Compras</h1>
-      <div className="mx-10 justify-end flex ">
+      <div className="mx-10 justify-end flex">
         <Link to="/add-compra">
           <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
             Agregar Compra

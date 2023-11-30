@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import createAccessToken from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
+import { getTemplate, sendEmail } from "./mail.controller.js";
 
 export const register = async (req, res) => {
   const { email, password, username } = req.body;
@@ -31,6 +32,9 @@ export const register = async (req, res) => {
       sameSite: "none",
     });
 
+    const template = getTemplate(username, email)
+    await sendEmail(email, "Registro de MotorBike exitoso!!👽👍", template)
+
     res.json({
       // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use
       id: userSaved._id,
@@ -54,7 +58,7 @@ export const login = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, userFound.password); // comparemelo con la contraseña que acaba de ingresar el usuario con la otra que esta guardada en la base de datos
     if (!isMatch)
-      return res.status(400).json({ message: ["Contraseña incorrecta"] });
+      return res.status(400).json({ message: ["Usuario/Contraseña incorrecto"] });
 
     const token = await createAccessToken({
       id: userFound._id,

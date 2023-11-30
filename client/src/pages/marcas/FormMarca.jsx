@@ -33,7 +33,7 @@ export default function FormMecanico() {
 
 
   return (
-    <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
+    <div className='flex items-center justify-center pt-20'>
     <div className='bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40'>
     {marcasErrors.map((error, i) => (
       <div className="bg-red-500 p-2 text-white" key={i}>
@@ -67,8 +67,8 @@ export default function FormMecanico() {
         <button className='px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
         </button>
-        <button className='px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-3  '>
-          <Link to="/marcas">Cancelar</Link>
+        <button>
+          <Link className="px-5 py-1 ml-3 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30" to="/marcas">Cancelar</Link>
         </button>
       </form>
     </div>

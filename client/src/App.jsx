@@ -40,9 +40,8 @@ import PageMarcas from "./pages/marcas/PageMarcas";
 import FormMarca from "./pages/marcas/FormMarca";
 
 import { CompraProvider } from "./context/ComprasContext";
-
 import PageCompras from "./pages/Compras/PageCompras";
-import FormCompras from "./pages/Compras/FormCompras";
+import FormCompras from "./pages/compras/FormCompras";
 
 
 export default function App() {

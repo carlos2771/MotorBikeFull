@@ -5,8 +5,6 @@ import { EmailRequired, PasswordRequire } from '../utils/validations';
 import { Link,  useNavigate } from 'react-router-dom';
 import { Alert } from "@material-tailwind/react";
 
-
-
 export default function loginPage() {
 
   const {register, handleSubmit, formState: {errors}} = useForm()
