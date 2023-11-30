@@ -41,8 +41,8 @@ import FormMarca from "./pages/marcas/FormMarca";
 
 import { CompraProvider } from "./context/ComprasContext";
 import PageCompras from "./pages/Compras/PageCompras";
-import FormCompras from "./pages/compras/FormCompras";
-
+import FormCompras from "./pages/Compras/FormCompras";
+import Graficos from "./pages/graficos/Index";
 
 export default function App() {
 
@@ -107,6 +107,8 @@ export default function App() {
                                     <Route path="/compras" element={<PageCompras />} />
                                     <Route path="/add-compra" element={<FormCompras />} />
                                     <Route path="/compras/:id" element={<FormCompras />} />
+
+                                    <Route path="/graficos" element={<Graficos />} />
 
                                   </Route>
                                 </Routes>

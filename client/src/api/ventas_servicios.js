@@ -1,7 +1,16 @@
 import { axiosClient } from "./axiosInstance";
 
-export const getVentasServiciosRequest = async () => {
-  const response = await axiosClient.get("/ventas_servicios");
+const formatDate = (date) => new Date(date).toISOString();
+
+
+export const getVentasServiciosRequest = async (startDate, endDate) => {
+  let url = "/ventas_servicios";
+
+  if (startDate && endDate) {
+    url += `?startDate=${formatDate(startDate)}&endDate=${formatDate(endDate)}`;
+  }
+
+  const response = await axiosClient.get(url);
   return response.data;
 };
 
@@ -15,8 +24,8 @@ export const createVentasServiciosRequest = async (servicio) => {
   return response.data;
 };
 
-export const updateVentasServiciosRequest = async (id,servicios) => {
-  const response = await axiosClient.put(`/ventas_servicios/${id}`,servicios);
+export const updateVentasServiciosRequest = async (id, servicios) => {
+  const response = await axiosClient.put(`/ventas_servicios/${id}`, servicios);
   return response.data;
 };
 
