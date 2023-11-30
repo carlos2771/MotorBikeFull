@@ -199,19 +199,16 @@ export const enviarToken = async (req, res) => {
 
 };
 
-
 export const validarToken = async (req, res) => {
-  // const token = req.params.token;
   const code = req.params.code;
-
+  console.log('Código recibido:', code);
   try {
     const usuario = await User.findOne({ code: code });
-    console.log(usuario)
+
     if (!usuario) {
-      return res.status(400).json({ message: "Código no válido" });
+      return res.status(404).json({ message: "Código no encontrado" });
     }
 
-    // Devolver la información del usuario en formato JSON
     return res.status(200).json({
       username: usuario.username,
       email: usuario.email,
@@ -222,7 +219,7 @@ export const validarToken = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ message: ["codigo inválido"] });
+    return res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 

@@ -1,48 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { useAuth } from '../hooks/useAuth';
 import { EstadoRequired } from '../utils/validations';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert } from '@material-tailwind/react';
+import Swal from 'sweetalert2';
 
 const ValidarCodePage = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, setValue, formState: { errors, values } } = useForm();
   const { validarToken, errors: verificationErrors } = useAuth();
   const navigate = useNavigate();
   const params = useParams();
   const [email, setEmail] = useState('');
+  const [backendErrors, setBackendErrors] = useState([]);
 
   useEffect(() => {
     const userEmail = params.email;
     setEmail(userEmail);
-  }, [params]);
 
-  const onSubmit = handleSubmit(async (values) => {
+    // Verifica si no hay errores y realiza la redirección
+    if (values && values.code && backendErrors.length === 0) {
+      navigate(`/reestablecer-password/${values.code}`);
+    }
+  }, [backendErrors, values, navigate, params]);
+
+  const onSubmit = handleSubmit(async (formData) => {
     try {
-      console.log(email);
-      const user = await validarToken(values.code);
-      const userEmail = params.email;
-  
-      // Verifica si hay errores de verificación antes de redirigir
-      if (verificationErrors.length > 0) {
-        // Muestra la alerta de errores de verificación
-        setShowErrorAlert(true);
+      const user = await validarToken(formData.code);
+
+      // Verifica si el código es válido
+      if (!user) {
+        // Actualiza el estado con el mensaje de error
+        setBackendErrors(['Código incorrecto, inténtalo de nuevo']);
         return;
       }
-  
+
+      // Establece el valor del código en el estado
+      setValue("code", values.code);
+
       // Redirige a la página de actualización de contraseña con el código
       navigate(`/reestablecer-password/${values.code}`);
     } catch (error) {
-      console.error("Error al validar el token:", error);
-  
-      // Puedes agregar aquí un manejo más específico del error, por ejemplo:
-      if (error.response) {
-        console.error("Respuesta del servidor:", error.response.data);
-      } else {
-        console.error("Error sin respuesta del servidor:", error.message);
-      }
-  
-      // También puedes mostrar un mensaje de error al usuario si es necesario.
+      console.error(error);
+      // Actualiza el estado con el mensaje de error del backend
+      setBackendErrors(['Error en el servidor, inténtalo de nuevo']);
     }
   });
 
@@ -51,12 +52,11 @@ const ValidarCodePage = () => {
       <div className='flex h-[calc(100vh-100px)] items-center justify-center '>
         <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md  '>
           {/* Muestra errores de autenticación */}
-          {verificationErrors.map((error, i) => (
+          {backendErrors.map((error, i) => (
             <Alert className="bg-red-500 p-2 text-white" key={i}>
               {error}
             </Alert>
           ))}
-
           <h1 className='text-3xl font-bold my-2 text-center'>Recuperar Contraseña</h1>
           {/* Mostrar el correo electrónico en el mensaje */}
           <p className="text-white text-center mb-4">Hemos enviado un código de verificación a tu correo electrónico. Ingresa el código de verificación</p>

@@ -1,9 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect , useCallback } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { useMecanicos } from "../../context/MecanicosContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWrench , faPlus, faDownload} from '@fortawesome/free-solid-svg-icons';
+import * as XLSX from "xlsx";
+
+// Agrega el icono a la biblioteca
+library.add(faWrench, faPlus);
 
 export default function PageMecanico() {
   const { mecanicos, getMecanicos, deleteMecanico,updateMecanico } = useMecanicos();
@@ -46,42 +53,86 @@ export default function PageMecanico() {
     });
   };
 
+  const exportarAExcel = useCallback(() => {
+    const datos = mecanicos.map((mecanico) => ({
+      Cedula: mecanico.cedula_mecanico,
+      Nombre: mecanico.nombre_mecanico,
+      Telefono: mecanico.telefono_mecanico,
+      Direccion: mecanico.direccion_mecanico,
+      Estado: mecanico.estado,
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(datos);
+
+    // Agregar formato a los títulos (encabezados) y establecer autoFilter
+    ws["!cols"] = [{ wch: 15 }, { wch: 20 }, { wch: 15 }, { wch: 30 }, { wch: 15 }];
+    ws["!rows"] = [{ hpx: 20, outlineLevel: 0, hidden: false }];
+
+    // Establecer el formato de fondo y negrita para los títulos
+    for (let i = 0; i < 5; i++) {
+      const col = String.fromCharCode(65 + i); // Convertir número a letra (A, B, C, ...)
+      ws[`${col}1`].s = { font: { bold: true }, fill: { patternType: "solid", fgColor: { rgb: "#66FFCC" } } };
+    }
+
+    // Agregar formato a las celdas de datos y bordes
+    for (let i = 2; i <= mecanicos.length + 1; i++) {
+      for (let j = 0; j < 5; j++) {
+        const col = String.fromCharCode(65 + j);
+        const cell = `${col}${i}`;
+        ws[cell].s = {
+          fill: { patternType: "solid", fgColor: { rgb: "#FFFFFF" } },
+          border: { left: { style: "thin", color: { rgb: "#000000" } }, right: { style: "thin", color: { rgb: "#000000" } }, top: { style: "thin", color: { rgb: "#000000" } }, bottom: { style: "thin", color: { rgb: "#000000" } } },
+        };
+      }
+    }
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Mecanicos");
+    XLSX.writeFile(wb, "mecanicos.xlsx");
+
+  }, [mecanicos]);
+
   const columns = [
 
     {
         field: "cedula_mecanico",
         headerName: "Cedula",
         width: 200,
-       
+        headerClassName: "font-custom text-lg",
     },
     {
       field: "nombre_mecanico",
       headerName: "Nombre",
       width: 190,
+      headerClassName: "font-bold text-lg"
 
     },
     {
       field: "telefono_mecanico",
       headerName: "Telefono",
       width: 200,
+      headerClassName: "font-bold text-lg"
      
     },
     {
       field: "direccion_mecanico",
       headerName: "Direccion",
       width: 200,
+      headerClassName: "font-bold text-lg"
      
     },
     {
       field: "estado",
       headerName: "Estado",
       width: 100,
+      headerClassName: "font-bold text-lg"
 
     },
     {
       field: "createdAt",
       headerName: "Fecha Creacion",
       width: 240,
+      headerClassName: "font-bold text-lg",
  
       renderCell: (params) => {
         const date = new Date(params.value);
@@ -97,6 +148,7 @@ export default function PageMecanico() {
       field: "acciones",
       headerName: "Acciones",
       width: 300,
+      headerClassName: "font-bold text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("Estado", estado);
@@ -132,13 +184,19 @@ export default function PageMecanico() {
 
   return (
     <div className="mt-16">
-      <h1 className="text-2xl text-center mx-auto">Mecánicos</h1>
-      <div className="mx-10 justify-end flex">
+      <h1 className="text-2xl mx-auto ml-20 font-custom"> <FontAwesomeIcon icon="wrench" className="mr-2" />Gestion de Mecánicos</h1>
+      <div className="mx-20 ml-2 justify-end flex">
         <Link to="/add-mecanico">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
-            Agregar Mecánico
+          <button  className="px-4 py-2 m-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
+          <FontAwesomeIcon icon={faPlus} className="mr-2" />
+            Agregar
           </button>
         </Link>
+        <button
+          onClick={exportarAExcel}
+          className="px-4 py-2 m-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
+        ><FontAwesomeIcon icon={faDownload} className="mr-0" />
+        </button>
       </div>
       <Box sx={{ width: "100%" }}>
         <DataGrid
@@ -159,7 +217,7 @@ export default function PageMecanico() {
           sx={{
             color: "white",
             '& .MuiDataGrid-cell': {
-              fontSize: '18px',
+              fontSize: '15px',
             },
           }}
           slots={{ toolbar: GridToolbar }}

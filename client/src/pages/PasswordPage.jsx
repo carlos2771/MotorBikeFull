@@ -19,15 +19,14 @@ const PasswordPage = () => {
     //       }
     // });
 
-    const onSubmit = handleSubmit((values) =>{
-      enviarToken(values.email)
-    })
-  
-    useEffect(() => {
-      if (isAuthenticated) {
-        navigate(`/restablecer-password/${values.email}`);
-      }
-    }, [isAuthenticated]);
+    const onSubmit = handleSubmit(async (values) => {
+        try {
+            await enviarToken(values.email);
+            navigate(`/restablecer-password/${values.email}`);
+          } catch (error) {
+            console.error(error);
+          }
+    });
 
   return (
     <div>
