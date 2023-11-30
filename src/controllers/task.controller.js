@@ -19,7 +19,7 @@ export const createTasks = async (req, res) => {
       description,
       date,
       user: req.user.id, // para que el ref pueda funcionar adecuadamente
-    });
+    });   
     const saveTask = await newTask.save();
     res.json(saveTask);
   } catch (error) {

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useVentasRepuestos } from "../../context/VentasRepuestoContex";
+import { useCompras } from "../../context/ComprasContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import utc from "dayjs/plugin/utc"
+import dayjs from 'dayjs'
+dayjs.extend(utc)
+
 import { useForm } from "react-hook-form";
-import { useClientes } from "../../context/ClientContext";
 import { useRepuestos } from "../../context/RepuestosContext";
-import { NegativeRequired, NombreRequired, RepuestoRequired } from "../../utils/validations";
+import { NegativeRequired, NombreRequired, RepuestoRequired} from "../../utils/validations";
 
 
-export default function FormVentaRepuesto() {
+export default function FormCompra() {
   const {
     register,
     handleSubmit,
@@ -15,12 +18,11 @@ export default function FormVentaRepuesto() {
     formState: { errors },
   } = useForm();
   const {
-    createVentaRepuesto,
-    getVentaRepuesto,
-    updateVentaRepuesto,
-    errors: ventasRepuestosErrors,
-  } = useVentasRepuestos();
-  const { clientes, getClientes } = useClientes();
+    createCompra,
+    getCompra,
+    updateCompra,
+    errors: comprasErrors,
+  } = useCompras();
   const { repuestos, getRepuestos } = useRepuestos();
   const navigate = useNavigate();
   const params = useParams();
@@ -29,22 +31,23 @@ export default function FormVentaRepuesto() {
   useEffect(() => {
     (async () => {
       if (params.id) {
-        const ventaRepuesto = await getVentaRepuesto(params.id);
-        setValue("repuesto", ventaRepuesto.repuesto);
-        setSelectedRepuesto(ventaRepuesto.repuesto);
-        setValue("cantidad_repuesto", ventaRepuesto.cantidad_repuesto);
-        setValue("cantidad", ventaRepuesto.repuestos.cantidad);
-        setSelectedRepuesto(ventaRepuesto.cantidad);
-        setValue("precio_unitario", ventaRepuesto.precio_unitario);
-        setValue("precio_total", ventaRepuesto.precio_total);
-        setValue("cliente", ventaRepuesto.cliente._id);
+        const compra = await getCompra(params.id);
+        setValue("repuesto", compra.repuesto);
+        setSelectedRepuesto(compra.repuesto);
+        setValue("cantidad_repuesto", compra.cantidad_repuesto);
+        setValue("cantidad", compra.repuestos.cantidad);
+        setSelectedRepuesto(compra.cantidad);
+
+
+        setValue("precio_unitario", compra.precio_unitario);
+        setValue("precio_total", compra.precio_total);
+        setValue("fecha", dayjs(compra.fecha).utc().format("YYYY-MM-DD"))
       }
     })();
   }, []);
 
   useEffect(() => {
     try {
-      getClientes();
       getRepuestos();
     } catch (error) {
       console.error("Error al obtener clientes:", error);
@@ -57,43 +60,49 @@ export default function FormVentaRepuesto() {
         (repuesto) => repuesto._id === selectedRepuesto
       );
       if (selectedRepuestoData) {
-        setValue("precio_unitario", selectedRepuestoData.precio);
+        // setValue("precio_unitario", selectedRepuestoData.precio);
         setValue("cantidad", selectedRepuestoData.cantidad);
       }
     }
   }, [selectedRepuesto]);
 
-  const onSubmit = handleSubmit(async(data) => {
+  const onSubmit = handleSubmit(async (data) => {
+
+    // CUADRAR POR SI ALGO
+    if(!data.fecha){
+      data.fecha = dayjs().format("YYYY-MM-DD");
+    }
+
     data.precio_total = data.cantidad_repuesto * data.precio_unitario;
 
     if (params.id) {
-      const res = updateVentaRepuesto(params.id, data);
-        if(res) navigate("/ventas-repuestos")
+      const res = updateCompra(params.id, data);
+      if (res) navigate("/compras")
     } else {
-      const res = await createVentaRepuesto(data);
-        if(res) navigate("/ventas-repuestos")
-      
+      const res = await createCompra(data);
+      if (res) navigate("/compras")
+
     }
-    
+
   });
 
-  console.log(ventasRepuestosErrors);
+  console.log(comprasErrors);
 
 
-  
+
   return (
     <div className="flex items-center justify-center pt-20">
       <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
-        {ventasRepuestosErrors.map((error, i) => (
+        {comprasErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
         ))}
-        <h1 className="text-2xl flex justify-center ">Agregar Venta Repueso </h1>
+        <h1 className="text-2xl flex justify-center ">Agregar Compra </h1>
         <form className="mt-10" onSubmit={onSubmit}>
           <label>Repuestos</label>
           <select
-            {...register("repuesto", NombreRequired)}
+            {...register("repuesto", RepuestoRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             onChange={(e) => setSelectedRepuesto(e.target.value)}
           >
@@ -110,18 +119,17 @@ export default function FormVentaRepuesto() {
             placeholder="cantidad"
             {...register("cantidad")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-           disabled
-           
+            disabled
+
           />
-          <label>Cantidad a vender</label>
+          <label>Cantidad a comprar</label>
           <input
             placeholder="Cantidad"
-            type="number"
-            {...register("cantidad_repuesto", NegativeRequired )}
+            {...register("cantidad_repuesto", NegativeRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             onChange={(e) => {
               const cantidad = parseFloat(e.target.value);
-              const precioUnitario = parseFloat(register("precio_unitario").value);
+              // const precioUnitario = parseFloat(register("precio_unitario").value);
               const precioTotal = isNaN(cantidad) || isNaN(precioUnitario)
                 ? ""
                 : (cantidad * precioUnitario).toFixed(2);
@@ -129,31 +137,28 @@ export default function FormVentaRepuesto() {
             }}
           />
           {errors.cantidad_repuesto && <p className="text-red-500">{errors.cantidad_repuesto.message}</p>}
-          <label>Precio De Repuesto</label>
+
+
+          <label>Precio del repuesto</label>
           <input
             placeholder="Precio_repuesto"
-            {...register("precio_unitario")}
+            {...register("precio_unitario", NegativeRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
+          {errors.precio_unitario && <p className="text-red-500">{errors.precio_unitario.message}</p>}
           {/* <label>Precio total</label> */}
           {/* <input
             placeholder="Precio Total"
             {...register("precio_total")}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
           /> */}
-          <label>Cliente</label>
-          <select
-            {...register("cliente",NombreRequired )}
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-          >
-            <option value="">Selecciona un cliente</option>
-            {clientes.map((cliente) => (
-              <option key={cliente._id} value={cliente._id}>
-                {cliente.nombre_cliente}
-              </option>
-            ))}
-          </select>
-          
+          <label htmlFor="fecha">Fecha</label>
+          <input type="date"
+          className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
+          {...register("fecha")} />
+
+
+
           {/* <label >Estado</label>
           <select
         {...register("estado")}
@@ -167,13 +172,13 @@ export default function FormVentaRepuesto() {
           </option>
 
         </select> */}
-            {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
+          {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
           <button className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d" type="submit">
             Guardar
           </button>
           <button>
-          <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/ventas-repuestos">Cancelar</Link>
-        </button>
+            <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/compras">Cancelar</Link>
+          </button>
         </form>
       </div>
     </div>

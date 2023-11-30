@@ -63,6 +63,8 @@ export default function TaskFormPage() {
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         ></textarea>
         {errors.description && <p className="text-red-500">{errors.description.message}</p>}
+
+        
         <label htmlFor="date">Date</label>
         <input className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' type="date"{...register("date")} />
         <div className='justify-end flex mt-6'>

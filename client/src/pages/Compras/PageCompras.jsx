@@ -1,31 +1,40 @@
 import React, { useEffect } from "react";
-import { useVentasRepuestos } from "../../context/VentasRepuestoContex";
+import { useCompras } from "../../context/ComprasContext";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
-export default function PageVentaRepuestos() {
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.locale('es');
+dayjs.extend(utc);
+
+
+
+export default function PageCompras() {
   const {
-    ventasRepuestos,
-    getVentasRepuestos,
-    deleteVentaRepuesto,
-    updateVentaRepuesto,
-  } = useVentasRepuestos();
+    compras,
+    getCompras,
+    deleteCompra,
+    updateCompra,
+  } = useCompras();
 
   useEffect(() => {
     try {
-      getVentasRepuestos();
+      getCompras();
     } catch (error) {
-      console.error("Error al obtener clientes:", error);
+      console.error("Error al obtener compras:", error);
     }
   }, []);
 
   const mostrarAlerta = (id, anulado) => {
     const title = anulado ? "Anulado" : "Anular";
     const text = anulado
-      ? "Esta venta ya ha sido anulada."
-      : "¿Estás seguro de anular la venta?";
+      ? "Esta compra ya ha sido anulada."
+      : "¿Estás seguro de anular la compra?";
     const buttonText = anulado ? "Entendido" : "Sí";
 
     Swal.fire({
@@ -85,10 +94,19 @@ export default function PageVentaRepuestos() {
 
   const cambiarEstado = (id, anulado) => {
     const nuevoEstado = anulado ? "Activo" : "Inactivo";
-    updateVentaRepuesto(id, { estado: nuevoEstado }).then(() => {
-      getVentasRepuestos();
+    updateCompra(id, { estado: nuevoEstado }).then(() => {
+      getCompras();
     });
   };
+
+
+  // FECHA
+
+  const currentDate = new Date();
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  const formattedDate = new Intl.DateTimeFormat('es-ES', options).format(currentDate);
+
+
 
   const columns = [
     {
@@ -103,6 +121,7 @@ export default function PageVentaRepuestos() {
       headerName: "Cantidad Repuesto",
       width: 185,
       headerClassName: "custom-header",
+      // valueGetter: (params) => params.row.repuesto.cantidad,
     },
     {
       field: "precio_unitario",
@@ -116,14 +135,22 @@ export default function PageVentaRepuestos() {
       width: 170,
       headerClassName: "custom-header",
     },
+
     {
-      field: "nombre_cliente",
-      headerName: "Cliente",
-      width: 170,
+      field: "fecha",
+      headerName: "Fecha",
+      width: 250,
       headerClassName: "custom-header",
-      valueGetter: (params) => params.row.cliente.nombre_cliente,
-      
+      renderCell: (params) => {
+        const date = new Date(params.value);
+        const formattedDate = dayjs.utc(date).locale('es').format("DD [de] MMMM [de] YYYY");
+        return <div>{formattedDate}</div>;
+      },
     },
+    // ... Otras columnas
+
+
+
     // {
     //   field: "estado",
     //   headerName: "Estado",
@@ -160,6 +187,7 @@ export default function PageVentaRepuestos() {
                   ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
                   : "hidden"
               }
+
             >
               <Link to={`/venta-repuesto/${params.row._id}`}>Editar</Link>
             </button> */}
@@ -181,18 +209,18 @@ export default function PageVentaRepuestos() {
 
   return (
     <div className="mt-16">
-      <h1 className="text-2xl text-center mx-auto">Ventas Repuestos</h1>
+      <h1 className="text-2xl text-center mx-auto">Compras</h1>
       <div className="mx-10 justify-end flex">
-        <Link to="/add-venta-repuesto">
+        <Link to="/add-compra">
           <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
-            Agregar Repuesto
+            Agregar Compra
           </button>
         </Link>
       </div>
       <Box sx={{ width: "100%" }}>
         <DataGrid
           className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
-          rows={ventasRepuestos}
+          rows={compras}
           columns={columns}
           getRowId={(row) => row._id}
           initialState={{

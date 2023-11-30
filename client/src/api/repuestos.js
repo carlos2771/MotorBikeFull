@@ -10,17 +10,17 @@ export const getRepuestoRequest = async (id) => {
   return response.data;
 };
 
-export const createRepuestoRequest = async (repuesto) => {
-  const response = await axiosClient.post("/repuestos", repuesto);
+export const createRepuestosRequest = async (cliente) => {
+  const response = await axiosClient.post("/repuestos", cliente);
   return response.data;
 };
 
-export const updateRepuestoRequest = async (id,repuestos) => {
-  const response = await axiosClient.put(`/repuestos/${id}`,repuestos);
+export const updateRepuestosRequest = async (id,clientes) => {
+  const response = await axiosClient.put(`/repuestos/${id}`,clientes);
   return response.data;
 };
 
-export const deleteRepuestoRequest = async (id) => {
+export const deleteRepuestosRequest = async (id) => {
   const response = await axiosClient.delete(`/repuestos/${id}`);
   return response;
 };

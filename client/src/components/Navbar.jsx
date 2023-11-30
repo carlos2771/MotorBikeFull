@@ -35,16 +35,14 @@ export default function Navbar() {
             </button>
 
             <div
-              className={`${
-                !open && "hidden"
-              } bg-gray-600/50 min-h-screen  fixed top-0 left-0 right-0 transition-all duration-300`}
+              className={`${!open && "hidden"
+                } bg-gray-600/50 min-h-screen  fixed top-0 left-0 right-0 transition-all duration-300`}
               onClick={() => setOpen(false)}
             ></div>
 
             <div
-              className={`${
-                open ? "w-80" : "w-0"
-              } bg-slate-700 min-h-screen fixed top-0 left-0 transition-all duration-300`}
+              className={`${open ? "w-80" : "w-0"
+                } bg-slate-700 min-h-screen fixed top-0 left-0 transition-all duration-300`}
             >
               <div className={`${!open && "hidden"} pt-3`}>
                 <button
@@ -67,71 +65,84 @@ export default function Navbar() {
                   </svg>
                 </button>
                 <div onClick={() => setOpen(false)}>
-                <Render>
-                  <Link
-                    to="/tasks"
-                    className="flex justify-center p-3"
-                  >
-                    Tareas
-                  </Link>
-                </Render>
-                <Render>
-                  <Link to="/clientes" className="flex justify-center p-3">
-                    Clientes
-                  </Link>
-                </Render>
-                <Render>
-                  <Link to="/marcas" className="flex justify-center p-3">
-                    Marcas
-                  </Link>
-                </Render>
-                <Render>
-                  <Link to="/repuestos" className="flex justify-center p-3">
-                    Repuestos
-                  </Link>
-                </Render>
-                <Render>
-                  <Link to="/mecanicos" className="flex justify-center p-3">
-                    Mecanicos
-                  </Link>
-                </Render>
-                <Render>
-                  <Link
-                    to="/ventas-repuestos"
-                    className="flex justify-center p-3"
-                  >
-                    Ventas Repuestos
-                  </Link>
-                </Render>
-                <Render>
-                  <Link
-                    to="/ventas-servicios"
-                    className="flex justify-center p-3"
-                  >
-                    Ventas Servicios
-                  </Link>
-                </Render>
-                <Render>
-                  <Link
-                    to="/graficos"
-                    className="flex justify-center p-3"
-                  >
-                    Graficos
-                  </Link>
-                </Render>
-                <Render>
-                  <Link
-                    to="/"
-                    onClick={() => {
-                      logout();
-                    }}
-                    className="absolute inset-x-0 bottom-0 hover:bg-zinc-400 hover:bg-opacity-90 p-3"
-                  >
-                    Logout
-                  </Link>
-                </Render>
+                  <Render>
+                    <Link
+                      to="/tasks"
+                      className="flex justify-center p-3"
+                    >
+                      Tareas
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link to="/clientes" className="flex justify-center p-3">
+                      Clientes
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link to="/marcas" className="flex justify-center p-3">
+                      Marcas
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link to="/repuestos" className="flex justify-center p-3">
+                      Repuestos
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link to="/mecanicos" className="flex justify-center p-3">
+                      Mecanicos
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link
+                      to="/ventas-repuestos"
+                      className="flex justify-center p-3"
+                    >
+                      Ventas Repuestos
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link
+                      to="/ventas-servicios"
+                      className="flex justify-center p-3"
+                    >
+                      Ventas Servicios
+                    </Link>
+                  </Render>
+
+
+
+
+                  <Render>
+                    <Link
+                      to="/compras"
+                      className="flex justify-center p-3"
+                    >
+                      Compras
+                    </Link>
+                  </Render>
+
+                  <Render>
+                    <Link
+                      to="/graficos"
+                      className="flex justify-center p-3"
+                    >
+                      Graficos
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link
+                      to="/"
+                      onClick={() => {
+                        logout();
+                      }}
+                      className="absolute inset-x-0 bottom-0 hover:bg-zinc-400 hover:bg-opacity-90 p-3"
+                    >
+                      Logout
+                    </Link>
+                  </Render>
                 </div>
-                
+
               </div>
             </div>
           </div>

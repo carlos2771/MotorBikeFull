@@ -1,25 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react'
+import { useRepuestos } from '../../context/RepuestosContext'
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
-import { useRepuestos } from "../../context/RepuestosContext";
-import { Link } from "react-router-dom";
-import Swal from "sweetalert2"
+import { Link } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 
 export default function PageRepuestos() {
-  const { repuestos, getRepuestos, deleteRepuesto, updateRepuesto} = useRepuestos();
+  const { repuestos, getRepuestos, deleteRepuesto, updateRepuesto } = useRepuestos()
 
   useEffect(() => {
     try {
       getRepuestos();
+
     } catch (error) {
-      console.error("Error al obtener repuestos:", error);
+      console.error("Error al obtener los repuestos:", error);
     }
   }, []);
-
   const mostrarAlerta = (id, estado) => {
     const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
-    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar el cliente?" : "¿Estás seguro de habilitar el cliente?";
+    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar la venta ?" : "¿Estás seguro de habilitar la venta ?";
     const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
 
     Swal.fire({
@@ -55,25 +55,26 @@ export default function PageRepuestos() {
           icon: "success",
           title: "Se ha modificado"
         });
-      }else {
+      } else {
         const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        }
-      });
-      Toast.fire({
-        icon: "error",
-        title: "No se ha modificado"
-      });
-    }}
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "error",
+          title: "No se ha modificado"
+        });
+      }
+    }
     );
-    
+
   };
 
   const cambiarEstado = (id, estado) => {
@@ -84,36 +85,51 @@ export default function PageRepuestos() {
   };
 
 
+
   const columns = [
     {
       field: "nombre_repuesto",
-      headerName: "Nombre",
-      width: 190,
+      headerName: "Repuesto",
+      width: 160,
       editable: true,
+      headerClassName: 'custom-header',
+
+    },
+    {
+      field: "marca",
+      headerName: "Marca",
+      width: 170,
+      editable: true,
+      headerClassName: 'custom-header',
+      valueGetter: (params) => params.row.marca.nombre_marca,
     },
     {
       field: "cantidad",
-      headerName: "cantidad",
-      width: 240,
+      headerName: "Cantidad",
+      width: 185,
       editable: true,
+      headerClassName: 'custom-header',
     },
     {
       field: "precio",
-      headerName: "precio",
-      width: 200,
+      headerName: "Precio",
+      width: 170,
       editable: true,
+      headerClassName: 'custom-header',
     },
     {
       field: "estado",
       headerName: "Estado",
-      width: 100,
+      width: 170,
+      headerClassName: 'custom-header',
 
     },
     {
       field: "createdAt",
       headerName: "Fecha Creacion",
-      width: 240,
+      width: 300,
       editable: true,
+      headerClassName: 'custom-header',
       renderCell: (params) => {
         const date = new Date(params.value);
         const formattedDate = date.toLocaleDateString("es-ES", {
@@ -128,26 +144,30 @@ export default function PageRepuestos() {
       field: "acciones",
       headerName: "Acciones",
       width: 200,
+      headerClassName: 'custom-header',
       renderCell: (params) => {
         const estado = params.row.estado;
-        console.log("estado", estado);
         return (
           <div>
             <button
-            className={estado === "Activo" ? "" : "hidden"}
-          >
-              <Link className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500" to={`/repuestos/${params.row._id}`}>Editar</Link>
+              className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500" : "hidden"}
+            >
+              <Link to={`/repuestos/${params.row._id}`}>Editar</Link>
             </button>
             {/* <button
-              className="px-4 py-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
-              onClick={() => {
-                deleteRepuesto(params.row._id); // Suponiendo que params.row contiene la información del cliente
-              }}
-            >
-              Eliminar
-            </button> */}
+                  className="px-4 py-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
+                  onClick={() => {
+                    deleteVentaServicio(params.row._id);
+                  }}
+                >
+                  Eliminar
+                </button> */}
             <button
-              className={estado === "Activo" ?  "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500" : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"}
+              className={
+                estado === "Activo"
+                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
+                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+              }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
               {estado === "Activo" ? "Inhabilitar" : "Habilitar"}
@@ -158,9 +178,10 @@ export default function PageRepuestos() {
     },
   ];
 
+
   return (
     <div className="mt-16 ">
-      <h1 className="text-2xl text-center mx-auto">Gestionar Repuestos</h1>
+      <h1 className="text-2xl text-center mx-auto">Repuestos</h1>
       <div className="mx-10 justify-end flex ">
         <Link to="/add-repuesto">
           <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
@@ -182,7 +203,6 @@ export default function PageRepuestos() {
             },
           }}
           pageSizeOptions={[5]}
-
           disableRowSelectionOnClick
           sx={{
             color: "white",
