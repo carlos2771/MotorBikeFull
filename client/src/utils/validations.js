@@ -1,7 +1,7 @@
 const EMAIL_REGEX = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,3}$/i;
 const numberPattern = /^[0-9]*$/;
 const negative = /^[1-9]\d*$/;
-const nombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
+// const nombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
 
 
 export const EmailRequired = {
@@ -62,10 +62,6 @@ export const NegativeRequired = {
 
 export const NombreRequired = {
   required: "campo requerido",
-  pattern: {
-    value: nombre,
-    message: "Ingrese un nombre correcto",
-  },
 };
 
 
@@ -81,4 +77,6 @@ export const EstadoRequired = {
   required: "Campo requerido",
 };
 
-
+export const MecanicoRequired = {
+  required: "Campo requerido",
+};

@@ -4,7 +4,7 @@ import { Link,useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useMecanicos } from "../../context/MecanicosContext";
-import { NegativeRequired, NombreRequired } from "../../utils/validations";
+import { NegativeRequired, ClienteRequired, MecanicoRequired, EstadoRequired} from "../../utils/validations";
 
 export default function FormVentaServicio() {
   const {
@@ -76,7 +76,7 @@ const onSubmit = handleSubmit(async (data) => {
         <form className="mt-10" onSubmit={onSubmit}>
           <label>Cliente</label>
           <select
-            {...register("cliente", NombreRequired)}
+            {...register("cliente", ClienteRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value="">Selecciona un cliente</option>
@@ -89,7 +89,7 @@ const onSubmit = handleSubmit(async (data) => {
           
           <label>Mecánico</label>
           { <select
-            {...register("mecanico", NombreRequired)}
+            {...register("mecanico", MecanicoRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value="">Selecciona un mecánico</option>
@@ -109,13 +109,13 @@ const onSubmit = handleSubmit(async (data) => {
           {errors.precio_servicio && <p className="text-red-500">{errors.precio_servicio.message}</p>}
           <label>Descripción</label>
           <textarea
-            {...register("descripcion", NombreRequired)}
+            {...register("descripcion")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
           {errors.descripcion && <p className="text-red-500">{errors.descripcion.message}</p>}
           <label>Estado</label>
           <select
-        {...register("estado")}
+        {...register("estado", EstadoRequired)}
         className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
         >
           <option value={"Activo"} >
