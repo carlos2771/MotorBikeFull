@@ -16,6 +16,7 @@ export default function FormCliente() {
         const cliente = await getCliente(params.id);
         console.log("cliente por params", cliente);
         setValue("nombre_cliente", cliente.nombre_cliente);
+        setValue("tipo", cliente.tipo);
         setValue("email_cliente", cliente.email_cliente);
         setValue("telefono_cliente", cliente.telefono_cliente);
         setValue("cedula", cliente.cedula);
@@ -47,28 +48,37 @@ export default function FormCliente() {
         ))}
         <h1 className="text-2xl flex justify-center ">Agregar cliente </h1>
       <form className="mt-10" onSubmit={onSubmit}>
-      <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 gap-4">
-      <div>
+      <label >Tipo Documento</label>
+          <select
+        {...register("tipo")}
+        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2" 
+        >
+          <option value={"Cedula"} >
+            Cedula
+          </option>
+          <option value={"Tarjeta Identidad"} >
+            Tarjeta Identidad
+          </option>
+          <option value={"Otro"} >
+            Otro
+          </option>
+        </select>
       <label>Cedula</label>
         <input 
         placeholder='Cedula'
         {...register("cedula", CedulaRequired)}
-        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
+        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' autoFocus
         />
         {errors.cedula && <p className="text-red-500">{errors.cedula.message}</p>}
-      </div>
-        <div>
         <label>Nombre Completo</label>
         <input 
         type="text" 
         placeholder='Nombre Cliente' 
         {...register("nombre_cliente", NombreRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
-        autoFocus
         />
         {errors.nombre_cliente && <p className="text-red-500">{errors.nombre_cliente.message}</p>}
-        </div>
-      <div>
+        
       <label >Sexo</label>
           <select
         {...register("sexo")}
@@ -80,10 +90,12 @@ export default function FormCliente() {
           <option value={"Femenino"} >
             Femenino
           </option>
+          <option value={"Otro"} >
+            Otro
+          </option>
 
         </select>
-      </div>
-      <div>
+      
       <label >Email Cliente</label>
         <input 
         placeholder='Email Cliente'
@@ -92,8 +104,7 @@ export default function FormCliente() {
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.email_cliente && <p className="text-red-500">{errors.email_cliente.message}</p>}
-      </div>
-      <div>
+      
       <label>Telefono Cliente</label>
         <input 
         placeholder='Telefono Cliente'
@@ -101,9 +112,7 @@ export default function FormCliente() {
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.telefono_cliente && <p className="text-red-500">{errors.telefono_cliente.message}</p>}
-      </div>
       
-      <div>
       <label >Estado</label>
         <select
         {...register("estado")}
@@ -117,7 +126,7 @@ export default function FormCliente() {
           </option>
 
         </select>
-      </div>
+      
         <div className="flex justify-center xl:ps-60">
         <button className='px-5 p-1 text-sm ml-6 text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
@@ -126,7 +135,7 @@ export default function FormCliente() {
           <Link className="px-5 py-1 ml-3 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30" to="/clientes">Cancelar</Link>
         </button>
         </div>
-        </div>
+        
         
         
       </form>

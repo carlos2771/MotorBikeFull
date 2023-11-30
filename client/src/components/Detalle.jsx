@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useClientes } from '../context/ClientContext';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-
+import { Link } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faEdit, } from '@fortawesome/free-solid-svg-icons';
 export default function Detalle({ id, metodo,children }) {
   const [open, setOpen] = useState(false);
   // const { getCliente } = useClientes();
@@ -21,7 +23,7 @@ export default function Detalle({ id, metodo,children }) {
 
   return (
     <div className='rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500'>
-       <Button onClick={handleOpen} style={{ color: 'white', textTransform: 'none',  }}>Detalle</Button>
+       <Button onClick={handleOpen} style={{ color: 'white', textTransform: 'none'}}> <FontAwesomeIcon icon={faSearch} /></Button>
       <Modal
         open={open} 
         onClose={handleClose}
@@ -33,9 +35,17 @@ export default function Detalle({ id, metodo,children }) {
 
               {children}
            
-          
+              <div className="flex justify-end " >
+              <button className="px-5 py-1 mt-8 text-sm rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30"
+              onClick={handleClose}
+              >
+                    Cancelar
+                </button> 
+              </div>
         </div>
+
       </Modal>
+      
     </div>
   );
 }

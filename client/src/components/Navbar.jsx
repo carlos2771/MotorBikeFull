@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import Render from "./Render";
 import Header from "./Header";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTasks, faUsers, faBuilding, faTools, faShoppingCart, faHandshake, faShoppingBag, faChartBar, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
@@ -18,20 +20,7 @@ export default function Navbar() {
             style={{ zIndex: 1000 }}
           >
             <button className="ml-4" onClick={() => setOpen(true)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />
-              </svg>
+              <FontAwesomeIcon icon={faTasks} className="text-white" />
             </button>
 
             <div
@@ -49,100 +38,82 @@ export default function Navbar() {
                   className="ml-4 text-white mb-4"
                   onClick={() => setOpen(false)}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <FontAwesomeIcon icon={faSignOutAlt} />
                 </button>
                 <div onClick={() => setOpen(false)}>
                   <Render>
                     <Link
                       to="/tasks"
-                      className="flex justify-center p-3"
+                      className="flex   ms-20 p-3"
                     >
-                      Tareas
+                      <FontAwesomeIcon icon={faTasks} className="mr-2" /> Tareas
                     </Link>
                   </Render>
                   <Render>
-                    <Link to="/clientes" className="flex justify-center p-3">
-                      Clientes
+                    <Link to="/clientes" className="flex ms-20 p-3">
+                      <FontAwesomeIcon icon={faUsers} className="mr-2" /> Clientes
                     </Link>
                   </Render>
                   <Render>
-                    <Link to="/marcas" className="flex justify-center p-3">
-                      Marcas
+                    <Link to="/marcas" className="flex ms-20 p-3">
+                      <FontAwesomeIcon icon={faBuilding} className="mr-2" /> Marcas
                     </Link>
                   </Render>
                   <Render>
-                    <Link to="/repuestos" className="flex justify-center p-3">
-                      Repuestos
+                    <Link to="/repuestos" className="flex ms-20 p-3">
+                      <FontAwesomeIcon icon={faTools} className="mr-2" /> Repuestos
                     </Link>
                   </Render>
                   <Render>
-                    <Link to="/mecanicos" className="flex justify-center p-3">
-                      Mecanicos
+                    <Link to="/mecanicos" className="flex ms-20 p-3">
+                      <FontAwesomeIcon icon={faTools} className="mr-2" /> Mecanicos
                     </Link>
                   </Render>
                   <Render>
                     <Link
                       to="/ventas-repuestos"
-                      className="flex justify-center p-3"
+                      className="flex ms-20 p-3"
                     >
-                      Ventas Repuestos
+                      <FontAwesomeIcon icon={faShoppingCart} className="mr-2" /> Ventas Repuestos
                     </Link>
                   </Render>
                   <Render>
                     <Link
                       to="/ventas-servicios"
-                      className="flex justify-center p-3"
+                      className="flex ms-20 p-3"
                     >
-                      Ventas Servicios
+                      <FontAwesomeIcon icon={faHandshake} className="mr-2" /> Ventas Servicios
                     </Link>
                   </Render>
-
-
-
-
                   <Render>
                     <Link
                       to="/compras"
-                      className="flex justify-center p-3"
+                      className="flex ms-20 p-3"
                     >
-                      Compras
+                      <FontAwesomeIcon icon={faShoppingBag} className="mr-2" /> Compras
                     </Link>
                   </Render>
-
                   <Render>
                     <Link
                       to="/graficos"
-                      className="flex justify-center p-3"
+                      className="flex ms-20 p-3"
                     >
-                      Graficos
+                      <FontAwesomeIcon icon={faChartBar} className="mr-2" /> Graficos
                     </Link>
                   </Render>
                   <Render>
                     <Link
                       to="/"
+                      
                       onClick={() => {
                         logout();
                       }}
-                      className="absolute inset-x-0 bottom-0 hover:bg-zinc-400 hover:bg-opacity-90 p-3"
+                      className="absolute  inset-x-0 bottom-0 hover:bg-zinc-400 hover:bg-opacity-90 p-3 "
                     >
-                      Logout
+                      <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" /> Logout
                     </Link>
                   </Render>
                 </div>
-
               </div>
             </div>
           </div>

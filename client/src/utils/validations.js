@@ -39,11 +39,11 @@ export const CedulaRequired = {
   required: "Cedula es requerido",
   pattern: {
     value: numberPattern,
-    message: "Por ahora solo son numeros",
+    message: "Cedula solo contiene numeros ",
   },
   maxLength: {
-    value: 10,
-    message: "El maximo de caracteres es de 10"
+    value: 12,
+    message: "El maximo de caracteres es de 12"
   },
   minLength: {
     value: 8,

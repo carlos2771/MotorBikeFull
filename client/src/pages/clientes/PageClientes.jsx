@@ -5,6 +5,9 @@ import { useClientes } from "../../context/ClientContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import Detalle from "../../components/Detalle";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faIdCard, faUser, faPhone, faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard} from "@fortawesome/free-solid-svg-icons";
+import {Tabla, Titulo} from "../../components/Tabla";
 
 export default function PageClientes() {
   const { clientes, getClientes, deleteCliente, updateCliente, getCliente } =
@@ -26,7 +29,7 @@ export default function PageClientes() {
   }, []);
 
   const mostrarAlerta = (id, estado) => {
-    const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
+    const titulo = estado === "Activo" ? "Inhabilitar": "Habilitar"
     const text =
       estado === "Activo"
         ? "¿Estás seguro de inhabilitar el cliente?"
@@ -36,7 +39,7 @@ export default function PageClientes() {
     //"px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500 ",
 
     Swal.fire({
-      title: title,
+      title: titulo,
       text: text,
       icon: "warning",
       showCancelButton: true,
@@ -101,17 +104,17 @@ export default function PageClientes() {
     {
       field: "nombre_cliente",
       headerName: "Nombre",
-      width: 190,
+      width: 280,
     },
-    {
-      field: "sexo",
-      headerName: "Sexo",
-      width: 190,
-    },
+    // {
+    //   field: "sexo",
+    //   headerName: "Sexo",
+    //   width: 190,
+    // },
     {
       field: "email_cliente",
       headerName: "Email",
-      width: 240,
+      width: 290,
     },
     {
       field: "telefono_cliente",
@@ -128,21 +131,21 @@ export default function PageClientes() {
       headerName: "Estado",
       width: 100,
     },
-    {
-      field: "createdAt",
-      headerName: "Fecha Creacion",
-      width: 240,
+    // {
+    //   field: "createdAt",
+    //   headerName: "Fecha Creacion",
+    //   width: 240,
 
-      renderCell: (params) => {
-        const date = new Date(params.value);
-        const formattedDate = date.toLocaleDateString("es-ES", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
-        return <div>{formattedDate}</div>;
-      },
-    },
+    //   renderCell: (params) => {
+    //     const date = new Date(params.value);
+    //     const formattedDate = date.toLocaleDateString("es-ES", {
+    //       year: "numeric",
+    //       month: "long",
+    //       day: "numeric",
+    //     });
+    //     return <div>{formattedDate}</div>;
+    //   },
+    // },
     {
       field: "acciones",
       headerName: "Acciones",
@@ -157,7 +160,7 @@ export default function PageClientes() {
                 className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
                 to={`/cliente/${params.row._id}`}
               >
-                Editar
+                <FontAwesomeIcon icon={faPencil} />
               </Link>
             </button>
 
@@ -175,43 +178,98 @@ export default function PageClientes() {
               }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
-              {estado === "Activo" ? "Inhabilitar" : "Habilitar"}
+              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
             </button>
             <button className={estado === "Activo" ? "" : "hidden"}>
               <Detalle
                 metodo={() => getCliente(params.row._id)}
                 id={params.row._id}
               >
-                <p className="text-2xl">
-                  {
-                    clientes.find((cliente) => cliente._id === params.row._id)
-                      ?.nombre_cliente
-                  }
-                </p>
-                <p className="text-2xl">
-                  {
-                    clientes.find((cliente) => cliente._id === params.row._id)
-                      ?.sexo
-                  }
-                </p>
-                <p className="text-2xl">
-                  {
+                <table>
+                  <tbody>
+                    <Titulo>
+                        <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                        Detalles del Cliente
+                    </Titulo>
+
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                        Nombre
+                      </Tabla>
+                      <Tabla >
+                        {
+                          clientes.find(
+                            (cliente) => cliente._id === params.row._id
+                          )?.nombre_cliente
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faUser} className="mr-2" />
+                        Sexo
+                      </Tabla>
+                      <Tabla >
+                        {
+                          clientes.find(
+                            (cliente) => cliente._id === params.row._id
+                          )?.sexo
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
+                        Email
+                      </Tabla>
+                      <Tabla >
+                      {
                     clientes.find((cliente) => cliente._id === params.row._id)
                       ?.email_cliente
                   }
-                </p>
-                <p className="text-2xl">
-                  {
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faPhone} className="mr-2" />
+                        Telefono
+                      </Tabla>
+                      <Tabla >
+                      {
                     clientes.find((cliente) => cliente._id === params.row._id)
                       ?.telefono_cliente
                   }
-                </p>
-                <p className="text-2xl">
-                  {
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                        Tipo Documento
+                      </Tabla>
+                      <Tabla >
+                      {
+                    clientes.find((cliente) => cliente._id === params.row._id)
+                      ?.tipo
+                  }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                        Cedula
+                      </Tabla>
+                      <Tabla >
+                      {
                     clientes.find((cliente) => cliente._id === params.row._id)
                       ?.cedula
                   }
-                </p>
+                      </Tabla>
+                    </tr>
+                  </tbody>
+                  
+                </table>
+                
               </Detalle>
             </button>
           </div>
