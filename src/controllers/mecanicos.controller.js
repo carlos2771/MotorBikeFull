@@ -36,7 +36,7 @@ export const getMecanico = async (req, res) => {
 export const createMecanico = async(req, res) =>{
     try {
         // Extrae los datos del mecanico, del cuerpo de la solicitud
-        const  { nombre_mecanico, cedula_mecanico, telefono_mecanico, direccion_mecanico, estado} = req.body
+        const  { nombre_mecanico, cedula_mecanico, telefono_mecanico, direccion_mecanico, estado, tipo} = req.body
 
         const cedulaFound = await Mecanico.findOne({cedula_mecanico})
         if(cedulaFound) return res.status(400).json({message:["cedula de mecanico ya existe"]});
@@ -46,7 +46,7 @@ export const createMecanico = async(req, res) =>{
 
         // Crea una nueva instancia del modelo 'Mecanico' con los datos del mecanico
         const newMecanico = new Mecanico({
-            nombre_mecanico, cedula_mecanico, telefono_mecanico, direccion_mecanico, estado
+            nombre_mecanico, cedula_mecanico, telefono_mecanico, direccion_mecanico, estado, tipo
         })
 
         // Guarda el nuevo mecanico en la base de datos

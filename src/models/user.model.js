@@ -16,7 +16,16 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
-    }
+    },
+    resetToken: { 
+        type: String 
+    },
+    resetTokenExpires: { 
+        type: Date 
+    }, // Nueva propiedad para almacenar la fecha de expiración
+    code: { 
+        type: String 
+    },
 },{
     timestamps: true
 })
