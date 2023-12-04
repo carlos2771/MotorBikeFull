@@ -4,6 +4,7 @@ const negative = /^[1-9]\d*$/;
 // const nombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
 
 
+
 export const EmailRequired = {
   required: "Campo requerido",
   pattern: {
@@ -63,6 +64,12 @@ export const NegativeRequired = {
 export const NombreRequired = {
   required: "Campo requerido",
 };
+
+export const fecha = {
+  
+  message: "Solo puedes ingresar una fecha del año actual"
+};
+
 
 
 export const RepuestoRequired = {

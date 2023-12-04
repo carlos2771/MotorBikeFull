@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 // NUEVAS IMPORTS AGREGADAS
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faIdCard, faUser, faPhone, faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faIdCard, faUser, faPhone, faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faRegistered, faDollarSign, faHashtag} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
 
 
@@ -209,20 +209,20 @@ export default function PageRepuestos() {
                     </tr>
                     <tr>
                       <Tabla >
-                        <FontAwesomeIcon icon={faUser} className="mr-2" />
+                        <FontAwesomeIcon icon={faRegistered} className="mr-2" />
                         Marca
                       </Tabla>
                       <Tabla >
                         {
                           repuestos.find(
-                            (repuesto) => repuesto._id === params.row._id
-                          )?.marca
+                            (marca) => marca._id === params.row._id
+                          )?.marca.nombre_marca
                         }
                       </Tabla>
                     </tr>
                     <tr>
                       <Tabla >
-                        <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
+                        <FontAwesomeIcon icon={faHashtag} className="mr-2" />
                         Cantidad
                       </Tabla>
                       <Tabla >
@@ -234,7 +234,7 @@ export default function PageRepuestos() {
                     </tr>
                     <tr>
                       <Tabla >
-                        <FontAwesomeIcon icon={faPhone} className="mr-2" />
+                        <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
                         Precio
                       </Tabla>
                       <Tabla >
@@ -243,7 +243,6 @@ export default function PageRepuestos() {
                       ?.precio
                   }
                     
-                     
                       </Tabla>
                     </tr>
                   </tbody>
@@ -260,7 +259,7 @@ export default function PageRepuestos() {
 
   return (
     <div className="mt-16">
-      <h1 className="text-2xl text-center mx-auto">Gestionar Repuestos</h1>
+      <h1 className="text-2xl text-start ml-20">Gestionar Repuestos</h1>
       <div className="mx-10 justify-end flex">
         <Link to="/add-repuesto">
           <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
