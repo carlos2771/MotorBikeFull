@@ -4,6 +4,13 @@ import Box from "@mui/material/Box";
 import { useMarcas } from "../../context/MarcasContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import * as XLSX from "xlsx";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWrench , faPlus, faDownload} from '@fortawesome/free-solid-svg-icons';
+
+// Agrega el icono a la biblioteca
+library.add(faWrench, faPlus);
 
 export default function PageMarcas() {
   const { marcas, getMarcas, deleteMarca,updateMarca } = useMarcas();
@@ -82,6 +89,43 @@ export default function PageMarcas() {
         getMarcas();
     });
   };
+
+  const exportarAExcel = useCallback(() => {
+    const datos = marcas.map((mecanico) => ({
+      Nombre_Marca: marcas.nombre_marca,
+      Estado: marcas.estado,
+      Fecha_Creacion: marcas.createdAt
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(datos);
+
+    // Agregar formato a los títulos (encabezados) y establecer autoFilter
+    ws["!cols"] = [{ wch: 15 }, { wch: 20 }, { wch: 15 }, { wch: 30 }, { wch: 15 }];
+    ws["!rows"] = [{ hpx: 20, outlineLevel: 0, hidden: false }];
+
+    // Establecer el formato de fondo y negrita para los títulos
+    for (let i = 0; i < 5; i++) {
+      const col = String.fromCharCode(65 + i); // Convertir número a letra (A, B, C, ...)
+      ws[`${col}1`].s = { font: { bold: true }, fill: { patternType: "solid", fgColor: { rgb: "#66FFCC" } } };
+    }
+
+    // Agregar formato a las celdas de datos y bordes
+    for (let i = 2; i <= mecanicos.length + 1; i++) {
+      for (let j = 0; j < 5; j++) {
+        const col = String.fromCharCode(65 + j);
+        const cell = `${col}${i}`;
+        ws[cell].s = {
+          fill: { patternType: "solid", fgColor: { rgb: "#FFFFFF" } },
+          border: { left: { style: "thin", color: { rgb: "#000000" } }, right: { style: "thin", color: { rgb: "#000000" } }, top: { style: "thin", color: { rgb: "#000000" } }, bottom: { style: "thin", color: { rgb: "#000000" } } },
+        };
+      }
+    }
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Mecanicos");
+    XLSX.writeFile(wb, "mecanicos.xlsx");
+
+  }, [mecanicos]);
 
   const columns = [
     {
