@@ -131,7 +131,7 @@ export default function PageMarcas() {
     {
       field: "nombre_marca",
       headerName: "Nombre de Marca",
-      width: 250,
+      width: 200,
 
     },
     {
