@@ -17,6 +17,7 @@ export default function FormMecanico() {
       if (params.id) {
         const mecanico = await getMecanico(params.id);
         console.log("mecánico por params", mecanico);
+        setValue("tipo", mecanico.tipo);
         setValue("cedula_mecanico", mecanico.cedula_mecanico);
         setValue("nombre_mecanico", mecanico.nombre_mecanico);
         setValue("telefono_mecanico", mecanico.telefono_mecanico);
@@ -45,11 +46,25 @@ export default function FormMecanico() {
             {error}
           </div>
         ))}
-           <br />
-           <br />
-           <br />
           <h1 className="text-2xl flex justify-center ">Agregar mecánico</h1>
         <form className="mt-10"  onSubmit={onSubmit}>
+          <label >Tipo Documento<span className="text-red-500">*</span></label>
+            <select
+          {...register("tipo", NombreRequired)}
+          className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2" 
+          >
+            <option value={""}>Selecciona el tipo de documento</option>
+            <option value={"Cedula"} >
+              Cédula
+            </option>
+            <option value={"Tarjeta Identidad"} >
+              Tarjeta Identidad
+            </option>
+            <option value={"Otro"} >
+              Otro
+            </option>
+          </select>
+          {errors.tipo && <p className="text-red-500">{errors.tipo.message}</p>}
             <label >Cedula<span className="text-red-500">*</span></label>
             <input 
             placeholder='Cedula'

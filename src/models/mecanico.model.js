@@ -28,6 +28,10 @@ const mecanicoSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    tipo:{
+        type: String, //Tipo String
+        required: true, //Es requerido
+    },
 },{
     //Sirve para agregar automáticamente campos createdAt y updatedAt a los documentos, lo que permite realizar un seguimiento de cuándo se crearon y modificaron.
     timestamps: true 
