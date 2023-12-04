@@ -4,6 +4,10 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { Link } from 'react-router-dom';
 import Swal from "sweetalert2";
+import Detalle from "../../components/Detalle";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faIdCard, faUser, faPhone, faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard} from "@fortawesome/free-solid-svg-icons";
+import {Tabla, Titulo} from "../../components/Tabla";
 
 
 export default function PageVentaServicios() {
@@ -93,7 +97,6 @@ export default function PageVentaServicios() {
           editable: true,
           headerClassName: 'custom-header',
           valueGetter: (params) => params.row.mecanico.nombre_mecanico,
-         
         },
         {
           field: "nombre_cliente",
@@ -110,13 +113,13 @@ export default function PageVentaServicios() {
           editable: true,
           headerClassName: 'custom-header',
         },
-        {
-          field: "descripcion",
-          headerName: "Descripcion",
-          width: 170,
-          editable: true,
-          headerClassName: 'custom-header',
-        },
+        // {
+        //   field: "descripcion",
+        //   headerName: "Descripcion",
+        //   width: 170,
+        //   editable: true,
+        //   headerClassName: 'custom-header',
+        // },
         {
           field: "estado",
           headerName: "Estado",
@@ -124,36 +127,41 @@ export default function PageVentaServicios() {
           headerClassName: 'custom-header',
     
         },
-        {
-          field: "createdAt",
-          headerName: "Fecha Creacion",
-          width: 300,
-          editable: true,
-          headerClassName: 'custom-header',
-          renderCell: (params) => {
-            const date = new Date(params.value);
-            const formattedDate = date.toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            });
-            return <div>{formattedDate}</div>;
-          },
-        },
+        // {
+        //   field: "createdAt",
+        //   headerName: "Fecha Creacion",
+        //   width: 300,
+        //   editable: true,
+        //   headerClassName: 'custom-header',
+        //   renderCell: (params) => {
+        //     const date = new Date(params.value);
+        //     const formattedDate = date.toLocaleDateString("es-ES", {
+        //       year: "numeric",
+        //       month: "long",
+        //       day: "numeric",
+        //     });
+        //     return <div>{formattedDate}</div>;
+        //   },
+        // },
+
         {
           field: "acciones",
           headerName: "Acciones",
           width: 200,
-          headerClassName: 'custom-header',
           renderCell: (params) => {
             const estado = params.row.estado;
+            console.log("estado", estado);
             return (
               <div>
-                <button
-            className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500" : "hidden"}
-          >
-            <Link to={`/ventas-servicios/${params.row._id}`}>Editar</Link>
-          </button>
+                <button className={estado === "Activo" ? "" : "hidden"}>
+                  <Link
+                    className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                    to={`/ventas-servicios/${params.row._id}`}
+                  >
+                    <FontAwesomeIcon icon={faPencil} />
+                  </Link>
+                 </button>
+
                 {/* <button
                   className="px-4 py-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
                   onClick={() => {
@@ -163,22 +171,89 @@ export default function PageVentaServicios() {
                   Eliminar
                 </button> */}
                 <button
-              className={
-                estado === "Activo"
-                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
-                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                  className={
+                    estado === "Activo"
+                      ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
+                      : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
               }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
-              {estado === "Activo" ? "Inhabilitar" : "Habilitar"}
+              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
             </button>
-              </div>
-            );
-          },
-        },
-      ];
-      
-    
+            <button className={estado === "Activo" ? "" : "hidden"}>
+            <Detalle
+                metodo={() => getVentasServicios(params.row._id)}
+                id={params.row._id}
+              >
+                <table>
+                  <tbody>
+                    <Titulo>
+                        <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                        Detalles de la venta
+                    </Titulo>
+
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                        Cliente
+                      </Tabla>
+                      <Tabla >
+                        {
+                          ventasServicios.find(
+                            (cliente) => cliente._id === params.row._id
+                          )?.cliente.nombre_cliente
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faUser} className="mr-2" />
+                        Mecanico
+                      </Tabla>
+                      <Tabla >
+                        {
+                          ventasServicios.find(
+                            (mecanico) => mecanico._id === params.row._id
+                          )?.mecanico.nombre_mecanico
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
+                        Precio
+                      </Tabla>
+                      <Tabla >
+                      {
+                    ventasServicios.find((precio) => precio._id === params.row._id)
+                      ?.precio_servicio
+                  }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faPhone} className="mr-2" />
+                        Descripción
+                      </Tabla>
+                      <Tabla >
+                      {
+                    ventasServicios.find((descripcion) => descripcion._id === params.row._id)
+                      ?.descripcion
+                  }
+                      </Tabla>
+                    </tr>
+                    
+                  </tbody>
+                  
+                </table>
+                
+              </Detalle>
+            </button>
+          </div>
+        );
+      },
+    },
+  ];
       return (
         <div className="mt-16 ">
           <h1 className="text-2xl text-center mx-auto">Ventas Servicios</h1>
