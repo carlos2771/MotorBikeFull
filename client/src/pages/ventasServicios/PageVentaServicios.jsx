@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Swal from "sweetalert2";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faIdCard, faUser,faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faDollar, faDollarSign} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faUser,faPen, faPencil , faBan,  faCheck, faInfoCircle,faDollarSign} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
 
 
@@ -260,9 +260,9 @@ export default function PageVentaServicios() {
           <h1 className="text-2xl text-start ml-20">Gestionar ventas de servicios</h1>
           <div className="mx-10 justify-end flex ">
             <Link to="/add-venta-servicio">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
-                +
-              </button>
+            <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
+          <FontAwesomeIcon icon={faPlus} className="mr-0" />
+          </button>
             </Link>
           </div>
           <Box sx={{ width: "100%" }}>
