@@ -104,27 +104,27 @@ export default function PageClientes() {
     {
       field: "nombre_cliente",
       headerName: "Nombre",
-      width: 280,
+      width: 200,
     },
     // {
     //   field: "sexo",
     //   headerName: "Sexo",
     //   width: 190,
     // },
-    {
-      field: "email_cliente",
-      headerName: "Email",
-      width: 290,
-    },
+    // {
+    //   field: "email_cliente",
+    //   headerName: "Email",
+    //   width: 290,
+    // },
     {
       field: "telefono_cliente",
       headerName: "Telefono",
-      width: 200,
+      width: 190,
     },
     {
       field: "cedula",
       headerName: "Cedula",
-      width: 200,
+      width: 180,
     },
     {
       field: "estado",
