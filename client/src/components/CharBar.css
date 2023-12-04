@@ -31,8 +31,10 @@
 }
 
 .chart-bar-date-input {
-  width: 60%; 
+  width: 75%; 
   color: black;
-  background-color: gray;
+  background-color: rgba(158, 158, 158, 0.8);
   margin-right: 4%; 
+
 }
+

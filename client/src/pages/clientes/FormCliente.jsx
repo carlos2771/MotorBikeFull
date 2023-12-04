@@ -40,21 +40,22 @@ export default function FormCliente() {
   return (
     <div className='flex items-center justify-center pt-20 '>
       
-    <div className='bg-slate-700 max-w-xl w-full p-10 shadow-lg shadow-blue-600/40 '>
+    <div className='bg-slate-700 max-w-lg w-full p-10 shadow-lg shadow-blue-600/40 '>
     {clientesErrors.map((error, i) => (
       <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
         ))}
-        <h1 className="text-2xl flex justify-center ">Agregar cliente </h1>
+        <h1 className="text-2xl flex justify-center ">Agregar cliente</h1>
       <form className="mt-10" onSubmit={onSubmit}>
-      <label >Tipo Documento</label>
+      <label >Tipo Documento<span className="text-red-500">*</span></label>
           <select
-        {...register("tipo")}
+        {...register("tipo", NombreRequired)}
         className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2" 
         >
+          <option value={""}>Selecciona el tipo de documento</option>
           <option value={"Cedula"} >
-            Cedula
+            Cédula
           </option>
           <option value={"Tarjeta Identidad"} >
             Tarjeta Identidad
@@ -63,14 +64,15 @@ export default function FormCliente() {
             Otro
           </option>
         </select>
-      <label>Cedula</label>
+        {errors.tipo && <p className="text-red-500">{errors.tipo.message}</p>}
+      <label>Cedula<span className="text-red-500">*</span></label>
         <input 
         placeholder='Cedula'
         {...register("cedula", CedulaRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' autoFocus
         />
         {errors.cedula && <p className="text-red-500">{errors.cedula.message}</p>}
-        <label>Nombre Completo</label>
+        <label>Nombre Completo<span className="text-red-500">*</span></label>
         <input 
         type="text" 
         placeholder='Nombre Cliente' 
@@ -79,11 +81,12 @@ export default function FormCliente() {
         />
         {errors.nombre_cliente && <p className="text-red-500">{errors.nombre_cliente.message}</p>}
         
-      <label >Sexo</label>
+      <label >Sexo<span className="text-red-500">*</span></label>
           <select
-        {...register("sexo")}
+        {...register("sexo" , NombreRequired)}
         className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
         >
+          <option value={""}>Selecciona el Sexo</option>
           <option value={"Masculino"} >
             Masculino
           </option>
@@ -95,8 +98,8 @@ export default function FormCliente() {
           </option>
 
         </select>
-      
-      <label >Email Cliente</label>
+        {errors.sexo && <p className="text-red-500">{errors.sexo.message}</p>}
+      <label >Email Cliente<span className="text-red-500">*</span></label>
         <input 
         placeholder='Email Cliente'
         type="email"
@@ -105,7 +108,7 @@ export default function FormCliente() {
         />
         {errors.email_cliente && <p className="text-red-500">{errors.email_cliente.message}</p>}
       
-      <label>Telefono Cliente</label>
+      <label>Telefono Cliente<span className="text-red-500">*</span></label>
         <input 
         placeholder='Telefono Cliente'
         {...register("telefono_cliente", TelefonoRequired)}
@@ -113,7 +116,7 @@ export default function FormCliente() {
         />
         {errors.telefono_cliente && <p className="text-red-500">{errors.telefono_cliente.message}</p>}
       
-      <label >Estado</label>
+      <label >Estado<span className="text-red-500">*</span></label>
         <select
         {...register("estado")}
         className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
@@ -127,8 +130,8 @@ export default function FormCliente() {
 
         </select>
       
-        <div className="flex justify-center xl:ps-60">
-        <button className='px-5 p-1 text-sm ml-6 text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
+        <div>
+        <button className='px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
         </button>
         <button>

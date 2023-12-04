@@ -23,6 +23,11 @@ export function CharBar() {
           icon: 'error',
           title: 'Error',
           text: 'La fecha de inicio no puede ser mayor que la fecha de final',
+          background: "#334155",
+          color: "white",
+          buttonsStyling: false,
+          customClass: {
+            confirmButton: "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500"} 
         });
         return;
       }

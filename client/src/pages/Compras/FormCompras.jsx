@@ -100,7 +100,7 @@ export default function FormCompra() {
         ))}
         <h1 className="text-2xl flex justify-center ">Agregar Compra </h1>
         <form className="mt-10" onSubmit={onSubmit}>
-          <label>Repuestos</label>
+          <label>Repuestos<span className="text-red-500">*</span></label>
           <select
             {...register("repuesto", RepuestoRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
@@ -122,7 +122,7 @@ export default function FormCompra() {
             disabled
 
           />
-          <label>Cantidad a comprar</label>
+          <label>Cantidad a comprar<span className="text-red-500">*</span></label>
           <input
             placeholder="Cantidad"
             {...register("cantidad_repuesto", NegativeRequired)}
@@ -139,7 +139,7 @@ export default function FormCompra() {
           {errors.cantidad_repuesto && <p className="text-red-500">{errors.cantidad_repuesto.message}</p>}
 
 
-          <label>Precio del repuesto</label>
+          <label>Precio del repuesto<span className="text-red-500">*</span></label>
           <input
             placeholder="Precio_repuesto"
             {...register("precio_unitario", NegativeRequired)}

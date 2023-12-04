@@ -149,7 +149,7 @@ export default function PageClientes() {
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 400,
+      width: 200,
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("estado", estado);
