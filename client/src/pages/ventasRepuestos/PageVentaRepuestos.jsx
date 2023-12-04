@@ -4,18 +4,33 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import {faLock, faDollarSign, faBan, faInfoCircle, faIdCard,faScrewdriverWrench} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {Tabla, Titulo} from "../../components/Tabla";
+import Detalle from "../../components/Detalle";
+
 
 export default function PageVentaRepuestos() {
   const {
     ventasRepuestos,
     getVentasRepuestos,
+    getVentaRepuesto,
     deleteVentaRepuesto,
     updateVentaRepuesto,
   } = useVentasRepuestos();
 
+
+
   useEffect(() => {
     try {
       getVentasRepuestos();
+    } catch (error) {
+      console.error("Error al obtener clientes:", error);
+    }
+  }, []);
+  useEffect(() => {
+    try {
+      getVentaRepuesto(id);
     } catch (error) {
       console.error("Error al obtener clientes:", error);
     }
@@ -101,15 +116,15 @@ export default function PageVentaRepuestos() {
     {
       field: "cantidad_repuesto",
       headerName: "Cantidad Repuesto",
-      width: 185,
+      width: 175,
       headerClassName: "custom-header",
     },
-    {
-      field: "precio_unitario",
-      headerName: "Precio Unitario",
-      width: 170,
-      headerClassName: "custom-header",
-    },
+    // {
+    //   field: "precio_unitario",
+    //   headerName: "Precio Unitario",
+    //   width: 170,
+    //   headerClassName: "custom-header",
+    // },
     {
       field: "precio_total",
       headerName: "Precio Total",
@@ -148,7 +163,7 @@ export default function PageVentaRepuestos() {
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 200,
+      width: 170,
       headerClassName: "custom-header",
       renderCell: (params) => {
         const estado = params.row.estado;
@@ -171,7 +186,90 @@ export default function PageVentaRepuestos() {
               }
               onClick={() => mostrarAlerta(params.row._id, params.row.anulado)}
             >
-              {params.row.anulado ? "Anulado" : "Anular"}
+              {params.row.anulado ? <FontAwesomeIcon icon={faLock} /> : <FontAwesomeIcon icon={faBan} />}
+            </button>
+            <button>
+              <Detalle
+                metodo={() => getVentaRepuesto(params.row._id)}
+                id={params.row._id}
+              >
+                <table>
+                  <tbody>
+                    <Titulo>
+                        <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                        Detalles del Cliente
+                    </Titulo>
+
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                        Nombre
+                      </Tabla>
+                      <Tabla >
+                        {
+                          ventasRepuestos.find(
+                            (cliente) => cliente._id === params.row._id
+                          )?.cliente.nombre_cliente
+                        }
+                      </Tabla>
+                      </tr>
+                      <tr>
+                      <Tabla >
+                      <FontAwesomeIcon icon={faScrewdriverWrench}className="mr-2" />
+                        Repuesto
+                      </Tabla>
+                      <Tabla >
+                        { 
+                          ventasRepuestos.find(
+                            (repuesto) => repuesto._id === params.row._id
+                          )?.repuesto.nombre_repuesto
+                        }
+                      </Tabla>
+                    </tr>
+                      <tr>
+                      <Tabla >
+                      <FontAwesomeIcon icon={faScrewdriverWrench}className="mr-2" />
+                        Cantidad Repuesto
+                      </Tabla>
+                      <Tabla >
+                        { 
+                           ventasRepuestos.find(
+                            (cantidad) => cantidad._id === params.row._id
+                            )?.cantidad_repuesto
+                        }
+                      </Tabla>
+                    </tr>
+                      <tr>
+                      <Tabla >
+                      <FontAwesomeIcon icon={faDollarSign} className="mr-2"/>
+                        Precio Unitario
+                      </Tabla>
+                      <Tabla >
+                        { 
+                           ventasRepuestos.find(
+                            (precio) => precio._id === params.row._id
+                            )?.precio_unitario
+                        }
+                      </Tabla>
+                    </tr>
+                      <tr>
+                      <Tabla >
+                      <FontAwesomeIcon icon={faDollarSign} className="mr-2"  />
+                        Precio Total
+                      </Tabla>
+                      <Tabla >
+                        { 
+                           ventasRepuestos.find(
+                            (precio) => precio._id === params.row._id
+                            )?.precio_total
+                        }
+                      </Tabla>
+                    </tr>
+                    </tbody>
+                  
+                </table>
+                
+              </Detalle>
             </button>
           </div>
         );
@@ -181,11 +279,11 @@ export default function PageVentaRepuestos() {
 
   return (
     <div className="mt-16">
-      <h1 className="text-2xl text-center mx-auto">Ventas Repuestos</h1>
+      <h1 className="text-2xl text-start ml-20">Ventas Repuestos</h1>
       <div className="mx-10 justify-end flex">
         <Link to="/add-venta-repuesto">
           <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
-            Agregar Repuesto
+          +
           </button>
         </Link>
       </div>
