@@ -114,23 +114,11 @@ export default function App() {
                                     <Route path="/add-mecanico" element={<FormMecanico />} />
                                     <Route path="/mecanico/:id" element={<FormMecanico />} />
 
-                                    <Route path="/repuestos" element={<PageRepuestos/>} />
-                                    <Route path="/add-repuesto" element={<FormRepuesto/>} />
-                                    <Route path="/repuestos/:id" element={<FormRepuesto/>} />
-
-                                    <Route path="/mecanicos" element={<PageMecanico />} />
-                                    <Route path="/add-mecanico" element={<FormMecanico />} />
-                                    <Route path="/mecanico/:id" element={<FormMecanico />} />
-
                                     <Route path="/marcas" element={<PageMarcas />} />
                                     <Route path="/add-marca" element={<FormMarca />} />
                                     <Route path="/marca/:id" element={<FormMarca />} />
 
                                     <Route path="/mecanicos/:id" element={<VerMecanico />} />
-
-                                    <Route path="/marcas" element={<PageMarcas />} />
-                                    <Route path="/add-marca" element={<FormMarca />} />
-                                    <Route path="/marca/:id" element={<FormMarca />} />
 
                                     <Route path="/compras" element={<PageCompras />} />
                                     <Route path="/add-compra" element={<FormCompras />} />

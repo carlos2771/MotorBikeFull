@@ -8,6 +8,9 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWrench , faPlus, faDownload} from '@fortawesome/free-solid-svg-icons';
 import * as XLSX from "xlsx";
+import Detalle from "../../components/Detalle";
+import { faEnvelope, faIdCard, faUser, faPhone, faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faHome} from "@fortawesome/free-solid-svg-icons";
+import {Tabla, Titulo} from "../../components/Tabla";
 
 // Agrega el icono a la biblioteca
 library.add(faWrench, faPlus);
@@ -130,7 +133,12 @@ export default function PageMecanico() {
   }, [mecanicos]);
 
   const columns = [
-
+    {
+      field: "tipo",
+      headerName: "Tipo Documento",
+      width: 200,
+      headerClassName: "font-custom text-lg",
+    },
     {
         field: "cedula_mecanico",
         headerName: "Cedula",
@@ -144,43 +152,43 @@ export default function PageMecanico() {
       headerClassName: "font-bold text-lg"
 
     },
-    {
-      field: "telefono_mecanico",
-      headerName: "Telefono",
-      width: 200,
-      headerClassName: "font-bold text-lg"
+    // {
+    //   field: "telefono_mecanico",
+    //   headerName: "Telefono",
+    //   width: 200,
+    //   headerClassName: "font-bold text-lg"
      
-    },
-    {
-      field: "direccion_mecanico",
-      headerName: "Direccion",
-      width: 200,
-      headerClassName: "font-bold text-lg"
+    // },
+    // {
+    //   field: "direccion_mecanico",
+    //   headerName: "Direccion",
+    //   width: 200,
+    //   headerClassName: "font-bold text-lg"
      
-    },
-    {
-      field: "estado",
-      headerName: "Estado",
-      width: 100,
-      headerClassName: "font-bold text-lg"
+    // },
+    // {
+    //   field: "estado",
+    //   headerName: "Estado",
+    //   width: 100,
+    //   headerClassName: "font-bold text-lg"
 
-    },
-    {
-      field: "createdAt",
-      headerName: "Fecha Creacion",
-      width: 240,
-      headerClassName: "font-bold text-lg",
+    // },
+    // {
+    //   field: "createdAt",
+    //   headerName: "Fecha Creacion",
+    //   width: 240,
+    //   headerClassName: "font-bold text-lg",
  
-      renderCell: (params) => {
-        const date = new Date(params.value);
-        const formattedDate = date.toLocaleDateString("es-ES", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
-        return <div>{formattedDate}</div>;
-      },
-    },
+    //   renderCell: (params) => {
+    //     const date = new Date(params.value);
+    //     const formattedDate = date.toLocaleDateString("es-ES", {
+    //       year: "numeric",
+    //       month: "long",
+    //       day: "numeric",
+    //     });
+    //     return <div>{formattedDate}</div>;
+    //   },
+    // },
     {
       field: "acciones",
       headerName: "Acciones",
@@ -191,16 +199,14 @@ export default function PageMecanico() {
         console.log("Estado", estado);
         return (
           <div>
-            <button
-            className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500" : "hidden"}
-          >
-            <Link to={`/mecanicos/${params.row._id}`}>Ver</Link>
-          </button>
-          <button
-            className={estado === "Activo" ? "" : "hidden"}
-          >
-            <Link className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500" to={`/mecanico/${params.row._id}`}>Editar</Link>
-          </button>
+            <button className={estado === "Activo" ? "" : "hidden"}>
+            <Link to="/add-mecanico">
+              <button  className="px-4 py-2 m-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
+              <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                Agregar
+              </button>
+            </Link>
+            </button>
           {/* <button
             className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
             onClick={() => mostrarAlerta(params.row._id)}
@@ -208,10 +214,106 @@ export default function PageMecanico() {
             Eliminar
           </button> */}
            <button
-              className={estado === "Activo" ?  "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500" : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"}
+              className={
+                estado === "Activo"
+                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
+                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+              }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
-              {estado === "Activo" ? "Inhabilitar" : "Habilitar"}
+              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
+            </button>
+            <button className={estado === "Activo" ? "" : "hidden"}>
+              <Detalle
+                metodo={() => getMecanicos(params.row._id)}
+                id={params.row._id}
+              >
+                <table>
+                  <tbody>
+                    <Titulo>
+                        <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                        Detalles del Mecánico
+                    </Titulo>
+
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                        Tipo de documento
+                      </Tabla>
+                      <Tabla >
+                        {
+                          mecanicos.find(
+                            (mecanicos) => mecanicos._id === params.row._id
+                          )?.tipo
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                        Cedula
+                      </Tabla>
+                      <Tabla >
+                        {
+                          mecanicos.find(
+                            (mecanicos) => mecanicos._id === params.row._id
+                          )?.cedula_mecanico
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faUser} className="mr-2" />
+                        Nombre
+                      </Tabla>
+                      <Tabla >
+                      {
+                    mecanicos.find((mecanicos) => mecanicos._id === params.row._id)
+                      ?.nombre_mecanico
+                  }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faPhone} className="mr-2" />
+                        Telefono
+                      </Tabla>
+                      <Tabla >
+                      {
+                    mecanicos.find((mecanicos) => mecanicos._id === params.row._id)
+                      ?.telefono_mecanico
+                  }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faHome} className="mr-2" />
+                        Direccion
+                      </Tabla>
+                      <Tabla >
+                      {
+                    mecanicos.find((mecanicos) => mecanicos._id === params.row._id)
+                      ?.direccion_mecanico
+                  }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faCheck} className="mr-2" />
+                        Estado
+                      </Tabla>
+                      <Tabla >
+                      {
+                    mecanicos.find((mecanicos) => mecanicos._id === params.row._id)
+                      ?.estado
+                  }
+                      </Tabla>
+                    </tr>
+                  </tbody>
+                  
+                </table>
+                
+              </Detalle>
             </button>
         </div>
         );
