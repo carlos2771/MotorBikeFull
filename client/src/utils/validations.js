@@ -43,12 +43,12 @@ export const CedulaRequired = {
     message: "Cedula solo contiene numeros ",
   },
   maxLength: {
-    value: 12,
+    value: 10,
     message: "El maximo de caracteres es de 12"
   },
   minLength: {
-    value: 8,
-    message: "El minimo de caracteres es de 8"
+    value: 7,
+    message: "El minimo de caracteres es de 7"
   }
 };
 

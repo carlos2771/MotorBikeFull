@@ -20,6 +20,22 @@ export const verifyTokenRequest= async() => {
 //     return res.data
 // }
 
+export const enviarTokenRequest = async(email) => {
+    const res = await axiosClient.post("/reestablecer", {email});
+    return res.data
+}
+
+export const validarTokenRequest = async(code) => {
+    const res = await axiosClient.post(`restablecer-password/${code}`);
+    return res.data
+}
+
+export const actualizarPasswordRequest = async(code, password,confirmPassword) => {
+    console.log("Código en la petición:", code); 
+    console.log("Contraseña en la petición:", password, "Confirmar contraseña en la petición:", confirmPassword);
+    const res = await axiosClient.post(`/reestablecer-password/${code}`, {password, confirmPassword});
+    return res.data
+}
 
 
 

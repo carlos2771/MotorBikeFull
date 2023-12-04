@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faIdCard, faUser, faPhone, faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faIdCard, faUser, faPhone, faPlus, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
 
 export default function PageClientes() {
@@ -104,27 +104,27 @@ export default function PageClientes() {
     {
       field: "nombre_cliente",
       headerName: "Nombre",
-      width: 280,
+      width: 200,
     },
     // {
     //   field: "sexo",
     //   headerName: "Sexo",
     //   width: 190,
     // },
-    {
-      field: "email_cliente",
-      headerName: "Email",
-      width: 290,
-    },
+    // {
+    //   field: "email_cliente",
+    //   headerName: "Email",
+    //   width: 290,
+    // },
     {
       field: "telefono_cliente",
       headerName: "Telefono",
-      width: 200,
+      width: 190,
     },
     {
       field: "cedula",
       headerName: "Cedula",
-      width: 200,
+      width: 180,
     },
     {
       field: "estado",
@@ -280,11 +280,11 @@ export default function PageClientes() {
 
   return (
     <div className="mt-16">
-      <h1 className="text-2xl text-center mx-auto">Gestionar Clientes</h1>
+      <h1 className="text-2xl text-start ml-20">Gestionar Clientes</h1>
       <div className="mx-10 justify-end flex">
         <Link to="/add-cliente">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
-            +
+        <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
+        <FontAwesomeIcon icon={faPlus} />
           </button>
         </Link>
       </div>
