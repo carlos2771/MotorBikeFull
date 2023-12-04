@@ -95,6 +95,7 @@ export default function PageMecanico() {
 
   const exportarAExcel = useCallback(() => {
     const datos = mecanicos.map((mecanico) => ({
+      Tipo_Documento: mecanico.tipo,
       Cedula: mecanico.cedula_mecanico,
       Nombre: mecanico.nombre_mecanico,
       Telefono: mecanico.telefono_mecanico,
