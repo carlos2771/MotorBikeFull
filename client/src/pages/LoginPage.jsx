@@ -30,6 +30,7 @@ export default function LoginPage() {
   return (
     <div>
       <div className='flex h-[calc(100vh-100px)] items-center justify-center '>
+      <animated.div style={formAnimation} >
       <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md  '>
       {
       signinErrors && Array.isArray(signinErrors) && signinErrors.map((error, i ) => (
@@ -75,6 +76,7 @@ export default function LoginPage() {
         ¿No tienes cuenta? <Link to='/register' className='text-sky-500 hover:text-yellow-200'>Registrate</Link>
       </p>
       </div>
+      </animated.div>
     </div>
     </div>
   );
