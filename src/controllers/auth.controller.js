@@ -26,7 +26,7 @@ export const register = async (req, res) => {
     // esta parte es para traer el token
     const token = await createAccessToken({ id: userSaved._id });
     // res.cookie("token", token);
-    res.cookie("token", token, {
+    res.cookie("token", token, { 
       httpOnly: process.env.NODE_ENV !== "development",
       secure: true,
       sameSite: "none",
