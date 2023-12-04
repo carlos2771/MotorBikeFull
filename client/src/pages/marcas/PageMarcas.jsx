@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWrench , faPlus, faDownload, faPencil} from '@fortawesome/free-solid-svg-icons';
+import { faWrench , faPlus, faDownload, faPencil, faBan, faCheck} from '@fortawesome/free-solid-svg-icons';
 
 // Agrega el icono a la biblioteca
 library.add(faWrench, faPlus);
@@ -179,10 +179,14 @@ export default function PageMarcas() {
             Eliminar
           </button> */}
            <button
-              className={estado === "Activo" ?  "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500" : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"}
+              className={
+                estado === "Activo"
+                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
+                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+              }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
-              {estado === "Activo" ? "Inhabilitar" : "Habilitar"}
+              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
             </button>
         </div>
         );
@@ -192,16 +196,16 @@ export default function PageMarcas() {
 
   return (
     <div className="mt-16">
-      <h1 className="text-2xl mx-auto ml-20 font-custom">Gestionar Marcas</h1>
-      <div className="mx-8 justify-end flex">
+      <h1 className="text-2xl text-start ml-20">Gestionar Marcas</h1>
+      <div className="mx-10 justify-end flex">
         <Link to="/add-marca">
-        <button  className="px-4 py-2 m-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
+        <button  className="px-4 py-2 mr-5 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
           <FontAwesomeIcon icon={faPlus} className="mr-0" />
           </button>
         </Link>
         <button
           onClick={exportarAExcel}
-          className="px-4 py-2 m-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
+          className="px-4 py-2 mr-8  text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
         ><FontAwesomeIcon icon={faDownload} className="mr-0" />
         </button>
       </div>
