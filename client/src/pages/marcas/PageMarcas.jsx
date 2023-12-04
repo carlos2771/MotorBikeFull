@@ -1,4 +1,4 @@
-import React, { useEffect, } from "react";
+import React, { useEffect, useCallback  } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { useMarcas } from "../../context/MarcasContext";
@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWrench , faPlus, faDownload} from '@fortawesome/free-solid-svg-icons';
+import { faWrench , faPlus, faDownload, faPencil} from '@fortawesome/free-solid-svg-icons';
 
 // Agrega el icono a la biblioteca
 library.add(faWrench, faPlus);
@@ -91,7 +91,7 @@ export default function PageMarcas() {
   };
 
   const exportarAExcel = useCallback(() => {
-    const datos = marcas.map((mecanico) => ({
+    const datos = marcas.map((marca) => ({
       Nombre_Marca: marcas.nombre_marca,
       Estado: marcas.estado,
       Fecha_Creacion: marcas.createdAt
@@ -110,7 +110,7 @@ export default function PageMarcas() {
     }
 
     // Agregar formato a las celdas de datos y bordes
-    for (let i = 2; i <= mecanicos.length + 1; i++) {
+    for (let i = 2; i <= marcas.length + 1; i++) {
       for (let j = 0; j < 5; j++) {
         const col = String.fromCharCode(65 + j);
         const cell = `${col}${i}`;
@@ -122,10 +122,10 @@ export default function PageMarcas() {
     }
 
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Mecanicos");
-    XLSX.writeFile(wb, "mecanicos.xlsx");
+    XLSX.utils.book_append_sheet(wb, ws, "Marcas");
+    XLSX.writeFile(wb, "marcas.xlsx");
 
-  }, [mecanicos]);
+  }, [marcas]);
 
   const columns = [
     {
@@ -164,10 +164,13 @@ export default function PageMarcas() {
         console.log("estadin", estado);
         return (
           <div>
-            <button
-                className={estado === "Activo" ? "" : "hidden"}
-            >
-                <Link className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500" to={`/marca/${params.row._id}`}>Editar</Link>
+            <button className={estado === "Activo" ? "" : "hidden"}>
+              <Link
+                className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                to={`/marca/${params.row._id}`}
+              >
+                <FontAwesomeIcon icon={faPencil} />
+              </Link>
             </button>
           {/* <button
             className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
@@ -189,13 +192,18 @@ export default function PageMarcas() {
 
   return (
     <div className="mt-16">
-      <h1 className="text-2xl text-center mx-auto">Gestionar Marcas</h1>
-      <div className="mx-10 justify-end flex">
+      <h1 className="text-2xl mx-auto ml-20 font-custom">Gestionar Marcas</h1>
+      <div className="mx-8 justify-end flex">
         <Link to="/add-marca">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
-            Agregar Marca
+        <button  className="px-4 py-2 m-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
+          <FontAwesomeIcon icon={faPlus} className="mr-0" />
           </button>
         </Link>
+        <button
+          onClick={exportarAExcel}
+          className="px-4 py-2 m-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
+        ><FontAwesomeIcon icon={faDownload} className="mr-0" />
+        </button>
       </div>
       <Box sx={{ width: "100%" }}>
         <DataGrid

@@ -95,7 +95,6 @@ export default function PageMecanico() {
 
   const exportarAExcel = useCallback(() => {
     const datos = mecanicos.map((mecanico) => ({
-      Tipo_Documento: mecanico.tipo,
       Cedula: mecanico.cedula_mecanico,
       Nombre: mecanico.nombre_mecanico,
       Telefono: mecanico.telefono_mecanico,
@@ -328,8 +327,7 @@ export default function PageMecanico() {
       <div className="mx-20 ml-2 justify-end flex">
         <Link to="/add-mecanico">
           <button  className="px-4 py-2 m-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
-          <FontAwesomeIcon icon={faPlus} className="mr-2" />
-            Agregar
+          <FontAwesomeIcon icon={faPlus} className="mr-0" />   
           </button>
         </Link>
         <button
