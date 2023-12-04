@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Swal from "sweetalert2";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faIdCard, faUser, faPhone, faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faIdCard, faUser,faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faDollar, faDollarSign} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
 
 
@@ -148,6 +148,7 @@ export default function PageVentaServicios() {
           field: "acciones",
           headerName: "Acciones",
           width: 200,
+          headerClassName: "custom-header",
           renderCell: (params) => {
             const estado = params.row.estado;
             console.log("estado", estado);
@@ -194,7 +195,7 @@ export default function PageVentaServicios() {
 
                     <tr>
                       <Tabla >
-                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                        <FontAwesomeIcon icon={faUser} className="mr-2" />
                         Cliente
                       </Tabla>
                       <Tabla >
@@ -220,7 +221,7 @@ export default function PageVentaServicios() {
                     </tr>
                     <tr>
                       <Tabla >
-                        <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
+                        <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
                         Precio
                       </Tabla>
                       <Tabla >
@@ -232,7 +233,7 @@ export default function PageVentaServicios() {
                     </tr>
                     <tr>
                       <Tabla >
-                        <FontAwesomeIcon icon={faPhone} className="mr-2" />
+                        <FontAwesomeIcon icon={faPen} className="mr-2" />
                         Descripción
                       </Tabla>
                       <Tabla >
@@ -256,11 +257,11 @@ export default function PageVentaServicios() {
   ];
       return (
         <div className="mt-16 ">
-          <h1 className="text-2xl text-center mx-auto">Ventas Servicios</h1>
+          <h1 className="text-2xl text-start ml-20">Gestionar ventas de servicios</h1>
           <div className="mx-10 justify-end flex ">
             <Link to="/add-venta-servicio">
               <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
-                Agregar Servicio
+                +
               </button>
             </Link>
           </div>
