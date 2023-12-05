@@ -147,7 +147,7 @@ export function CharBar() {
           "rgba(255, 159, 64, 1)",
         ],
         borderWidth: 1,
-        barThickness: 20,
+        barThickness: 30,
       },
     ],
   };
