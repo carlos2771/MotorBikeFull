@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Swal from "sweetalert2";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faUser,faPen, faPencil , faBan,  faCheck, faInfoCircle,faDollarSign} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faUser,faPen, faPencil , faBan,  faCheck, faInfoCircle,faDollarSign,  faHandshake} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
 
 
@@ -257,14 +257,29 @@ export default function PageVentaServicios() {
   ];
       return (
         <div className="mt-16 ">
-          <h1 className="text-2xl text-start ml-20">Gestionar ventas de servicios</h1>
-          <div className="mx-10 justify-end flex ">
-            <Link to="/add-venta-servicio">
-            <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
-          <FontAwesomeIcon icon={faPlus} className="mr-0" />
-          </button>
-            </Link>
+          <div className="flex justify-between">
+          <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faHandshake} className="mr-2" />Gestionar ventas de servicios</h1>
+          <div className="mx-10 justify-end">
+              <Link to="/add-venta-servicio">
+              <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
+            <FontAwesomeIcon icon={faPlus} />
+            </button>
+              </Link>
+            </div>
           </div>
+          
+
+{/*<div className="flex justify-between">
+      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faHandshake} className="mr-2" />Gestión de Repuestos</h1>
+        <div className="mx-10 justify-end">
+          <Link to="/add-repuesto">
+            <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
+            <FontAwesomeIcon icon={faPlus} />
+            </button>
+          </Link>
+        </div>
+      </div> */}
+
           <Box sx={{ width: "100%" }}>
             <DataGrid
               className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
