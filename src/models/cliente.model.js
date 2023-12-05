@@ -8,6 +8,10 @@ const clienteSchema = new mongoose.Schema({
         required: true, //Es requerido
         trim: true // Limpiar espacios de los inputs
     },
+    sexo: {
+        type: String,
+        required: true
+    },
     email_cliente: {
         type: String, //Tipo String
         required: true, //Es requerido
@@ -26,6 +30,10 @@ const clienteSchema = new mongoose.Schema({
         type: String, //Tipo String
         required: true, //Es requerido
         unique: true
+    },
+    tipo:{
+        type: String, //Tipo String
+        required: true, //Es requerido
     },
 },{
     //Sirve para agregar automáticamente campos createdAt y updatedAt a los documentos, lo que permite realizar un seguimiento de cuándo se crearon y modificaron.

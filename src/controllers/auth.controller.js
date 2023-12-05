@@ -3,6 +3,23 @@ import bcrypt from "bcryptjs";
 import createAccessToken from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
+import { getTemplate, sendEmail } from "./mail.controller.js";
+import { secretKey } from "../config.js";
+import nodemailer from "nodemailer";
+import base64String from "../img/base64Image.js";
+
+// Función para generar una cadena aleatoria de una longitud específica
+function generateRandomToken(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let token = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    token += characters.charAt(randomIndex);
+  }
+
+  return token;
+}
 
 export const register = async (req, res) => {
   const { email, password, username } = req.body;
@@ -25,11 +42,14 @@ export const register = async (req, res) => {
     // esta parte es para traer el token
     const token = await createAccessToken({ id: userSaved._id });
     // res.cookie("token", token);
-    res.cookie("token", token, {
+    res.cookie("token", token, { 
       httpOnly: process.env.NODE_ENV !== "development",
       secure: true,
       sameSite: "none",
     });
+
+    const template = getTemplate(username, email)
+    await sendEmail(email, "Registro de MotorBike exitoso!!👽👍", template)
 
     res.json({
       // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use
@@ -54,19 +74,28 @@ export const login = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, userFound.password); // comparemelo con la contraseña que acaba de ingresar el usuario con la otra que esta guardada en la base de datos
     if (!isMatch)
-      return res.status(400).json({ message: ["Contraseña incorrecta"] });
+      return res.status(400).json({ message: ["Usuario/Contraseña incorrecto"] });
 
     const token = await createAccessToken({
       id: userFound._id,
       username: userFound.username,
     }); // del usuario encontrado creeme un token con el id del usuario encontrado
 
+<<<<<<< HEAD
     // tokent frontend y backend
     // res.cookie("token", token, {
     //   httpOnly: process.env.NODE_ENV !== "development",
     //   secure: true,
     //   sameSite: "none",
     // });
+=======
+    //tokent frontend y backend
+    res.cookie("token", token, {
+      httpOnly: process.env.NODE_ENV !== "development",
+      secure: true,
+      sameSite: "none",
+    });
+>>>>>>> 60306eb967723c91bfbcf96a43887b3680169091
     res.cookie("token", token)
     res.json({
       // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use
@@ -121,3 +150,166 @@ export const verifyToken = async (req, res) => {
   });
 };
 
+export const enviarToken = async (req, res) => {
+
+  try {
+      const { email } = req.body;
+
+      // Verificar si el correo electrónico existe en la base de datos
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ message: ["Email no registrado"] });
+      }
+
+      // Generar un token con una duración limitada
+      const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
+      
+      const randomToken = generateRandomToken(5);
+      console.log(randomToken);
+
+      // Almacenar el token en el usuario en la base de datos
+      user.resetToken = token;
+      user.resetTokenExpires = new Date(Date.now() + 3600000); // 1 hora de expiración
+      user.code = randomToken;
+      await user.save();
+
+      // Almacenar el token en una cookie
+      res.cookie('token2', token, { httpOnly: true });
+
+      // Enviar un correo electrónico con el codigo
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USER || 'saritalop789@gmail.com',
+        pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
+        },
+      });
+      const code = randomToken
+      const mailOptions = {
+        to: email,
+        subject: 'Recuperación de contraseña',
+        html: `
+        <div style="font-family: 'Arial', sans-serif;">
+          <h2 style="color: #1477e4; font-size: 24px;">Recuperación de contraseña</h2>
+          <p style="font-size: 18px;">Su código de recuperación es: <strong>${code}</strong></p>
+          <p style="font-size: 18px;">¡Gracias!</p>
+        </div> `
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error(error);
+          return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
+        }
+        console.log('Correo electrónico enviado:', info.response);
+        res.status(200).json({ message: 'Correo electrónico enviado con éxito' });
+      });
+ 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+
+};
+
+export const validarToken = async (req, res) => {
+  const code = req.params.code;
+  console.log('Código recibido:', code);
+  try {
+    const usuario = await User.findOne({ code: code });
+
+    if (!usuario) {
+      return res.status(404).json({ message: "Código no encontrado" });
+    }
+
+    return res.status(200).json({
+      username: usuario.username,
+      email: usuario.email,
+      password: usuario.password,
+      createdAt: usuario.createdAt,
+      updatedAt: usuario.updatedAt,
+      resetTokenExpires: usuario.resetTokenExpires
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
+export const actualizarPassword = async (req, res) => {
+
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+  console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
+  console.log("Cuerpo de la solicitud:", req.body);
+  try {
+      console.log("Código recibido:", req.params.code); 
+    // Verificar el token según la fecha de expiración
+    const usuario = await User.findOne({
+      code: req.params.code,
+      // resetToken: req.params.token,
+      resetTokenExpires: { $gt: Date.now() },
+    });
+    console.log(usuario);
+
+    // Verificar que el usuario exista
+    if (!usuario) {
+      return res.status(400).json({ message: ["codigo inválido o expirado"] });
+    }
+
+    // Verificar que se proporciona una nueva contraseña y que coincide con la confirmación
+    console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
+    if (!password || !confirmPassword || password !== confirmPassword) {
+      console.error("Las contraseñas no coinciden");
+      return res.status(400).json({
+        message: ["Las contraseñas no coinciden"]
+      });
+    }
+    // Generar el hash de la nueva contraseña
+    const newPasswordHash = await bcrypt.hash(req.body.password, 10);
+
+    // Blanqueando los parámetros
+    usuario.resetToken = null;
+    usuario.resetTokenExpires = null;
+    usuario.password = newPasswordHash;
+    usuario.code = null;
+
+    // Guardar la nueva contraseña encriptada
+    await usuario.save();
+
+      // Enviar un correo electrónico con el mensaje de exito
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USER || 'saritalop789@gmail.com',
+        pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
+        },
+      });
+      
+      const mailOptions = {
+        to: usuario.email,
+        subject: 'Recuperación de contraseña',
+        html: `
+        <div style="font-family: 'Arial', sans-serif;">
+          <h2 style="color: #1477e4; font-size: 24px;">Se ha reestablecido su contraseña con exito!!</h2>
+          <p style="font-size: 18px;">Para mas informacion, comunicate: <strong>3004020129</strong></p>
+          <p style="font-size: 18px;">¡Gracias!</p>
+        </div> `
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error(error);
+          return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
+        }
+        console.log('Correo electrónico enviado:', info.response);
+        res.status(200).json({ message: 'Correo electrónico enviado con éxito' });
+
+    return res.status(200).json({ message: "Contraseña actualizada con éxito" });
+    });
+  } catch (error) {
+    console.error(error);
+    console.error("Error en la solicitud de actualizar contraseña:", error);
+    return res.status(500).json({ message:[ "Error interno del servidor"] });
+  }
+};

@@ -12,3 +12,16 @@ body{
   font-size: 19px; /* Tamaño de fuente personalizado */
   font-weight: bold; /* Otras propiedades de estilo según sea necesario */
 }
+
+.MuiDataGrid-columnHeaders {
+  background-color: #00aeff9b !important;
+  }
+
+.MuiDataGrid-toolbarContainer{
+  background-color: #00aeff9b !important;
+  border-bottom: 1px solid white !important;
+}
+
+.MuiDataGrid-toolbarContainer button{
+  color: white !important;
+}

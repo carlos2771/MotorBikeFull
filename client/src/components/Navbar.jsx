@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import Render from "./Render";
 import Header from "./Header";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTasks, faUsers, faBuilding, faTools, faShoppingCart, faHandshake, faShoppingBag, faChartBar, faSignOutAlt, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
@@ -13,56 +15,48 @@ export default function Navbar() {
     <div>
       {isAuthenticated ? (
         <>
-          <div className="bg-slate-700  py-3 fixed top-0 left-0 right-0 shadow-md " style={{ zIndex: 1000 }}>
-            <button className="ml-4" onClick={() => setOpen(true)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />
-              </svg>
+          <div
+            className="bg-slate-700 fixed top-0 left-0 right-0 shadow-md "
+            style={{ zIndex: 1000 }}
+          >
+            <div className="flex justify-between m-2">
+            <button className=" px-3" onClick={() => setOpen(true)}>
+              <FontAwesomeIcon icon={faTasks} className="" />
             </button>
 
+            <Render>
+                    <Link
+                      to="/"
+                      
+                      onClick={() => {
+                        logout();
+                      }}
+                      className="hover:bg-zinc-400 hover:bg-opacity-90 px-3"
+                    >
+                      <FontAwesomeIcon icon={faSignOutAlt} /> 
+                    </Link>
+                  </Render>
+            </div>
+            
+
             <div
-              className={`${
-                !open && "hidden"
-              } bg-gray-600/50 min-h-screen  fixed top-0 left-0 right-0 transition-all duration-300`}
+              className={`${!open && "hidden"
+                } bg-gray-600/50 min-h-screen  fixed top-0 left-0 right-0 transition-all duration-300`}
               onClick={() => setOpen(false)}
             ></div>
 
             <div
-              className={`${
-                open ? "w-80" : "w-0"
-              } bg-slate-700 min-h-screen fixed top-0 left-0 transition-all duration-300`}
+              className={`${open ? "w-80" : "w-0"
+                } bg-slate-700 min-h-screen fixed top-0 left-0 transition-all duration-300`}
             >
               <div className={`${!open && "hidden"} pt-3`}>
                 <button
-                  className="ml-4 text-white mb-14"
+                  className="ml-4 text-white "
                   onClick={() => setOpen(false)}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                 <FontAwesomeIcon icon={faChevronLeft} />
                 </button>
+<<<<<<< HEAD
                 <Render>
                   
                   <Link to="/tasks">Tareas</Link>
@@ -95,6 +89,82 @@ export default function Navbar() {
                     logout()
                 }}>Logout</Link>
                 </Render>
+=======
+                <div onClick={() => setOpen(false)}>
+                  <Render>
+                    <Link
+                      to="/tasks"
+                      className="flex ms-10 p-2"
+                    >
+                      <FontAwesomeIcon icon={faTasks} className="mr-2" /> Tareas
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link to="/clientes" className="flex ms-10 p-2">
+                      <FontAwesomeIcon icon={faUsers} className="mr-2" /> Clientes
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link to="/mecanicos" className="flex ms-10 p-2">
+                      <FontAwesomeIcon icon={faTools} className="mr-2" /> Mecanicos
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link to="/marcas" className="flex ms-10 p-2">
+                      <FontAwesomeIcon icon={faBuilding} className="mr-2" /> Marcas
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link to="/repuestos" className="flex ms-10 p-2">
+                      <FontAwesomeIcon icon={faTools} className="mr-2" /> Repuestos
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link
+                      to="/ventas-repuestos"
+                      className="flex ms-10 p-2"
+                    >
+                      <FontAwesomeIcon icon={faShoppingCart} className="mr-2" /> Ventas Repuestos
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link
+                      to="/ventas-servicios"
+                      className="flex ms-10 p-2"
+                    >
+                      <FontAwesomeIcon icon={faHandshake} className="mr-2" /> Ventas Servicios
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link
+                      to="/compras"
+                      className="flex ms-10 p-2"
+                    >
+                      <FontAwesomeIcon icon={faShoppingBag} className="mr-2" /> Compras
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link
+                      to="/graficos"  
+                      className="flex ms-10 p-2"
+                    >
+                      <FontAwesomeIcon icon={faChartBar} className="mr-2" /> Dashboard
+                    </Link>
+                  </Render>
+                  {/* <Render>
+                    <Link
+                      to="/"
+                      
+                      onClick={() => {
+                        logout();
+                      }}
+                      className="absolute  inset-x-0 bottom-0 hover:bg-zinc-400 hover:bg-opacity-90 p-3 "
+                    >
+                      <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" /> Logout
+                    </Link>
+                  </Render> */}
+                </div>
+>>>>>>> 60306eb967723c91bfbcf96a43887b3680169091
               </div>
             </div>
           </div>

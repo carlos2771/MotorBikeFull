@@ -4,9 +4,8 @@ import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const navigation = [
-  { name: "login", href: "/login" },
-  { name: "Register", href: "/Register" },
-  { name: "Home", href: "/" },
+  { name: "Iniciar sesión", href: "/login" },
+  { name: "Registrarse", href: "/Register" }
 ];
 
 function classNames(...classes) {
@@ -24,7 +23,7 @@ export default function Header() {
   }, [location]);
 
   return (
-    <Disclosure as="nav" className="bg-slate-700 fixed top-0 left-0 right-0 shadow-md " >
+    <Disclosure as="nav" className="bg-slate-700 fixed top-0 left-0 right-0 shadow-md z-20" >
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -42,8 +41,9 @@ export default function Header() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start ">
                 <div className="flex flex-shrink-0 items-center">
-                  <h1 className="text-3xl mr-6">Motor bike</h1> {/* Logo de motor bike a futuro */}
+                  <a href="/"><h1 className="text-[24px] font-bold text-white">Motor <span className='text-blue-300'>Bike</span></h1> {/* Logo de motor bike a futuro */}</a>
                 </div>
+              </div>
                 <div className="hidden sm:ml-6 sm:block ">
                   <div className="flex space-x-4 ">
                     {navigation.map((item) => (
@@ -64,7 +64,6 @@ export default function Header() {
                 </div>
               </div>
             </div>
-          </div>
 
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">

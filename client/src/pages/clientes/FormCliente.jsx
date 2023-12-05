@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form"
 import { useClientes } from "../../context/ClientContext"
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { NombreRequired ,EmailRequired, TelefonoRequired, CedulaRequired } from "../../utils/validations"
-
 
 export default function FormCliente() {
   const {register, handleSubmit, setValue, formState: {errors}} = useForm()
@@ -17,9 +16,11 @@ export default function FormCliente() {
         const cliente = await getCliente(params.id);
         console.log("cliente por params", cliente);
         setValue("nombre_cliente", cliente.nombre_cliente);
+        setValue("tipo", cliente.tipo);
         setValue("email_cliente", cliente.email_cliente);
         setValue("telefono_cliente", cliente.telefono_cliente);
         setValue("cedula", cliente.cedula);
+        setValue("sexo", cliente.sexo);
       }
     })();
   }, []);
@@ -37,49 +38,89 @@ export default function FormCliente() {
 
 
   return (
-    <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
-    <div className='bg-zinc-800 max-w-md w-full p-10 rounded-md'>
+    <div className='flex items-center justify-center pt-20 '>
+      
+    <div className='bg-slate-700 max-w-lg w-full p-10 shadow-lg shadow-blue-600/40 '>
     {clientesErrors.map((error, i) => (
-          <div className="bg-red-500 p-2 text-white" key={i}>
+      <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
         ))}
-      <form onSubmit={onSubmit}>
-        <label>Nombre Cliente</label>
+        <h1 className="text-2xl flex justify-center ">Agregar cliente</h1>
+      <form className="mt-10" onSubmit={onSubmit}>
+      <label >Tipo Documento<span className="text-red-500">*</span></label>
+          <select
+        {...register("tipo", NombreRequired)}
+        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2" 
+        >
+          <option value={""}>Selecciona el tipo de documento</option>
+          <option value={"Cedula"} >
+            Cédula
+          </option>
+          <option value={"Tarjeta Identidad"} >
+            Tarjeta Identidad
+          </option>
+          <option value={"Otro"} >
+            Otro
+          </option>
+        </select>
+        {errors.tipo && <p className="text-red-500">{errors.tipo.message}</p>}
+      <label>Cedula<span className="text-red-500">*</span></label>
+        <input 
+        placeholder='Cedula'
+        {...register("cedula", CedulaRequired)}
+        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' autoFocus
+        />
+        {errors.cedula && <p className="text-red-500">{errors.cedula.message}</p>}
+        <label>Nombre Completo<span className="text-red-500">*</span></label>
         <input 
         type="text" 
         placeholder='Nombre Cliente' 
         {...register("nombre_cliente", NombreRequired)}
-        className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
-        autoFocus
+        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.nombre_cliente && <p className="text-red-500">{errors.nombre_cliente.message}</p>}
-        <label >Email Cliente</label>
+        
+      <label >Sexo<span className="text-red-500">*</span></label>
+          <select
+        {...register("sexo" , NombreRequired)}
+        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+        >
+          <option value={""}>Selecciona el Sexo</option>
+          <option value={"Masculino"} >
+            Masculino
+          </option>
+          <option value={"Femenino"} >
+            Femenino
+          </option>
+          <option value={"Otro"} >
+            Otro
+          </option>
+
+        </select>
+        {errors.sexo && <p className="text-red-500">{errors.sexo.message}</p>}
+      <label >Email Cliente<span className="text-red-500">*</span></label>
         <input 
         placeholder='Email Cliente'
         type="email"
         {...register("email_cliente", EmailRequired)}
-        className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
+        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.email_cliente && <p className="text-red-500">{errors.email_cliente.message}</p>}
-        <label>Telefono Cliente</label>
+      
+      <label>Telefono Cliente<span className="text-red-500">*</span></label>
         <input 
         placeholder='Telefono Cliente'
         {...register("telefono_cliente", TelefonoRequired)}
-        className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
+        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.telefono_cliente && <p className="text-red-500">{errors.telefono_cliente.message}</p>}
-        <label>Cedula</label>
-        <input 
-        placeholder='Cedula'
-        {...register("cedula", CedulaRequired)}
-        className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
-        />
-        {errors.cedula && <p className="text-red-500">{errors.cedula.message}</p>}
+      
+      <label >Estado<span className="text-red-500">*</span></label>
         <select
         {...register("estado")}
-        className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-        >
+        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+        > 
           <option value={"Activo"} >
             Activo
           </option>
@@ -88,10 +129,18 @@ export default function FormCliente() {
           </option>
 
         </select>
-        
-        <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
+      
+        <div>
+        <button className='px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
         </button>
+        <button>
+          <Link className="px-5 py-1 ml-3 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30" to="/clientes">Cancelar</Link>
+        </button>
+        </div>
+        
+        
+        
       </form>
     </div>
     </div>

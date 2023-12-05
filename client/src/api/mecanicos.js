@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { axiosMecanico } from "./axiosInstance";
 
 //Esta función realiza una solicitud GET a la ruta /mecanicos utilizando la instancia de Axios axiosMecanico.
@@ -32,4 +33,31 @@ export const updateMecanicosRequest = async (id, mecanico) => {
 export const deleteMecanicosRequest = async (id) => {
   const response = await axiosMecanico.delete(`/mecanico/${id}`);
   return response; //Devuelve la respuesta de la solicitud sin procesar, que indicará el éxito o el fracaso de la eliminación.
+=======
+import { axiosClient } from "./axiosInstance";
+
+export const getMecanicosRequest = async () => {
+  const response = await axiosClient.get("/mecanicos");
+  return response.data;
+};
+
+export const getMecanicoRequest = async (id) => {
+  const response = await axiosClient.get(`/mecanicos/${id}`);
+  return response.data;
+};
+
+export const createMecanicosRequest = async (mecanico) => {
+  const response = await axiosClient.post("/mecanicos", mecanico);
+  return response.data;
+};
+
+export const updateMecanicosRequest = async (id, mecanico) => {
+  const response = await axiosClient.put(`/mecanicos/${id}`, mecanico);
+  return response.data;
+};
+
+export const deleteMecanicosRequest = async (id) => {
+  const response = await axiosClient.delete(`/mecanicos/${id}`);
+  return response;
+>>>>>>> 60306eb967723c91bfbcf96a43887b3680169091
 };

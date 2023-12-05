@@ -34,6 +34,7 @@ export const createVentas_Repuestos = async (req, res) => {
       precio_unitario,
       precio_total,
       cliente: clienteId,
+      estado
     } = req.body;
 
     // Verifica si el cliente existe
@@ -64,6 +65,7 @@ export const createVentas_Repuestos = async (req, res) => {
       precio_unitario,
       precio_total,
       cliente: clienteId,
+      estado
     });
 
     // Guarda la venta de servicio en la base de datos
@@ -76,18 +78,33 @@ export const createVentas_Repuestos = async (req, res) => {
 };
 
 
-export const updateVentas_Repuestos= async(req, res) =>{
+export const updateVentas_Repuestos = async (req, res) => {
   try {
-    const venta_repuesto = await Ventas_Repuestos.findByIdAndUpdate(req.params.id, req.body, {
-      // new y true son para que el guarde los datos nuevos que ingrese el usuario
-      new: true,
-    });
-    if (!venta_repuesto) return res.status(404).json({ message: "venta repuesto not found" });
+    const venta_repuesto = await Ventas_Repuestos.findByIdAndUpdate(
+      req.params.id,
+      { anulado: true },
+      { new: true }
+    );
+
+    if (!venta_repuesto) {
+      return res.status(404).json({ message: "Venta repuesto no encontrada" });
+    }
+
+    // Restaurar la cantidad de repuestos en el documento "Repuestos"
+    const repuesto = await Repuesto.findById(venta_repuesto.repuesto);
+    if (repuesto) {
+      const cantidadRestanteRepuesto =
+        repuesto.cantidad + venta_repuesto.cantidad_repuesto;
+      await Repuesto.findByIdAndUpdate(venta_repuesto.repuesto, {
+        cantidad: cantidadRestanteRepuesto,
+      });
+    }
+
     res.json(venta_repuesto);
   } catch (error) {
-    return res.status(500).json({ message: "venta repuesto no encontrada" });
+    return res.status(500).json({ message: "Error al anular la venta de repuesto", error });
   }
-}
+};
 
 export const deleteVentas_Repuestos = async(req, res) =>{
   try {

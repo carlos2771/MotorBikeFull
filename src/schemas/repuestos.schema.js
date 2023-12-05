@@ -1,31 +1,29 @@
-import {z} from "zod"
+import { z } from 'zod';
 
-// validacion del schema para que los datos no pasen vacios
-export const registerSchema = z.object({
-    username: z.string({
-        required_error: "username es requerido"
-    }),
-    email: z.string({
-        required_error: "email  es requerido"
-    }).email({
-        message: "email invalido"
-    }),
-    password: z.string({
-        required_error: "password incorrecta"
-    }).min(6,{
-        message: "password debe tener minimo 6 caracteres"
-    })
-})
+export const repuestosSchema = z.object({
+    nombre_repuesto: z.string().refine(value => value.trim() !== "", {
+            message: "El nombre del mecánico no puede estar vacío"
+        })
+        .refine(value => !/^\d+$/.test(value), {
+            message: "El nombre del mecánico no puede contener solo números enteros"
+        }),
 
-export const loginSchema = z.object({
-    email: z.string({
-        required_error: "email es requerido"
-    }).email({
-        message: "email invalido"
-    }),
-    password: z.string({
-        required_error: "password es requerido"
-    }).min(6,{
-        message: "password debe tener minimo 6 caracteres"
-    })
-})
+    cantidad: z.number().refine(value => value >= 0, {
+            message: "El precio no puede ser un número negativo"
+        })
+        .refine(value => !isNaN(value), {
+            message: "El precio debe ser un número válido"
+        }).refine(value => value !== null && value !== undefined, {
+            message: "El precio no puede estar vacío"
+        }),
+        
+    precio: z.number().refine(value => value >= 0, {
+            message: "El precio no puede ser un número negativo"
+        })
+        .refine(value => !isNaN(value), {
+            message: "El precio debe ser un número válido"
+        }).refine(value => value !== null && value !== undefined, {
+            message: "El precio no puede estar vacío"
+        }),
+
+});

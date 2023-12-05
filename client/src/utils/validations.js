@@ -1,9 +1,11 @@
-const EMAIL_REGEX = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+const EMAIL_REGEX = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,3}$/i;
 const numberPattern = /^[0-9]*$/;
 const negative = /^[1-9]\d*$/;
+// const nombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
+
 
 export const EmailRequired = {
-  required: "Email es requerido",
+  required: "Campo requerido",
   pattern: {
     value: EMAIL_REGEX,
     message: "Email es invalido",
@@ -11,7 +13,7 @@ export const EmailRequired = {
 };
 
 export const PasswordRequire = {
-  required: "Password es requerido",
+  required: "Campo requerido",
   minLength: {
     value: 6,
     message: "Password debe tener minimo 6 caracteres",
@@ -19,10 +21,14 @@ export const PasswordRequire = {
 };
 
 export const TelefonoRequired = {
-  required: "Telefono es requerido",
+  required: "Campo requerido",
   maxLength: {
     value: 10,
-    message: "el telefono solo debe tener 10 digitos",
+    message: "El máximo de digitos es de 10",
+  },
+  minLength: {
+    value: 7,
+    message: "El telefono debe tener entre 7 y 10 digitos"
   },
   pattern: {
     value: numberPattern,
@@ -30,26 +36,53 @@ export const TelefonoRequired = {
   },
 };
 export const CedulaRequired = {
-  required: "Cedula es requerido",
+  required: "Campo requerido",
   pattern: {
     value: numberPattern,
-    message: "Telefono solo contiene numeros",
+    message: "Cedula solo contiene numeros ",
   },
+  maxLength: {
+    value: 10,
+    message: "El maximo de caracteres es de 12"
+  },
+  minLength: {
+    value: 7,
+    message: "El minimo de caracteres es de 7"
+  }
 };
+
+
 export const NegativeRequired = {
-  required: "campo requerido",
+  required: "Campo requerido",
   pattern: {
     value: negative,
     message: "Solo numeros positivos ",
   },
 };
+
 export const NombreRequired = {
-  required: "campo requerido ",
+  required: "Campo requerido",
 };
+
+export const fecha = {
+  
+  message: "Solo puedes ingresar una fecha del año actual"
+};
+
+
+
 export const RepuestoRequired = {
-  required: "campo requeridos ",
+  required: "Campo requerido ",
+};
+
+export const ClienteRequired = {
+  required: "Campo requerido ",
 };
 
 export const EstadoRequired = {
+  required: "Campo requerido",
+};
+
+export const MecanicoRequired = {
   required: "Campo requerido",
 };

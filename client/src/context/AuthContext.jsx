@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth"; // Corregí "verifyTokentRequet" a "verifyTokenRequest".
+import { registerRequest, loginRequest, verifyTokenRequest , enviarTokenRequest, validarTokenRequest, actualizarPasswordRequest, } from "../api/auth"; // Corregí "verifyTokentRequet" a "verifyTokenRequest".
 import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
       const response = await registerRequest(user);
       console.log(response);
       setUser(response); // Actualizar el usuario con los datos recibidos
-      setIsAuthenticated(true); // Establecer la autenticacións a true
+       // Establecer la autenticacións a true
     } catch (error) {
       console.log(error.response.data);
       setErrors(error.response.data.message); 
@@ -54,6 +54,41 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setIsAuthenticated(false);
   };
+
+  const enviarToken = async (email) => {
+    try {
+      const response = await enviarTokenRequest(email);
+      console.log(response);
+      console.log("se creo correctamente el token")
+      console.log("se envio correctamente el email")
+    } catch (error) {
+      console.log(error.response.data);
+      setErrors(error.response.data.message);
+    }
+  };
+  const validarToken = async (code) => {
+    try {
+      const response = await validarTokenRequest(code);
+      console.log(response);
+      console.log();
+    } catch (error) {
+      console.log(error.response.data);
+      setErrors(error.response.data.message);
+    }
+  };
+  const actualizarPassword = async (code,  password, confirmPassword ) => {
+    try {
+      console.log("Código:", code);
+      console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
+      const response = await actualizarPasswordRequest(code,  password, confirmPassword);
+      console.log(response);
+    } catch (error) {
+      console.log(error.response.data);
+      setErrors(error.response.data.message);
+    }
+  };
+
+
   useEffect(() => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
@@ -74,7 +109,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       try {
-        const res = await verifyTokenRequest(cookies.token); // Corregí "verifyTokentRequet" a "verifyTokenRequest".
+        const res = await verifyTokenRequest(cookies.token); 
         if (!res.data) return setIsAuthenticated(false);
         setIsAuthenticated(true);
         setUser(res.data);
@@ -90,7 +125,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ signup, signin,logout, loading, user, isAuthenticated, errors }}>
+    <AuthContext.Provider value={{ signup, signin, logout, enviarToken,
+      validarToken, actualizarPassword, loading, user, isAuthenticated, errors }}>
       {children}
     </AuthContext.Provider>
   );

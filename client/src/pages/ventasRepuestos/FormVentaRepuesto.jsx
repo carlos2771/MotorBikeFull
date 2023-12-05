@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useVentasRepuestos } from "../../context/VentasRepuestoContex";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useRepuestos } from "../../context/RepuestosContext";
-import { NegativeRequired, NombreRequired, RepuestoRequired } from "../../utils/validations";
+import { NegativeRequired, NombreRequired, RepuestoRequired, ClienteRequired} from "../../utils/validations";
+
 
 export default function FormVentaRepuesto() {
   const {
@@ -23,7 +24,7 @@ export default function FormVentaRepuesto() {
   const { repuestos, getRepuestos } = useRepuestos();
   const navigate = useNavigate();
   const params = useParams();
-  const [selectedRepuesto, setSelectedRepuesto] = useState(null);
+  const [selectedRepuesto, setSelectedRepuesto] = useState();
 
   useEffect(() => {
     (async () => {
@@ -32,11 +33,11 @@ export default function FormVentaRepuesto() {
         setValue("repuesto", ventaRepuesto.repuesto);
         setSelectedRepuesto(ventaRepuesto.repuesto);
         setValue("cantidad_repuesto", ventaRepuesto.cantidad_repuesto);
-        setValue("cantidad", ventaRepuesto.cantidad);
+        setValue("cantidad", ventaRepuesto.repuestos.cantidad);
         setSelectedRepuesto(ventaRepuesto.cantidad);
         setValue("precio_unitario", ventaRepuesto.precio_unitario);
         setValue("precio_total", ventaRepuesto.precio_total);
-        setValue("cliente", ventaRepuesto.cliente);
+        setValue("cliente", ventaRepuesto.cliente._id);
       }
     })();
   }, []);
@@ -67,10 +68,10 @@ export default function FormVentaRepuesto() {
 
     if (params.id) {
       const res = updateVentaRepuesto(params.id, data);
-        if(res) navigate("/ventas-respuestos")
+        if(res) navigate("/ventas-repuestos")
     } else {
       const res = await createVentaRepuesto(data);
-        if(res) navigate("/ventas-respuestos")
+        if(res) navigate("/ventas-repuestos")
       
     }
     
@@ -81,18 +82,19 @@ export default function FormVentaRepuesto() {
 
   
   return (
-    <div className="flex h-[calc(100vh-100px)] items-center justify-center">
-      <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
+    <div className="flex items-center justify-center pt-20">
+      <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
         {ventasRepuestosErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
         ))}
-        <form onSubmit={onSubmit}>
-          <label>Repuestos</label>
+        <h1 className="text-2xl flex justify-center ">Agregar Venta Repueso </h1>
+        <form className="mt-10" onSubmit={onSubmit}>
+          <label>Repuestos<span className="text-red-500">*</span></label>
           <select
-            {...register("repuesto", NombreRequired)}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            {...register("repuesto", RepuestoRequired)}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             onChange={(e) => setSelectedRepuesto(e.target.value)}
           >
             <option value="">Selecciona un repuesto</option>
@@ -103,19 +105,20 @@ export default function FormVentaRepuesto() {
             ))}
           </select>
           {errors.repuesto && <p className="text-red-500">{errors.repuesto.message}</p>}
-          <label>Cantidad existente</label>
+          <label>Cantidad existente<span className="text-red-500">*</span></label>
           <input
             placeholder="cantidad"
             {...register("cantidad")}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
            disabled
+           
           />
-          <label>Cantidad a vender</label>
+          <label>Cantidad a vender<span className="text-red-500">*</span></label>
           <input
             placeholder="Cantidad"
             type="number"
             {...register("cantidad_repuesto", NegativeRequired )}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             onChange={(e) => {
               const cantidad = parseFloat(e.target.value);
               const precioUnitario = parseFloat(register("precio_unitario").value);
@@ -126,11 +129,11 @@ export default function FormVentaRepuesto() {
             }}
           />
           {errors.cantidad_repuesto && <p className="text-red-500">{errors.cantidad_repuesto.message}</p>}
-          <label>Precio De Repuesto</label>
+          <label>Precio De Repuesto<span className="text-red-500">*</span></label>
           <input
             placeholder="Precio_repuesto"
             {...register("precio_unitario")}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
           {/* <label>Precio total</label> */}
           {/* <input
@@ -138,10 +141,10 @@ export default function FormVentaRepuesto() {
             {...register("precio_total")}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
           /> */}
-          <label>Cliente</label>
+          <label>Cliente<span className="text-red-500">*</span></label>
           <select
-            {...register("cliente",NombreRequired )}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            {...register("cliente", ClienteRequired )}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value="">Selecciona un cliente</option>
             {clientes.map((cliente) => (
@@ -150,10 +153,27 @@ export default function FormVentaRepuesto() {
               </option>
             ))}
           </select>
+          
+          {/* <label >Estado</label>
+          <select
+        {...register("estado")}
+        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+        >
+          <option value={"Activo"} >
+            Activo
+          </option>
+          <option value={"Inactivo"} >
+            Inactivo
+          </option>
+
+        </select> */}
             {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
-          <button className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d" type="submit">
+          <button className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d" type="submit">
             Guardar
           </button>
+          <button>
+          <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/ventas-repuestos">Cancelar</Link>
+        </button>
         </form>
       </div>
     </div>
