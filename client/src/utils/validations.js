@@ -86,3 +86,22 @@ export const EstadoRequired = {
 export const MecanicoRequired = {
   required: "El mecanico es requerido",
 };
+
+export const DireccionRequired = {
+  required: "Campo requerido",
+  maxLength: {
+    value: 70,
+    message: "El maximo de caracteres es de 70"
+  },
+  minLength: {
+    value: 10,
+    message: "El minimo de caracteres es de 10"
+  }, 
+  validate: (value) => /\S/.test(value) || "No se permiten espacios en blanco",
+};
+
+export const NombreMeRequired = {
+  required: "Campo requerido",
+  validate: (value) => /\S/.test(value) || "No se permiten espacios en blanco",
+};
+

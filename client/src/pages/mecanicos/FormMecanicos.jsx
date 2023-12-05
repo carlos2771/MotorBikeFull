@@ -3,7 +3,7 @@ import { useMecanicos } from "../../context/MecanicosContext"
 import { Link } from "react-router-dom"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
-import { NombreRequired, CedulaRequired, TelefonoRequired } from "../../utils/validations"
+import { NombreRequired, CedulaRequired, TelefonoRequired, DireccionRequired, NombreMeRequired } from "../../utils/validations"
 
 
 export default function FormMecanico() {
@@ -65,35 +65,35 @@ export default function FormMecanico() {
             </option>
           </select>
           {errors.tipo && <p className="text-red-500">{errors.tipo.message}</p>}
-            <label >Cedula<span className="text-red-500">*</span></label>
+            <label >Número de Documento<span className="text-red-500">*</span></label>
             <input 
-            placeholder='Cedula'
+            placeholder='Número de Documento'
             {...register("cedula_mecanico", CedulaRequired)}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
             autoFocus
             />
             {errors.cedula_mecanico && <p className="text-red-500">{errors.cedula_mecanico.message}</p>}
-            <label>Nombre Mecanico<span className="text-red-500">*</span></label>
+            <label>Nombre Mecánico<span className="text-red-500">*</span></label>
             <input 
             type="text" 
-            placeholder='Nombre Mecanico' 
-            {...register("nombre_mecanico", NombreRequired)}
+            placeholder='Nombre Completo' 
+            {...register("nombre_mecanico", NombreMeRequired)}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
             autoFocus
             />
             {errors.nombre_mecanico && <p className="text-red-500">{errors.nombre_mecanico.message}</p>}
             
-            <label>Telefono Mecanico<span className="text-red-500">*</span></label>
+            <label>Teléfono Mecánico<span className="text-red-500">*</span></label>
             <input 
-            placeholder='Telefono Mecanico'
+            placeholder='Teléfono Mecánico'
             {...register("telefono_mecanico", TelefonoRequired)}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
             />
             {errors.telefono_mecanico && <p className="text-red-500">{errors.telefono_mecanico.message}</p>}
-            <label>Direccion<span className="text-red-500">*</span></label>
+            <label>Dirección<span className="text-red-500">*</span></label>
             <input 
-            placeholder='Direccion'
-            {...register("direccion_mecanico", NombreRequired)}
+            placeholder='Dirección'
+            {...register("direccion_mecanico", DireccionRequired)}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
             autoFocus
             />

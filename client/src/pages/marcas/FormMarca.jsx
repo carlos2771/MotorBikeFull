@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form"
 import { useMarcas } from "../../context/MarcasContext";
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
-import { NombreRequired } from "../../utils/validations"
+import { NombreMeRequired } from "../../utils/validations"
 
 export default function FormMecanico() {
   const {register, handleSubmit, setValue, formState: {errors}} = useForm()
@@ -46,7 +46,7 @@ export default function FormMecanico() {
         <input 
         type="text" 
         placeholder='Nombre Marca' 
-        {...register("nombre_marca", NombreRequired)}
+        {...register("nombre_marca", NombreMeRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         autoFocus
         />

@@ -95,7 +95,6 @@ export default function PageMecanico() {
 
   const exportarAExcel = useCallback(() => {
     const datos = mecanicos.map((mecanico) => ({
-      Tipo_Documento: mecanico.tipo,
       Cedula: mecanico.cedula_mecanico,
       Nombre: mecanico.nombre_mecanico,
       Telefono: mecanico.telefono_mecanico,
@@ -142,7 +141,7 @@ export default function PageMecanico() {
     },
     {
         field: "cedula_mecanico",
-        headerName: "Cédula",
+        headerName: "Número Documento",
         width: 200,
         headerClassName: "font-custom text-lg",
     },
@@ -200,10 +199,11 @@ export default function PageMecanico() {
         console.log("Estado", estado);
         return (
           <div>
-            <button className={estado === "Activo" ? "" : "hidden"}>
+            <button className={estado === "Activo" ? "" : "hidden"} title="Editar">
               <Link
                 className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
                 to={`/mecanico/${params.row._id}`}
+                
               >
                 <FontAwesomeIcon icon={faPencil} />
               </Link>
@@ -214,7 +214,7 @@ export default function PageMecanico() {
           >
             Eliminar
           </button> */}
-           <button
+           <button title="Activar/Inactivar"
               className={
                 estado === "Activo"
                   ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
@@ -224,7 +224,7 @@ export default function PageMecanico() {
             >
               {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
             </button>
-            <button className={estado === "Activo" ? "" : "hidden"}>
+            <button className={estado === "Activo" ? "" : "hidden"} title="Ver detalle">
               <Detalle
                 metodo={() => getMecanicos(params.row._id)}
                 id={params.row._id}
@@ -326,7 +326,7 @@ export default function PageMecanico() {
     <div className="mt-16">
       <div className="flex justify-between">
       <h1 className="text-2xl mx-auto ml-16 font-custom"> <FontAwesomeIcon icon="wrench" className="mr-2" />Gestión de Mecánicos</h1>
-      <div className="mx-20 ml-2 justify-end flex">
+      <div className="mx-16 justify-end flex">
         <Link to="/add-mecanico">
           <button  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
           <FontAwesomeIcon icon={faPlus} />

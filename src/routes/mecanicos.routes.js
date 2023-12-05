@@ -10,7 +10,7 @@ const router = Router()
 // Configura rutas y controladores
 router.get("/mecanicos", authRequired, getMecanicos) 
 router.get("/mecanicos/:id", authRequired, getMecanico) 
-router.post("/mecanicos", authRequired, validateSchema(mecanicoSchema) ,createMecanico) 
+router.post("/mecanicos", authRequired,createMecanico) 
 router.delete("/mecanicos/:id", authRequired, deleteMecanico) 
 router.put("/mecanicos/:id", authRequired, updateMecanico) 
 
