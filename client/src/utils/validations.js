@@ -56,7 +56,7 @@ export const NegativeRequired = {
   required: "Campo requerido",
   pattern: {
     value: negative,
-    message: "Solo numeros positivos ",
+    message: "Solo numeros mayores a cero ",
   },
 };
 
@@ -76,7 +76,7 @@ export const RepuestoRequired = {
 };
 
 export const ClienteRequired = {
-  required: "Campo requerido ",
+  required: "El cliente es requerido",
 };
 
 export const EstadoRequired = {
@@ -84,5 +84,5 @@ export const EstadoRequired = {
 };
 
 export const MecanicoRequired = {
-  required: "Campo requerido",
+  required: "El mecanico es requerido",
 };

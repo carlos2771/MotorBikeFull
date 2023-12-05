@@ -4,7 +4,7 @@ import { Link,useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useMecanicos } from "../../context/MecanicosContext";
-import { NegativeRequired, ClienteRequired, MecanicoRequired, EstadoRequired, NombreRequired} from "../../utils/validations";
+import { NegativeRequired, ClienteRequired, MecanicoRequired, NombreRequired} from "../../utils/validations";
 
 export default function FormVentaServicio() {
   const {
