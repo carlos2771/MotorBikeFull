@@ -4,7 +4,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import {faLock, faDollarSign, faBan, faInfoCircle, faIdCard,faScrewdriverWrench} from "@fortawesome/free-solid-svg-icons";
+import {faLock, faDollarSign,faPlus, faBan, faInfoCircle, faIdCard,faScrewdriverWrench} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {Tabla, Titulo} from "../../components/Tabla";
 import Detalle from "../../components/Detalle";
@@ -278,12 +278,13 @@ export default function PageVentaRepuestos() {
   ];
 
   return (
-    <div className="mt-16">
-      <h1 className="text-2xl text-start ml-20">Ventas Repuestos</h1>
+    <div className="mt-16">   
+      <h1 className="text-2xl text-start ml-20">Gestionar Ventas Repuestos</h1>
       <div className="mx-10 justify-end flex">
         <Link to="/add-venta-repuesto">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
-          +
+          <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
+          <FontAwesomeIcon icon={faPlus} />
+            
           </button>
         </Link>
       </div>
