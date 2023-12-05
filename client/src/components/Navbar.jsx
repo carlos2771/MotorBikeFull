@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import Render from "./Render";
 import Header from "./Header";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTasks, faUsers, faBuilding, faTools, faShoppingCart, faHandshake, faShoppingBag, faChartBar, faSignOutAlt, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faTasks, faUsers, faMotorcycle, faTools, faShoppingCart, faHandshake, faShoppingBag, faChartBar, faSignOutAlt, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
@@ -77,7 +77,7 @@ export default function Navbar() {
                   </Render>
                   <Render>
                     <Link to="/marcas" className="flex ms-10 p-2">
-                      <FontAwesomeIcon icon={faBuilding} className="mr-2" /> Marcas
+                      <FontAwesomeIcon icon={faMotorcycle} className="mr-2" /> Marcas
                     </Link>
                   </Render>
                   <Render>

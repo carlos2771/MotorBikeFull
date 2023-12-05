@@ -141,7 +141,7 @@ export default function PageMecanico() {
     },
     {
         field: "cedula_mecanico",
-        headerName: "Cédula",
+        headerName: "Número Documento",
         width: 200,
         headerClassName: "font-custom text-lg",
     },
