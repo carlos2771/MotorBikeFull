@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Swal from "sweetalert2";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faUser,faPen, faPencil , faBan,  faCheck, faInfoCircle,faDollarSign,  faHandshake} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faUser,faPen, faPencil , faBan,faCalendarDay,  faCheck, faInfoCircle,faDollarSign,  faHandshake} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
 
 
@@ -127,6 +127,7 @@ export default function PageVentaServicios() {
           headerClassName: 'custom-header',
     
         },
+
         // {
         //   field: "createdAt",
         //   headerName: "Fecha Creacion",
@@ -135,14 +136,17 @@ export default function PageVentaServicios() {
         //   headerClassName: 'custom-header',
         //   renderCell: (params) => {
         //     const date = new Date(params.value);
+        //     date.toLocaleString("en-US", { timeZone: "America/Bogota" });
         //     const formattedDate = date.toLocaleDateString("es-ES", {
         //       year: "numeric",
         //       month: "long",
         //       day: "numeric",
         //     });
+        
         //     return <div>{formattedDate}</div>;
         //   },
         // },
+        
 
         {
           field: "acciones",
@@ -243,6 +247,23 @@ export default function PageVentaServicios() {
                   }
                       </Tabla>
                     </tr>
+                    <tr>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faCalendarDay} className="mr-2" />
+                        Fecha de venta
+                      </Tabla>
+                      <Tabla>
+                        {
+                          ventasServicios.find((venta) => venta._id === params.row._id)?.createdAt &&
+                          new Date(ventasServicios.find((venta) => venta._id === params.row._id).createdAt).toLocaleDateString("es-ES", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })
+                        }
+                      </Tabla>
+                    </tr>
+
                     
                   </tbody>
                   
