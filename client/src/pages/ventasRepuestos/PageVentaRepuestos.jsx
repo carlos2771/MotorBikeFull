@@ -4,7 +4,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import {faLock, faDollarSign,faPlus, faBan, faInfoCircle, faIdCard,faScrewdriverWrench} from "@fortawesome/free-solid-svg-icons";
+import {faLock, faDollarSign,faPlus, faBan, faInfoCircle, faIdCard,faScrewdriverWrench, faShoppingCart} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {Tabla, Titulo} from "../../components/Tabla";
 import Detalle from "../../components/Detalle";
@@ -278,16 +278,18 @@ export default function PageVentaRepuestos() {
   ];
 
   return (
-    <div className="mt-16">   
-      <h1 className="text-2xl text-start ml-20">Gestionar Ventas Repuestos</h1>
-      <div className="mx-10 justify-end flex">
-        <Link to="/add-mecanico">
-          <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
-          <FontAwesomeIcon icon={faPlus} />
-            
-          </button>
-        </Link>
-      </div>
+    <div className="mt-16">
+      <div className="flex justify-between">
+      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faShoppingCart} className="mr-2" />Gestionar Ventas Repuestos</h1>
+        <div className="mx-10 justify-end">
+          <Link to="/add-venta-repuesto">
+          <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
+            <FontAwesomeIcon icon={faPlus} />
+              
+            </button>
+          </Link>
+        </div>
+      </div> 
       <Box sx={{ width: "100%" }}>
         <DataGrid
           className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"

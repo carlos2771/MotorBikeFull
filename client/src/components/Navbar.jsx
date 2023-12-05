@@ -71,6 +71,11 @@ export default function Navbar() {
                     </Link>
                   </Render>
                   <Render>
+                    <Link to="/mecanicos" className="flex ms-10 p-2">
+                      <FontAwesomeIcon icon={faTools} className="mr-2" /> Mecanicos
+                    </Link>
+                  </Render>
+                  <Render>
                     <Link to="/marcas" className="flex ms-10 p-2">
                       <FontAwesomeIcon icon={faBuilding} className="mr-2" /> Marcas
                     </Link>
@@ -78,11 +83,6 @@ export default function Navbar() {
                   <Render>
                     <Link to="/repuestos" className="flex ms-10 p-2">
                       <FontAwesomeIcon icon={faTools} className="mr-2" /> Repuestos
-                    </Link>
-                  </Render>
-                  <Render>
-                    <Link to="/mecanicos" className="flex ms-10 p-2">
-                      <FontAwesomeIcon icon={faTools} className="mr-2" /> Mecanicos
                     </Link>
                   </Render>
                   <Render>
@@ -111,10 +111,10 @@ export default function Navbar() {
                   </Render>
                   <Render>
                     <Link
-                      to="/graficos"
+                      to="/graficos"  
                       className="flex ms-10 p-2"
                     >
-                      <FontAwesomeIcon icon={faChartBar} className="mr-2" /> Graficos
+                      <FontAwesomeIcon icon={faChartBar} className="mr-2" /> Dashboard
                     </Link>
                   </Render>
                   {/* <Render>
