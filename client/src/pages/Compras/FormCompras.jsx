@@ -7,8 +7,10 @@ dayjs.extend(utc)
 
 import { useForm } from "react-hook-form";
 import { useRepuestos } from "../../context/RepuestosContext";
-import { NegativeRequired, NombreRequired, RepuestoRequired} from "../../utils/validations";
+import { NegativeRequired, NombreRequired, RepuestoRequired, fecha} from "../../utils/validations";
 
+
+const currentYear = dayjs().year();
 
 export default function FormCompra() {
   const {
@@ -155,7 +157,10 @@ export default function FormCompra() {
           <label htmlFor="fecha">Fecha</label>
           <input type="date"
           className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
-          {...register("fecha")} />
+          {...register("fecha", { min: `${currentYear}-01-01`, max: `${currentYear}-12-31` }, fecha)}
+           />
+
+          {errors.fecha && <p className="text-red-500">{errors.fecha.message}</p>}
 
 
 
