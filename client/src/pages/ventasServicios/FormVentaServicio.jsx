@@ -54,7 +54,8 @@ const onSubmit = handleSubmit(async (data) => {
     } else {
       const transformData={
         ...data,
-        precio_servicio: Number(data.precio_servicio)///AQUI CONVIERTO EL STRING DE PRECIO A UN TIPO NUMBER PARA QUE NO ME DE ERROR
+        precio_servicio: Number(data.precio_servicio),///AQUI CONVIERTO EL STRING DE PRECIO A UN TIPO NUMBER PARA QUE NO ME DE ERROR
+        estado:"Activo"//AQUI CREO EL ESTADO SIEMPRE ACTIVO
       }
       console.log(typeof(data.precio_servicio))/// AQUI MIRO QUE TIPO DE DATO ES PRECIO_SERVICIO
       const res = await createVentaServicio(transformData);//AQUI TRASFORMO LOS DATOS Y LOS GUARDO EN TRANSFORM
@@ -113,20 +114,7 @@ const onSubmit = handleSubmit(async (data) => {
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
           {errors.descripcion && <p className="text-red-500">{errors.descripcion.message}</p>}
-          <label>Estado</label>
-          <select
-        {...register("estado")}
-        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-        >
-          <option value={"Activo"} >
-            Activo
-          </option>
-          <option value={"Inactivo"} >
-            Inactivo
-          </option>
-
-        </select>
-           
+          
         <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
         </button>
