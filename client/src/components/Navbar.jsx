@@ -72,7 +72,7 @@ export default function Navbar() {
                   </Render>
                   <Render>
                     <Link to="/mecanicos" className="flex ms-10 p-2">
-                      <FontAwesomeIcon icon={faTools} className="mr-2" /> Mecanicos
+                      <FontAwesomeIcon icon="wrench" className="mr-2" /> Mecanicos
                     </Link>
                   </Render>
                   <Render>
