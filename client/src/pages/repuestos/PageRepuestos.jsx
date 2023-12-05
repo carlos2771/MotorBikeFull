@@ -5,7 +5,10 @@ import Box from "@mui/material/Box";
 import { Link } from 'react-router-dom';
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faIdCard, faUsers, faUser, faPhone, faPlus, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faBuilding, faTools} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faIdCard, faUser, faPhone, faPen, faTools, faPlus,faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faRegistered, faDollarSign, faHashtag} from "@fortawesome/free-solid-svg-icons";
+
+import Detalle from "../../components/Detalle";
+import {Tabla, Titulo} from "../../components/Tabla";
 
 
 
@@ -147,24 +150,26 @@ export default function PageRepuestos() {
       field: "acciones",
       headerName: "Acciones",
       width: 200,
-      headerClassName: 'custom-header',
       renderCell: (params) => {
         const estado = params.row.estado;
+        console.log("estado", estado);
         return (
           <div>
-            <button
-              className={estado === "Activo" ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500" : "hidden"}
-            >
-              <Link to={`/repuestos/${params.row._id}`}>Editar</Link>
+            <button className={estado === "Activo" ? "" : "hidden"}>
+              <Link
+                className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                to={`/repuestos/${params.row._id}`}
+              >
+                <FontAwesomeIcon icon={faPencil} />
+              </Link>
             </button>
+
             {/* <button
-                  className="px-4 py-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
-                  onClick={() => {
-                    deleteVentaServicio(params.row._id);
-                  }}
-                >
-                  Eliminar
-                </button> */}
+            className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
+            onClick={() => mostrarAlerta(params.row._id)}
+            >
+            Eliminar
+          </button> */}
             <button
               className={
                 estado === "Activo"
@@ -173,7 +178,76 @@ export default function PageRepuestos() {
               }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
-              {estado === "Activo" ? "Inhabilitar" : "Habilitar"}
+              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
+            </button>
+            <button className={estado === "Activo" ? "" : "hidden"}>
+              <Detalle
+                metodo={() => getRepuestos (params.row._id)}
+                id={params.row._id}
+              >
+                <table>
+                  <tbody>
+                    <Titulo>
+                        <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                        Detalles del Repuesto
+                    </Titulo>
+
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                        Nombre
+                      </Tabla>
+                      <Tabla >
+                        {
+                          repuestos.find(
+                            (repuesto) => repuesto._id === params.row._id
+                          )?.nombre_repuesto
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faRegistered} className="mr-2" />
+                        Marca
+                      </Tabla>
+                      <Tabla >
+                        {
+                          repuestos.find(
+                            (marca) => marca._id === params.row._id
+                          )?.marca.nombre_marca
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faHashtag} className="mr-2" />
+                        Cantidad
+                      </Tabla>
+                      <Tabla >
+                      {
+                    repuestos.find((repuesto) => repuesto._id === params.row._id)
+                      ?.cantidad
+                  }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
+                        Precio
+                      </Tabla>
+                      <Tabla >
+                      {
+                    repuestos.find((repuesto) => repuesto._id === params.row._id)
+                      ?.precio
+                  }
+                    
+                      </Tabla>
+                    </tr>
+                  </tbody>
+                  
+                </table>
+                
+              </Detalle>
             </button>
           </div>
         );
@@ -181,11 +255,10 @@ export default function PageRepuestos() {
     },
   ];
 
-
   return (
     <div className="mt-16 ">
       <div className="flex justify-between">
-      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faTools} className="mr-2" />Gestión de Marcas</h1>
+      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faTools} className="mr-2" />Gestión de Repuestos</h1>
         <div className="mx-10 justify-end">
           <Link to="/add-repuesto">
             <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
@@ -224,8 +297,8 @@ export default function PageRepuestos() {
           disableRowSelectionOnClick
           sx={{
             color: "white",
-            '& .MuiDataGrid-cell': {
-              fontSize: '18px', // Cambia el tamaño de fuente aquí
+            "& .MuiDataGrid-cell": {
+              fontSize: "18px",
             },
           }}
           slots={{ toolbar: GridToolbar }}

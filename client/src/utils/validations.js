@@ -64,6 +64,12 @@ export const NombreRequired = {
   required: "Campo requerido",
 };
 
+export const fecha = {
+  
+  message: "Solo puedes ingresar una fecha del año actual"
+};
+
+
 
 export const RepuestoRequired = {
   required: "Campo requerido ",
