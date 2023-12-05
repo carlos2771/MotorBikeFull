@@ -324,20 +324,22 @@ export default function PageMecanico() {
 
   return (
     <div className="mt-16">
-      <h1 className="text-2xl mx-auto ml-20 font-custom"> <FontAwesomeIcon icon="wrench" className="mr-2" />Gestión de Mecánicos</h1>
+      <div className="flex justify-between">
+      <h1 className="text-2xl mx-auto ml-16 font-custom"> <FontAwesomeIcon icon="wrench" className="mr-2" />Gestión de Mecánicos</h1>
       <div className="mx-20 ml-2 justify-end flex">
         <Link to="/add-mecanico">
-          <button  className="px-4 py-2 m-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
-          <FontAwesomeIcon icon={faPlus} className="mr-2" />
-            Agregar
+          <button  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
+          <FontAwesomeIcon icon={faPlus} />
           </button>
         </Link>
         <button
           onClick={exportarAExcel}
-          className="px-4 py-2 m-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
-        ><FontAwesomeIcon icon={faDownload} className="mr-0" />
+          className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent" title="Descargar excel"
+        ><FontAwesomeIcon icon={faDownload} />
         </button>
       </div>
+      </div>
+      
       <Box sx={{ width: "100%" }}>
         <DataGrid
           className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"

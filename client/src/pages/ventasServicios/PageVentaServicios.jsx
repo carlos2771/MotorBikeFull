@@ -265,7 +265,7 @@ export default function PageVentaServicios() {
           </button>
             </Link>
           </div>
-          <Box sx={{ width: "100%" }}>ñ
+          <Box sx={{ width: "100%" }}>
             <DataGrid
               className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
               rows={ventasServicios}
