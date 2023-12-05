@@ -154,7 +154,7 @@ export default function PageVentaServicios() {
             console.log("estado", estado);
             return (
               <div>
-                <button className={estado === "Activo" ? "" : "hidden"}>
+                <button className={estado === "Activo" ? "" : "hidden"} title='Editar'>
                   <Link
                     className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
                     to={`/ventas-servicios/${params.row._id}`}
@@ -171,7 +171,7 @@ export default function PageVentaServicios() {
                 >
                   Eliminar
                 </button> */}
-                <button
+                <button title='Activar/Inactivar'
                   className={
                     estado === "Activo"
                       ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
@@ -181,7 +181,7 @@ export default function PageVentaServicios() {
             >
               {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
             </button>
-            <button className={estado === "Activo" ? "" : "hidden"}>
+            <button className={estado === "Activo" ? "" : "hidden"} title='Ver detalle'>
             <Detalle
                 metodo={() => getVentasServicios(params.row._id)}
                 id={params.row._id}

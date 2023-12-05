@@ -155,7 +155,7 @@ export default function PageRepuestos() {
         console.log("estado", estado);
         return (
           <div>
-            <button className={estado === "Activo" ? "" : "hidden"}>
+            <button className={estado === "Activo" ? "" : "hidden"} title='Editar'>
               <Link
                 className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
                 to={`/repuestos/${params.row._id}`}
@@ -170,7 +170,7 @@ export default function PageRepuestos() {
             >
             Eliminar
           </button> */}
-            <button
+            <button title='Activar/Inactivar'
               className={
                 estado === "Activo"
                   ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
@@ -180,7 +180,7 @@ export default function PageRepuestos() {
             >
               {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
             </button>
-            <button className={estado === "Activo" ? "" : "hidden"}>
+            <button className={estado === "Activo" ? "" : "hidden"} title='Ver detalle'>
               <Detalle
                 metodo={() => getRepuestos (params.row._id)}
                 id={params.row._id}

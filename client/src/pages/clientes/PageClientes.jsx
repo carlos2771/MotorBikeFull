@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faIdCard, faUsers, faUser, faPhone, faPlus, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faIdCard, faUsers, faUser, faPhone, faPlus, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faCircleInfo} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
 
 export default function PageClientes() {
