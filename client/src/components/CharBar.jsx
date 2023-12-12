@@ -65,9 +65,10 @@ export function CharBar() {
     ventasServicios.forEach((venta) => {
       const nombreMecanico = venta.mecanico.nombre_mecanico;
       const precioServicio = venta.precio_servicio;
+      const estado = venta.estado;
       const fechaVenta = venta.createdAt ? new Date(venta.createdAt) : null;
   
-      if (fechaVenta) {
+      if (fechaVenta && estado === "Activo") {
         if (startDate && endDate) {
           const formattedStartDate = formatDate(startDate);
           const formattedEndDate = formatDate(endDate);
@@ -118,6 +119,7 @@ export function CharBar() {
   
     return sumas;
   };
+  
   
   
   

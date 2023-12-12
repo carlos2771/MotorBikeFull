@@ -108,7 +108,7 @@ export default function PageVentaServicios() {
         },
         {
           field: "precio_servicio",
-          headerName: "Precio servicio ",
+          headerName: "Precio de servicio ",
           width: 185,
           editable: true,
           headerClassName: 'custom-header',
@@ -119,7 +119,26 @@ export default function PageVentaServicios() {
         //   width: 170,
         //   editable: true,
         //   headerClassName: 'custom-header',
-        // },
+        // }
+
+        {
+          field: "createdAt",
+          headerName: "Fecha de venta",
+          width: 300,
+          editable: true,
+          headerClassName: 'custom-header',
+          renderCell: (params) => {
+            const date = new Date(params.value);
+            date.toLocaleString("en-US", { timeZone: "America/Bogota" });
+            const formattedDate = date.toLocaleDateString("es-ES", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            });
+        
+            return <div>{formattedDate}</div>;
+          },
+        },
         {
           field: "estado",
           headerName: "Estado",
@@ -127,25 +146,6 @@ export default function PageVentaServicios() {
           headerClassName: 'custom-header',
     
         },
-
-        // {
-        //   field: "createdAt",
-        //   headerName: "Fecha Creacion",
-        //   width: 300,
-        //   editable: true,
-        //   headerClassName: 'custom-header',
-        //   renderCell: (params) => {
-        //     const date = new Date(params.value);
-        //     date.toLocaleString("en-US", { timeZone: "America/Bogota" });
-        //     const formattedDate = date.toLocaleDateString("es-ES", {
-        //       year: "numeric",
-        //       month: "long",
-        //       day: "numeric",
-        //     });
-        
-        //     return <div>{formattedDate}</div>;
-        //   },
-        // },
         
 
         {
@@ -200,19 +200,6 @@ export default function PageVentaServicios() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faUser} className="mr-2" />
-                        Cliente
-                      </Tabla>
-                      <Tabla >
-                        {
-                          ventasServicios.find(
-                            (cliente) => cliente._id === params.row._id
-                          )?.cliente.nombre_cliente
-                        }
-                      </Tabla>
-                    </tr>
-                    <tr>
-                      <Tabla >
-                        <FontAwesomeIcon icon={faUser} className="mr-2" />
                         Mecanico
                       </Tabla>
                       <Tabla >
@@ -225,25 +212,26 @@ export default function PageVentaServicios() {
                     </tr>
                     <tr>
                       <Tabla >
+                        <FontAwesomeIcon icon={faUser} className="mr-2" />
+                        Cliente
+                      </Tabla>
+                      <Tabla >
+                        {
+                          ventasServicios.find(
+                            (cliente) => cliente._id === params.row._id
+                          )?.cliente.nombre_cliente
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
                         <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
-                        Precio
+                        Precio de servicio
                       </Tabla>
                       <Tabla >
                       {
                     ventasServicios.find((precio) => precio._id === params.row._id)
                       ?.precio_servicio
-                  }
-                      </Tabla>
-                    </tr>
-                    <tr>
-                      <Tabla >
-                        <FontAwesomeIcon icon={faPen} className="mr-2" />
-                        Descripción
-                      </Tabla>
-                      <Tabla >
-                      {
-                    ventasServicios.find((descripcion) => descripcion._id === params.row._id)
-                      ?.descripcion
                   }
                       </Tabla>
                     </tr>
@@ -263,8 +251,18 @@ export default function PageVentaServicios() {
                         }
                       </Tabla>
                     </tr>
-
-                    
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faPen} className="mr-2" />
+                        Descripción
+                      </Tabla>
+                      <Tabla >
+                      {
+                    ventasServicios.find((descripcion) => descripcion._id === params.row._id)
+                      ?.descripcion
+                  }
+                      </Tabla>
+                    </tr>
                   </tbody>
                   
                 </table>
