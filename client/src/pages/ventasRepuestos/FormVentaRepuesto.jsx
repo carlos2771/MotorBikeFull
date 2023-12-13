@@ -4,8 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useRepuestos } from "../../context/RepuestosContext";
-import { NegativeRequired, NombreRequired, RepuestoRequired, ClienteRequired} from "../../utils/validations";
-
+import { NegativeRequired, NombreRequired, RepuestoRequired, ClienteRequired } from "../../utils/validations";
 
 export default function FormVentaRepuesto() {
   const {
@@ -25,22 +24,8 @@ export default function FormVentaRepuesto() {
   const navigate = useNavigate();
   const params = useParams();
   const [selectedRepuesto, setSelectedRepuesto] = useState();
-
-  useEffect(() => {
-    (async () => {
-      if (params.id) {
-        const ventaRepuesto = await getVentaRepuesto(params.id);
-        setValue("repuesto", ventaRepuesto.repuesto);
-        setSelectedRepuesto(ventaRepuesto.repuesto);
-        setValue("cantidad_repuesto", ventaRepuesto.cantidad_repuesto);
-        setValue("cantidad", ventaRepuesto.repuestos.cantidad);
-        setSelectedRepuesto(ventaRepuesto.cantidad);
-        setValue("precio_unitario", ventaRepuesto.precio_unitario);
-        setValue("precio_total", ventaRepuesto.precio_total);
-        setValue("cliente", ventaRepuesto.cliente._id);
-      }
-    })();
-  }, []);
+  const [repuestosSeleccionados, setRepuestosSeleccionados] = useState([]);
+  const [totalVenta, setTotalVenta] = useState(0);
 
   useEffect(() => {
     try {
@@ -63,24 +48,39 @@ export default function FormVentaRepuesto() {
     }
   }, [selectedRepuesto]);
 
-  const onSubmit = handleSubmit(async(data) => {
-    data.precio_total = data.cantidad_repuesto * data.precio_unitario;
-
+  const onSubmit = handleSubmit(async (data) => {
+    const precioTotalRepuesto = data.cantidad_repuesto * data.precio_unitario;
+  
+    const nuevoRepuesto = {
+      repuesto: data.repuesto,
+      cantidad_vender: data.cantidad_repuesto,
+      precio_unitario: data.precio_unitario,
+      precio_total: precioTotalRepuesto,
+    };
+  
+    const repuestosActualizados = [...repuestosSeleccionados, nuevoRepuesto];
+  
+    setRepuestosSeleccionados(repuestosActualizados);
+  
+    const totalVentaActualizado = repuestosActualizados.reduce(
+      (total, repuesto) => total + repuesto.precio_total,
+      0
+    );
+  
+    setTotalVenta(totalVentaActualizado);
+  
     if (params.id) {
-      const res = updateVentaRepuesto(params.id, data);
-        if(res) navigate("/ventas-repuestos")
+      const res = updateVentaRepuesto(params.id, { ...data, precio_total: totalVentaActualizado });
+      if (res) navigate("/ventas-repuestos");
     } else {
-      const res = await createVentaRepuesto(data);
-        if(res) navigate("/ventas-repuestos")
-      
+      const res = await createVentaRepuesto({ ...data, precio_total: totalVentaActualizado });
+      if (res) navigate("/ventas-repuestos");
     }
-    
   });
+  
 
   console.log(ventasRepuestosErrors);
 
-
-  
   return (
     <div className="flex items-center justify-center pt-20">
       <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
@@ -89,7 +89,7 @@ export default function FormVentaRepuesto() {
             {error}
           </div>
         ))}
-        <h1 className="text-2xl flex justify-center ">Agregar Venta Repueso </h1>
+        <h1 className="text-2xl flex justify-center ">Agregar Venta Repuesto </h1>
         <form className="mt-10" onSubmit={onSubmit}>
           <label>Repuestos<span className="text-red-500">*</span></label>
           <select
@@ -110,8 +110,7 @@ export default function FormVentaRepuesto() {
             placeholder="cantidad"
             {...register("cantidad")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-           disabled
-           
+            disabled
           />
           <label>Cantidad a vender<span className="text-red-500">*</span></label>
           <input
@@ -135,12 +134,6 @@ export default function FormVentaRepuesto() {
             {...register("precio_unitario")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
-          {/* <label>Precio total</label> */}
-          {/* <input
-            placeholder="Precio Total"
-            {...register("precio_total")}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-          /> */}
           <label>Cliente<span className="text-red-500">*</span></label>
           <select
             {...register("cliente", ClienteRequired )}
@@ -153,27 +146,39 @@ export default function FormVentaRepuesto() {
               </option>
             ))}
           </select>
-          
-          {/* <label >Estado</label>
-          <select
-        {...register("estado")}
-        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-        >
-          <option value={"Activo"} >
-            Activo
-          </option>
-          <option value={"Inactivo"} >
-            Inactivo
-          </option>
+          {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
+          <div>
+            <h2>Lista de Repuestos:</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Repuesto</th>
+                  <th>Cantidad</th>
+                  <th>Precio Unitario</th>
+                  <th>Precio Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {repuestosSeleccionados.map((repuesto, index) => (
+                  <tr key={index}>
+                    <td>{repuestos.find(item => item._id === repuesto.repuesto)?.nombre_repuesto}</td>
+                    <td>{repuesto.cantidad_vender}</td>
+                    <td>{repuesto.precio_unitario}</td>
+                    <td>{repuesto.precio_total}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-        </select> */}
-            {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
+            <p>Total de la Venta: {totalVenta}</p>
+          </div>
+
           <button className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d" type="submit">
             Guardar
           </button>
-          <button>
-          <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/ventas-repuestos">Cancelar</Link>
-        </button>
+          <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/ventas-repuestos">
+            Cancelar
+          </Link>
         </form>
       </div>
     </div>
