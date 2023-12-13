@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMarcas } from "../../context/MarcasContext";
 import { NegativeRequired, NombreRequired, RepuestoRequired } from "../../utils/validations";
-
+import Swal from "sweetalert2";
 
 export default function FormRepuesto() {
   const {
@@ -63,9 +63,39 @@ export default function FormRepuesto() {
 
     if (params.id) {
       const res = updateRepuesto(params.id, data);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Actualizado correctamente",
+      });
       if (res) navigate("/repuestos")
     } else {
       const res = await createRepuesto(data);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Agregado correctamente",
+      });
       if (res) navigate("/repuestos")
 
     }

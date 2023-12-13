@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useMecanicos } from "../../context/MecanicosContext";
 import { NegativeRequired, ClienteRequired, MecanicoRequired, NombreRequired} from "../../utils/validations";
+import Swal from "sweetalert2";
+
 
 export default function FormVentaServicio() {
   const {
@@ -50,6 +52,21 @@ const onSubmit = handleSubmit(async (data) => {
   
     if (params.id) {
       const res = updateVentaServicio(params.id, data);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Actualizado correctamente",
+      });
       if (res) navigate("/ventas-servicios");
     } else {
       const transformData={
@@ -59,6 +76,21 @@ const onSubmit = handleSubmit(async (data) => {
       }
       console.log(typeof(data.precio_servicio))/// AQUI MIRO QUE TIPO DE DATO ES PRECIO_SERVICIO
       const res = await createVentaServicio(transformData);//AQUI TRASFORMO LOS DATOS Y LOS GUARDO EN TRANSFORM
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Agregado correctamente",
+      });
       if (res) navigate("/ventas-servicios");
     }
   });
