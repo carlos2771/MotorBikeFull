@@ -243,7 +243,7 @@ export default function PageMarcas() {
           sx={{
             color: "white",
             '& .MuiDataGrid-cell': {
-              fontSize: '15px',
+              fontSize: '18px',
             },
           }}
           slots={{ toolbar: GridToolbar }}

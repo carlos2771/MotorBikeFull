@@ -152,43 +152,6 @@ export default function PageMecanico() {
       headerClassName: "font-bold text-lg"
 
     },
-    // {
-    //   field: "telefono_mecanico",
-    //   headerName: "Telefono",
-    //   width: 200,
-    //   headerClassName: "font-bold text-lg"
-     
-    // },
-    // {
-    //   field: "direccion_mecanico",
-    //   headerName: "Direccion",
-    //   width: 200,
-    //   headerClassName: "font-bold text-lg"
-     
-    // },
-    // {
-    //   field: "estado",
-    //   headerName: "Estado",
-    //   width: 100,
-    //   headerClassName: "font-bold text-lg"
-
-    // },
-    // {
-    //   field: "createdAt",
-    //   headerName: "Fecha Creacion",
-    //   width: 240,
-    //   headerClassName: "font-bold text-lg",
- 
-    //   renderCell: (params) => {
-    //     const date = new Date(params.value);
-    //     const formattedDate = date.toLocaleDateString("es-ES", {
-    //       year: "numeric",
-    //       month: "long",
-    //       day: "numeric",
-    //     });
-    //     return <div>{formattedDate}</div>;
-    //   },
-    // },
     {
       field: "acciones",
       headerName: "Acciones",
@@ -358,7 +321,7 @@ export default function PageMecanico() {
           sx={{
             color: "white",
             '& .MuiDataGrid-cell': {
-              fontSize: '15px',
+              fontSize: '18px',
             },
           }}
           slots={{ toolbar: GridToolbar }}
