@@ -93,7 +93,8 @@ export default function FormCompra() {
         ))}
         <h1 className="text-2xl flex justify-center ">Agregar Compra </h1>
         <form className="mt-10" onSubmit={onSubmit}>
-          <label>Repuestos</label>
+        <label>Repuestos</label>
+          <div className="flex">
           {fields.map((item, index) => (
             <div key={item.id} className="my-2">
               <select
@@ -118,18 +119,18 @@ export default function FormCompra() {
                 <p className="text-red-500">{errors.repuestos[index].repuesto.message}</p>
               )}
 
-              <br />
+             
 
               <input style={{ width: '220px' }}
                 placeholder="Cantidad"
                 {...register(`repuestos.${index}.cantidad_repuesto`, NegativeRequired)}
-                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
+                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 m-2"
               />
               {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].cantidad_repuesto && (
                 <p className="text-red-500">{errors.repuestos[index].cantidad_repuesto.message}</p>
               )}
 
-              <br />
+
               <input style={{ width: '220px' }}
                 placeholder="Precio unitario"
                 {...register(`repuestos.${index}.precio_unitario`, RepuestoRequired)}
@@ -138,15 +139,23 @@ export default function FormCompra() {
               {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].precio_unitario && (
                 <p className="text-red-500">{errors.repuestos[index].precio_unitario.message}</p>
               )}
-              <br />
 
-              <br />
-              <button type="button" onClick={() => remove(index)}>Eliminar Repuesto</button>
+              <input style={{ width: '220px' }}
+            type="date"
+            className="w-full ml-2 bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
+            {...register("fecha", { min: `${currentYear}-01-01`, max: `${currentYear}-12-31` }, fecha)}
+          />
+
+          <button type="submit" className="mx-2">Agregar</button>
+          <button type="button" onClick={() => remove(index)}>Eliminar</button>
+          
             </div>
           ))}
-          <button type="submit">Agregar Repuesto</button>
-          <br />
+          
 
+          </div>
+          
+          <div className="">
           <h2 className="text-xl font-semibold mt-4">Repuestos Agregados:</h2>
           <ul>
             {repuestosList.map((repuesto, index) => (
@@ -156,23 +165,25 @@ export default function FormCompra() {
             ))}
           </ul>
 
-          <input style={{ width: '220px' }}
-            type="date"
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
-            {...register("fecha", { min: `${currentYear}-01-01`, max: `${currentYear}-12-31` }, fecha)}
-          />
+         
+          </div>
+
+          
           <br />
 
-          <button>
+          
+        </form>
+        <div className="flex">
+        <button
+          className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d"
+          onClick={guardarCompra}>Guardar
+        </button>
+        <button>
             <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/compras">Cancelar</Link>
           </button>
-        </form>
-        <button
-          className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d"
-          onClick={guardarCompra}
-        >
-          Guardar
-        </button>
+       
+        </div>
+        
       </div>
     </div>
   );
