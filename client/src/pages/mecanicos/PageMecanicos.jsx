@@ -148,7 +148,7 @@ export default function PageMecanico() {
     {
       field: "nombre_mecanico",
       headerName: "Nombre",
-      width: 190,
+      width: 250,
       headerClassName: "font-bold text-lg"
 
     },

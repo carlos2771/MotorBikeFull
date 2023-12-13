@@ -55,6 +55,7 @@ export default function FormMecanico() {
   };
 
   const onSubmit = handleSubmit(async (data) => {
+    
     if (params.id) {
       updateMecanico(params.id, data);
       navigate("/mecanicos");
