@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Chart as ChartJS, BarElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { format, startOfDay, endOfDay } from 'date-fns';  
 import "./CharBar.css";
 import Swal from 'sweetalert2';
 
@@ -8,8 +9,8 @@ ChartJS.register(BarElement, Tooltip, Legend, CategoryScale, LinearScale);
 
 export function CharBar() {
   const [ventasServicios, setVentasServicios] = useState([]);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState(startOfDay(new Date()));  // Iniciar con el comienzo del día actual
+  const [endDate, setEndDate] = useState(endOfDay(new Date()));  
 
   useEffect(() => {
     fetchData();
