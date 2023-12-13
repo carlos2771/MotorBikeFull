@@ -236,7 +236,7 @@ export default function PageClientes() {
                         Detalles del Cliente
                     </Titulo>
                     <tr>
-                      <Tabla >
+                      <Tabla>
                         <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
                         Tipo Documento
                       </Tabla>

@@ -5,7 +5,7 @@ import  Marca from "../models/marca.model.js"
 export const getMarcas = async(req, res) =>{
     try {
         // Consulta todas las marcas en la base de datos
-        const marca = await Marca.find()
+        const marca = await Marca.find().sort({createdAt : 'desc'})
 
         // Si no se encuentran marcas, devuelve un código de estado 404 y un mensaje de error
         if(!marca) {

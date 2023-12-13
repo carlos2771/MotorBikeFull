@@ -4,6 +4,8 @@ import { useAuth } from '../hooks/useAuth';
 import { PasswordRequire } from '../utils/validations';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert } from '@material-tailwind/react';
+import { useSpring, animated } from 'react-spring';
+import Swal from "sweetalert2";
 
 const ActualizarPassword = () => {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
@@ -20,13 +22,42 @@ const ActualizarPassword = () => {
     // Validar que las contraseñas coincidan
     if (values.password !== values.confirmPassword) {
       setPasswordError('Las contraseñas no coinciden');
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Contraseñas no coinciden",
+      });
       return;
     }
 
     try {
       console.log("Código:", params.code); 
       await actualizarPassword(params.code, values.password, values.confirmPassword);
-      console.log("Contraseña actualizada correctamente");
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Contraseña actualizada correctamente",
+      });
       navigate(`/login`);
     } catch (error) {
       console.error(error);
@@ -35,8 +66,15 @@ const ActualizarPassword = () => {
     }
   };
 
+  // Define a spring animation for the form
+  const formAnimation = useSpring({
+    from: { opacity: 0, transform: 'translateY(-50px)' },
+    to: { opacity: 1, transform: 'translateY(0)' },
+  });
+
   return (
     <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
+      <animated.div style={formAnimation} >
       <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md'>
         {/* Mostrar errores de actualización */}
         {updateErrors.map((error, i) => (
@@ -60,7 +98,7 @@ const ActualizarPassword = () => {
 
           <input
             type="password"
-            {...register('confirmPassword', { required: 'Confirmar Contraseña es requerido' })}
+            {...register('confirmPassword', PasswordRequire)}
             className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-950 border-0 border-b-2 border-sky-500 text-white px-4 py-2 rounded2 my-2"
             placeholder="Confirmar Contraseña"
           />
@@ -81,6 +119,7 @@ const ActualizarPassword = () => {
           </div>
         </form>
       </div>
+      </animated.div>
     </div>
   );
 };
