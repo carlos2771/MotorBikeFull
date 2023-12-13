@@ -5,6 +5,9 @@ import utc from "dayjs/plugin/utc";
 import dayjs from 'dayjs';
 dayjs.extend(utc);
 
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRepuestos } from "../../context/RepuestosContext";
 import { NegativeRequired, RepuestoRequired, fecha } from "../../utils/validations";
@@ -106,7 +109,7 @@ export default function FormCompra() {
 
   return (
     <div className="flex items-center justify-center pt-20">
-      <div className="bg-slate-700 p-10 shadow-lg shadow-blue-600/40" style={{ width: '1000px' }}>
+      <div className="bg-slate-700 p-10 shadow-lg shadow-blue-600/40" style={{ width: '800px' }}>
         {comprasErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
@@ -115,65 +118,81 @@ export default function FormCompra() {
         <h1 className="text-2xl flex justify-center ">Agregar Compra </h1>
         <form className="mt-10" onSubmit={onSubmit}>
           <label>Repuestos</label>
+
           {fields.map((item, index) => (
-            <div key={item.id} className="my-2">
-              <select
-                style={{ width: '220px' }}
-                {...register(`repuestos.${index}.repuesto`, RepuestoRequired)}
-                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
-                onChange={(e) => {
-                  setSelectedRepuesto(e.target.value);
-                }}
-              >
-                <option value="">Selecciona un repuesto</option>
-                {availableRepuestos.map((repuesto) => (
-                  <option
-                    key={repuesto._id}
-                    value={repuesto._id}
-                    
-                  >
-                    {repuesto.nombre_repuesto}
-                  </option>
-                ))}
-              </select>
+            <div key={item.id} className="my-2 flex">
+              <div className="flex flex-col">
+                <select
+                  style={{ width: '220px' }}
+                  {...register(`repuestos.${index}.repuesto`, RepuestoRequired)}
+                  className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
+                  onChange={(e) => {
+                    setSelectedRepuesto(e.target.value);
+                  }}
+                >
+                  <option value="">Selecciona un repuesto</option>
+                  {availableRepuestos.map((repuesto) => (
+                    <option
+                      key={repuesto._id}
+                      value={repuesto._id}
 
-              {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].repuesto && errors.repuestos[index].repuesto.message && (
-                <p className="text-red-500">{errors.repuestos[index].repuesto.message}</p>
-              )}
+                    >
+                      {repuesto.nombre_repuesto}
+                    </option>
+                  ))}
+                </select>
 
-              <br />
+                {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].repuesto && errors.repuestos[index].repuesto.message && (
+                  <p className="text-red-500">{errors.repuestos[index].repuesto.message}</p>
+                )}
+              </div>
 
-              <input style={{ width: '220px' }}
-                placeholder="Cantidad"
-                {...register(`repuestos.${index}.cantidad_repuesto`, NegativeRequired)}
-                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
-              />
-              {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].cantidad_repuesto && (
-                <p className="text-red-500">{errors.repuestos[index].cantidad_repuesto.message}</p>
-              )}
 
-              <br />
-              <input style={{ width: '220px' }}
-                placeholder="Precio unitario"
-                {...register(`repuestos.${index}.precio_unitario`, RepuestoRequired)}
-                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
-              />
-              {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].precio_unitario && (
-                <p className="text-red-500">{errors.repuestos[index].precio_unitario.message}</p>
-              )}
-              <br />
 
-              <br />
+              <div className="flex flex-col">
+                <input style={{ width: '220px' }}
+                  placeholder="Cantidad"
+                  {...register(`repuestos.${index}.cantidad_repuesto`, NegativeRequired)}
+                  className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 mx-2"
+                />
+                {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].cantidad_repuesto && (
+                  <p className="text-red-500 mx-2">{errors.repuestos[index].cantidad_repuesto.message}</p>
+                )}
+              </div>
+
+
+              <div>
+                <input style={{ width: '220px' }}
+                  placeholder="Precio unitario"
+                  {...register(`repuestos.${index}.precio_unitario`, RepuestoRequired)}
+                  className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
+                />
+                {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].precio_unitario && (
+                  <p className="text-red-500 mx-2">{errors.repuestos[index].precio_unitario.message}</p>
+                )}
+              </div>
+
+
+              {/* <input style={{ width: '220px' }}
+                type="date"
+                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 mx-2"
+                {...register("fecha", { min: `${currentYear}-01-01`, max: `${currentYear}-12-31` }, fecha)}
+              /> */}
+
+
+              <button type="submit" disabled={selectedRepuesto === ""} className="px-4 m-4  text-sm text-withe font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500 hover:border-transparent" title="Agregar">
+                <FontAwesomeIcon icon={faPlus} />
+              </button>
             </div>
+
           ))}
-          <button type="submit" disabled={selectedRepuesto === ""}>
-            Agregar Repuesto
-          </button>
-          <br />
 
-          <h2 className="text-xl font-semibold mt-4 text-right">Repuestos Agregados:</h2>
 
-          <ul className="text-right">
+
+
+          <h2 className="text-xl font-semibold mt-4 text-left">Repuestos Agregados:</h2>
+
+          <ul className="text-left">
             {repuestosList.map((repuesto, index) => (
               <li key={index}>
                 {repuesto.repuesto.nombre_repuesto} - Cantidad: {repuesto.cantidad_repuesto}, Precio Unitario: {repuesto.precio_unitario}
@@ -181,29 +200,21 @@ export default function FormCompra() {
                   className="ml-2 text-red-500"
                   onClick={() => eliminarRepuesto(index)}
                 >
-                  Eliminar
+                  <FontAwesomeIcon icon={faTrash} />
                 </button>
               </li>
             ))}
           </ul>
-
-          <input style={{ width: '220px' }}
-            type="date"
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
-            {...register("fecha", { min: `${currentYear}-01-01`, max: `${currentYear}-12-31` }, fecha)}
-          />
-          <br />
-
-          <button>
-            <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/compras">Cancelar</Link>
-          </button>
         </form>
         <button
           className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d"
           onClick={guardarCompra}
-          disabled={repuestosList.length === 0 }
+          disabled={repuestosList.length === 0}
         >
           Guardar
+        </button>
+        <button>
+          <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/compras">Cancelar</Link>
         </button>
       </div>
     </div>

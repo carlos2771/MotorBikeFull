@@ -167,19 +167,19 @@ export default function PageCompras() {
     //   headerClassName: "custom-header",
     // },
 
-    {
-      field: "fecha",
-      headerName: "Fecha",
-      width: 250,
-      headerClassName: "custom-header",
-      renderCell: (params) => {
-        console.log(params.value); // Agrega esta línea para imprimir el valor de fecha en la consola
-        const date = new Date(params.value);
-        const formattedDate = dayjs.utc(date).locale('es').format("DD [de] MMMM [de] YYYY");
-        return <div>{formattedDate}</div>;
-      },
+    // {
+    //   field: "fecha",
+    //   headerName: "Fecha",
+    //   width: 250,
+    //   headerClassName: "custom-header",
+    //   renderCell: (params) => {
+    //     console.log(params.value); // Agrega esta línea para imprimir el valor de fecha en la consola
+    //     const date = new Date(params.value);
+    //     const formattedDate = dayjs.utc(date).locale('es').format("DD [de] MMMM [de] YYYY");
+    //     return <div>{formattedDate}</div>;
+    //   },
 
-    },
+    // },
     // ... Otras columnas
 
 
@@ -190,21 +190,21 @@ export default function PageCompras() {
     //   width: 100,
     //   headerClassName: "custom-header",
     // },
-    // {
-    //   field: "createdAt",
-    //   headerName: "Fecha Creacion",
-    //   width: 300,
-    //   headerClassName: "custom-header",
-    //   renderCell: (params) => {
-    //     const date = new Date(params.value);
-    //     const formattedDate = date.toLocaleDateString("es-ES", {
-    //       year: "numeric",
-    //       month: "long",
-    //       day: "numeric",
-    //     });
-    //     return <div>{formattedDate}</div>;
-    //   },
-    // },
+    {
+      field: "createdAt",
+      headerName: "Fecha Creacion",
+      width: 300,
+      headerClassName: "custom-header",
+      renderCell: (params) => {
+        const date = new Date(params.value);
+        const formattedDate = date.toLocaleDateString("es-ES", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        return <div>{formattedDate}</div>;
+      },
+    },
     {
       field: "acciones",
       headerName: "Acciones",
