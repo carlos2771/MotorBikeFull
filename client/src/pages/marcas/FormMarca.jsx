@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useMarcas } from "../../context/MarcasContext";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { NombreMaRequired } from "../../utils/validations";
+import { Link, useNavigate, useParams } from "react-router-dom"
+import { useEffect } from "react"
+import { NombreMeRequired } from "../../utils/validations"
+import Swal from "sweetalert2";
 
 export default function FormMecanico() {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
@@ -23,22 +24,52 @@ export default function FormMecanico() {
       }
     })();
   }, []);
-
-  const onSubmit = handleSubmit(async (data) => {
-    // Convertir los campos a minúsculas
+  
+  const onSubmit = handleSubmit(async(data) => {
     const lowercaseData = {
       ...data,
       nombre_marca: data.nombre_marca.toLowerCase(),
     };
 
-    if (params.id) {
-      updateMarca(params.id, lowercaseData);
-      navigate("/marcas");
-    } else {
-      const res = await createMarca(lowercaseData);
-      if (res) navigate('/marcas');
+    if(params.id){
+        updateMarca(params.id, lowercaseData)
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Actualizado correctamente",
+        });
+       navigate("/marcas")
+    }else{
+      const res = await createMarca(lowercaseData)
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Agregado correctamente",
+      });
+      if(res) navigate('/marcas')
     }
-  });
+    
+  })
 
   return (
     <div className='flex items-center justify-center pt-20'>

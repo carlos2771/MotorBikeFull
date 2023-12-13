@@ -1,8 +1,7 @@
 const EMAIL_REGEX = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,3}$/i;
 const numberPattern = /^[0-9]*$/;
 const negative = /^[1-9]\d*$/;
-// const nombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
-
+const nombreRepuesto = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ][a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{3,68}(?: [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{4,68})*[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]$/;
 
 export const EmailRequired = {
   required: "Campo requerido",
@@ -52,11 +51,24 @@ export const CedulaRequired = {
 };
 
 
+
+export const nombre_RepuestoValidacion = {
+  required: "Campo requerido",
+  pattern: {
+    required: 'Campo requerido',
+    value: nombreRepuesto,
+    message: "Ingrese un nombre correcto",
+  },
+};
+
+
+
+
 export const NegativeRequired = {
   required: "Campo requerido",
   pattern: {
     value: negative,
-    message: "Solo numeros positivos ",
+    message: "Solo numeros mayores a cero ",
   },
 };
 
@@ -64,8 +76,16 @@ export const NombreRequired = {
   required: "Campo requerido",
 };
 
+export const NombreRepuestoRequired = {
+  required: "Campo requerido",
+  pattern: {
+    value: nombreRepuesto,
+    message: "Campo requerido",
+  },
+};
+
 export const fecha = {
-  
+  required: "Campo requerido",
   message: "Solo puedes ingresar una fecha del año actual"
 };
 
@@ -73,10 +93,11 @@ export const fecha = {
 
 export const RepuestoRequired = {
   required: "Campo requerido ",
+  message: "Campo requerido ¿"
 };
 
 export const ClienteRequired = {
-  required: "Campo requerido ",
+  required: "El cliente es requerido",
 };
 
 export const EstadoRequired = {
@@ -84,7 +105,7 @@ export const EstadoRequired = {
 };
 
 export const MecanicoRequired = {
-  required: "Campo requerido",
+  required: "El mecanico es requerido",
 };
 
 // Estas validaciones fueron hechas por Sara

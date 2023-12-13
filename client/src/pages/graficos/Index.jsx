@@ -1,4 +1,3 @@
-
 // import {CharPie} from "../../components/CharPie";
 import {CharBar} from "../../components/CharBar";
 
@@ -14,7 +13,7 @@ return (
 
     {/* <div className="col-start-3">
         <CharPie /> 
-      </div> */}
+      </div>  */}
 </div>
 
 

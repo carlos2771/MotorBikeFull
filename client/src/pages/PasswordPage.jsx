@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { useAuth } from '../hooks/useAuth';
-import { EmailRequired } from '../utils/validations';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import Swal from "sweetalert2";
+import { EmailRequired, PasswordRequire } from '../utils/validations';
+import { Link,  useNavigate, useParams } from 'react-router-dom';
 import { Alert } from "@material-tailwind/react";
 import { useSpring, animated } from 'react-spring';
 
@@ -49,6 +50,29 @@ const PasswordPage = () => {
     from: { opacity: 0, transform: 'translateY(-50px)' },
     to: { opacity: 1, transform: 'translateY(0)' },
   });
+    // const onSubmit = handleSubmit(async (values) => {
+    //     try {
+    //       const Toast = Swal.mixin({
+    //         toast: true,
+    //         position: "top-end",
+    //         showConfirmButton: false,
+    //         timer: 3000,
+    //         timerProgressBar: true,
+    //         didOpen: (toast) => {
+    //           toast.onmouseenter = Swal.stopTimer;
+    //           toast.onmouseleave = Swal.resumeTimer;
+    //         },
+    //       });
+    //       Toast.fire({
+    //         icon: "success",
+    //         title: "Codigó de recuperación enviado",
+    //       });
+    //         await enviarToken(values.email);
+    //         navigate(`/restablecer-password/${values.email}`);
+    //       } catch (error) {
+    //         console.error(error);
+    //       }
+    // });
 
   return (
     <div>

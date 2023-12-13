@@ -5,6 +5,7 @@ import { EstadoRequired } from '../utils/validations';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert } from '@material-tailwind/react';
 import { useSpring, animated } from 'react-spring';
+import Swal from "sweetalert2";
 
 const ValidarCodePage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -35,6 +36,27 @@ const ValidarCodePage = () => {
           setError('');
         }, 3000);
       }
+      // console.log(email);
+      // const user = await validarToken(values.code);
+      // const userEmail = params.email
+      // const Toast = Swal.mixin({
+      //   toast: true,
+      //   position: "top-end",
+      //   showConfirmButton: false,
+      //   timer: 3000,
+      //   timerProgressBar: true,
+      //   didOpen: (toast) => {
+      //     toast.onmouseenter = Swal.stopTimer;
+      //     toast.onmouseleave = Swal.resumeTimer;
+      //   },
+      // });
+      // Toast.fire({
+      //   icon: "success",
+      //   title: "Codigo correcto",
+      // });
+      // // Redirige a la página de actualización de contraseña con el código
+      // navigate(`/reestablecer-password/${values.code}`);
+      
     } catch (error) {
       console.error(error);
     }

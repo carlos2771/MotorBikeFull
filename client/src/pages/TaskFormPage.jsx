@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import utc from "dayjs/plugin/utc"
 import dayjs from 'dayjs'
 import { NombreRequired } from '../utils/validations'
+import Swal from "sweetalert2";
 dayjs.extend(utc)
 //dayjs es para modificar la fecha a tipo string
 
@@ -36,8 +37,38 @@ export default function TaskFormPage() {
     } 
     if(params.id){
       updateTask(params.id, dateValid)
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Actualizado correctamente",
+      });
     }else{
       createTask(dateValid);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Agregado correctamente",
+      });
     }
     navigate("/tasks")
   })

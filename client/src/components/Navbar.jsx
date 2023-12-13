@@ -21,7 +21,7 @@ export default function Navbar() {
           >
             <div className="flex justify-between m-2">
             <button className=" px-3" onClick={() => setOpen(true)}>
-              <FontAwesomeIcon icon={faTasks} className="" />
+              <FontAwesomeIcon icon={faTasks}/>
             </button>
 
             <Render>

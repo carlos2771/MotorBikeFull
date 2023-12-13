@@ -6,11 +6,11 @@ export const clienteSchema = z.object({
     }).refine(value => /^[A-Za-z\s]*$/.test(value), {
         message: "El nombre del cliente debe contener solo letras y espacios"
     }),
-    email_cliente: z.string().refine(value => value.trim() !== "", {
-        message: "El email del cliente no puede estar vacío"
-    }).refine(value => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(value), {
-        message: "Email inválido"
-    }),
+    // email_cliente: z.string().refine(value => value.trim() !== "", {
+    //     message: "El email del cliente no puede estar vacío"
+    // }).refine(value => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(value), {
+    //     message: "Email inválido"
+    // }),
     telefono_cliente: z.string().refine(value => value.trim() !== "", {
         message: "El teléfono del cliente no puede estar vacío"
     }).refine(value => /^[0-9]{7,10}$/.test(value), {
