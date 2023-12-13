@@ -2,7 +2,8 @@ import { useForm } from "react-hook-form"
 import { useMarcas } from "../../context/MarcasContext";
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
-import { NombreRequired } from "../../utils/validations"
+import { NombreMeRequired } from "../../utils/validations"
+import Swal from "sweetalert2";
 
 export default function FormMecanico() {
   const {register, handleSubmit, setValue, formState: {errors}} = useForm()
@@ -23,9 +24,39 @@ export default function FormMecanico() {
   const onSubmit = handleSubmit(async(data) => {
     if(params.id){
         updateMarca(params.id, data)
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Actualizado correctamente",
+        });
        navigate("/marcas")
     }else{
       const res = await createMarca(data)
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Agregado correctamente",
+      });
       if(res) navigate('/marcas')
     }
     
@@ -46,7 +77,7 @@ export default function FormMecanico() {
         <input 
         type="text" 
         placeholder='Nombre Marca' 
-        {...register("nombre_marca", NombreRequired)}
+        {...register("nombre_marca", NombreMeRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         autoFocus
         />

@@ -5,6 +5,8 @@ import { EmailRequired, PasswordRequire } from '../utils/validations';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert } from '@material-tailwind/react';
 import { useSpring, animated } from 'react-spring';
+import Swal from "sweetalert2";
+
 
 export default function LoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -17,6 +19,21 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
+      // const Toast = Swal.mixin({
+      //   toast: true,
+      //   position: "top-end",
+      //   showConfirmButton: false,
+      //   timer: 3000,
+      //   timerProgressBar: true,
+      //   didOpen: (toast) => {
+      //     toast.onmouseenter = Swal.stopTimer;
+      //     toast.onmouseleave = Swal.resumeTimer;
+      //   },
+      // });
+      // Toast.fire({
+      //   icon: "success",
+      //   title: "Bienvenid@",
+      // });
       navigate('/tasks');
     }
   }, [isAuthenticated]);
@@ -30,10 +47,11 @@ export default function LoginPage() {
   return (
     <div>
       <div className='flex h-[calc(100vh-100px)] items-center justify-center '>
+      <animated.div style={formAnimation} >
       <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md  '>
       {
       signinErrors && Array.isArray(signinErrors) && signinErrors.map((error, i ) => (
-        <Alert className="bg-red-500 p-2 text-white" key={i}>
+        <Alert className="bg-red-500  p-2 text-white" key={i}>
           {error}
         </Alert>
       ))
@@ -75,6 +93,7 @@ export default function LoginPage() {
         ¿No tienes cuenta? <Link to='/register' className='text-sky-500 hover:text-yellow-200'>Registrate</Link>
       </p>
       </div>
+      </animated.div>
     </div>
     </div>
   );

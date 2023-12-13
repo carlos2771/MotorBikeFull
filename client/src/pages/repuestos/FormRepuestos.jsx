@@ -3,8 +3,8 @@ import { useRepuestos } from "../../context/RepuestosContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMarcas } from "../../context/MarcasContext";
-import { NegativeRequired, NombreRequired, RepuestoRequired, nombre_RepuestoValidacion } from "../../utils/validations";
-
+import { NegativeRequired, NombreRequired, RepuestoRequired , NombreRepuestoRequired} from "../../utils/validations";
+import Swal from "sweetalert2";
 
 export default function FormRepuesto() {
   const {
@@ -63,9 +63,39 @@ export default function FormRepuesto() {
 
     if (params.id) {
       const res = updateRepuesto(params.id, data);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Actualizado correctamente",
+      });
       if (res) navigate("/repuestos")
     } else {
       const res = await createRepuesto(data);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Agregado correctamente",
+      });
       if (res) navigate("/repuestos")
 
     }
@@ -95,7 +125,7 @@ export default function FormRepuesto() {
           <input
             type="text"
             placeholder='Nombre'
-            {...register("nombre_repuesto", nombre_RepuestoValidacion)}
+            {...register("nombre_repuesto", NombreRepuestoRequired)}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
             autoFocus
           />

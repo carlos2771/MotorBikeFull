@@ -14,9 +14,7 @@ const clienteSchema = new mongoose.Schema({
     },
     email_cliente: {
         type: String, //Tipo String
-        required: true, //Es requerido
         trim: true, // Limpiar espacios de los inputs
-        unique: true //Unico
     },
     telefono_cliente: {
         type: String, //Tipo String
