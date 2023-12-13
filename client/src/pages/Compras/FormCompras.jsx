@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCompras } from "../../context/ComprasContext";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import utc from "dayjs/plugin/utc";
 import dayjs from 'dayjs';
 dayjs.extend(utc);
@@ -37,6 +37,7 @@ export default function FormCompra() {
 
   const [selectedRepuesto, setSelectedRepuesto] = useState("");
   const [repuestosList, setRepuestosList] = useState([]);
+  const [availableRepuestos, setAvailableRepuestos] = useState([]);
 
   useEffect(() => {
     try {
@@ -45,6 +46,11 @@ export default function FormCompra() {
       console.error("Error al obtener clientes:", error);
     }
   }, []);
+
+  useEffect(() => {
+    // Actualizar la lista de opciones disponibles cuando repuestos cambia
+    setAvailableRepuestos(repuestos);
+  }, [repuestos]);
 
   const onSubmit = handleSubmit(async (data) => {
     if (!data.fecha) {
@@ -59,6 +65,12 @@ export default function FormCompra() {
     };
 
     setRepuestosList([...repuestosList, repuestoData]);
+
+    // Actualizar la lista de opciones disponibles excluyendo el repuesto seleccionado
+    const updatedAvailableRepuestos = availableRepuestos.filter(
+      (repuesto) => repuesto._id !== selectedRepuesto
+    );
+    setAvailableRepuestos(updatedAvailableRepuestos);
 
     reset();
   });
@@ -83,6 +95,15 @@ export default function FormCompra() {
     }
   };
 
+  const eliminarRepuesto = (index) => {
+    const updatedRepuestosList = [...repuestosList];
+    const repuestoEliminado = updatedRepuestosList.splice(index, 1)[0];
+    setRepuestosList(updatedRepuestosList);
+
+    // Actualizar la lista de opciones disponibles al volver a agregar el repuesto eliminado
+    setAvailableRepuestos([...availableRepuestos, repuestoEliminado.repuesto]);
+  };
+
   return (
     <div className="flex items-center justify-center pt-20">
       <div className="bg-slate-700 p-10 shadow-lg shadow-blue-600/40" style={{ width: '1000px' }}>
@@ -100,14 +121,16 @@ export default function FormCompra() {
                 style={{ width: '220px' }}
                 {...register(`repuestos.${index}.repuesto`, RepuestoRequired)}
                 className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
-                onChange={(e) => setSelectedRepuesto(e.target.value)}
+                onChange={(e) => {
+                  setSelectedRepuesto(e.target.value);
+                }}
               >
                 <option value="">Selecciona un repuesto</option>
-                {repuestos.map((repuesto) => (
+                {availableRepuestos.map((repuesto) => (
                   <option
                     key={repuesto._id}
                     value={repuesto._id}
-                    disabled={repuesto._id === selectedRepuesto}
+                    
                   >
                     {repuesto.nombre_repuesto}
                   </option>
@@ -141,17 +164,25 @@ export default function FormCompra() {
               <br />
 
               <br />
-              <button type="button" onClick={() => remove(index)}>Eliminar Repuesto</button>
             </div>
           ))}
-          <button type="submit">Agregar Repuesto</button>
+          <button type="submit" disabled={selectedRepuesto === ""}>
+            Agregar Repuesto
+          </button>
           <br />
 
-          <h2 className="text-xl font-semibold mt-4">Repuestos Agregados:</h2>
-          <ul>
+          <h2 className="text-xl font-semibold mt-4 text-right">Repuestos Agregados:</h2>
+
+          <ul className="text-right">
             {repuestosList.map((repuesto, index) => (
               <li key={index}>
                 {repuesto.repuesto.nombre_repuesto} - Cantidad: {repuesto.cantidad_repuesto}, Precio Unitario: {repuesto.precio_unitario}
+                <button
+                  className="ml-2 text-red-500"
+                  onClick={() => eliminarRepuesto(index)}
+                >
+                  Eliminar
+                </button>
               </li>
             ))}
           </ul>
@@ -170,6 +201,7 @@ export default function FormCompra() {
         <button
           className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d"
           onClick={guardarCompra}
+          disabled={repuestosList.length === 0 }
         >
           Guardar
         </button>

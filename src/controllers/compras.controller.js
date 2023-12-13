@@ -64,7 +64,10 @@ export const createCompras = async (req, res) => {
 };
 
 export const updateCompras = async (req, res) => {
+
   try {
+
+
     const compraId = req.params.id;
     const { repuestos, anulado } = req.body;
 

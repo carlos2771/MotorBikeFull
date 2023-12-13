@@ -231,6 +231,7 @@ export default function PageCompras() {
               }
               onClick={() => mostrarAlerta(params.row._id, params.row.anulado)}
             >
+              
               {params.row.anulado ? <FontAwesomeIcon icon={faLock} /> : <FontAwesomeIcon icon={faBan} />}
             </button>
 
