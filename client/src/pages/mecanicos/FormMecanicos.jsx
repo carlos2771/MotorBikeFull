@@ -43,11 +43,11 @@ export default function FormMecanico() {
   }, []);
 
   const handleTipoChange = (selectedTipo) => {
+    // Desregistrando el campo antes de volver a registrarlo
+    unregister("cedula_mecanico");
     // Actualiza la validación según el tipo seleccionado
     if (selectedTipo === "Pasaporte") {
-      // Desregistrando el campo antes de volver a registrarlo
-      unregister("cedula_mecanico");
-
+      
       register("cedula_mecanico", PasaporteRequired);
     } else {
       register("cedula_mecanico", CedulaRequired);
@@ -55,7 +55,6 @@ export default function FormMecanico() {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    
     if (params.id) {
       updateMecanico(params.id, data);
       navigate("/mecanicos");
