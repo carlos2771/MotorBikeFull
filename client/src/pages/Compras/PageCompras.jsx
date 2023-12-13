@@ -14,9 +14,9 @@ dayjs.extend(utc);
 
 
 
-import {faLock, faDollarSign, faBan, faInfoCircle, faIdCard,faScrewdriverWrench, faHashtag} from "@fortawesome/free-solid-svg-icons";
+import { faLock, faDollarSign, faBan, faInfoCircle, faIdCard, faScrewdriverWrench, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {Tabla, Titulo} from "../../components/Tabla";
+import { Tabla, Titulo } from "../../components/Tabla";
 import Detalle from "../../components/Detalle";
 
 
@@ -115,34 +115,57 @@ export default function PageCompras() {
   const formattedDate = new Intl.DateTimeFormat('es-ES', options).format(currentDate);
 
 
+  const calcularPrecioTotalCompra = (compra) => {
+    return compra.repuestos.reduce((total, repuesto) => {
+      return total + repuesto.precio_total;
+    }, 0);
+  };
+
+
 
   const columns = [
     {
-      field: "repuesto",
+      field: "repuestos",
       headerName: "Repuesto",
       width: 160,
       headerClassName: "custom-header",
-      valueGetter: (params) => params.row.repuesto.nombre_repuesto,
+      valueGetter: (params) => {
+        const repuestos = params.row.repuestos;
+
+        // Verifica si hay repuestos
+        if (repuestos && repuestos.length > 0) {
+          // Mapea los nombres de repuestos y únelos con una coma
+          const nombresRepuestos = repuestos.map((repuesto) => repuesto.repuesto.nombre_repuesto);
+          return nombresRepuestos.join(', '); // Muestra los nombres separados por coma
+        } else {
+          return "Nombre no disponible";
+        }
+      },
     },
-    {
-      field: "cantidad_repuesto",
-      headerName: "Cantidad Repuesto",
-      width: 185,
-      headerClassName: "custom-header",
-      // valueGetter: (params) => params.row.repuesto.cantidad,
-    },
-    {
-      field: "precio_unitario",
-      headerName: "Precio Unitario",
-      width: 170,
-      headerClassName: "custom-header",
-    },
-    {
-      field: "precio_total",
-      headerName: "Precio Total",
-      width: 170,
-      headerClassName: "custom-header",
-    },
+    // Resto de las columnas
+
+
+
+
+    // {
+    //   field: "cantidad_repuesto",
+    //   headerName: "Cantidad Repuesto",
+    //   width: 185,
+    //   headerClassName: "custom-header",
+    //   // valueGetter: (params) => params.row.repuesto.cantidad,
+    // },
+    // {
+    //   field: "precio_unitario",
+    //   headerName: "Precio Unitario",
+    //   width: 170,
+    //   headerClassName: "custom-header",
+    // },
+    // {
+    //   field: "precio_total",
+    //   headerName: "Precio Total",
+    //   width: 170,
+    //   headerClassName: "custom-header",
+    // },
 
     {
       field: "fecha",
@@ -150,10 +173,12 @@ export default function PageCompras() {
       width: 250,
       headerClassName: "custom-header",
       renderCell: (params) => {
+        console.log(params.value); // Agrega esta línea para imprimir el valor de fecha en la consola
         const date = new Date(params.value);
         const formattedDate = dayjs.utc(date).locale('es').format("DD [de] MMMM [de] YYYY");
         return <div>{formattedDate}</div>;
       },
+
     },
     // ... Otras columnas
 
@@ -190,14 +215,14 @@ export default function PageCompras() {
         return (
           <div>
             {/* <button
-              className={
-                params.row.anulado
-                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
-                  : "hidden"
-              }
-            >
-              <Link to={`/venta-repuesto/${params.row._id}`}>Editar</Link>
-            </button> */}
+                className={
+                  params.row.anulado
+                    ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                    : "hidden"
+                }
+              >
+                <Link to={`/venta-repuesto/${params.row._id}`}>Editar</Link>
+              </button> */}
             <button
               className={
                 params.row.anulado
@@ -208,75 +233,244 @@ export default function PageCompras() {
             >
               {params.row.anulado ? <FontAwesomeIcon icon={faLock} /> : <FontAwesomeIcon icon={faBan} />}
             </button>
+
+
             <button>
               <Detalle
                 metodo={() => getCompras(params.row._id)}
                 id={params.row._id}
               >
-                <table>
-                  <tbody>
-                    <Titulo>
+
+
+                <table className="scroll" style={{ width: '800px' }}>
+
+
+                  <thead>
+                    {/* <Titulo>
                         <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
                         Detalles de la compra
-                    </Titulo>
+                      </Titulo> */}
 
                     <tr>
-                      <Tabla >
-                        <FontAwesomeIcon icon={faScrewdriverWrench} className="mr-2" />
-                        Repuesto
-                      </Tabla>
-                      <Tabla >
-                        {
-                          compras.find(
-                            (repuesto) => repuesto._id === params.row._id
-                          )?.repuesto.nombre_repuesto
-                        }
-                      </Tabla>
-                      </tr>
-            
-                      <tr>
-                      <Tabla >
-                      <FontAwesomeIcon icon={faHashtag}className="mr-2" />
-                        Cantidad Repuesto
-                      </Tabla>
-                      <Tabla >
-                        { 
-                           compras.find(
-                            (cantidad) => cantidad._id === params.row._id
-                            )?.cantidad_repuesto
-                        }
-                      </Tabla>
-                    </tr>
-                      <tr>
-                      <Tabla >
-                      <FontAwesomeIcon icon={faDollarSign} className="mr-2"/>
+
+                      <th >
+
+                        {/* <FontAwesomeIcon icon={faScrewdriverWrench} className="mr-2"  */}
+
+                        Repuestos
+
+
+                      </th>
+
+                      <th >
+
+                        {/* <FontAwesomeIcon icon={faScrewdriverWrench} className="mr-2"  */}
+
+                        Cantidad
+
+
+                      </th>
+
+
+                      <th >
+
+
                         Precio Unitario
-                      </Tabla>
-                      <Tabla >
-                        { 
-                           compras.find(
-                            (precio) => precio._id === params.row._id
-                            )?.precio_unitario
-                        }
-                      </Tabla>
-                    </tr>
-                      <tr>
-                      <Tabla >
-                      <FontAwesomeIcon icon={faDollarSign} className="mr-2"  />
+
+
+                      </th>
+
+                      <th >
                         Precio Total
-                      </Tabla>
-                      <Tabla >
-                        { 
-                           compras.find(
-                            (precio) => precio._id === params.row._id
-                            )?.precio_total
-                        }
-                      </Tabla>
+                      </th>
                     </tr>
-                    </tbody>
-                  
+
+
+
+                  </thead>
+                  <tbody>
+                    <tr>
+
+                      <td style={{ textAlign: 'center' }}>
+                        {compras.find((compra) => compra._id === params.row._id)
+                          ?.repuestos.map((repuesto, index) => (
+                            <div key={index}>{repuesto.repuesto.nombre_repuesto}</div>
+                          ))}
+                      </td>
+
+                      <td style={{ textAlign: 'center' }}>
+                        {compras.find((compra) => compra._id === params.row._id)
+                          ?.repuestos.map((repuesto, index) => (
+                            <div key={index}>{repuesto.cantidad_repuesto}</div>
+                          ))}
+                      </td>
+
+                      <td style={{ textAlign: 'center' }}>
+                        {compras.find((compra) => compra._id === params.row._id)
+                          ?.repuestos.map((repuesto, index) => (
+                            <div key={index}>{repuesto.precio_unitario}</div>
+                          ))}
+                      </td>
+
+                      <td style={{ textAlign: 'center' }}>
+                        {compras.find((compra) => compra._id === params.row._id)
+                          ?.repuestos.map((repuesto, index) => (
+                            <div key={index}>{repuesto.precio_total}</div>
+                          ))}
+                      </td>
+
+                    </tr>
+
+
+                    {/* <Tabla> */}
+
+                    {/* Agregar el icono de ojo en la celda de la tabla */}
+
+                    {/* <FontAwesomeIcon icon={faScrewdriverWrench} className="mr-2" /> */}
+
+
+
+
+                    {/* {compras.find((compra) => compra._id === params.row._id)
+                            ?.repuestos.map((repuesto, index) => (
+                              <div key={index}>{repuesto.repuesto.nombre_repuesto}</div>
+                            ))} */}
+                    {/* </Tabla> */}
+
+                    {/* <tr>
+                        <Tabla>
+                          <FontAwesomeIcon icon={faHashtag} className="mr-2" />
+                          Cantidades de Repuestos
+                        </Tabla>
+                        <Tabla>
+                          {compras.find((compra) => compra._id === params.row._id)
+                            ?.repuestos.map((repuesto, index) => (
+                              <div key={index}>{repuesto.cantidad_repuesto}</div>
+                            ))}
+                        </Tabla>
+                      </tr> */}
+                    {/* 
+                      <tr>
+                        <Tabla>
+                          <FontAwesomeIcon icon={faHashtag} className="mr-2" />
+                          Precio unitario de Repuestos
+                        </Tabla>
+                        <Tabla>
+                          {compras.find((compra) => compra._id === params.row._id)
+                            ?.repuestos.map((repuesto, index) => (
+                              <div key={index}>{repuesto.precio_unitario}</div>
+                            ))}
+                        </Tabla>
+                      </tr> */}
+
+                    {/* <tr>
+                        <Tabla>
+                          <FontAwesomeIcon icon={faHashtag} className="mr-2" />
+                          Precio total de Repuestos
+                        </Tabla>
+                        <Tabla>
+                          {compras.find((compra) => compra._id === params.row._id)
+                            ?.repuestos.map((repuesto, index) => (
+                              <div key={index}>{repuesto.precio_total}</div>
+                            ))}
+                        </Tabla>
+                      </tr> */}
+                    {/* <tr>
+                        <Tabla >
+                          <FontAwesomeIcon icon={faHashtag} className="mr-2" />
+                          Cantidad Repuesto
+                        </Tabla>
+                        <Tabla >
+                          {
+                            compras.find(
+                              (cantidad) => cantidad._id === params.row._id
+                            )?.cantidad_repuesto
+                          }
+                        </Tabla>
+                      </tr> */}
+                    {/* <tr>
+                        <Tabla >
+                          <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
+                          Precio Unitario
+                        </Tabla>
+                        <Tabla >
+                          {
+                            compras.find(
+                              (precio) => precio._id === params.row._id
+                            )?.repuesto.precio_unitario
+                          }
+                        </Tabla>
+                      </tr> */}
+                    {/* <tr>
+                        <Tabla >
+                          <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
+                          Precio Total
+                        </Tabla>
+                        <Tabla >
+                          {
+                            compras.find(
+                              (precio) => precio._id === params.row._id
+                            )?.precio_total
+                          }
+                        </Tabla>
+                      </tr> */}
+
+                    <style>
+                      {
+                        `
+      
+      
+
+      table.scroll tbody,
+  table.scroll thead tr { display: block; }
+
+  table.scroll tbody {
+    height: 250px;
+    overflow-y: auto;
+    
+  }
+
+
+
+  table.scroll tbody td,
+  table.scroll thead th {
+      width: 140px;
+      
+  }
+
+
+
+  thead tr th { 
+    height: 30px;
+    line-height: 30px;
+    /*text-align: left;*/
+  }
+
+  tbody { border-top: 2px solid black; }
+
+  tbody td:last-child, thead th:last-child {
+      border-right: none !important;
+  }
+
+
+
+
+
+
+
+
+      
+      `}
+                    </style>
+
+                  </tbody>
+
                 </table>
-                
+                <div>
+                  <strong>Precio Total Compra:</strong>{" "}
+                  {calcularPrecioTotalCompra(params.row)}
+                </div>
+
               </Detalle>
             </button>
           </div>
@@ -285,13 +479,16 @@ export default function PageCompras() {
     },
   ];
 
+
+
+
   return (
     <div className="mt-16">
       <h1 className="text-2xl text-start ml-20">Gestionar Compras</h1>
       <div className="mx-10 justify-end flex">
         <Link to="/add-compra">
           <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
-          +
+            +
           </button>
         </Link>
       </div>
