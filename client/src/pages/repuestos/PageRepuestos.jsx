@@ -1,16 +1,18 @@
-import React, { useEffect, useCallback} from 'react'
+import React, { useEffect } from 'react'
 import { useRepuestos } from '../../context/RepuestosContext'
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { Link } from 'react-router-dom';
 import Swal from "sweetalert2";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faDownload ,faIdCard, faUser, faPhone, faPen, faTools, faPlus,faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faRegistered, faDollarSign, faHashtag} from "@fortawesome/free-solid-svg-icons";
 
+
+// NUEVAS IMPORTS AGREGADAS
 import Detalle from "../../components/Detalle";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faIdCard, faUser, faPhone, faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faRegistered, faDollarSign, faHashtag} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
 
-import * as XLSX from "xlsx";
+
 
 export default function PageRepuestos() {
   const { repuestos, getRepuestos, deleteRepuesto, updateRepuesto } = useRepuestos()
@@ -90,44 +92,6 @@ export default function PageRepuestos() {
     });
   };
 
-  const exportarAExcel = useCallback(() => {
-    const datos = repuestos.map((repuesto) => ({
-      Nombre: repuesto.nombre_repuesto,
-      Marca: repuesto.marca.nombre_marca,
-      Cantidad: repuesto.cantidad,
-      Precio: repuesto.precio,
-      Estado: repuesto.estado,
-    }));
-
-    const ws = XLSX.utils.json_to_sheet(datos);
-
-    // Agregar formato a los títulos (encabezados) y establecer autoFilter
-    ws["!cols"] = [{ wch: 15 }, { wch: 20 }, { wch: 15 }, { wch: 30 }, { wch: 15 }];
-    ws["!rows"] = [{ hpx: 20, outlineLevel: 0, hidden: false }];
-
-    // Establecer el formato de fondo y negrita para los títulos
-    for (let i = 0; i < 5; i++) {
-      const col = String.fromCharCode(65 + i); // Convertir número a letra (A, B, C, ...)
-      ws[`${col}1`].s = { font: { bold: true }, fill: { patternType: "solid", fgColor: { rgb: "#66FFCC" } } };
-    }
-
-    // Agregar formato a las celdas de datos y bordes
-    for (let i = 2; i <= repuestos.length + 1; i++) {
-      for (let j = 0; j < 5; j++) {
-        const col = String.fromCharCode(65 + j);
-        const cell = `${col}${i}`;
-        ws[cell].s = {
-          fill: { patternType: "solid", fgColor: { rgb: "#FFFFFF" } },
-          border: { left: { style: "thin", color: { rgb: "#000000" } }, right: { style: "thin", color: { rgb: "#000000" } }, top: { style: "thin", color: { rgb: "#000000" } }, bottom: { style: "thin", color: { rgb: "#000000" } } },
-        };
-      }
-    }
-
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Repuestos");
-    XLSX.writeFile(wb, "repuestos.xlsx");
-
-  }, [repuestos]);
 
 
   const columns = [
@@ -194,7 +158,7 @@ export default function PageRepuestos() {
         console.log("estado", estado);
         return (
           <div>
-            <button className={estado === "Activo" ? "" : "hidden"} title='Editar'>
+            <button className={estado === "Activo" ? "" : "hidden"}>
               <Link
                 className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
                 to={`/repuestos/${params.row._id}`}
@@ -209,7 +173,7 @@ export default function PageRepuestos() {
             >
             Eliminar
           </button> */}
-            <button title='Activar/Inactivar'
+            <button
               className={
                 estado === "Activo"
                   ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
@@ -219,7 +183,7 @@ export default function PageRepuestos() {
             >
               {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
             </button>
-            <button className={estado === "Activo" ? "" : "hidden"} title='Ver detalle'>
+            <button className={estado === "Activo" ? "" : "hidden"}>
               <Detalle
                 metodo={() => getRepuestos (params.row._id)}
                 id={params.row._id}
@@ -295,35 +259,15 @@ export default function PageRepuestos() {
   ];
 
   return (
-    <div className="mt-16 ">
-      <div className="flex justify-between">
-      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faTools} className="mr-2" />Gestión de Repuestos</h1>
-        <div className="mx-16 justify-end">
-          <Link to="/add-repuesto">
-            <button  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
-            <FontAwesomeIcon icon={faPlus} />
-            </button>
-          </Link>
-          <button
-          onClick={exportarAExcel}
-          className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent" title="Descargar excel"
-        ><FontAwesomeIcon icon={faDownload} />
-        </button>
-        </div>
-      </div>
-      
-
-{/* <div className="flex justify-between">
-      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faBuilding} className="mr-2" />Gestión de Marcas</h1>
-      <div className="mx-10 justify-end">
-        <Link to="/add-marca">
-        <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
-        <FontAwesomeIcon icon={faPlus} />
+    <div className="mt-16">
+      <h1 className="text-2xl text-start ml-20">Gestionar Repuestos</h1>
+      <div className="mx-10 justify-end flex">
+        <Link to="/add-repuesto">
+          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-8">
+            +
           </button>
         </Link>
       </div>
-      </div> */}
-
       <Box sx={{ width: "100%" }}>
         <DataGrid
           className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
