@@ -150,44 +150,45 @@ export default function PageRepuestos() {
     {
       field: "cantidad",
       headerName: "Cantidad",
-      width: 185,
+      width: 120,
       editable: true,
       headerClassName: 'custom-header',
     },
     {
       field: "precio",
       headerName: "Precio",
-      width: 170,
+      width: 150,
       editable: true,
       headerClassName: 'custom-header',
     },
     {
       field: "estado",
       headerName: "Estado",
-      width: 170,
+      width: 100,
       headerClassName: 'custom-header',
 
     },
-    {
-      field: "createdAt",
-      headerName: "Fecha Creacion",
-      width: 300,
-      editable: true,
-      headerClassName: 'custom-header',
-      renderCell: (params) => {
-        const date = new Date(params.value);
-        const formattedDate = date.toLocaleDateString("es-ES", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
-        return <div>{formattedDate}</div>;
-      },
-    },
+    // {
+    //   field: "createdAt",
+    //   headerName: "Fecha Creacion",
+    //   width: 300,
+    //   editable: true,
+    //   headerClassName: 'custom-header',
+    //   renderCell: (params) => {
+    //     const date = new Date(params.value);
+    //     const formattedDate = date.toLocaleDateString("es-ES", {
+    //       year: "numeric",
+    //       month: "long",
+    //       day: "numeric",
+    //     });
+    //     return <div>{formattedDate}</div>;
+    //   },
+    // },
     {
       field: "acciones",
       headerName: "Acciones",
       width: 200,
+      headerClassName: 'custom-header',
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("estado", estado);
@@ -341,7 +342,7 @@ export default function PageRepuestos() {
           sx={{
             color: "white",
             "& .MuiDataGrid-cell": {
-              fontSize: "18px",
+              fontSize: "15px",
             },
           }}
           slots={{ toolbar: GridToolbar }}

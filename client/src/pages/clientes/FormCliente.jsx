@@ -113,9 +113,9 @@ export default function FormCliente() {
           </option>
         </select>
         {errors.tipo && <p className="text-red-500">{errors.tipo.message}</p>}
-      <label>Cedula<span className="text-red-500">*</span></label>
+      <label>Documento<span className="text-red-500">*</span></label>
         <input 
-        placeholder='Cedula'
+        placeholder='Documento'
         {...register("cedula", CedulaRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' 
         />
@@ -123,7 +123,7 @@ export default function FormCliente() {
         <label>Nombre Completo<span className="text-red-500">*</span></label>
         <input 
         type="text" 
-        placeholder='Nombre Cliente' 
+        placeholder='Nombre Completo' 
         {...register("nombre_cliente", NombreRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
@@ -147,18 +147,18 @@ export default function FormCliente() {
 
         </select>
         {errors.sexo && <p className="text-red-500">{errors.sexo.message}</p>}
-      <label >Email Cliente</label>
+      <label >Email</label>
         <input 
-        placeholder='Email Cliente'
+        placeholder='Email'
         type="email"
         {...register("email_cliente")}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.email_cliente && <p className="text-red-500">{errors.email_cliente.message}</p>}
       
-      <label>Telefono Cliente<span className="text-red-500">*</span></label>
+      <label>Teléfono<span className="text-red-500">*</span></label>
         <input 
-        placeholder='Telefono Cliente'
+        placeholder='Telefono'
         {...register("telefono_cliente", TelefonoRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />

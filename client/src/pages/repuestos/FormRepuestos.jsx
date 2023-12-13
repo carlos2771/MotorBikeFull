@@ -132,7 +132,7 @@ export default function FormRepuesto() {
         ))}
 
 
-        <h1 className="text-2xl flex justify-center ">Agregar repuesto</h1>
+        <h1 className="text-2xl flex justify-center ">Agregar Repuesto</h1>
         <form className="mt-10" onSubmit={onSubmit}>
 
 

@@ -146,13 +146,15 @@ export default function PageClientes() {
   const columns = [
     {
       field: "cedula",
-      headerName: "Cedula",
+      headerName: "Documento",
       width: 180,
+      headerClassName: "font-custom text-lg"
     },
     {
       field: "nombre_cliente",
-      headerName: "Nombre",
+      headerName: "Nombre Completo",
       width: 200,
+      headerClassName: "font-custom text-lg"
     },
     // {
     //   field: "sexo",
@@ -166,13 +168,15 @@ export default function PageClientes() {
     // },
     {
       field: "telefono_cliente",
-      headerName: "Telefono",
+      headerName: "Teléfono",
       width: 190,
+      headerClassName: "font-custom text-lg"
     },
     {
       field: "estado",
       headerName: "Estado",
       width: 100,
+      headerClassName: "font-custom text-lg"
     },
     // {
     //   field: "createdAt",
@@ -193,6 +197,7 @@ export default function PageClientes() {
       field: "acciones",
       headerName: "Acciones",
       width: 200,
+      headerClassName: "font-custom text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("estado", estado);
@@ -359,7 +364,7 @@ export default function PageClientes() {
           sx={{
             color: "white",
             "& .MuiDataGrid-cell": {
-              fontSize: "18px",
+              fontSize: "15px",
             },
           }}
           slots={{ toolbar: GridToolbar }}

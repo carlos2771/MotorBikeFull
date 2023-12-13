@@ -21,7 +21,7 @@ const ActualizarPassword = () => {
   const onSubmit = async (values) => {
     // Validar que las contraseñas coincidan
     if (values.password !== values.confirmPassword) {
-      setPasswordError('Las contraseñas no coinciden');
+      // setPasswordError('Las contraseñas no coinciden');
       const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
