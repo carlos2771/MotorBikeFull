@@ -3,7 +3,7 @@ import { useRepuestos } from "../../context/RepuestosContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMarcas } from "../../context/MarcasContext";
-import { NegativeRequired, NombreRequired, RepuestoRequired } from "../../utils/validations";
+import { NegativeRequired, NombreRequired, RepuestoRequired , NombreRepuestoRequired} from "../../utils/validations";
 import Swal from "sweetalert2";
 
 export default function FormRepuesto() {
@@ -125,7 +125,7 @@ export default function FormRepuesto() {
           <input
             type="text"
             placeholder='Nombre'
-            {...register("nombre_repuesto", NombreRequired)}
+            {...register("nombre_repuesto", NombreRepuestoRequired)}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
             autoFocus
           />
