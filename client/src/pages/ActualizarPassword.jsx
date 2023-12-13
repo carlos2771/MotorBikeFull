@@ -5,7 +5,7 @@ import { PasswordRequire } from '../utils/validations';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert } from '@material-tailwind/react';
 import { useSpring, animated } from 'react-spring';
-
+import Swal from "sweetalert2";
 
 const ActualizarPassword = () => {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
@@ -22,13 +22,42 @@ const ActualizarPassword = () => {
     // Validar que las contraseñas coincidan
     if (values.password !== values.confirmPassword) {
       setPasswordError('Las contraseñas no coinciden');
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Contraseñas no coinciden",
+      });
       return;
     }
 
     try {
       console.log("Código:", params.code); 
       await actualizarPassword(params.code, values.password, values.confirmPassword);
-      console.log("Contraseña actualizada correctamente");
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Contraseña actualizada correctamente",
+      });
       navigate(`/login`);
     } catch (error) {
       console.error(error);

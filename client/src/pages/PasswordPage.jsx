@@ -5,6 +5,7 @@ import { EmailRequired } from '../utils/validations';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert } from "@material-tailwind/react";
 import { useSpring, animated } from 'react-spring';
+import Swal from "sweetalert2";
 
 const PasswordPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -19,11 +20,40 @@ const PasswordPage = () => {
       const isEmailRegistered = await enviarToken(values.email);
 
       if (isEmailRegistered) {
-        console.log(`El correo electrónico ${values.email} está registrado.`);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Correo enviado correctamente",
+        });
         setShouldNavigate(true);
         setEmailValue(values.email);
+        
       } else {
-        console.log(`El correo electrónico ${values.email} no está registrado.`);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "El correo es incorrecto",
+        });
         // Manejo del error aquí
         setError(`El Email ${values.email} no está registrado.`);
         // Limpiar el estado de error después de tres segundos
