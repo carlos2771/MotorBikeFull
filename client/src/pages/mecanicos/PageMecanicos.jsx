@@ -29,7 +29,7 @@ export default function PageMecanico() {
 
   const mostrarAlerta = (id, estado) => {
     const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
-    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar el cliente?" : "¿Estás seguro de habilitar el cliente?";
+    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar el mecánico?" : "¿Estás seguro de habilitar el mecánico?";
     const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
 
     Swal.fire({
