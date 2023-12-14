@@ -57,7 +57,6 @@ export default function FormCompra() {
 
   useEffect(() => {
     setAvailableRepuestos(repuestos);
-
   }, [repuestos]);
 
   const onSubmit = handleSubmit((data) => {
@@ -251,7 +250,6 @@ export default function FormCompra() {
           <h2 className="text-xl font-semibold mt-4 ">Repuestos Agregados:</h2>
 
           <ul>
-
             {repuestosList.map((repuesto, index) => (
               <li key={index}>
                 {repuesto.repuesto.nombre_repuesto} - Cantidad: {repuesto.cantidad_repuesto}, Precio Unitario: {repuesto.precio_unitario}, Precio Total: {repuesto.precio_total}

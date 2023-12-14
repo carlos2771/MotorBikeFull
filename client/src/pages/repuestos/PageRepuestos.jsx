@@ -10,7 +10,6 @@ import { faEnvelope, faDownload ,faIdCard, faUser, faPhone, faPen, faTools, faPl
 import Detalle from "../../components/Detalle";
 import {Tabla, Titulo} from "../../components/Tabla";
 
-
 function formatCurrency(value) {
   // Agrega el signo de peso
   const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
@@ -18,6 +17,12 @@ function formatCurrency(value) {
 }
 
 import * as XLSX from "xlsx";
+
+function formatCurrency2(value) {
+  // Solo separa los miles sin agregar el signo de pesos
+  const formattedValue = value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return formattedValue;
+}
 
 export default function PageRepuestos() {
   const { repuestos, getRepuestos, deleteRepuesto, updateRepuesto } = useRepuestos()
@@ -142,7 +147,6 @@ export default function PageRepuestos() {
       field: "nombre_repuesto",
       headerName: "Repuesto",
       width: 160,
-      editable: true,
       headerClassName: 'custom-header',
 
     },
@@ -150,16 +154,13 @@ export default function PageRepuestos() {
       field: "marca",
       headerName: "Marca",
       width: 170,
-      editable: true,
       headerClassName: 'custom-header',
       valueGetter: (params) => params.row.marca.nombre_marca,
     },
     {
       field: "cantidad",
-      headerName: "cantidad",
-      width: 185,
-      editable: false,
-
+      headerName: "Cantidad",
+      width: 120,
       headerClassName: 'custom-header',
       valueFormatter: (params) => formatCurrency2(params.value),
     },
@@ -167,7 +168,6 @@ export default function PageRepuestos() {
       field: "precio",
       headerName: "Precio",
       width: 170,
-      editable: false,
       headerClassName: 'custom-header',
       valueFormatter: (params) => formatCurrency(params.value),
     },
