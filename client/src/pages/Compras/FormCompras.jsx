@@ -5,6 +5,9 @@ import utc from "dayjs/plugin/utc";
 import dayjs from 'dayjs';
 dayjs.extend(utc);
 
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRepuestos } from "../../context/RepuestosContext";
 import { NegativeRequired, RepuestoRequired, fecha, nombre_RepuestoValidacion, codeCompra, NombreMaRequired } from "../../utils/validations";
@@ -135,7 +138,7 @@ export default function FormCompra() {
 
   return (
     <div className="flex items-center justify-center pt-20">
-      <div className="bg-slate-700 p-10 shadow-lg shadow-blue-600/40" style={{ width: '1000px' }}>
+      <div className="bg-slate-700 p-10 shadow-lg shadow-blue-600/40" style={{ width: '800px' }}>
         {comprasErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
@@ -279,7 +282,6 @@ export default function FormCompra() {
                   onClick={() => eliminarRepuesto(index)}
                 >
                   <FontAwesomeIcon icon={faTrash} />
-
                 </button>
               </li>
             ))}

@@ -29,7 +29,7 @@ export default function PageMecanico() {
 
   const mostrarAlerta = (id, estado) => {
     const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
-    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar el cliente?" : "¿Estás seguro de habilitar el cliente?";
+    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar el mecánico?" : "¿Estás seguro de habilitar el mecánico?";
     const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
 
     Swal.fire({
@@ -141,13 +141,13 @@ export default function PageMecanico() {
     },
     {
         field: "cedula_mecanico",
-        headerName: "Número Documento",
+        headerName: "Documento",
         width: 200,
         headerClassName: "font-custom text-lg",
     },
     {
       field: "nombre_mecanico",
-      headerName: "Nombre",
+      headerName: "Nombre Completo",
       width: 250,
       headerClassName: "font-bold text-lg"
 
@@ -155,7 +155,7 @@ export default function PageMecanico() {
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 300,
+      width: 250,
       headerClassName: "font-bold text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
@@ -215,7 +215,7 @@ export default function PageMecanico() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faIdCard} className="mr-2" />
-                        Cedula
+                        Documento
                       </Tabla>
                       <Tabla >
                         {
@@ -228,7 +228,7 @@ export default function PageMecanico() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faUser} className="mr-2" />
-                        Nombre
+                        Nombre Completo
                       </Tabla>
                       <Tabla >
                       {
@@ -240,7 +240,7 @@ export default function PageMecanico() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faPhone} className="mr-2" />
-                        Telefono
+                        Teléfono
                       </Tabla>
                       <Tabla >
                       {
@@ -252,7 +252,7 @@ export default function PageMecanico() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faHome} className="mr-2" />
-                        Direccion
+                        Dirección
                       </Tabla>
                       <Tabla >
                       {
@@ -322,7 +322,7 @@ export default function PageMecanico() {
           sx={{
             color: "white",
             '& .MuiDataGrid-cell': {
-              fontSize: '18px',
+              fontSize: '15px',
             },
           }}
           slots={{ toolbar: GridToolbar }}

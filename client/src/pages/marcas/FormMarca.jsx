@@ -3,7 +3,7 @@ import { useMarcas } from "../../context/MarcasContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { NombreMaRequired } from "../../utils/validations";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
 
 export default function FormMecanico() {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
@@ -15,78 +15,56 @@ export default function FormMecanico() {
     (async () => {
       if (params.id) {
         const marca = await getMarca(params.id);
-        console.log("marca por params", marca);
         setValue("nombre_marca", marca.nombre_marca);
-      }
-      // Establecer el valor predeterminado para "estado" como "Activo" al crear una nueva marca
-      else {
+        setValue("estado", marca.estado);
+      } else {
         setValue("estado", "Activo");
       }
     })();
   }, []);
 
   const onSubmit = handleSubmit(async (data) => {
-    // Convertir los campos a minúsculas
     const lowercaseData = {
       ...data,
       nombre_marca: data.nombre_marca.toLowerCase(),
     };
 
     if (params.id) {
-      updateMarca(params.id, lowercaseData);
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
-      Toast.fire({
-        icon: "success",
-        title: "Actualizado correctamente",
-      });
-      navigate("/marcas");
+      const res = await updateMarca(params.id, lowercaseData);
+      handleApiResponse(res, "Actualizado correctamente");
     } else {
       const res = await createMarca(lowercaseData);
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
-      Toast.fire({
-        icon: "success",
-        title: "Agregado correctamente",
-      });
-      if (res) navigate('/marcas');
-      else{
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "error",
-          title: "No se ha agregado",
-        });
-      }
+      handleApiResponse(res, "Agregado correctamente");
     }
   });
+
+  const handleApiResponse = (res, successMessage) => {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+
+    if (res && !res.error) {
+      Toast.fire({
+        icon: "success",
+        title: successMessage,
+      });
+      navigate('/marcas');
+    } else {
+      // Toast.fire({
+      //   icon: "error",
+      //   title: "La marca ya existe . Verifica los errores.",
+      // }); 
+      console.log("no se agrego, la marca ya existe")
+    }
+  };
 
   return (
     <div className='flex items-center justify-center pt-20'>

@@ -62,6 +62,14 @@ export const createMarca = async(req, res) =>{
 // Actualiza una marca por su ID
 export const updateMarca= async(req, res) =>{
     try {
+        // Extrae el nombre de la marca del cuerpo de la solicitud
+        const  {nombre_marca, estado} = req.body
+
+        const marcaFound = await Marca.findOne({nombre_marca})
+        if(marcaFound) return res.status(400).json({message:["La marca ya existe, no se puede actualizar"]});
+        // Para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
+        console.log(req.user) 
+
         // Busca la marca por su ID y actualíza con los datos proporcionados en el cuerpo de la solicitud
         const marca = await Marca.findByIdAndUpdate(req.params.id, req.body,{ 
 

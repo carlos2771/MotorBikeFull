@@ -8,7 +8,6 @@ export default function HomePage() {
     "https://wallpapercave.com/wp/wp9343809.jpg",
     "https://wallpapercave.com/wp/wp9638466.jpg", 
     "https://wallpapercave.com/wp/wp9638428.jpg",
-    "https://getwallpapers.com/wallpaper/full/5/c/0/606489.jpg",
   ];
   return (
     <div>
