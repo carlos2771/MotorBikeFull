@@ -140,10 +140,10 @@ export default function FormMecanico() {
             <p className="text-red-500">{errors.tipo.message}</p>
           )}
           <label>
-            Número de Documento<span className="text-red-500">*</span>
+            Documento<span className="text-red-500">*</span>
           </label>
           <input
-            placeholder="Número de Documento"
+            placeholder="Documento"
             {...register("cedula_mecanico")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             autoFocus
@@ -152,7 +152,7 @@ export default function FormMecanico() {
             <p className="text-red-500">{errors.cedula_mecanico.message}</p>
           )}
           <label>
-            Nombre Mecánico<span className="text-red-500">*</span>
+            Nombre Completo<span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -166,7 +166,7 @@ export default function FormMecanico() {
           )}
 
           <label>
-            Teléfono Mecánico<span className="text-red-500">*</span>
+            Teléfono<span className="text-red-500">*</span>
           </label>
           <input
             placeholder="Teléfono Mecánico"

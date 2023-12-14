@@ -65,9 +65,6 @@ export const createCompras = async (req, res) => {
   }
 };
 
-
-
-
 export const updateCompras = async (req, res) => {
   try {
     const compra = await Compras.findByIdAndUpdate(
@@ -75,7 +72,6 @@ export const updateCompras = async (req, res) => {
       { anulado: true },
       { new: true }
     );
-
     if (!compra) {
       return res.status(404).json({ message: "Compra no encontrada" });
     }
@@ -102,8 +98,6 @@ export const updateCompras = async (req, res) => {
     return res.status(500).json({ message: "Error al anular la compra", error });
   }
 };
-
-
 
 
 // export const updateCompras = async (req, res) => {
@@ -159,7 +153,6 @@ export const updateCompras = async (req, res) => {
 //     return res.status(500).json({ message: "Error al actualizar la compra", error });
 //   }
 // };
-
 
 export const deleteCompras = async (req, res) => {
   try {

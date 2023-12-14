@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faIdCard, faUsers, faUser, faPhone, faPlus, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faCircleInfo, faDownload} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faIdCard, faUsers, faUser, faPhone, faPlus, faPencil , faBan, faMars, faCheck, faInfoCircle, faAddressCard, faCircleInfo, faDownload} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
 import * as XLSX from "xlsx";
 
@@ -146,13 +146,15 @@ export default function PageClientes() {
   const columns = [
     {
       field: "cedula",
-      headerName: "Cedula",
+      headerName: "Documento",
       width: 180,
+      headerClassName: "font-custom text-lg"
     },
     {
       field: "nombre_cliente",
-      headerName: "Nombre",
+      headerName: "Nombre Completo",
       width: 200,
+      headerClassName: "font-custom text-lg"
     },
     // {
     //   field: "sexo",
@@ -166,13 +168,15 @@ export default function PageClientes() {
     // },
     {
       field: "telefono_cliente",
-      headerName: "Telefono",
+      headerName: "Teléfono",
       width: 190,
+      headerClassName: "font-custom text-lg"
     },
     {
       field: "estado",
       headerName: "Estado",
       width: 100,
+      headerClassName: "font-custom text-lg"
     },
     // {
     //   field: "createdAt",
@@ -193,6 +197,7 @@ export default function PageClientes() {
       field: "acciones",
       headerName: "Acciones",
       width: 200,
+      headerClassName: "font-custom text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("estado", estado);
@@ -250,7 +255,7 @@ export default function PageClientes() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
-                        Cedula
+                        Documento
                       </Tabla>
                       <Tabla >
                       {
@@ -261,7 +266,7 @@ export default function PageClientes() {
                     </tr>
                     <tr>
                       <Tabla >
-                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                        <FontAwesomeIcon icon={faUser} className="mr-2" />
                         Nombre
                       </Tabla>
                       <Tabla >
@@ -274,7 +279,7 @@ export default function PageClientes() {
                     </tr>
                     <tr>
                       <Tabla >
-                        <FontAwesomeIcon icon={faUser} className="mr-2" />
+                        <FontAwesomeIcon icon={faMars} className="mr-2" />
                         Sexo
                       </Tabla>
                       <Tabla >
@@ -359,7 +364,7 @@ export default function PageClientes() {
           sx={{
             color: "white",
             "& .MuiDataGrid-cell": {
-              fontSize: "18px",
+              fontSize: "15px",
             },
           }}
           slots={{ toolbar: GridToolbar }}

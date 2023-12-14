@@ -183,7 +183,7 @@ export default function PageCompras() {
     {
       field: "repuestos",
       headerName: "Repuesto",
-      width: 160,
+      width: 400,
       headerClassName: "custom-header",
       valueGetter: (params) => {
         const repuestos = params.row.repuestos;
@@ -223,19 +223,19 @@ export default function PageCompras() {
     //   headerClassName: "custom-header",
     // },
 
-    {
-      field: "fecha",
-      headerName: "Fecha",
-      width: 250,
-      headerClassName: "custom-header",
-      renderCell: (params) => {
-        console.log(params.value); // Agrega esta línea para imprimir el valor de fecha en la consola
-        const date = new Date(params.value);
-        const formattedDate = dayjs.utc(date).locale('es').format("DD [de] MMMM [de] YYYY");
-        return <div>{formattedDate}</div>;
-      },
+    // {
+    //   field: "fecha",
+    //   headerName: "Fecha",
+    //   width: 250,
+    //   headerClassName: "custom-header",
+    //   renderCell: (params) => {
+    //     console.log(params.value); // Agrega esta línea para imprimir el valor de fecha en la consola
+    //     const date = new Date(params.value);
+    //     const formattedDate = dayjs.utc(date).locale('es').format("DD [de] MMMM [de] YYYY");
+    //     return <div>{formattedDate}</div>;
+    //   },
 
-    },
+    // },
     // ... Otras columnas
 
 
@@ -246,21 +246,21 @@ export default function PageCompras() {
     //   width: 100,
     //   headerClassName: "custom-header",
     // },
-    // {
-    //   field: "createdAt",
-    //   headerName: "Fecha Creacion",
-    //   width: 300,
-    //   headerClassName: "custom-header",
-    //   renderCell: (params) => {
-    //     const date = new Date(params.value);
-    //     const formattedDate = date.toLocaleDateString("es-ES", {
-    //       year: "numeric",
-    //       month: "long",
-    //       day: "numeric",
-    //     });
-    //     return <div>{formattedDate}</div>;
-    //   },
-    // },
+    {
+      field: "createdAt",
+      headerName: "Fecha Creacion",
+      width: 300,
+      headerClassName: "custom-header",
+      renderCell: (params) => {
+        const date = new Date(params.value);
+        const formattedDate = date.toLocaleDateString("es-ES", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        return <div>{formattedDate}</div>;
+      },
+    },
     {
       field: "acciones",
       headerName: "Acciones",
@@ -564,8 +564,8 @@ export default function PageCompras() {
   return (
     <div className="mt-16">
       <div className="flex justify-between">
-        <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faShoppingBag} className="mr-2" />Gestionar Compras</h1>
-        <div className="mx-10 justify-end">
+      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faShoppingBag} className="mr-2" />Gestión de Compras</h1>
+      <div className="mx-10 justify-end">
           <Link to="/add-compra">
             <button className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
               <FontAwesomeIcon icon={faPlus} />
@@ -598,7 +598,7 @@ export default function PageCompras() {
           sx={{
             color: "white",
             "& .MuiDataGrid-cell": {
-              fontSize: "18px", // Cambia el tamaño de fuente aquí
+              fontSize: "15px", // Cambia el tamaño de fuente aquí
             },
           }}
           slots={{ toolbar: GridToolbar }}

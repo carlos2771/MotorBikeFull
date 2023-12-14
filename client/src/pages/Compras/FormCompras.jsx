@@ -5,6 +5,9 @@ import utc from "dayjs/plugin/utc";
 import dayjs from 'dayjs';
 dayjs.extend(utc);
 
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRepuestos } from "../../context/RepuestosContext";
 import { NegativeRequired, RepuestoRequired, fecha, nombre_RepuestoValidacion, codeCompra, NombreMaRequired } from "../../utils/validations";
@@ -57,6 +60,7 @@ export default function FormCompra() {
 
   useEffect(() => {
     setAvailableRepuestos(repuestos);
+
   }, [repuestos]);
 
   const onSubmit = handleSubmit((data) => {
@@ -135,7 +139,7 @@ export default function FormCompra() {
 
   return (
     <div className="flex items-center justify-center pt-20">
-      <div className="bg-slate-700 p-10 shadow-lg shadow-blue-600/40" style={{ width: '1000px' }}>
+      <div className="bg-slate-700 p-10 shadow-lg shadow-blue-600/40" style={{ width: '800px' }}>
         {comprasErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
@@ -143,7 +147,6 @@ export default function FormCompra() {
         ))}
         <h1 className="text-2xl flex justify-center ">Agregar Compra </h1>
         <form className="mt-10" onSubmit={onSubmit}>
-
           <div className="flex">
             <div className="mr-4">
               {/* <label>Proveedor</label> */}
@@ -175,7 +178,6 @@ export default function FormCompra() {
               {errors.codigo && (
                 <p className="text-red-500 mt-2">{errors.codigo.message}</p>
               )}
-
             </div>
 
 
@@ -271,6 +273,7 @@ export default function FormCompra() {
           <h2 className="text-xl font-semibold mt-4 ">Repuestos Agregados:</h2>
 
           <ul>
+
             {repuestosList.map((repuesto, index) => (
               <li key={index}>
                 {repuesto.repuesto.nombre_repuesto} - Cantidad: {repuesto.cantidad_repuesto}, Precio Unitario: {repuesto.precio_unitario}, Precio Total: {repuesto.precio_total}
@@ -279,13 +282,10 @@ export default function FormCompra() {
                   onClick={() => eliminarRepuesto(index)}
                 >
                   <FontAwesomeIcon icon={faTrash} />
-
                 </button>
               </li>
             ))}
           </ul>
-
-
           
           {/* Mostrar la suma total de los precios */}
           
@@ -313,7 +313,6 @@ export default function FormCompra() {
        
         </form>
           <p className="text-right">Precio total compra: {precioTotalCompra}</p>
-
       </div>
       
     </div>

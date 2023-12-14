@@ -4,7 +4,7 @@ import  Cliente from "../models/cliente.model.js"
 // Obtiene todos los clientes
 export const getClientes = async(req, res) =>{
     try {
-        const cliente = await Cliente.find();
+        const cliente = await Cliente.find().sort({createdAt : 'desc'});
         if (!cliente) {
           return res.status(404).json({ message: "cliente no encontrados" });
         }
@@ -36,7 +36,7 @@ export const createCliente = async(req, res) =>{
      const clientFound = await Cliente.findOne({email_cliente})
      if(clientFound) return res.status(400).json({message:["el correo del cliente ya existe"]});
      const cedulaFound = await Cliente.findOne({cedula})
-     if(cedulaFound) return res.status(400).json({message:["cedula cliente ya existe"]});
+     if(cedulaFound) return res.status(400).json({message:["El documento del cliente ya existe"]});
      
  
      // para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado

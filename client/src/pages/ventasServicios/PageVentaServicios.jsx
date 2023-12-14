@@ -7,25 +7,43 @@ import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faUser, faPen, faDownload, faPencil, faBan, faCalendarDay, faCheck, faInfoCircle, faDollarSign, faHandshake } from "@fortawesome/free-solid-svg-icons";
-import { Tabla, Titulo } from "../../components/Tabla";
+
+import { faPlus, faLock,faUser,faPen,faDownload,faPencil , faBan,faCalendarDay, faInfoCircle,faDollarSign,faShoppingCart,  faHandshake} from "@fortawesome/free-solid-svg-icons";
+import {Tabla, Titulo} from "../../components/Tabla";
+
+
+
+function formatCurrency(value) {
+  // Agrega el signo de peso
+  const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+  return formattedValue;
+}
+
 
 
 export default function PageVentaServicios() {
-  const { ventasServicios, getVentasServicios, deleteVentaServicio, updateVentaServicio } = useVentasServicios()
 
-  useEffect(() => {
-    try {
-      getVentasServicios();
+    const {ventasServicios, getVentasServicios, deleteVentaServicio,updateVentaServicio} = useVentasServicios()
+   
+    useEffect(() => {
+        try {
+            getVentasServicios();
+            
+        } catch (error) {
+          console.error("Error al obtener las ventas:", error);
+        }
+      }, []);
 
-    } catch (error) {
-      console.error("Error al obtener las ventas:", error);
-    }
-  }, []);
-  const mostrarAlerta = (id, estado) => {
-    const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
-    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar la venta ?" : "¿Estás seguro de habilitar la venta ?";
-    const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
+
+      const mostrarAlerta = (id, estado) => {
+  const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
+  const text =
+    estado === "Activo"
+      ? "¿Estás seguro de inhabilitar la venta ?"
+      : "¿Estás seguro de habilitar la venta ?";
+  const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
+
+  if (estado === "Activo") {
 
     Swal.fire({
       title: title,
@@ -39,9 +57,13 @@ export default function PageVentaServicios() {
       iconColor: "#2563eb",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
-        cancelButton: "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500"
-      }
+
+        confirmButton:
+          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+        cancelButton:
+          "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
+      },
+
     }).then((result) => {
       if (result.isConfirmed) {
         cambiarEstado(id, estado);
@@ -54,11 +76,12 @@ export default function PageVentaServicios() {
           didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
-          }
+          },
         });
         Toast.fire({
           icon: "success",
-          title: "Se ha modificado"
+          title: "Se ha modificado",
+
         });
       } else {
         const Toast = Swal.mixin({
@@ -70,7 +93,37 @@ export default function PageVentaServicios() {
           didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
-          }
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "No se ha modificado",
+        });
+      }
+    });
+  } else {
+    // Si la venta está desactivada, solo mostrar un mensaje indicando que no se puede realizar ninguna acción
+    Swal.fire({
+      title: "Acción no permitida",
+      text: "Esta venta ya está desactivada y no se puede modificar.",
+      icon: "info",
+      background: "#334155",
+      color: "white",
+      iconColor: "#2563eb",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+      },
+    });
+  }
+};
+    
+      const cambiarEstado = (id, estado) => {
+        const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
+        updateVentaServicio(id, { estado: nuevoEstado }).then(() => {
+          getVentasServicios();
+
         });
         Toast.fire({
           icon: "error",
@@ -125,87 +178,74 @@ export default function PageVentaServicios() {
     XLSX.writeFile(wb, 'ventasServicios.xlsx');
   }, [ventasServicios]);
 
+      
+      const columns = [
+        {
+          field: "nombre_mecanico",
+          headerName: "Mecánico",
+          width: 160,   
+          headerClassName: 'custom-header',
+          valueGetter: (params) => params.row.mecanico.nombre_mecanico,
+        },
+        {
+          field: "nombre_cliente",
+          headerName: "Cliente",
+          width: 170,
+          headerClassName: 'custom-header',
+          valueGetter: (params) => params.row.cliente.nombre_cliente,
+        },
+        {
+          field: "precio_servicio",
+          headerName: "Precio de servicio",
+          width: 185,
+          headerClassName: 'custom-header',
+          valueFormatter: (params) => formatCurrency(params.value),
+        },
+        // {
+        //   field: "descripcion",
+        //   headerName: "Descripcion",
+        //   width: 170,
+        //   editable: true,
+        //   headerClassName: 'custom-header',
+        // }
 
+        {
+          field: "createdAt",
+          headerName: "Fecha de venta",
+          width: 200,
+          headerClassName: 'custom-header',
+          renderCell: (params) => {
+            const date = new Date(params.value);
+            date.toLocaleString("en-US", { timeZone: "America/Bogota" });
+            const formattedDate = date.toLocaleDateString("es-ES", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            });
+        
+            return <div>{formattedDate}</div>;
+          },
+        },
+        // {
+        //   field: "estado",
+        //   headerName: "Estado",
+        //   width: 170,
+        //   headerClassName: 'custom-header',
+    
+        // },
+        
 
-  const columns = [
-    {
-      field: "nombre_mecanico",
-      headerName: "Mecanico",
-      width: 160,
-      editable: true,
-      headerClassName: 'custom-header',
-      valueGetter: (params) => params.row.mecanico.nombre_mecanico,
-    },
-    {
-      field: "nombre_cliente",
-      headerName: "Cliente",
-      width: 170,
-      editable: true,
-      headerClassName: 'custom-header',
-      valueGetter: (params) => params.row.cliente.nombre_cliente,
-    },
-    {
-      field: "precio_servicio",
-      headerName: "Precio de servicio ",
-      width: 185,
-      editable: true,
-      headerClassName: 'custom-header',
-    },
-    // {
-    //   field: "descripcion",
-    //   headerName: "Descripcion",
-    //   width: 170,
-    //   editable: true,
-    //   headerClassName: 'custom-header',
-    // }
-
-    {
-      field: "createdAt",
-      headerName: "Fecha de venta",
-      width: 300,
-      editable: true,
-      headerClassName: 'custom-header',
-      renderCell: (params) => {
-        const date = new Date(params.value);
-        date.toLocaleString("en-US", { timeZone: "America/Bogota" });
-        const formattedDate = date.toLocaleDateString("es-ES", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
-
-        return <div>{formattedDate}</div>;
-      },
-    },
-    {
-      field: "estado",
-      headerName: "Estado",
-      width: 170,
-      headerClassName: 'custom-header',
-
-    },
-
-
-    {
-      field: "acciones",
-      headerName: "Acciones",
-      width: 200,
-      headerClassName: "custom-header",
-      renderCell: (params) => {
-        const estado = params.row.estado;
-        console.log("estado", estado);
-        return (
-          <div>
-            <button className={estado === "Activo" ? "" : "hidden"} title='Editar'>
-              <Link
-                className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
-                to={`/ventas-servicios/${params.row._id}`}
-              >
-                <FontAwesomeIcon icon={faPencil} />
-              </Link>
-            </button>
-
-            {/* <button
+        {
+          field: "acciones",
+          headerName: "Acciones",
+          width: 200,
+          headerClassName: "custom-header",
+          renderCell: (params) => {
+            const estado = params.row.estado;
+            console.log("estado", estado);
+            return (
+              <div>
+                {/* <button
                   className="px-4 py-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
                   onClick={() => {
                     deleteVentaServicio(params.row._id);
@@ -213,15 +253,15 @@ export default function PageVentaServicios() {
                 >
                   Eliminar
                 </button> */}
-            <button title='Activar/Inactivar'
-              className={
-                estado === "Activo"
-                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
-                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                <button title='Inactivar'
+                  className={
+                    estado === "Activo"
+                      ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
+                      : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
               }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
-              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
+              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faLock} />}
             </button>
             <button className={estado === "Activo" ? "" : "hidden"} title='Ver detalle'>
               <Detalle
@@ -238,7 +278,7 @@ export default function PageVentaServicios() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faUser} className="mr-2" />
-                        Mecanico
+                        Mecánico
                       </Tabla>
                       <Tabla >
                         {
@@ -267,10 +307,12 @@ export default function PageVentaServicios() {
                         Precio de servicio
                       </Tabla>
                       <Tabla >
-                        {
-                          ventasServicios.find((precio) => precio._id === params.row._id)
-                            ?.precio_servicio
-                        }
+                      {
+                      formatCurrency(
+                        ventasServicios.find((precio) => precio._id === params.row._id)
+                          ?.precio_servicio
+                      )
+                    }
                       </Tabla>
                     </tr>
                     <tr>
@@ -312,14 +354,14 @@ export default function PageVentaServicios() {
       },
     },
   ];
-  return (
-    <div className="mt-16 ">
-      <div className="flex justify-between">
-        <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faHandshake} className="mr-2" />Gestionar ventas de servicios</h1>
-        <div className="mx-16 justify-end flex">
-          <Link to="/add-venta-servicio">
-            <button className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
-              <FontAwesomeIcon icon={faPlus} />
+      return (
+        <div className="mt-16 ">
+          <div className="flex justify-between">
+          <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faHandshake} className="mr-2" />Gestión de Ventas Servicios</h1>
+          <div className="mx-16 justify-end flex">
+              <Link to="/add-venta-servicio">
+              <button  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
+            <FontAwesomeIcon icon={faPlus} />
             </button>
           </Link>
           <button
@@ -329,33 +371,34 @@ export default function PageVentaServicios() {
           >
             <FontAwesomeIcon icon={faDownload} />
           </button>
+            </div>
+          </div>
+          <Box sx={{ width: "100%" }}>
+            <DataGrid
+              className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
+              rows={ventasServicios}
+              columns={columns}
+              columnHeader
+              getRowId={(row) => row._id}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              disableRowSelectionOnClick
+              sx={{
+                color: "white",
+                '& .MuiDataGrid-cell': {
+                  fontSize: '15px', // Cambia el tamaño de fuente aquí
+                },
+              }}
+              slots={{ toolbar: GridToolbar }}
+            />
+          </Box>
         </div>
-      </div>
-      <Box sx={{ width: "100%" }}>
-        <DataGrid
-          className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
-          rows={ventasServicios}
-          columns={columns}
-          getRowId={(row) => row._id}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          pageSizeOptions={[5]}
-          disableRowSelectionOnClick
-          sx={{
-            color: "white",
-            '& .MuiDataGrid-cell': {
-              fontSize: '15px', // Cambia el tamaño de fuente aquí
-            },
-          }}
-          slots={{ toolbar: GridToolbar }}
-        />
-      </Box>
-    </div>
-  );
-}
-///Comit
+      );
+    }
+
