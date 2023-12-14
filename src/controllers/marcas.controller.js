@@ -60,44 +60,31 @@ export const createMarca = async(req, res) =>{
 }
 
 // Actualiza una marca por su ID
-export const updateMarca = async (req, res) => {
+export const updateMarca= async(req, res) =>{
     try {
-        // Busca la marca por su ID
-        const existingMarca = await Marca.findById(req.params.id);
+        // Extrae el nombre de la marca del cuerpo de la solicitud
+        const  {nombre_marca, estado} = req.body
 
+        const marcaFound = await Marca.findOne({nombre_marca})
+        if(marcaFound) return res.status(400).json({message:["La marca ya existe, no se puede actualizar"]});
+        // Para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
+        console.log(req.user) 
+
+        // Busca la marca por su ID y actualíza con los datos proporcionados en el cuerpo de la solicitud
+        const marca = await Marca.findByIdAndUpdate(req.params.id, req.body,{ 
+
+            // New y true son para que el guarde los datos nuevos que ingrese el usuario
+            new: true
+        })
         // Si la marca no se encuentra, devuelve un código de estado 404 y un mensaje de error
-        if (!existingMarca) {
-            return res.status(404).json({ message: "Marca no encontrada" });
-        }
-
-        // Extrae el nombre de la marca y el estado del cuerpo de la solicitud
-        const { nombre_marca, estado } = req.body;
-
-        // Si el nombre de la marca ha cambiado, verifica si ya existe
-        if (nombre_marca && nombre_marca !== existingMarca.nombre_marca) {
-            const marcaFound = await Marca.findOne({ nombre_marca });
-            if (marcaFound) {
-                return res.status(400).json({ message: ["La marca ya existe"] });
-            }
-        }
-
-        // Actualiza la marca con los datos proporcionados en el cuerpo de la solicitud
-        const updatedMarca = await Marca.findByIdAndUpdate(
-            req.params.id,
-            { nombre_marca, estado },
-            {
-                // new y true son para que el guarde los datos nuevos que ingrese el usuario
-                new: true,
-            }
-        );
+        if(!marca) return res.status(404).json({message: "Marca no encontrada"})
 
         // Devuelve la marca actualizada en formato JSON
-        res.json(updatedMarca);
+        res.json(marca)
     } catch (error) {
-        return res.status(500).json({ message: "Error al actualizar la marca", error });
+        return res.status(500).json({ message: " Error al actualizar la marca", error });
     }
-};
-
+}
 
 // Elimina una marca por su ID
 export const deleteMarca = async(req, res) =>{
