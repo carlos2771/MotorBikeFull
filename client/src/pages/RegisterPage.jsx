@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@material-tailwind/react";
-import { EmailRequired, EstadoRequired ,PasswordRequire } from "../utils/validations";
+import { EmailRequired, EstadoRequired ,PasswordRequire, NombreMaRequired } from "../utils/validations";
 import { useSpring, animated } from 'react-spring';
 
 export default function registerPage() {
@@ -51,7 +51,7 @@ export default function registerPage() {
         
           <input
             type="text"
-            {...register("username",EstadoRequired )}
+            {...register("username",NombreMaRequired )}
             className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white px-4 py-2 rounded2 my-2 border-0 border-b-2 border-sky-500   "
             placeholder="Nombre de usuario"
           />
@@ -59,7 +59,7 @@ export default function registerPage() {
             <p className="text-red-500">Nombre de usuario es requerido</p> // Corregido "Username" a "Username"
           )}
           <input
-            type="email"
+            type="text"
             {...register("email", EmailRequired)}
             className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white px-4 py-2 rounded2 my-2 border-0 border-b-2 border-sky-500 "
             placeholder="Email"
