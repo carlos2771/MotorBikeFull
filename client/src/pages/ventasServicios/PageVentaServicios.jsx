@@ -30,64 +30,87 @@ export default function PageVentaServicios() {
           console.error("Error al obtener las ventas:", error);
         }
       }, []);
+
+
       const mostrarAlerta = (id, estado) => {
-        const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
-        const text =estado === "Activo"? "¿Estás seguro de inhabilitar la venta ?": "¿Estás seguro de habilitar la venta ?";
-        const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
-    
-        Swal.fire({
-          title: title,
-          text: text,
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Sí",
-          cancelButtonText: "No",
-          background: "#334155",
-          color: "white",
-          iconColor: "#2563eb",
-          buttonsStyling: false,
-          customClass: {
-            confirmButton: "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
-            cancelButton: "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500"
-          }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            cambiarEstado(id, estado);
-            const Toast = Swal.mixin({
-              toast: true,
-              position: "top-end",
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-              didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-              }
-            });
-            Toast.fire({
-              icon: "success",
-              title: "Se ha modificado"
-            });
-          }else {
-            const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.onmouseenter = Swal.stopTimer;
-              toast.onmouseleave = Swal.resumeTimer;
-            }
-          });
-          Toast.fire({
-            icon: "error",
-            title: "No se ha modificado"
-          });
-        }}
-        );
-        
-      };
+  const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
+  const text =
+    estado === "Activo"
+      ? "¿Estás seguro de inhabilitar la venta ?"
+      : "¿Estás seguro de habilitar la venta ?";
+  const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
+
+  if (estado === "Activo") {
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+      background: "#334155",
+      color: "white",
+      iconColor: "#2563eb",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+        cancelButton:
+          "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        cambiarEstado(id, estado);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Se ha modificado",
+        });
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "No se ha modificado",
+        });
+      }
+    });
+  } else {
+    // Si la venta está desactivada, solo mostrar un mensaje indicando que no se puede realizar ninguna acción
+    Swal.fire({
+      title: "Acción no permitida",
+      text: "Esta venta ya está desactivada y no se puede modificar.",
+      icon: "info",
+      background: "#334155",
+      color: "white",
+      iconColor: "#2563eb",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+      },
+    });
+  }
+};
     
       const cambiarEstado = (id, estado) => {
         const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
