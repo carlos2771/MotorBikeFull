@@ -145,7 +145,6 @@ export default function FormCompra() {
         ))}
         <h1 className="text-2xl flex justify-center ">Agregar Compra </h1>
         <form className="mt-10" onSubmit={onSubmit}>
-
           <div className="flex">
             <div className="mr-4">
               {/* <label>Proveedor</label> */}
@@ -177,7 +176,6 @@ export default function FormCompra() {
               {errors.codigo && (
                 <p className="text-red-500 mt-2">{errors.codigo.message}</p>
               )}
-
             </div>
 
 
@@ -285,8 +283,6 @@ export default function FormCompra() {
               </li>
             ))}
           </ul>
-
-
           
           {/* Mostrar la suma total de los precios */}
           
@@ -314,7 +310,6 @@ export default function FormCompra() {
        
         </form>
           <p className="text-right">Precio total compra: {precioTotalCompra}</p>
-
       </div>
       
     </div>

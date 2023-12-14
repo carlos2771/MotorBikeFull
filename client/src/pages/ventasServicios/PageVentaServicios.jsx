@@ -7,8 +7,10 @@ import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { faPlus, faLock,faUser,faPen,faDownload,faPencil , faBan,faCalendarDay, faInfoCircle,faDollarSign,faShoppingCart,  faHandshake} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
+
 
 
 function formatCurrency(value) {
@@ -41,6 +43,7 @@ export default function PageVentaServicios() {
   const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
 
   if (estado === "Activo") {
+
     Swal.fire({
       title: title,
       text: text,
@@ -53,11 +56,13 @@ export default function PageVentaServicios() {
       iconColor: "#2563eb",
       buttonsStyling: false,
       customClass: {
+
         confirmButton:
           "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
         cancelButton:
           "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
       },
+
     }).then((result) => {
       if (result.isConfirmed) {
         cambiarEstado(id, estado);
@@ -75,6 +80,7 @@ export default function PageVentaServicios() {
         Toast.fire({
           icon: "success",
           title: "Se ha modificado",
+
         });
       } else {
         const Toast = Swal.mixin({
@@ -116,19 +122,19 @@ export default function PageVentaServicios() {
         const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
         updateVentaServicio(id, { estado: nuevoEstado }).then(() => {
           getVentasServicios();
+
         });
-      };
-
-  useEffect(() => {
-    try {
-      getVentasServicios();
-
-    } catch (error) {
-      console.error("Error al obtener las ventas:", error);
+        
+      }
     }
-  }, []);
-  
 
+
+  const cambiarEstado = (id, estado) => {
+    const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
+    updateVentaServicio(id, { estado: nuevoEstado }).then(() => {
+      getVentasServicios();
+    });
+  };
 
   const exportarAExcel = useCallback(() => {
     const datos = ventasServicios.map((venta) => ({
@@ -165,8 +171,6 @@ export default function PageVentaServicios() {
     XLSX.utils.book_append_sheet(wb, ws, 'VentasServicios');
     XLSX.writeFile(wb, 'ventasServicios.xlsx');
   }, [ventasServicios]);
-    
-      
       
       const columns = [
         {
@@ -389,4 +393,4 @@ export default function PageVentaServicios() {
           </Box>
         </div>
       );
-    }
+    
