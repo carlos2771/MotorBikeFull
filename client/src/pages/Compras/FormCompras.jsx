@@ -5,8 +5,7 @@ import utc from "dayjs/plugin/utc";
 import dayjs from 'dayjs';
 dayjs.extend(utc);
 
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRepuestos } from "../../context/RepuestosContext";
