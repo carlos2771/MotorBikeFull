@@ -39,7 +39,7 @@ export default function Detalle({ id, metodo,children }) {
               <button className="px-5 py-1 mt-8 text-sm rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30"
               onClick={handleClose}
               >
-                    Cancelar
+                    Cerrar
                 </button> 
               </div>
         </div>
