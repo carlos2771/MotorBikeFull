@@ -7,8 +7,16 @@ import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faUser,faPen,faDownload,faPencil , faBan,faCalendarDay,  faCheck, faInfoCircle,faDollarSign,  faHandshake} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faLock,faUser,faPen,faDownload,faPencil , faBan,faCalendarDay, faInfoCircle,faDollarSign,faShoppingCart,  faHandshake} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
+
+
+function formatCurrency(value) {
+  // Agrega el signo de peso
+  const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+  return formattedValue;
+}
+
 
 
 export default function PageVentaServicios() {
@@ -145,10 +153,11 @@ export default function PageVentaServicios() {
         },
         {
           field: "precio_servicio",
-          headerName: "Precio de servicio ",
+          headerName: "Precio de servicio",
           width: 185,
           editable: true,
           headerClassName: 'custom-header',
+          valueFormatter: (params) => formatCurrency(params.value),
         },
         // {
         //   field: "descripcion",
@@ -195,15 +204,6 @@ export default function PageVentaServicios() {
             console.log("estado", estado);
             return (
               <div>
-                <button className={estado === "Activo" ? "" : "hidden"} title='Editar'>
-                  <Link
-                    className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
-                    to={`/ventas-servicios/${params.row._id}`}
-                  >
-                    <FontAwesomeIcon icon={faPencil} />
-                  </Link>
-                 </button>
-
                 {/* <button
                   className="px-4 py-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
                   onClick={() => {
@@ -212,7 +212,7 @@ export default function PageVentaServicios() {
                 >
                   Eliminar
                 </button> */}
-                <button title='Activar/Inactivar'
+                <button title='Inactivar'
                   className={
                     estado === "Activo"
                       ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
@@ -220,7 +220,7 @@ export default function PageVentaServicios() {
               }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
-              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
+              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faLock} />}
             </button>
             <button className={estado === "Activo" ? "" : "hidden"} title='Ver detalle'>
             <Detalle
@@ -267,9 +267,11 @@ export default function PageVentaServicios() {
                       </Tabla>
                       <Tabla >
                       {
-                    ventasServicios.find((precio) => precio._id === params.row._id)
-                      ?.precio_servicio
-                  }
+                      formatCurrency(
+                        ventasServicios.find((precio) => precio._id === params.row._id)
+                          ?.precio_servicio
+                      )
+                    }
                       </Tabla>
                     </tr>
                     <tr>
