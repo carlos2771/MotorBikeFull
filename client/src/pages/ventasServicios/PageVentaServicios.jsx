@@ -162,7 +162,6 @@ export default function PageVentaServicios() {
           field: "nombre_mecanico",
           headerName: "Mecánico",
           width: 160,   
-          editable: true,
           headerClassName: 'custom-header',
           valueGetter: (params) => params.row.mecanico.nombre_mecanico,
         },
@@ -170,7 +169,6 @@ export default function PageVentaServicios() {
           field: "nombre_cliente",
           headerName: "Cliente",
           width: 170,
-          editable: true,
           headerClassName: 'custom-header',
           valueGetter: (params) => params.row.cliente.nombre_cliente,
         },
@@ -178,7 +176,6 @@ export default function PageVentaServicios() {
           field: "precio_servicio",
           headerName: "Precio de servicio",
           width: 185,
-          editable: true,
           headerClassName: 'custom-header',
           valueFormatter: (params) => formatCurrency(params.value),
         },
@@ -194,7 +191,6 @@ export default function PageVentaServicios() {
           field: "createdAt",
           headerName: "Fecha de venta",
           width: 200,
-          editable: true,
           headerClassName: 'custom-header',
           renderCell: (params) => {
             const date = new Date(params.value);
@@ -360,6 +356,7 @@ export default function PageVentaServicios() {
               className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
               rows={ventasServicios}
               columns={columns}
+              columnHeader
               getRowId={(row) => row._id}
               initialState={{
                 pagination: {
@@ -382,4 +379,3 @@ export default function PageVentaServicios() {
         </div>
       );
     }
-///Comit
