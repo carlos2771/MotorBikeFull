@@ -7,8 +7,16 @@ import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faUser,faPen,faDownload,faPencil , faBan,faCalendarDay,  faCheck, faInfoCircle,faDollarSign,  faHandshake} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faLock,faUser,faPen,faDownload,faPencil , faBan,faCalendarDay, faInfoCircle,faDollarSign,faShoppingCart,  faHandshake} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
+
+
+function formatCurrency(value) {
+  // Agrega el signo de peso
+  const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+  return formattedValue;
+}
+
 
 
 export default function PageVentaServicios() {
@@ -22,64 +30,87 @@ export default function PageVentaServicios() {
           console.error("Error al obtener las ventas:", error);
         }
       }, []);
+
+
       const mostrarAlerta = (id, estado) => {
-        const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
-        const text =estado === "Activo"? "¿Estás seguro de inhabilitar la venta ?": "¿Estás seguro de habilitar la venta ?";
-        const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
-    
-        Swal.fire({
-          title: title,
-          text: text,
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Sí",
-          cancelButtonText: "No",
-          background: "#334155",
-          color: "white",
-          iconColor: "#2563eb",
-          buttonsStyling: false,
-          customClass: {
-            confirmButton: "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
-            cancelButton: "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500"
-          }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            cambiarEstado(id, estado);
-            const Toast = Swal.mixin({
-              toast: true,
-              position: "top-end",
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-              didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-              }
-            });
-            Toast.fire({
-              icon: "success",
-              title: "Se ha modificado"
-            });
-          }else {
-            const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.onmouseenter = Swal.stopTimer;
-              toast.onmouseleave = Swal.resumeTimer;
-            }
-          });
-          Toast.fire({
-            icon: "error",
-            title: "No se ha modificado"
-          });
-        }}
-        );
-        
-      };
+  const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
+  const text =
+    estado === "Activo"
+      ? "¿Estás seguro de inhabilitar la venta ?"
+      : "¿Estás seguro de habilitar la venta ?";
+  const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
+
+  if (estado === "Activo") {
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+      background: "#334155",
+      color: "white",
+      iconColor: "#2563eb",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+        cancelButton:
+          "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        cambiarEstado(id, estado);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Se ha modificado",
+        });
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "No se ha modificado",
+        });
+      }
+    });
+  } else {
+    // Si la venta está desactivada, solo mostrar un mensaje indicando que no se puede realizar ninguna acción
+    Swal.fire({
+      title: "Acción no permitida",
+      text: "Esta venta ya está desactivada y no se puede modificar.",
+      icon: "info",
+      background: "#334155",
+      color: "white",
+      iconColor: "#2563eb",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+      },
+    });
+  }
+};
     
       const cambiarEstado = (id, estado) => {
         const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
@@ -145,10 +176,11 @@ export default function PageVentaServicios() {
         },
         {
           field: "precio_servicio",
-          headerName: "Precio de servicio ",
+          headerName: "Precio de servicio",
           width: 185,
           editable: true,
           headerClassName: 'custom-header',
+          valueFormatter: (params) => formatCurrency(params.value),
         },
         // {
         //   field: "descripcion",
@@ -195,15 +227,6 @@ export default function PageVentaServicios() {
             console.log("estado", estado);
             return (
               <div>
-                <button className={estado === "Activo" ? "" : "hidden"} title='Editar'>
-                  <Link
-                    className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
-                    to={`/ventas-servicios/${params.row._id}`}
-                  >
-                    <FontAwesomeIcon icon={faPencil} />
-                  </Link>
-                 </button>
-
                 {/* <button
                   className="px-4 py-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
                   onClick={() => {
@@ -212,7 +235,7 @@ export default function PageVentaServicios() {
                 >
                   Eliminar
                 </button> */}
-                <button title='Activar/Inactivar'
+                <button title='Inactivar'
                   className={
                     estado === "Activo"
                       ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
@@ -220,7 +243,7 @@ export default function PageVentaServicios() {
               }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
-              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
+              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faLock} />}
             </button>
             <button className={estado === "Activo" ? "" : "hidden"} title='Ver detalle'>
             <Detalle
@@ -267,9 +290,11 @@ export default function PageVentaServicios() {
                       </Tabla>
                       <Tabla >
                       {
-                    ventasServicios.find((precio) => precio._id === params.row._id)
-                      ?.precio_servicio
-                  }
+                      formatCurrency(
+                        ventasServicios.find((precio) => precio._id === params.row._id)
+                          ?.precio_servicio
+                      )
+                    }
                       </Tabla>
                     </tr>
                     <tr>
