@@ -3,6 +3,10 @@ const numberPattern = /^[0-9]*$/;
 const negative = /^[1-9]\d*$/;
 const nombreRepuesto = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ][a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{3,68}(?: [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{4,68})*[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]$/;
 
+// VALIDACION PARA EL CODIGO DE COMPRAS
+const codigoCompraValidacion = /^[a-zA-Z0-9]{6,}$/
+
+
 export const EmailRequired = {
   required: "Campo requerido",
   pattern: {
@@ -58,6 +62,15 @@ export const nombre_RepuestoValidacion = {
     required: 'Campo requerido',
     value: nombreRepuesto,
     message: "Ingrese un nombre correcto",
+  },
+};
+
+export const codeCompra = {
+  required: "Campo requerido",
+  pattern: {
+    required: 'Campo requerido',
+    value: codigoCompraValidacion,
+    message: "Ingrese un codigo correcto",
   },
 };
 
@@ -148,6 +161,10 @@ export const PasaporteRequired = {
   maxLength: { value: 15, message: "Maximo 15 caracteres"},
   minLength: { value: 8, message: "Minimo 8 caracteres"}
 };
+
+
+
+
 //-----------------------------------------------------------
 
 

@@ -7,8 +7,12 @@ dayjs.extend(utc);
 
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRepuestos } from "../../context/RepuestosContext";
-import { NegativeRequired, RepuestoRequired, fecha } from "../../utils/validations";
+import { NegativeRequired, RepuestoRequired, fecha, nombre_RepuestoValidacion, codeCompra, NombreMaRequired } from "../../utils/validations";
+
+import { faLock, faDollarSign, faBan, faDownload, faInfoCircle, faIdCard, faScrewdriverWrench, faHashtag, faShoppingBag, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const currentYear = dayjs().year();
+
 
 export default function FormCompra() {
   const {
@@ -23,7 +27,7 @@ export default function FormCompra() {
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields } = useFieldArray({
     control,
     name: "repuestos",
   });
@@ -38,24 +42,27 @@ export default function FormCompra() {
   const [selectedRepuesto, setSelectedRepuesto] = useState("");
   const [repuestosList, setRepuestosList] = useState([]);
   const [availableRepuestos, setAvailableRepuestos] = useState([]);
+  const [proveedorCompra, setProveedorCompra] = useState("");
+  const [codigo, setCodigo] = useState("");
+  const [fechaCompra, setFechaCompra] = useState("");
+  const [precioTotalCompra, setPrecioTotalCompra] = useState(0);
 
   useEffect(() => {
     try {
       getRepuestos();
     } catch (error) {
-      console.error("Error al obtener clientes:", error);
+      console.error("Error al obtener repuestos:", error);
     }
   }, []);
 
   useEffect(() => {
-    // Actualizar la lista de opciones disponibles cuando repuestos cambia
     setAvailableRepuestos(repuestos);
   }, [repuestos]);
 
-  const onSubmit = handleSubmit(async (data) => {
-    if (!data.fecha) {
-      data.fecha = dayjs().format("YYYY-MM-DD");
-    }
+  const onSubmit = handleSubmit((data) => {
+    setProveedorCompra(data.proveedorCompra);
+    setCodigo(data.codigo);
+    setFechaCompra(data.fecha);
 
     const repuestoData = {
       repuesto: repuestos.find((repuesto) => repuesto._id === data.repuestos[0].repuesto),
@@ -66,18 +73,38 @@ export default function FormCompra() {
 
     setRepuestosList([...repuestosList, repuestoData]);
 
-    // Actualizar la lista de opciones disponibles excluyendo el repuesto seleccionado
     const updatedAvailableRepuestos = availableRepuestos.filter(
       (repuesto) => repuesto._id !== selectedRepuesto
     );
     setAvailableRepuestos(updatedAvailableRepuestos);
 
-    reset();
+    // Actualizar el estado de la suma total
+    setPrecioTotalCompra(precioTotalCompra + repuestoData.precio_total);
+
+    reset({
+      ...fields.reduce((acc, _, index) => {
+        acc[`repuestos.${index}.repuesto`] = "";
+        acc[`repuestos.${index}.cantidad_repuesto`] = "";
+        acc[`repuestos.${index}.precio_unitario`] = "";
+        return acc;
+      }, {}),
+      fecha: data.fecha,
+      proveedorCompra: data.proveedorCompra,
+      codigo: data.codigo,
+    });
   });
 
   const guardarCompra = async () => {
+    let fechaGuardada = fechaCompra;
+
+    if (!fechaGuardada) {
+      fechaGuardada = dayjs().format("YYYY-MM-DD");
+    }
+
     const compraData = {
-      fecha: dayjs().format("YYYY-MM-DD"),
+      fecha: fechaGuardada,
+      proveedor: proveedorCompra,
+      codigo: codigo,
       repuestos: repuestosList.map((repuesto) => ({
         repuesto: repuesto.repuesto,
         cantidad_repuesto: repuesto.cantidad_repuesto,
@@ -100,8 +127,10 @@ export default function FormCompra() {
     const repuestoEliminado = updatedRepuestosList.splice(index, 1)[0];
     setRepuestosList(updatedRepuestosList);
 
-    // Actualizar la lista de opciones disponibles al volver a agregar el repuesto eliminado
     setAvailableRepuestos([...availableRepuestos, repuestoEliminado.repuesto]);
+
+    // Actualizar el estado de la suma total
+    setPrecioTotalCompra(precioTotalCompra - repuestoEliminado.precio_total);
   };
 
   return (
@@ -114,98 +143,179 @@ export default function FormCompra() {
         ))}
         <h1 className="text-2xl flex justify-center ">Agregar Compra </h1>
         <form className="mt-10" onSubmit={onSubmit}>
-          <label>Repuestos</label>
-          {fields.map((item, index) => (
-            <div key={item.id} className="my-2">
-              <select
+
+          <div className="flex">
+            <div className="mr-4">
+              {/* <label>Proveedor</label> */}
+              <input
                 style={{ width: '220px' }}
-                {...register(`repuestos.${index}.repuesto`, RepuestoRequired)}
-                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
-                onChange={(e) => {
-                  setSelectedRepuesto(e.target.value);
-                }}
-              >
-                <option value="">Selecciona un repuesto</option>
-                {availableRepuestos.map((repuesto) => (
-                  <option
-                    key={repuesto._id}
-                    value={repuesto._id}
-                    
-                  >
-                    {repuesto.nombre_repuesto}
-                  </option>
-                ))}
-              </select>
-
-              {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].repuesto && errors.repuestos[index].repuesto.message && (
-                <p className="text-red-500">{errors.repuestos[index].repuesto.message}</p>
-              )}
-
-              <br />
-
-              <input style={{ width: '220px' }}
-                placeholder="Cantidad"
-                {...register(`repuestos.${index}.cantidad_repuesto`, NegativeRequired)}
+                placeholder="Proveedor"
+                {...register("proveedorCompra", {
+                  ...nombre_RepuestoValidacion,
+                  required: "El proveedor es requerido",
+                })}
                 className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
               />
-              {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].cantidad_repuesto && (
-                <p className="text-red-500">{errors.repuestos[index].cantidad_repuesto.message}</p>
+              {errors.proveedorCompra && (
+                <p className="text-red-500 mt-2">{errors.proveedorCompra.message}</p>
               )}
-
-              <br />
-              <input style={{ width: '220px' }}
-                placeholder="Precio unitario"
-                {...register(`repuestos.${index}.precio_unitario`, RepuestoRequired)}
-                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
-              />
-              {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].precio_unitario && (
-                <p className="text-red-500">{errors.repuestos[index].precio_unitario.message}</p>
-              )}
-              <br />
-
-              <br />
             </div>
+
+            <div>
+              {/* <label>Código</label> */}
+              <input
+                style={{ width: '220px', marginRight: '150px' }}
+                placeholder="Código"
+                {...register("codigo", {
+                  ...NombreMaRequired,
+                  required: "El código de compra es requerido",
+                })}
+                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
+              />
+              {errors.codigo && (
+                <p className="text-red-500 mt-2">{errors.codigo.message}</p>
+              )}
+
+            </div>
+
+
+
+
+            <button
+              className="px-5 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar"
+              type="submit" disabled={selectedRepuesto === ""}>
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
+
+
+
+
+
+
+          </div>
+
+
+
+
+
+
+
+
+
+
+          {fields.map((item, index) => (
+            <div key={item.id} className="flex my-2">
+
+              <div className="mr-4">
+
+                <select
+                  style={{ width: '220px' }}
+                  {...register(`repuestos.${index}.repuesto`, RepuestoRequired)}
+                  className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
+                  onChange={(e) => {
+                    setSelectedRepuesto(e.target.value);
+                  }}
+                >
+                  <option value="">Selecciona un repuesto</option>
+                  {availableRepuestos.map((repuesto) => (
+                    <option
+                      key={repuesto._id}
+                      value={repuesto._id}
+                    >
+                      {repuesto.nombre_repuesto}
+                    </option>
+                  ))}
+                </select>
+                {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].repuesto && errors.repuestos[index].repuesto.message && (
+                  <p className="text-red-500 mt-2">{errors.repuestos[index].repuesto.message}</p>
+                )}
+              </div>
+
+              <div className="mr-4">
+
+                <input
+                  style={{ width: '220px' }}
+                  placeholder="Cantidad"
+                  {...register(`repuestos.${index}.cantidad_repuesto`, NegativeRequired)}
+                  className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
+                />
+                {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].cantidad_repuesto && (
+                  <p className="text-red-500 mt-2">{errors.repuestos[index].cantidad_repuesto.message}</p>
+                )}
+              </div>
+
+
+
+              <div>
+
+                <input
+                  style={{ width: '220px' }}
+                  placeholder="Precio unitario"
+                  {...register(`repuestos.${index}.precio_unitario`, RepuestoRequired)}
+                  className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
+                />
+                {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].precio_unitario && (
+                  <p className="text-red-500 mt-2">{errors.repuestos[index].precio_unitario.message}</p>
+                )}
+              </div>
+
+
+
+
+            </div>
+
           ))}
-          <button type="submit" disabled={selectedRepuesto === ""}>
-            Agregar Repuesto
-          </button>
+
           <br />
 
-          <h2 className="text-xl font-semibold mt-4 text-right">Repuestos Agregados:</h2>
+          <h2 className="text-xl font-semibold mt-4 ">Repuestos Agregados:</h2>
 
-          <ul className="text-right">
+          <ul>
             {repuestosList.map((repuesto, index) => (
               <li key={index}>
-                {repuesto.repuesto.nombre_repuesto} - Cantidad: {repuesto.cantidad_repuesto}, Precio Unitario: {repuesto.precio_unitario}
+                {repuesto.repuesto.nombre_repuesto} - Cantidad: {repuesto.cantidad_repuesto}, Precio Unitario: {repuesto.precio_unitario}, Precio Total: {repuesto.precio_total}
                 <button
                   className="ml-2 text-red-500"
                   onClick={() => eliminarRepuesto(index)}
                 >
-                  Eliminar
+                  <FontAwesomeIcon icon={faTrash} />
+
                 </button>
               </li>
             ))}
           </ul>
 
-          <input style={{ width: '220px' }}
+
+          
+          {/* Mostrar la suma total de los precios */}
+          
+
+          <input
+            style={{ width: '220px' }}
             type="date"
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
             {...register("fecha", { min: `${currentYear}-01-01`, max: `${currentYear}-12-31` }, fecha)}
+            onChange={(e) => setFechaCompra(e.target.value)}
           />
           <br />
 
-          <button>
-            <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/compras">Cancelar</Link>
+          <button
+            type="button"
+            className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30"
+            onClick={guardarCompra}
+            disabled={repuestosList.length === 0 || errors.proveedorCompra || errors.codigo}
+          >
+            Guardar
           </button>
+          <button type="button">
+            <Link className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5" to="/compras">Cancelar</Link>
+          </button>
+       
         </form>
-        <button
-          className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d"
-          onClick={guardarCompra}
-          disabled={repuestosList.length === 0 }
-        >
-          Guardar
-        </button>
+          <p className="text-right">Precio total compra: {precioTotalCompra}</p>
+
       </div>
+      
     </div>
   );
 }

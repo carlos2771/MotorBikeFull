@@ -12,7 +12,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faIdCard, faUser, faPhone, faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faRegistered, faDollarSign, faHashtag} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
 
+function formatCurrency(value) {
+  // Agrega el signo de peso
+  const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+  return formattedValue;
+}
 
+
+function formatCurrency2(value) {
+  // Solo separa los miles sin agregar el signo de pesos
+  const formattedValue = value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return formattedValue;
+}
 
 export default function PageRepuestos() {
   const { repuestos, getRepuestos, deleteRepuesto, updateRepuesto } = useRepuestos()
@@ -113,17 +124,19 @@ export default function PageRepuestos() {
     },
     {
       field: "cantidad",
-      headerName: "Cantidad",
+      headerName: "cantidad",
       width: 185,
-      editable: true,
+      editable: false,
       headerClassName: 'custom-header',
+      valueFormatter: (params) => formatCurrency2(params.value),
     },
     {
       field: "precio",
       headerName: "Precio",
       width: 170,
-      editable: true,
+      editable: false,
       headerClassName: 'custom-header',
+      valueFormatter: (params) => formatCurrency(params.value),
     },
     {
       field: "estado",

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const comprasSchema = new mongoose.Schema(
   {
 
-  // ESTE ME PERMITE INRGRESAR VARIOS REPUESTOS A LA COMPRA
+    // ESTE ME PERMITE INRGRESAR VARIOS REPUESTOS A LA COMPRA
     repuestos: [
       {
         repuesto: {
@@ -24,7 +24,6 @@ const comprasSchema = new mongoose.Schema(
         },
       },
     ],
-
     // LA FECHA DE LA COMPRA
     fecha: {
       type: Date,
@@ -35,6 +34,14 @@ const comprasSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    proveedor: {
+      type: String,
+      required: true,
+    },
+    codigo: {
+      type: String,
+      required: true,
+    }
   },
   {
     timestamps: true,
