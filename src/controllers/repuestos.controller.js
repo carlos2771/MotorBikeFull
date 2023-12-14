@@ -3,7 +3,7 @@ import Marca from "../models/marca.model.js";
 
 export const getRepuestos = async (req, res) => {
     try {
-        const repuestos = await Repuesto.find().populate({ path: 'marca', select: 'nombre_marca' })
+        const repuestos = await Repuesto.find().populate({ path: 'marca', select: 'nombre_marca' }).sort({nombre_repuesto:'desc'});
         if (!repuestos) {
             return res.status(404).json({ message: "repuestos no encontrados" });
         }
@@ -35,39 +35,34 @@ export const createRepuestos = async (req, res) => {
             estado
         } = req.body;
 
-        // Verifica si el cliente existe
-        // const clienteEncontrado = await Cliente.findById(clienteId);
-        // if (!clienteEncontrado) {
-        //     return res.status(404).json({ message: "Cliente no encontrado" });
-        // }
+        // Convertir la cantidad a un número (puedes ajustar esto según tus necesidades)
+        const cantidadNumerica = parseInt(cantidad, 10);
 
-        // MARCA:
+        // Verificar si ya existe un repuesto con el mismo nombre y marca
+        const repuestoExistente = await Repuesto.findOne({ nombre_repuesto, marca: marcaId });
+
+        if (repuestoExistente) {
+            // Si existe, actualiza la cantidad
+            repuestoExistente.cantidad += cantidadNumerica;
+            await repuestoExistente.save();
+
+            return res.status(200).json(repuestoExistente);
+        }
+
+        // Si no existe, crea un nuevo repuesto
         const marcaEncontrada = await Marca.findById(marcaId);
         if (!marcaEncontrada) {
             return res.status(404).json({ message: "Marca no encontrada" });
         }
-        // Obtiene la cantidad actual del repuesto
-        // const cantidadActualRepuesto = repuestoEncontrado.cantidad;
 
-        // Verifica si hay suficiente cantidad disponible del repuesto
-        // if (cantidadActualRepuesto < cantidad_repuesto) {
-        //     return res.status(400).json({ message: ["Cantidad insuficiente del repuesto"] });
-        // }
-
-        // Resta la cantidad vendida de la cantidad actual del repuesto
-        // const cantidadRestanteRepuesto = cantidadActualRepuesto - cantidad_repuesto;
-        // await Repuesto.findByIdAndUpdate(repuestoId, { cantidad: cantidadRestanteRepuesto });
-
-        // Crea una nueva venta de servicio asociada al cliente
         const nuevoRepuesto = new Repuesto({
             nombre_repuesto,
             marca: marcaId,
-            cantidad,
+            cantidad: cantidadNumerica,
             precio,
             estado
         });
 
-        // Guarda la venta de servicio en la base de datos
         const repuestoGuardado = await nuevoRepuesto.save();
 
         res.status(201).json(repuestoGuardado);
@@ -77,17 +72,45 @@ export const createRepuestos = async (req, res) => {
 };
 
 
-
 export const updateRepuestos = async (req, res) => {
     try {
-        const repuesto = await Repuesto.findByIdAndUpdate(req.params.id, req.body, {
-            // new y true son para que el guarde los datos nuevos que ingrese el usuario
+        const {
+            nombre_repuesto,
+            marca: marcaId,
+            cantidad
+        } = req.body;
+
+        // Convertir la cantidad a un número (puedes ajustar esto según tus necesidades)
+        const cantidadNumerica = parseInt(cantidad, 10);
+
+        // Verificar si ya existe un repuesto con el mismo nombre y marca
+        const repuestoExistente = await Repuesto.findOne({ nombre_repuesto, marca: marcaId });
+
+        if (repuestoExistente) {
+            // Si existe, actualiza la cantidad
+            repuestoExistente.cantidad += cantidadNumerica;
+            await repuestoExistente.save();
+
+            // Ahora, puedes actualizar otras propiedades si es necesario
+            const repuestoActualizado = await Repuesto.findByIdAndUpdate(req.params.id, req.body, {
+                new: true,
+            });
+
+            return res.status(200).json(repuestoActualizado);
+        }
+
+        // Si no existe, realiza la actualización normal
+        const repuestoActualizado = await Repuesto.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
         });
-        if (!repuesto) return res.status(404).json({ message: "repuesto not found" });
-        res.json(repuesto);
+
+        if (!repuestoActualizado) {
+            return res.status(404).json({ message: "Repuesto no encontrado" });
+        }
+
+        res.json(repuestoActualizado);
     } catch (error) {
-        return res.status(500).json({ message: "repuesto no encontrado" });
+        return res.status(500).json({ message: "Error al actualizar el repuesto", error });
     }
 };
 

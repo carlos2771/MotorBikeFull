@@ -10,6 +10,13 @@ import { faEnvelope, faDownload ,faIdCard, faUser, faPhone, faPen, faTools, faPl
 import Detalle from "../../components/Detalle";
 import {Tabla, Titulo} from "../../components/Tabla";
 
+
+function formatCurrency(value) {
+  // Agrega el signo de peso
+  const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+  return formattedValue;
+}
+
 import * as XLSX from "xlsx";
 
 export default function PageRepuestos() {
@@ -149,17 +156,20 @@ export default function PageRepuestos() {
     },
     {
       field: "cantidad",
-      headerName: "Cantidad",
-      width: 120,
-      editable: true,
+      headerName: "cantidad",
+      width: 185,
+      editable: false,
+
       headerClassName: 'custom-header',
+      valueFormatter: (params) => formatCurrency2(params.value),
     },
     {
       field: "precio",
       headerName: "Precio",
       width: 170,
-      editable: true,
+      editable: false,
       headerClassName: 'custom-header',
+      valueFormatter: (params) => formatCurrency(params.value),
     },
     {
       field: "estado",

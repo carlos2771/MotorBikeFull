@@ -3,6 +3,10 @@ const numberPattern = /^[0-9]*$/;
 const negative = /^[1-9]\d*$/;
 // const nombreRepuesto = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ][a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{3,68}(?: [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{4,68})*[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]$/;
 
+// VALIDACION PARA EL CODIGO DE COMPRAS
+const codigoCompraValidacion = /^[a-zA-Z0-9]{6,}$/
+
+
 export const EmailRequired = {
   required: "Campo requerido",
   pattern: {
@@ -65,6 +69,15 @@ export const nombre_RepuestoValidacion = {
   validate: (value) => /^(?! +$)[A-Za-z0-9\s]+$/.test(value.trim()) || "No se permite solo espacio",
   maxLength: { value: 50, message: "Maximo 50 caracteres"},
   minLength: { value: 4, message: "Minimo 4 caracteres"}
+};
+
+export const codeCompra = {
+  required: "Campo requerido",
+  pattern: {
+    required: 'Campo requerido',
+    value: codigoCompraValidacion,
+    message: "Ingrese un codigo correcto",
+  },
 };
 
 
