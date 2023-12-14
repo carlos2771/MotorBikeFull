@@ -127,7 +127,7 @@ export default function PageCompras() {
     {
       field: "repuestos",
       headerName: "Repuesto",
-      width: 160,
+      width: 400,
       headerClassName: "custom-header",
       valueGetter: (params) => {
         const repuestos = params.row.repuestos;

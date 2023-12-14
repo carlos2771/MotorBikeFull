@@ -1,7 +1,7 @@
 const EMAIL_REGEX = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,3}$/i;
 const numberPattern = /^[0-9]*$/;
 const negative = /^[1-9]\d*$/;
-const nombreRepuesto = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ][a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{3,68}(?: [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{4,68})*[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]$/;
+// const nombreRepuesto = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ][a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{3,68}(?: [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{4,68})*[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]$/;
 
 export const EmailRequired = {
   required: "Campo requerido",
@@ -10,6 +10,14 @@ export const EmailRequired = {
     message: "Email es invalido",
   },
 };
+
+export const EmailCliente = {
+  pattern: {
+    value: EMAIL_REGEX,
+    message: "Email es invalido",
+  },
+};
+
 
 export const PasswordRequire = {
   required: "Campo requerido",
@@ -54,11 +62,9 @@ export const CedulaRequired = {
 
 export const nombre_RepuestoValidacion = {
   required: "Campo requerido",
-  pattern: {
-    required: 'Campo requerido',
-    value: nombreRepuesto,
-    message: "Ingrese un nombre correcto",
-  },
+  validate: (value) => /^(?! +$)[A-Za-z0-9\s]+$/.test(value.trim()) || "No se permite solo espacio",
+  maxLength: { value: 50, message: "Maximo 50 caracteres"},
+  minLength: { value: 4, message: "Minimo 4 caracteres"}
 };
 
 
@@ -78,11 +84,12 @@ export const NombreRequired = {
 
 export const NombreRepuestoRequired = {
   required: "Campo requerido",
-  pattern: {
-    value: nombreRepuesto,
-    message: "Campo requerido",
-  },
+  validate: (value) => /^(?! +$)[A-Za-z0-9\s]+$/.test(value.trim()) || "No se permite solo espacio",
+  maxLength: { value: 50, message: "Maximo 50 caracteres"},
+  minLength: { value: 4, message: "Minimo 4 caracteres"}
 };
+
+
 
 export const fecha = {
   required: "Campo requerido",

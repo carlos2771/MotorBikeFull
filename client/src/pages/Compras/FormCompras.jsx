@@ -52,7 +52,7 @@ export default function FormCompra() {
 
   useEffect(() => {
     // Actualizar la lista de opciones disponibles cuando repuestos cambia
-    setAvailableRepuestos(repuestos);
+    setAvailableRepuestos(repuestos.filter(repuesto => repuesto.estado === "Activo"));
   }, [repuestos]);
 
   const onSubmit = handleSubmit(async (data) => {
@@ -135,7 +135,6 @@ export default function FormCompra() {
                     <option
                       key={repuesto._id}
                       value={repuesto._id}
-
                     >
                       {repuesto.nombre_repuesto}
                     </option>
@@ -146,8 +145,6 @@ export default function FormCompra() {
                   <p className="text-red-500">{errors.repuestos[index].repuesto.message}</p>
                 )}
               </div>
-
-
 
               <div className="flex flex-col">
                 <input style={{ width: '220px' }}
@@ -160,11 +157,10 @@ export default function FormCompra() {
                 )}
               </div>
 
-
               <div>
                 <input style={{ width: '220px' }}
                   placeholder="Precio unitario"
-                  {...register(`repuestos.${index}.precio_unitario`, RepuestoRequired)}
+                  {...register(`repuestos.${index}.precio_unitario`, NegativeRequired)}
                   className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
                 />
                 {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].precio_unitario && (
@@ -172,23 +168,11 @@ export default function FormCompra() {
                 )}
               </div>
 
-
-              {/* <input style={{ width: '220px' }}
-                type="date"
-                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 mx-2"
-                {...register("fecha", { min: `${currentYear}-01-01`, max: `${currentYear}-12-31` }, fecha)}
-              /> */}
-
-
               <button type="submit" disabled={selectedRepuesto === ""} className="px-4 m-4  text-sm text-withe font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500 hover:border-transparent" title="Agregar">
                 <FontAwesomeIcon icon={faPlus} />
               </button>
             </div>
-
           ))}
-
-
-
 
           <h2 className="text-xl font-semibold mt-4 text-left">Repuestos Agregados:</h2>
 

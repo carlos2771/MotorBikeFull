@@ -2,11 +2,11 @@ import { useForm } from "react-hook-form"
 import { useClientes } from "../../context/ClientContext"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
-import { NombreRequired ,EmailRequired, TelefonoRequired, CedulaRequired } from "../../utils/validations"
+import { NombreRequired , TelefonoRequired, CedulaRequired , EmailCliente, PasaporteRequired} from "../../utils/validations"
 import Swal from "sweetalert2";
 
 export default function FormCliente() {
-  const {register, handleSubmit, setValue, formState: {errors}} = useForm()
+  const {register, unregister , handleSubmit, setValue, formState: {errors}} = useForm()
   const {createCliente, getCliente, updateCliente, errors: clientesErrors} = useClientes()
   const navigate = useNavigate()  
   const params = useParams()
@@ -26,6 +26,18 @@ export default function FormCliente() {
     })();
   }, []);
   
+const handleTipoChange = (selectedTipo) => {
+    // Desregistrando el campo antes de volver a registrarlo
+    unregister("cedula");
+    // Actualiza la validación según el tipo seleccionado
+    if (selectedTipo === "Pasaporte") {
+      
+      register("cedula", PasaporteRequired);
+    } else {
+      register("cedula", CedulaRequired);
+    }
+  };
+
   const onSubmit = handleSubmit(async(data) => {
     if(params.id){
        updateCliente(params.id, data)
@@ -93,30 +105,30 @@ export default function FormCliente() {
       <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
-        ))}
+        ))} 
         <h1 className="text-2xl flex justify-center ">Agregar cliente</h1>
       <form className="mt-10" onSubmit={onSubmit}>
-      <label >Tipo Documento<span className="text-red-500">*</span></label>
+      <label>
+            Tipo Documento<span className="text-red-500">*</span>
+          </label>
           <select
-        {...register("tipo", NombreRequired)}
-        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2" autoFocus
-        >
-          <option value={""}>Selecciona el tipo de documento</option>
-          <option value={"Cedula"} >
-            Cédula
-          </option>
-          <option value={"Tarjeta Identidad"} >
-            Tarjeta Identidad
-          </option>
-          <option value={"Otro"} >
-            Otro
-          </option>
-        </select>
-        {errors.tipo && <p className="text-red-500">{errors.tipo.message}</p>}
+            {...register("tipo", NombreRequired)}
+            onChange={(e) => handleTipoChange(e.target.value)}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+          >
+            <option value={""}>Selecciona el tipo de documento</option>
+            <option value={"Cedula"}>Cédula</option>
+            <option value={"Tarjeta Identidad"}>Tarjeta Identidad</option>
+            <option value={"Pasaporte"}>Pasaporte</option>
+            <option value={"Otro"}>Otro</option>
+          </select>
+          {errors.tipo && (
+            <p className="text-red-500">{errors.tipo.message}</p>
+          )}
       <label>Documento<span className="text-red-500">*</span></label>
         <input 
         placeholder='Documento'
-        {...register("cedula", CedulaRequired)}
+        {...register("cedula")}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' 
         />
         {errors.cedula && <p className="text-red-500">{errors.cedula.message}</p>}
@@ -151,7 +163,7 @@ export default function FormCliente() {
         <input 
         placeholder='Email'
         type="email"
-        {...register("email_cliente")}
+        {...register("email_cliente", EmailCliente)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.email_cliente && <p className="text-red-500">{errors.email_cliente.message}</p>}

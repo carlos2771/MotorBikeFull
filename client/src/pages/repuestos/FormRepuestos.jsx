@@ -3,7 +3,7 @@ import { useRepuestos } from "../../context/RepuestosContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMarcas } from "../../context/MarcasContext";
-import { NegativeRequired, NombreRequired, RepuestoRequired , NombreRepuestoRequired} from "../../utils/validations";
+import { NegativeRequired, NombreRequired, RepuestoRequired, NombreRepuestoRequired } from "../../utils/validations";
 import Swal from "sweetalert2";
 
 export default function FormRepuesto() {
@@ -23,20 +23,7 @@ export default function FormRepuesto() {
   const navigate = useNavigate();
   const params = useParams();
   const [selectedMarca, setSelectedMarca] = useState();
-
-  useEffect(() => {
-    (async () => {
-      if (params.id) {
-        const repuesto = await getRepuesto(params.id);
-        setValue("nombre_repuesto", repuesto.nombre_repuesto);
-        setValue("marca", repuesto.marca);
-        setSelectedMarca(repuesto.marca);
-        setValue("cantidad", repuesto.cantidad);
-        setValue("precio", repuesto.precio);
-
-      }
-    })();
-  }, []);
+  const [activeMarcas, setActiveMarcas] = useState([]);
 
   useEffect(() => {
     try {
@@ -47,20 +34,35 @@ export default function FormRepuesto() {
   }, []);
 
   useEffect(() => {
+    const activeMarcasList = marcas.filter(marca => marca.estado === "Activo");
+    setActiveMarcas(activeMarcasList);
+  }, [marcas]);
+
+  useEffect(() => {
+    (async () => {
+      if (params.id) {
+        const repuesto = await getRepuesto(params.id);
+        setValue("nombre_repuesto", repuesto.nombre_repuesto);
+        setValue("marca", repuesto.marca);
+        setSelectedMarca(repuesto.marca);
+        setValue("cantidad", repuesto.cantidad);
+        setValue("precio", repuesto.precio);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
     if (selectedMarca) {
       const selectedMarcaData = marcas.find(
         (marca) => marca._id === selectedMarca
       );
       if (selectedMarcaData) {
-        // setValue("precio_unitario", selectedRepuestoData.precio);
         setValue("nombre_marca", selectedMarca.nombre_marca);
       }
     }
   }, [selectedMarca]);
 
   const onSubmit = handleSubmit(async (data) => {
-
-
     if (params.id) {
       const res = updateRepuesto(params.id, data);
       const Toast = Swal.mixin({
@@ -78,7 +80,7 @@ export default function FormRepuesto() {
         icon: "success",
         title: "Actualizado correctamente",
       });
-      if (res) navigate("/repuestos")
+      if (res) navigate("/repuestos");
     } else {
       const res = await createRepuesto(data);
       const Toast = Swal.mixin({
@@ -96,8 +98,8 @@ export default function FormRepuesto() {
         icon: "success",
         title: "Agregado correctamente",
       });
-      if (res) navigate("/repuestos")
-      else{
+      if (res) navigate("/repuestos");
+      else {
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -115,12 +117,9 @@ export default function FormRepuesto() {
         });
       }
     }
-
   });
 
   console.log(repuestosErrors);
-
-
 
   return (
     <div className="flex items-center justify-center pt-20">
@@ -131,12 +130,8 @@ export default function FormRepuesto() {
           </div>
         ))}
 
-
         <h1 className="text-2xl flex justify-center ">Agregar Repuesto</h1>
         <form className="mt-10" onSubmit={onSubmit}>
-
-
-
           <label>Nombre Repuesto<span className="text-red-500">*</span></label>
           <input
             type="text"
@@ -147,15 +142,14 @@ export default function FormRepuesto() {
           />
           {errors.nombre_repuesto && <p className="text-red-500">{errors.nombre_repuesto.message}</p>}
 
-
           <label>Marca<span className="text-red-500">*</span></label>
           <select
             {...register("marca", RepuestoRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-            onChange={(e) => selectedMarca(e.target.value)}
+            onChange={(e) => setSelectedMarca(e.target.value)}
           >
             <option value="">Selecciona una marca</option>
-            {marcas.map((marca) => (
+            {activeMarcas.map((marca) => (
               <option key={marca._id} value={marca._id}>
                 {marca.nombre_marca}
               </option>
@@ -163,17 +157,14 @@ export default function FormRepuesto() {
           </select>
           {errors.marca && <p className="text-red-500">{errors.marca.message}</p>}
 
-
           <label>Cantidad<span className="text-red-500">*</span></label>
           <input
             type="text"
             placeholder='Cantidad'
             {...register("cantidad", NegativeRequired)}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
-            
           />
           {errors.cantidad && <p className="text-red-500">{errors.cantidad.message}</p>}
-
 
           <label>Precio del repuesto<span className="text-red-500">*</span></label>
           <input
@@ -183,47 +174,15 @@ export default function FormRepuesto() {
           />
           {errors.precio && <p className="text-red-500">{errors.precio.message}</p>}
 
-
-
-            {/* ESTADO DEL REPUESTO */}
-          <label >Estado</label>
+          <label>Estado</label>
           <select
             {...register("estado")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
-            <option value={"Activo"} >
-              Activo
-            </option>
-            <option value={"Inactivo"} >
-              Inactivo
-            </option>
-
+            <option value={"Activo"}>Activo</option>
+            <option value={"Inactivo"}>Inactivo</option>
           </select>
 
-
-
-
-          {/* <label>Precio total</label> */}
-          {/* <input
-            placeholder="Precio Total"
-            {...register("precio_total")}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-          /> */}
-
-
-          {/* <label >Estado</label>
-          <select
-        {...register("estado")}
-        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-        >
-          <option value={"Activo"} >
-            Activo
-          </option>
-          <option value={"Inactivo"} >
-            Inactivo
-          </option>
-
-        </select> */}
           <button className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d" type="submit">
             Guardar
           </button>

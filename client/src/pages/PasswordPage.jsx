@@ -52,7 +52,7 @@ const PasswordPage = () => {
         });
         Toast.fire({
           icon: "error",
-          title: "El correo es incorrecto",
+          title: "El correo no existe",
         });
         // Manejo del error aquí
         setError(`El Email ${values.email} no está registrado.`);
