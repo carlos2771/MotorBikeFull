@@ -21,11 +21,11 @@ export const EmailCliente = {
 
 export const PasswordRequire = {
   required: "Campo requerido",
-  minLength: {
-    value: 6,
-    message: "Password debe tener minimo 6 caracteres",
-  },
+  minLength: { value: 6, message: "La contraseña debe tener al menos 6 caracteres" },
+  maxLength: { value: 12, message: "La contraseña no puede tener más de 12 caracteres" },
+  validate: (value) => /^[^\s]+$/.test(value) || "La contraseña no puede contener espacios",
 };
+
 
 export const TelefonoRequired = {
   required: "Campo requerido",
@@ -118,28 +118,16 @@ export const MecanicoRequired = {
 // Estas validaciones fueron hechas por Sara
 export const DireccionRequired = {
   required: "Campo requerido",
-  maxLength: {
-    value: 70,
-    message: "El maximo de caracteres es de 70"
-  },
-  minLength: {
-    value: 10,
-    message: "El minimo de caracteres es de 10"
-  }, 
-  validate: (value) => /\S/.test(value) || "No se permiten espacios en blanco",
+  validate: (value) => /^(?! +$)[A-Za-z0-9\s#-]+$/.test(value.trim()) || "No se permite solo espacio",
+  maxLength: { value: 70, message: "Máximo 70 caracteres"},
+  minLength: { value: 10, message: "Mínimo 10 caracteres"}
 };
 
 export const NombreMeRequired = {
   required: "Campo requerido",
   validate: (value) => /^[A-Za-z\s]+$/.test(value.trim()) || "Solo se permiten letras y espacios",
-  maxLength: {
-    value: 75,
-    message: "El maximo de caracteres es de 75"
-  },
-  minLength: {
-    value: 6,
-    message: "Ingresa el nombre completo, minimo 6 caracteres"
-  }
+  maxLength: { value: 75, message: "El maximo de caracteres es de 75"},
+  minLength: { value: 6, message: "Ingresa el nombre completo, minimo 6 caracteres"}
 };
 
 export const NombreMaRequired = {
@@ -151,10 +139,11 @@ export const NombreMaRequired = {
 
 export const PasaporteRequired = {
   required: "Campo requerido",
-  validate: (value) => /^(?! +$)(?=(.*[A-Za-z]){4})[A-Za-z0-9\s]+$/.test(value.trim()) || "Debe contener al menos 4 letras",
-  maxLength: { value: 15, message: "Maximo 15 caracteres"},
-  minLength: { value: 8, message: "Minimo 8 caracteres"}
+  validate: (value) => /^(?=(.*[A-Za-z]){4})(?=(.*\d){4})[A-Za-z0-9\s]+$/.test(value.trim()) || "Debe contener al menos 4 letras y 4 números",
+  maxLength: { value: 16, message: "Máximo 16 caracteres" },
+  minLength: { value: 8, message: "Mínimo 8 caracteres" }
 };
+
 //-----------------------------------------------------------
 
 
