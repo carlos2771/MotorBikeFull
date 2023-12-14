@@ -37,10 +37,12 @@ const comprasSchema = new mongoose.Schema(
     proveedor: {
       type: String,
       required: true,
+      trim: true
     },
     codigo: {
       type: String,
       required: true,
+      trim: true
     }
   },
   {

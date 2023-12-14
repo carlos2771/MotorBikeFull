@@ -129,7 +129,7 @@ export default function PageCompras() {
       Repuesto: compra.repuestos.map(repuesto => repuesto.repuesto.nombre_repuesto).join(', '), // Unir los nombres con comas si hay varios repuestos
       'Cantidad': compra.repuestos.map(repuesto => repuesto.cantidad_repuesto).join(', '), // Unir las cantidades con comas si hay varios repuestos
       'Fecha de compra': dayjs.utc(compra.fecha).locale('es').format("DD [de] MMMM [de] YYYY"), // Formatear la fecha
-      Estado: compra.anulado,
+      
     }));
     // Resto de tu lógica para exportar a Excel
 
