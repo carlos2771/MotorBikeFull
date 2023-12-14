@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
+
 import { useCompras } from "../../context/ComprasContext";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
@@ -13,13 +14,27 @@ dayjs.locale('es');
 dayjs.extend(utc);
 
 
+// EXCEL IMPORTS  
+import * as XLSX from "xlsx";
 
-import {faLock, faDollarSign, faBan, faInfoCircle, faIdCard,faScrewdriverWrench, faHashtag, faShoppingBag, faPlus} from "@fortawesome/free-solid-svg-icons";
+
+
+import { faLock, faDollarSign, faBan, faDownload, faInfoCircle, faIdCard, faScrewdriverWrench, faHashtag, faShoppingBag, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tabla, Titulo } from "../../components/Tabla";
 import Detalle from "../../components/Detalle";
 
+function formatCurrency(value) {
+  // Agrega el signo de peso
+  const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+  return formattedValue;
+}
 
+function formatCurrency2(value) {
+  // Solo separa los miles sin agregar el signo de pesos
+  const formattedValue = value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return formattedValue;
+}
 
 
 export default function PageCompras() {
@@ -108,18 +123,59 @@ export default function PageCompras() {
   };
 
 
+
+  const exportarAExcel = useCallback(() => {
+    const datos = compras.map((compra) => ({
+      Repuesto: compra.repuestos.map(repuesto => repuesto.repuesto.nombre_repuesto).join(', '), // Unir los nombres con comas si hay varios repuestos
+      'Cantidad': compra.repuestos.map(repuesto => repuesto.cantidad_repuesto).join(', '), // Unir las cantidades con comas si hay varios repuestos
+      'Fecha de compra': dayjs.utc(compra.fecha).locale('es').format("DD [de] MMMM [de] YYYY"), // Formatear la fecha
+      Estado: compra.anulado,
+    }));
+    // Resto de tu lógica para exportar a Excel
+
+    // Resto de tu lógica para exportar a Excel
+
+
+
+    const ws = XLSX.utils.json_to_sheet(datos);
+
+    // Agregar formato y bordes
+    for (let i = 1; i <= compras.length + 1; i++) {
+      for (let j = 0; j < Object.keys(datos[0]).length; j++) {
+        const col = String.fromCharCode(65 + j);
+        const cell = `${col}${i}`;
+        ws[cell].s = {
+          border: {
+            left: { style: 'thin', color: { rgb: '#000000' } },
+            right: { style: 'thin', color: { rgb: '#000000' } },
+            top: { style: 'thin', color: { rgb: '#000000' } },
+            bottom: { style: 'thin', color: { rgb: '#000000' } },
+          },
+        };
+      }
+    }
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'VentasServicios');
+    XLSX.writeFile(wb, 'compras.xlsx');
+  }, [compras]);
+
+
+
+
+
   // FECHA
 
   const currentDate = new Date();
   const options = { day: 'numeric', month: 'long', year: 'numeric' };
   const formattedDate = new Intl.DateTimeFormat('es-ES', options).format(currentDate);
 
-
   const calcularPrecioTotalCompra = (compra) => {
-    return compra.repuestos.reduce((total, repuesto) => {
+    return formatCurrency(compra.repuestos.reduce((total, repuesto) => {
       return total + repuesto.precio_total;
-    }, 0);
+    }, 0));
   };
+
 
 
 
@@ -127,7 +183,7 @@ export default function PageCompras() {
     {
       field: "repuestos",
       headerName: "Repuesto",
-      width: 160,
+      width: 400,
       headerClassName: "custom-header",
       valueGetter: (params) => {
         const repuestos = params.row.repuestos;
@@ -167,19 +223,19 @@ export default function PageCompras() {
     //   headerClassName: "custom-header",
     // },
 
-    {
-      field: "fecha",
-      headerName: "Fecha",
-      width: 250,
-      headerClassName: "custom-header",
-      renderCell: (params) => {
-        console.log(params.value); // Agrega esta línea para imprimir el valor de fecha en la consola
-        const date = new Date(params.value);
-        const formattedDate = dayjs.utc(date).locale('es').format("DD [de] MMMM [de] YYYY");
-        return <div>{formattedDate}</div>;
-      },
+    // {
+    //   field: "fecha",
+    //   headerName: "Fecha",
+    //   width: 250,
+    //   headerClassName: "custom-header",
+    //   renderCell: (params) => {
+    //     console.log(params.value); // Agrega esta línea para imprimir el valor de fecha en la consola
+    //     const date = new Date(params.value);
+    //     const formattedDate = dayjs.utc(date).locale('es').format("DD [de] MMMM [de] YYYY");
+    //     return <div>{formattedDate}</div>;
+    //   },
 
-    },
+    // },
     // ... Otras columnas
 
 
@@ -190,21 +246,21 @@ export default function PageCompras() {
     //   width: 100,
     //   headerClassName: "custom-header",
     // },
-    // {
-    //   field: "createdAt",
-    //   headerName: "Fecha Creacion",
-    //   width: 300,
-    //   headerClassName: "custom-header",
-    //   renderCell: (params) => {
-    //     const date = new Date(params.value);
-    //     const formattedDate = date.toLocaleDateString("es-ES", {
-    //       year: "numeric",
-    //       month: "long",
-    //       day: "numeric",
-    //     });
-    //     return <div>{formattedDate}</div>;
-    //   },
-    // },
+    {
+      field: "createdAt",
+      headerName: "Fecha Creacion",
+      width: 300,
+      headerClassName: "custom-header",
+      renderCell: (params) => {
+        const date = new Date(params.value);
+        const formattedDate = date.toLocaleDateString("es-ES", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        return <div>{formattedDate}</div>;
+      },
+    },
     {
       field: "acciones",
       headerName: "Acciones",
@@ -231,6 +287,7 @@ export default function PageCompras() {
               }
               onClick={() => mostrarAlerta(params.row._id, params.row.anulado)}
             >
+
               {params.row.anulado ? <FontAwesomeIcon icon={faLock} /> : <FontAwesomeIcon icon={faBan} />}
             </button>
 
@@ -301,21 +358,23 @@ export default function PageCompras() {
                       <td style={{ textAlign: 'center' }}>
                         {compras.find((compra) => compra._id === params.row._id)
                           ?.repuestos.map((repuesto, index) => (
-                            <div key={index}>{repuesto.cantidad_repuesto}</div>
+                            <div key={index}>{formatCurrency2(repuesto.cantidad_repuesto)}</div>
                           ))}
                       </td>
 
                       <td style={{ textAlign: 'center' }}>
                         {compras.find((compra) => compra._id === params.row._id)
                           ?.repuestos.map((repuesto, index) => (
-                            <div key={index}>{repuesto.precio_unitario}</div>
+                            <div key={index}>{formatCurrency(repuesto.precio_unitario)}</div>
                           ))}
                       </td>
+
+
 
                       <td style={{ textAlign: 'center' }}>
                         {compras.find((compra) => compra._id === params.row._id)
                           ?.repuestos.map((repuesto, index) => (
-                            <div key={index}>{repuesto.precio_total}</div>
+                            <div key={index}>{formatCurrency(repuesto.precio_total)}</div>
                           ))}
                       </td>
 
@@ -471,6 +530,26 @@ export default function PageCompras() {
                   {calcularPrecioTotalCompra(params.row)}
                 </div>
 
+                <tr>
+                  <td colSpan="4" style={{ textAlign: 'center' }}>
+                    <strong>Proveedor:</strong>{" "}
+                    {params.row.proveedor}
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan="4" style={{ textAlign: 'center' }}>
+                    <strong>Código de compra:</strong>{" "}
+                    {params.row.codigo}
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan="4" style={{ textAlign: 'center' }}>
+                    <strong>Fecha de compra:</strong>{" "}
+                    {dayjs.utc(params.row.fecha).format("DD/MM/YYYY")}
+                  </td>
+                </tr>
+
+
               </Detalle>
             </button>
           </div>
@@ -485,13 +564,20 @@ export default function PageCompras() {
   return (
     <div className="mt-16">
       <div className="flex justify-between">
-      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faShoppingBag} className="mr-2" />Gestionar Compras</h1>
+      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faShoppingBag} className="mr-2" />Gestión de Compras</h1>
       <div className="mx-10 justify-end">
           <Link to="/add-compra">
-          <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
-          <FontAwesomeIcon icon={faPlus} />
+            <button className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
+              <FontAwesomeIcon icon={faPlus} />
             </button>
           </Link>
+          <button
+            onClick={exportarAExcel}
+            className="px-4 py-2 mx-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
+            title="Descargar excel"
+          >
+            <FontAwesomeIcon icon={faDownload} />
+          </button>
         </div>
       </div>
       <Box sx={{ width: "100%" }}>
@@ -512,7 +598,7 @@ export default function PageCompras() {
           sx={{
             color: "white",
             "& .MuiDataGrid-cell": {
-              fontSize: "18px", // Cambia el tamaño de fuente aquí
+              fontSize: "15px", // Cambia el tamaño de fuente aquí
             },
           }}
           slots={{ toolbar: GridToolbar }}

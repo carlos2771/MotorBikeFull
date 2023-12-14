@@ -137,7 +137,7 @@ export default function PageMarcas() {
     {
       field: "nombre_marca",
       headerName: "Nombre de Marca",
-      width: 250,
+      width: 450,
       headerClassName: "font-custom text-lg"
 
     },
@@ -148,26 +148,27 @@ export default function PageMarcas() {
       headerClassName: "font-custom text-lg"
 
     },
-    {
-      field: "createdAt",
-      headerName: "Fecha Creacion",
-      width: 220,
-      headerClassName: "font-custom text-lg",
+    // {
+    //   field: "createdAt",
+    //   headerName: "Fecha Creacion",
+    //   width: 220,
+    //   headerClassName: "font-custom text-lg",
  
-      renderCell: (params) => {
-        const date = new Date(params.value);
-        const formattedDate = date.toLocaleDateString("es-ES", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
-        return <div>{formattedDate}</div>;
-      },
-    },
+    //   renderCell: (params) => {
+    //     const date = new Date(params.value);
+    //     const formattedDate = date.toLocaleDateString("es-ES", {
+    //       year: "numeric",
+    //       month: "long",
+    //       day: "numeric",
+    //     });
+    //     return <div>{formattedDate}</div>;
+    //   },
+    // },
     {
       field: "acciones",
       headerName: "Acciones",
       width: 200,
+      headerClassName: "font-custom text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("estadin", estado);

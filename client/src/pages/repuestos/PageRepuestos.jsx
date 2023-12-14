@@ -10,6 +10,13 @@ import { faEnvelope, faDownload ,faIdCard, faUser, faPhone, faPen, faTools, faPl
 import Detalle from "../../components/Detalle";
 import {Tabla, Titulo} from "../../components/Tabla";
 
+
+function formatCurrency(value) {
+  // Agrega el signo de peso
+  const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+  return formattedValue;
+}
+
 import * as XLSX from "xlsx";
 
 export default function PageRepuestos() {
@@ -149,45 +156,49 @@ export default function PageRepuestos() {
     },
     {
       field: "cantidad",
-      headerName: "Cantidad",
+      headerName: "cantidad",
       width: 185,
-      editable: true,
+      editable: false,
+
       headerClassName: 'custom-header',
+      valueFormatter: (params) => formatCurrency2(params.value),
     },
     {
       field: "precio",
       headerName: "Precio",
       width: 170,
-      editable: true,
+      editable: false,
       headerClassName: 'custom-header',
+      valueFormatter: (params) => formatCurrency(params.value),
     },
     {
       field: "estado",
       headerName: "Estado",
-      width: 170,
+      width: 120,
       headerClassName: 'custom-header',
 
     },
-    {
-      field: "createdAt",
-      headerName: "Fecha Creacion",
-      width: 300,
-      editable: true,
-      headerClassName: 'custom-header',
-      renderCell: (params) => {
-        const date = new Date(params.value);
-        const formattedDate = date.toLocaleDateString("es-ES", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
-        return <div>{formattedDate}</div>;
-      },
-    },
+    // {
+    //   field: "createdAt",
+    //   headerName: "Fecha Creacion",
+    //   width: 300,
+    //   editable: true,
+    //   headerClassName: 'custom-header',
+    //   renderCell: (params) => {
+    //     const date = new Date(params.value);
+    //     const formattedDate = date.toLocaleDateString("es-ES", {
+    //       year: "numeric",
+    //       month: "long",
+    //       day: "numeric",
+    //     });
+    //     return <div>{formattedDate}</div>;
+    //   },
+    // },
     {
       field: "acciones",
       headerName: "Acciones",
       width: 200,
+      headerClassName: 'custom-header',
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("estado", estado);
@@ -341,7 +352,7 @@ export default function PageRepuestos() {
           sx={{
             color: "white",
             "& .MuiDataGrid-cell": {
-              fontSize: "18px",
+              fontSize: "15px",
             },
           }}
           slots={{ toolbar: GridToolbar }}
