@@ -3,6 +3,7 @@ import { useClientes } from "../../context/ClientContext"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { NombreRequired ,EmailRequired, TelefonoRequired, CedulaRequired } from "../../utils/validations"
+import Swal from "sweetalert2";
 
 export default function FormCliente() {
   const {register, handleSubmit, setValue, formState: {errors}} = useForm()
@@ -28,10 +29,57 @@ export default function FormCliente() {
   const onSubmit = handleSubmit(async(data) => {
     if(params.id){
        updateCliente(params.id, data)
+       const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Actualizado correctamente",
+      });
        navigate("/clientes")
     }else{
       const res = await createCliente(data)
-      if(res) navigate('/clientes')
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Agregado correctamente",
+      });
+      if(res){navigate('/clientes')}
+      else{
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "No se ha agregado",
+        });
+      }
     }
     
   })
@@ -51,7 +99,7 @@ export default function FormCliente() {
       <label >Tipo Documento<span className="text-red-500">*</span></label>
           <select
         {...register("tipo", NombreRequired)}
-        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2" 
+        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2" autoFocus
         >
           <option value={""}>Selecciona el tipo de documento</option>
           <option value={"Cedula"} >
@@ -69,7 +117,7 @@ export default function FormCliente() {
         <input 
         placeholder='Cedula'
         {...register("cedula", CedulaRequired)}
-        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' autoFocus
+        className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' 
         />
         {errors.cedula && <p className="text-red-500">{errors.cedula.message}</p>}
         <label>Nombre Completo<span className="text-red-500">*</span></label>
@@ -81,12 +129,12 @@ export default function FormCliente() {
         />
         {errors.nombre_cliente && <p className="text-red-500">{errors.nombre_cliente.message}</p>}
         
-      <label >Sexo<span className="text-red-500">*</span></label>
+      <label >Género<span className="text-red-500">*</span></label>
           <select
         {...register("sexo" , NombreRequired)}
         className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
         >
-          <option value={""}>Selecciona el Sexo</option>
+          <option value={""}>Selecciona el género</option>
           <option value={"Masculino"} >
             Masculino
           </option>
@@ -99,11 +147,11 @@ export default function FormCliente() {
 
         </select>
         {errors.sexo && <p className="text-red-500">{errors.sexo.message}</p>}
-      <label >Email Cliente<span className="text-red-500">*</span></label>
+      <label >Email Cliente</label>
         <input 
         placeholder='Email Cliente'
         type="email"
-        {...register("email_cliente", EmailRequired)}
+        {...register("email_cliente")}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.email_cliente && <p className="text-red-500">{errors.email_cliente.message}</p>}

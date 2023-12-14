@@ -11,7 +11,7 @@
   align-items: center;
   text-align: center;
   height: 95%; 
-  width: 150%; 
+  width: 200%; 
   box-shadow: 0 0 20px rgba(44, 146, 248, 0.5);
 }
 
@@ -28,13 +28,22 @@
   align-items: center; 
   width: 100%;
   margin-top: 0.5rem;
+  padding-bottom: 40px;  
+}
+
+.chart-bar-date-input-container label{
+font-weight: bolder;
 }
 
 .chart-bar-date-input {
   width: 75%; 
-  color: black;
-  background-color: rgba(158, 158, 158, 0.8);
-  margin-right: 4%; 
-
+  color: white;
+  background-color: rgba(0, 0, 0, 0.1);
+  margin-right: 4%;
+  margin-top: 5px; 
+  border: 2px solid rgba(44, 146, 248, 0.5);
+  font-size: small;
+  text-align: center;
+  
 }
 

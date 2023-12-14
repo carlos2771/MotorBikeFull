@@ -14,7 +14,6 @@ import roles_permisosRoutes from "./routes/roles_permisos.routes.js"
 import ventas_repuestosRoutes from "./routes/ventas_repuestos.routes.js"
 import comprasRoutes from "./routes/compras.routes.js"
 import cors  from 'cors'
-import fucion from "./routes/fucion.routes.js"
 
 const app = express()
 
@@ -45,7 +44,7 @@ app.use("/api", rolesRoutes)
 app.use("/api", roles_permisosRoutes)
 app.use("/api", ventas_repuestosRoutes)
 app.use("/api", comprasRoutes)
-app.use("/api", fucion)
+
 
 
 export default app;

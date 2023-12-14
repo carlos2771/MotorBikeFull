@@ -49,8 +49,8 @@ import PasswordPage from "./pages/PasswordPage";
 import ActualizarPassword from "./pages/ActualizarPassword";
 import ValidarCodePage from "./pages/ValidarCodePage";
 
-import { Products } from "./components/TablaVenta";
-import { TablaRepuestoProvider } from "./context/TablaRepuestoContext";
+
+
 
 
 export default function App() {
@@ -77,7 +77,6 @@ export default function App() {
                                 <Navbar/>
                                 <Routes>
                                   <Route path="/" element={<HomePage />} />
-                                  <Route path="/tabla" element={<Products />} />
                                   <Route path="/login" element={<LoginPage />} />
                                   <Route path="/register" element={<RegisterPage />} />
                                   <Route path="/reestablecer" element={<PasswordPage />} />

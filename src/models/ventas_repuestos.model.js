@@ -9,27 +9,18 @@ const ventas_repuestosSchema = new mongoose.Schema(
           ref: "repuestos",
           required: true,
         },
-        // cantidad_repuesto: {
-        //   type: Number,
-        //   required: true,
-        // },
-        // precio_unitario: {
-        //   type: Number,
-          
-        // },
-        // precio_total: {
-        //   type: Number,
-        // },
         cantidad_vender: {
           type: Number,
-          default:0
+          required: true,
         },
       },
     ],
     precio_total: {
       type: Number,
-      
+      required: true
     },
+   
+    type: Number,
     cliente: {
       type: mongoose.Schema.Types.ObjectId, // para traer el _id
       ref: "clientes",

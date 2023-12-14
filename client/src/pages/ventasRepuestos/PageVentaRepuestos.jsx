@@ -160,27 +160,6 @@ export default function PageVentaRepuestos() {
       headerClassName: "custom-header",
       valueGetter: (params) => params.row.cliente.nombre_cliente,
     },
-    // {
-    //   field: "estado",
-    //   headerName: "Estado",
-    //   width: 100,
-    //   headerClassName: "custom-header",
-    // },
-    // {
-    //   field: "createdAt",
-    //   headerName: "Fecha Creacion",
-    //   width: 300,
-    //   headerClassName: "custom-header",
-    //   renderCell: (params) => {
-    //     const date = new Date(params.value);
-    //     const formattedDate = date.toLocaleDateString("es-ES", {
-    //       year: "numeric",
-    //       month: "long",
-    //       day: "numeric",
-    //     });
-    //     return <div>{formattedDate}</div>;
-    //   },
-    // },
     {
       field: "acciones",
       headerName: "Acciones",

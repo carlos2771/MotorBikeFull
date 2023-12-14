@@ -3,6 +3,9 @@ import { useTasks } from "../context/TasksContext";
 import { Link } from "react-router-dom";
 import TaskCard from "../components/TaskCard";
 
+import {faLock, faDollarSign, faBan, faInfoCircle, faIdCard,faScrewdriverWrench, faHashtag, faShoppingBag, faPlus, faTasks} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export default function TaskPaje() {
   const { tasks, getTasks } = useTasks();
 
@@ -17,28 +20,16 @@ export default function TaskPaje() {
     </div>
   );
   return (
-    <div className="max-w-xxl mt-10" >
-      <h1 className="mt-12 text-2xl text-center">Tareas</h1>
-      <div className="justify-end flex my-1">
-      <button className="px-3   m-2 text-sm text-withe font-semibold rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent shadow-lg ">
+    <div className="mt-16" >
+      <div className="flex justify-between">
+      <h1 className="text-2xl text-start "><FontAwesomeIcon icon={faTasks} className="mr-2" />Tareas</h1>
+      <div className="mx-10 my-1 justify-end">
+      <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
         <Link to={"/add-task"}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
-            />
-          </svg>
+          <FontAwesomeIcon icon={faPlus} />
         </Link>
       </button>
-
+      </div>
       </div>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
         {tasks.map((task) => (

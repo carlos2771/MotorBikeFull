@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import { Link } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faEdit, } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faEdit, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 export default function Detalle({ id, metodo,children }) {
   const [open, setOpen] = useState(false);
   // const { getCliente } = useClientes();
@@ -23,7 +23,7 @@ export default function Detalle({ id, metodo,children }) {
 
   return (
     <div className='rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500'>
-       <Button onClick={handleOpen} style={{ color: 'white', textTransform: 'none'}}> <FontAwesomeIcon icon={faSearch} /></Button>
+       <Button onClick={handleOpen} style={{ color: 'white', textTransform: 'none'}}> <FontAwesomeIcon icon={faCircleInfo} /></Button>
       <Modal
         open={open} 
         onClose={handleClose}

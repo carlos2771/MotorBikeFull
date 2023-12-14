@@ -4,7 +4,9 @@ import { Link,useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useMecanicos } from "../../context/MecanicosContext";
-import { NegativeRequired, ClienteRequired, MecanicoRequired, EstadoRequired, NombreRequired} from "../../utils/validations";
+import { NegativeRequired, ClienteRequired, MecanicoRequired, NombreRequired} from "../../utils/validations";
+import Swal from "sweetalert2";
+
 
 export default function FormVentaServicio() {
   const {
@@ -50,14 +52,45 @@ const onSubmit = handleSubmit(async (data) => {
   
     if (params.id) {
       const res = updateVentaServicio(params.id, data);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Actualizado correctamente",
+      });
       if (res) navigate("/ventas-servicios");
     } else {
       const transformData={
         ...data,
-        precio_servicio: Number(data.precio_servicio)///AQUI CONVIERTO EL STRING DE PRECIO A UN TIPO NUMBER PARA QUE NO ME DE ERROR
+        precio_servicio: Number(data.precio_servicio),///AQUI CONVIERTO EL STRING DE PRECIO A UN TIPO NUMBER PARA QUE NO ME DE ERROR
+        estado:"Activo"//AQUI CREO EL ESTADO SIEMPRE ACTIVO
       }
       console.log(typeof(data.precio_servicio))/// AQUI MIRO QUE TIPO DE DATO ES PRECIO_SERVICIO
       const res = await createVentaServicio(transformData);//AQUI TRASFORMO LOS DATOS Y LOS GUARDO EN TRANSFORM
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Agregado correctamente",
+      });
       if (res) navigate("/ventas-servicios");
     }
   });
@@ -113,20 +146,7 @@ const onSubmit = handleSubmit(async (data) => {
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
           {errors.descripcion && <p className="text-red-500">{errors.descripcion.message}</p>}
-          <label>Estado</label>
-          <select
-        {...register("estado")}
-        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-        >
-          <option value={"Activo"} >
-            Activo
-          </option>
-          <option value={"Inactivo"} >
-            Inactivo
-          </option>
-
-        </select>
-           
+          
         <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
         </button>
