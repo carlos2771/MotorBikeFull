@@ -7,10 +7,8 @@ import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { faPlus, faLock,faUser,faPen,faDownload,faPencil , faBan,faCalendarDay, faInfoCircle,faDollarSign,faShoppingCart,  faHandshake} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
-
 
 
 function formatCurrency(value) {
@@ -22,7 +20,6 @@ function formatCurrency(value) {
 
 
 export default function PageVentaServicios() {
-
     const {ventasServicios, getVentasServicios, deleteVentaServicio,updateVentaServicio} = useVentasServicios()
    
     useEffect(() => {
@@ -44,7 +41,6 @@ export default function PageVentaServicios() {
   const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
 
   if (estado === "Activo") {
-
     Swal.fire({
       title: title,
       text: text,
@@ -57,13 +53,11 @@ export default function PageVentaServicios() {
       iconColor: "#2563eb",
       buttonsStyling: false,
       customClass: {
-
         confirmButton:
           "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
         cancelButton:
           "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
       },
-
     }).then((result) => {
       if (result.isConfirmed) {
         cambiarEstado(id, estado);
@@ -81,7 +75,6 @@ export default function PageVentaServicios() {
         Toast.fire({
           icon: "success",
           title: "Se ha modificado",
-
         });
       } else {
         const Toast = Swal.mixin({
@@ -123,26 +116,10 @@ export default function PageVentaServicios() {
         const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
         updateVentaServicio(id, { estado: nuevoEstado }).then(() => {
           getVentasServicios();
-
         });
-        Toast.fire({
-          icon: "error",
-          title: "No se ha modificado"
-        });
-      }
-    }
-    );
+      };
 
-  };
-
-  const cambiarEstado = (id, estado) => {
-    const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
-    updateVentaServicio(id, { estado: nuevoEstado }).then(() => {
-      getVentasServicios();
-    });
-  };
-
-  const exportarAExcel = useCallback(() => {
+      const exportarAExcel = useCallback(() => {
     const datos = ventasServicios.map((venta) => ({
       Mecanico: venta.mecanico.nombre_mecanico,
       Cliente: venta.cliente.nombre_cliente,
@@ -177,7 +154,8 @@ export default function PageVentaServicios() {
     XLSX.utils.book_append_sheet(wb, ws, 'VentasServicios');
     XLSX.writeFile(wb, 'ventasServicios.xlsx');
   }, [ventasServicios]);
-
+    
+      
       
       const columns = [
         {
@@ -264,15 +242,15 @@ export default function PageVentaServicios() {
               {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faLock} />}
             </button>
             <button className={estado === "Activo" ? "" : "hidden"} title='Ver detalle'>
-              <Detalle
+            <Detalle
                 metodo={() => getVentasServicios(params.row._id)}
                 id={params.row._id}
               >
                 <table>
                   <tbody>
                     <Titulo>
-                      <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
-                      Detalles de la venta
+                        <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                        Detalles de la venta
                     </Titulo>
 
                     <tr>
@@ -337,16 +315,16 @@ export default function PageVentaServicios() {
                         Descripción
                       </Tabla>
                       <Tabla >
-                        {
-                          ventasServicios.find((descripcion) => descripcion._id === params.row._id)
-                            ?.descripcion
-                        }
+                      {
+                    ventasServicios.find((descripcion) => descripcion._id === params.row._id)
+                      ?.descripcion
+                  }
                       </Tabla>
                     </tr>
                   </tbody>
-
+                  
                 </table>
-
+                
               </Detalle>
             </button>
           </div>
@@ -366,7 +344,7 @@ export default function PageVentaServicios() {
           </Link>
           <button
             onClick={exportarAExcel}
-            className="px-4 py-2 mx-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
+            className="px-4 py-2 mx-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent" 
             title="Descargar excel"
           >
             <FontAwesomeIcon icon={faDownload} />
@@ -401,4 +379,3 @@ export default function PageVentaServicios() {
         </div>
       );
     }
-

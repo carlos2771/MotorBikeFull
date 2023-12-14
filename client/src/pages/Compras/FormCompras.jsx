@@ -5,9 +5,6 @@ import utc from "dayjs/plugin/utc";
 import dayjs from 'dayjs';
 dayjs.extend(utc);
 
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRepuestos } from "../../context/RepuestosContext";
 import { NegativeRequired, RepuestoRequired, fecha, nombre_RepuestoValidacion, codeCompra, NombreMaRequired } from "../../utils/validations";
@@ -179,31 +176,12 @@ export default function FormCompra() {
                 <p className="text-red-500 mt-2">{errors.codigo.message}</p>
               )}
             </div>
-
-
-
-
             <button
-              className="px-5 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar"
+              className="px-5 py-2 m-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar"
               type="submit" disabled={selectedRepuesto === ""}>
               <FontAwesomeIcon icon={faPlus} />
             </button>
-
-
-
-
-
-
           </div>
-
-
-
-
-
-
-
-
-
 
           {fields.map((item, index) => (
             <div key={item.id} className="flex my-2">
