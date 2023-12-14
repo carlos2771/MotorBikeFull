@@ -2,11 +2,11 @@ import { useForm } from "react-hook-form"
 import { useClientes } from "../../context/ClientContext"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
-import { NombreRequired ,EmailRequired, TelefonoRequired, CedulaRequired } from "../../utils/validations"
+import { NombreRequired ,EmailRequired, TelefonoRequired, CedulaRequired, PasaporteRequired, NombreMeRequired} from "../../utils/validations"
 import Swal from "sweetalert2";
 
 export default function FormCliente() {
-  const {register, handleSubmit, setValue, formState: {errors}} = useForm()
+  const {register, unregister,handleSubmit, setValue, formState: {errors}} = useForm()
   const {createCliente, getCliente, updateCliente, errors: clientesErrors} = useClientes()
   const navigate = useNavigate()  
   const params = useParams()
@@ -25,6 +25,18 @@ export default function FormCliente() {
       }
     })();
   }, []);
+
+  const handleTipoChange = (selectedTipo) => {
+    // Desregistrando el campo antes de volver a registrarlo
+    unregister("cedula");
+    // Actualiza la validación según el tipo seleccionado
+    if (selectedTipo === "Pasaporte") {
+      
+      register("cedula", PasaporteRequired);
+    } else {
+      register("cedula", CedulaRequired);
+    }
+  };
   
   const onSubmit = handleSubmit(async(data) => {
     if(params.id){
@@ -99,6 +111,7 @@ export default function FormCliente() {
       <label >Tipo Documento<span className="text-red-500">*</span></label>
           <select
         {...register("tipo", NombreRequired)}
+        onChange={(e) => handleTipoChange(e.target.value)}
         className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2" autoFocus
         >
           <option value={""}>Selecciona el tipo de documento</option>
@@ -108,6 +121,7 @@ export default function FormCliente() {
           <option value={"Tarjeta Identidad"} >
             Tarjeta Identidad
           </option>
+          <option value={"Pasaporte"}>Pasaporte</option>
           <option value={"Otro"} >
             Otro
           </option>
@@ -116,7 +130,7 @@ export default function FormCliente() {
       <label>Documento<span className="text-red-500">*</span></label>
         <input 
         placeholder='Documento'
-        {...register("cedula", CedulaRequired)}
+        {...register("cedula")}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' 
         />
         {errors.cedula && <p className="text-red-500">{errors.cedula.message}</p>}
@@ -124,7 +138,7 @@ export default function FormCliente() {
         <input 
         type="text" 
         placeholder='Nombre Completo' 
-        {...register("nombre_cliente", NombreRequired)}
+        {...register("nombre_cliente", NombreMeRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.nombre_cliente && <p className="text-red-500">{errors.nombre_cliente.message}</p>}
@@ -150,8 +164,8 @@ export default function FormCliente() {
       <label >Email</label>
         <input 
         placeholder='Email'
-        type="email"
-        {...register("email_cliente")}
+        type="text"
+        {...register("email_cliente", EmailRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
         {errors.email_cliente && <p className="text-red-500">{errors.email_cliente.message}</p>}

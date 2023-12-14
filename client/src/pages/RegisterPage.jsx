@@ -75,7 +75,7 @@ export default function registerPage() {
             placeholder="Contraseña"
           />
           {errors.password && (
-            <p className="text-red-500">Contraseña es requerida</p>
+            <p className="text-red-500">{errors.password.message}</p>
           )}
           <div className="flex justify-center">
             <button
