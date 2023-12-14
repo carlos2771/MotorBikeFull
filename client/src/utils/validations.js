@@ -111,28 +111,16 @@ export const MecanicoRequired = {
 // Estas validaciones fueron hechas por Sara
 export const DireccionRequired = {
   required: "Campo requerido",
-  maxLength: {
-    value: 70,
-    message: "El maximo de caracteres es de 70"
-  },
-  minLength: {
-    value: 10,
-    message: "El minimo de caracteres es de 10"
-  }, 
-  validate: (value) => /\S/.test(value) || "No se permiten espacios en blanco",
+  validate: (value) => /^(?! +$)[A-Za-z0-9\s#-]+$/.test(value.trim()) || "No se permite solo espacio",
+  maxLength: { value: 70, message: "Máximo 70 caracteres"},
+  minLength: { value: 10, message: "Mínimo 10 caracteres"}
 };
 
 export const NombreMeRequired = {
   required: "Campo requerido",
   validate: (value) => /^[A-Za-z\s]+$/.test(value.trim()) || "Solo se permiten letras y espacios",
-  maxLength: {
-    value: 75,
-    message: "El maximo de caracteres es de 75"
-  },
-  minLength: {
-    value: 6,
-    message: "Ingresa el nombre completo, minimo 6 caracteres"
-  }
+  maxLength: { value: 75, message: "El maximo de caracteres es de 75"},
+  minLength: { value: 6, message: "Ingresa el nombre completo, minimo 6 caracteres"}
 };
 
 export const NombreMaRequired = {
