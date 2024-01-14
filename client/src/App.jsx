@@ -49,7 +49,10 @@ import PasswordPage from "./pages/PasswordPage";
 import ActualizarPassword from "./pages/ActualizarPassword";
 import ValidarCodePage from "./pages/ValidarCodePage";
 
+import Home from "./components/Home"
+import { CartProvider } from "./context/CartContext";
 
+import { CartClienteProvider } from "./context/CartClienteContext";
 
 
 
@@ -71,6 +74,10 @@ export default function App() {
                       <MecanicoProvider>
                         <MarcaProvider>
                           <CompraProvider>
+                            <CartProvider>
+                              <CartClienteProvider>
+
+                              
                            {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
                             <BrowserRouter>
                               <main className='min-h-screen bg-gradient-to-tr from-[#1E293B] via-[#0f172a] to-[#1E293B] px-8 md:px-14 lg:px-36 pb-10 pt-7'>  
@@ -88,7 +95,9 @@ export default function App() {
                                     <Route path="/tasks" element={<TaskPaje />} />
                                     <Route path="/add-task" element={<TaskFormPage />} />
                                     <Route path="/tasks/:id" element={<TaskFormPage />} />
+                                    <Route path="/home" element={<Home/>} />
                                     
+                                   
                                     <Route path="/profile" element={<ProfilePage />} />
                                     <Route path="/clientes" element={<PageClientes />} />
                                     <Route path="/add-cliente" element={<FormCliente />} />
@@ -135,6 +144,8 @@ export default function App() {
                                 </Routes>
                               </main>
                             </BrowserRouter>
+                            </CartClienteProvider>
+                            </CartProvider>
                           </CompraProvider>
                         </MarcaProvider>
                       </MecanicoProvider>
