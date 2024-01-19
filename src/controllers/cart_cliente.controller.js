@@ -3,22 +3,17 @@ import CartCliente from "../models/cart_cliente.js"
 import Cliente from "../models/cart_cliente.js"
 
 
-
 export const getCartClient = async (req, res) => {
-    const cart = await Cart.find()
-    const cliente = await Cliente.find()
-
-    if(!cart){
-        res.json({mesaje:"no hay nada en el carro"})
-    }else {
-        console.log(cart);
+  try {
+    const cart_cliente = await CartCliente.find().populate({ path: 'cliente', select: 'nombre_cliente' })
+    if (!cart_cliente) {
+      return res.status(404).json({ message: "Venta_servicios no encontrados" });
     }
-    if(!cliente){
-        res.json({mesaje:"no hay nada en el carro"})
-    }else {
-        console.log(cliente);
-    }
-}
+    res.json(cart_cliente);
+  } catch (error) {
+    console.error("error", error)
+  }
+};
 
 
 export const createCartCliente = async (req, res) => {

@@ -4,10 +4,6 @@ const CartSchema = new mongoose.Schema({
     img: { type: String },
     amount: { type: Number, required: true },
     price: { type: Number, required: true },
-    // cliente: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "clientes",
-    // },
     
   });
 

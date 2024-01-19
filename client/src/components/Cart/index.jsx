@@ -5,12 +5,10 @@ import styles from "./styles.module.scss";
 import { useClientes } from "../../context/ClientContext";
 import { useForm } from "react-hook-form";
 import { useCartCliente } from "../../context/CartClienteContext";
-import { Link, useNavigate  } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const navigate = useNavigate();
-  /* Creamos 2 estados, uno para ver si el carrito esta abierto o no 
-  y otro para obtener la cantidad de productos que tenemos en el carrito */
   const [cartOpen, setCartOpen] = useState(false);
   const [productsLength, setProductsLength] = useState(0);
   const { getClientes, clientes } = useClientes();
@@ -47,33 +45,31 @@ const Cart = () => {
     0
   );
 
-
-
   const onSubmit = async (data) => {
     try {
-      if(data){ 
+      if (data) {
         navigate("/home-page");
-        cleartCart()
+        cleartCart(); // Assuming you have a function named clearCart
+  
         const { cliente, ...restData } = data;
-        const result = await cartItems.map((item) => item);
+        const result = cartItems.map((item) => ({ ...item })); // Make sure to create a copy of each item
         const datosCartCliente = {
           ...restData,
           cart: result,
           cliente,
         };
-      }else{
+  
+        const res = await createCartCliente(datosCartCliente);
+        console.log("Datos antes de enviar:", datosCartCliente);
+        console.log("cartcliente", res);
+      } else {
         console.log("no se pudo renderizar");
       }
-      
-
-      console.log("Datos antes de enviar:", datosCartCliente);
-
-      const res = await createCartCliente(datosCartCliente);
-      console.log("cartcliente", res);
     } catch (error) {
       console.error("Error al enviar el carrito y cliente:", error);
     }
   };
+  
   return (
     <div className={styles.cartContainer}>
       <div

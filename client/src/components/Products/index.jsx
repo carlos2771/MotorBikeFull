@@ -16,12 +16,12 @@ const Products = () => {
             {!product.inCart ? (
               <button
                 className="border-none rounded-3px px-5 py-2 cursor-pointer hover:bg-gray-300"
-                onClick={() => addItemToCart(product)}
+                onClick={async() => await addItemToCart(product)}
               >
                 Add to Cart
               </button>
             ) : (
-              <button className="border-none rounded-3px px-5 py-2">En el carrito</button>
+               <button className="border-none rounded-3px px-5 py-2">En el carrito</button>
             )}
           </div>
         ))}

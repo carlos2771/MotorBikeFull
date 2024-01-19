@@ -26,48 +26,36 @@ import {
 
 export default function PageCartClient() {
   const { getCartClient, cartClientes } = useCartCliente();
-  const { clientes, getClientes, deleteCliente, updateCliente, getCliente } =
-    useClientes();
 
   useEffect(() => {
     try {
       getCartClient();
     } catch (error) {
-      console.error("Error al obtener cartClient:", error);
+      console.error("Error al obtener compras:", error);
     }
   }, []);
-  useEffect(() => {
-    try {
-      getCartClient();
-    } catch (error) {
-      console.error("Error al obtener cartClient:", error);
-    }
-  }, []);
-
   const columns = [
+
     {
-      field: "nombre_cliente",
-      headerName: "Nombre Completo",
-      width: 200,
-      headerClassName: "font-custom text-lg",
+      field: "codigo",
+      headerName: "codigo",
+      width: 170,
+      headerClassName: 'custom-header',
+      
     },
     {
-      field: "cart",
-      headerName: "venta",
-      width: 400,
-      headerClassName: "custom-header",
-      valueGetter: (params) => {
-        const repuestos = params.row.cart;
-
-        // Verifica si hay repuestos
-        if (repuestos && repuestos.length > 0) {
-          // Mapea los nombres de repuestos y únelos con una coma
-          const nombresRepuestos = repuestos.map((repuesto) => repuesto.repuesto.nombre);
-          return nombresRepuestos.join(', '); // Muestra los nombres separados por coma
-        } else {
-          return "Nombre no disponible";
-        }
-      },
+      field: "nombre_cliente",
+      headerName: "Cliente",
+      width: 170,
+      headerClassName: 'custom-header',
+      valueGetter: (params) => params.row.cliente.nombre_cliente,
+    },
+    {
+      field: "total",
+      headerName: "Total_Venta",
+      width: 170,
+      headerClassName: 'custom-header',
+      
     },
   ];
 
@@ -79,7 +67,7 @@ export default function PageCartClient() {
           Gestión de Repuestos
         </h1>
         <div className="mx-16 justify-end">
-          <Link to="/add-repuesto">
+          <Link to="/home">
             <button
               className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
               title="Agregar"
