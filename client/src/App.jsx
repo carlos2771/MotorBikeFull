@@ -53,6 +53,7 @@ import Home from "./components/Home"
 import { CartProvider } from "./context/CartContext";
 
 import { CartClienteProvider } from "./context/CartClienteContext";
+import PageCartClient from "./pages/cartClient/PageCartClient";
 
 
 
@@ -96,6 +97,7 @@ export default function App() {
                                     <Route path="/add-task" element={<TaskFormPage />} />
                                     <Route path="/tasks/:id" element={<TaskFormPage />} />
                                     <Route path="/home" element={<Home/>} />
+                                    <Route path="/home-page" element={<PageCartClient/>} />
                                     
                                    
                                     <Route path="/profile" element={<ProfilePage />} />

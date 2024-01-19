@@ -5,7 +5,7 @@ import styles from './styles.module.scss'
 
 const Home = () => {
   return (
-    <div className={styles.home}>
+    <div className="">
       <Cart />
       <Products />
     </div>

@@ -1,9 +1,10 @@
 .cartContainer {
-    width: 100vw;
+    width: 90vw;
     height: 50px;
     display: flex;
     justify-content: flex-end;
     font-family: Roboto;
+    margin-top: 50px;
   
     .buttonCartContainer {
       position: absolute;
@@ -72,7 +73,7 @@
       }
   
       .productsContainer{
-        max-height: 200px;
+        max-height: 420px;
         overflow-y: scroll;
         margin-top: 5px;
       }
@@ -84,7 +85,7 @@
   }
   
   ::-webkit-scrollbar:vertical {
-    width: 3px;
+    width: 4px;
   }
   
   ::-webkit-scrollbar-thumb {

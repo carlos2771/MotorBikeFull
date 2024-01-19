@@ -5,7 +5,10 @@ import styles from "./styles.module.scss";
 import { useClientes } from "../../context/ClientContext";
 import { useForm } from "react-hook-form";
 import { useCartCliente } from "../../context/CartClienteContext";
+import { Link, useNavigate  } from "react-router-dom";
+
 const Cart = () => {
+  const navigate = useNavigate();
   /* Creamos 2 estados, uno para ver si el carrito esta abierto o no 
   y otro para obtener la cantidad de productos que tenemos en el carrito */
   const [cartOpen, setCartOpen] = useState(false);
@@ -29,7 +32,7 @@ const Cart = () => {
   }, []);
 
   /* Traemos del context los productos del carrito */
-  const { cartItems } = useContext(CartContext);
+  const { cartItems, cleartCart } = useContext(CartContext);
 
   /* Cada vez que se modifica el carrito, actualizamos la cantidad de productos */
   useEffect(() => {
@@ -44,15 +47,24 @@ const Cart = () => {
     0
   );
 
+
+
   const onSubmit = async (data) => {
     try {
-      const { cliente, ...restData } = data;
-      const result = await cartItems.map((item) => item);
-      const datosCartCliente = {
-        ...restData,
-        cart: result,
-        cliente,
-      };
+      if(data){ 
+        navigate("/home-page");
+        cleartCart()
+        const { cliente, ...restData } = data;
+        const result = await cartItems.map((item) => item);
+        const datosCartCliente = {
+          ...restData,
+          cart: result,
+          cliente,
+        };
+      }else{
+        console.log("no se pudo renderizar");
+      }
+      
 
       console.log("Datos antes de enviar:", datosCartCliente);
 

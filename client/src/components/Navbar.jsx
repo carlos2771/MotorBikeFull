@@ -81,7 +81,7 @@ export default function Navbar() {
                     </Link>
                   </Render>
                   <Render>
-                    <Link to="/home" className="flex ms-10 p-2">
+                    <Link to="/home-page" className="flex ms-10 p-2">
                       <FontAwesomeIcon icon={faMotorcycle} className="mr-2" />Home
                     </Link>
                   </Render>

@@ -1,14 +1,11 @@
 import Product from "../models/product.js"
 import Cart from "../models/cart.js"
-// import  Cliente from "../models/cliente.model.js"
+import multer from "multer";
+import path from "path";
 
 export const addProductCart = async (req, res) => {
-  const { name, img, price,  } = req.body;
+  const { name, img, price } = req.body;
 
-  // const clienteEncontrado = await Cliente.findById(clienteId);
-  // if (!clienteEncontrado) {
-  //   return res.status(404).json({ message: "Cliente no encontrado" });
-  // }
 
   /* Nos fijamos si tenemos el producto */
   const estaEnProducts = await Product.findOne({ name });
@@ -38,7 +35,6 @@ export const addProductCart = async (req, res) => {
     )
       .then((product) => {
         newProductInCart.save();
-        console.log("el nuevo", product);
         res.json({
           mensaje: `El producto fue agregado al carrito`,
           product,
@@ -157,3 +153,77 @@ export const deleteProduct = async (req, res) => {
       res.status(400).json({ mensaje: "Ocurrio un error" });    
     }
   };
+
+import fs from "fs"
+// import base64 from 'base64-js';
+
+import sharp from 'sharp'; // Importa el módulo sharp
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = './uploads';
+    // Crea el directorio si no existe
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+
+const upload = multer({ storage: storage });
+
+const uploadMiddleware = () => upload.single("img");
+
+export default uploadMiddleware;
+
+export const createProduct = async (req, res) => {
+  try {
+    const { name, inCart, price, cantidad } = req.body;
+    const imgPath = req.file.path;
+
+    // Redimensiona la imagen a un tamaño específico (por ejemplo, 300x300)
+    const resizedImageBuffer = await sharp(imgPath)
+      .resize({ width: 300, height: 300 })
+      .toBuffer();
+
+    // Convierte la imagen redimensionada a base64
+    const base64Image = resizedImageBuffer.toString('base64');
+
+    const product = new Product({
+      name,
+      img: base64Image,
+      inCart,
+      price,
+      cantidad,
+    });
+
+    const productStored = await product.save();
+    res.status(201).send({ productStored });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error interno del servidor");
+  }
+};
+
+
+export const cleartCart = async (req, res) => {
+  try {
+    // Elimina todos los documentos en la colección 'Cart'
+    const deleteCart = await Cart.deleteMany({});
+    
+    // Actualiza el estado 'inCart' a false en todos los productos
+    const updateProducts = await Product.updateMany({}, { inCart: false });
+
+    // Verifica si se eliminaron carritos y se actualizaron productos
+    if (deleteCart.deletedCount === 0 && updateProducts.nModified === 0) {
+      return res.status(404).json({ message: "No carts or products found" });
+    }
+
+    return res.json({ message: "Cart cleared successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
