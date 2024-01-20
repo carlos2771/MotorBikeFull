@@ -56,6 +56,7 @@ export default function FormRepuesto() {
         setValue("marca", repuesto.marca);
         setSelectedMarca(repuesto.marca);
         setValue("price", repuesto.price);
+        // setValue("InCart", repuesto.InCart);
       }
     })();
   }, []);
@@ -240,12 +241,13 @@ export default function FormRepuesto() {
             <option value={"Activo"}>Activo</option>
             <option value={"Inactivo"}>Inactivo</option>
           </select>
-          <select
+          {/* <input
             {...register("InCart")}
+            value={false}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2 hidden"
           >
-            <option value={false}>Inactivo</option>
-          </select>
+            
+          </input> */}
 
           <button
             className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d"

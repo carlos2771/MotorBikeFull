@@ -11,7 +11,7 @@ export const ItemCart = ({ item }) => {
 
   return (
     <div className={styles.cartItem}>
-      <img src={`data:image/png;base64, ${item.img}`}alt={item.name} />
+      <img className= "h-1" src={` ${item.img}`}alt={item.name} />
       <div className={styles.dataContainer}>
         <div className={styles.left}>
           <p>{item.name}</p>

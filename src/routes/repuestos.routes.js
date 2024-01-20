@@ -7,7 +7,7 @@ import { validateSchema } from "../middlewares/validator.middleware.js"
 const router = Router()
 
 // Configura rutas y controladores
-router.get("/repuestos",authRequired,  getRepuestos)
+router.get("/repuestos",  getRepuestos)
 router.get("/repuestos/:id",authRequired, getRepuesto)
 router.post("/repuestos", uploadMiddleware(), createRepuestos)
 router.delete("/repuestos/:id", authRequired, deleteRepuesto)

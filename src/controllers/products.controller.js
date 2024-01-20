@@ -2,13 +2,14 @@ import Product from "../models/product.js"
 import Cart from "../models/cart.js"
 import multer from "multer";
 import path from "path";
+import Repuesto from "../models/repuestos.model.js";
 
 export const addProductCart = async (req, res) => {
   const { name, img, price } = req.body;
 
 
   /* Nos fijamos si tenemos el producto */
-  const estaEnProducts = await Product.findOne({ name });
+  const estaEnProducts = await Repuesto.findOne({ name });
   console.log(estaEnProducts, "para ver que retorna");
 
   /* Nos fijamos si todos los campos vienen con info */
@@ -28,7 +29,7 @@ export const addProductCart = async (req, res) => {
     const newProductInCart = new Cart({ name, img, price, amount: 1 });
 
     /* Y actualizamos la prop inCart: true en nuestros productos */
-    await Product.findByIdAndUpdate(
+    await Repuesto.findByIdAndUpdate(
       estaEnProducts?._id, // interrogacion para acceder a las propiedades de un objeto y para ver si es nulo o indefinido. retorna undefined
       { inCart: true, name, img, price },
       { new: true }
@@ -59,7 +60,7 @@ export const deleteProduct = async (req, res) => {
     const productInCart = await Cart.findById(productId);
   
     /* Buscamos el producto en nuestra DB por el nombre del que esta en el carrito */
-    const { name, img, price, _id } = await Product.findOne({
+    const { name, img, price, _id } = await Repuesto.findOne({
       name: productInCart.name,
     });
   
@@ -70,7 +71,7 @@ export const deleteProduct = async (req, res) => {
     /* Le pasamos la id del producto en la DB */
     /* La prop a cambiar y las demas */
     /* Y el new para devolver el producto editado */
-    await Product.findByIdAndUpdate( // se actualiza para poder sacarlo de la base de datos ya que tiene un boolean 
+    await Repuesto.findByIdAndUpdate( // se actualiza para poder sacarlo de la base de datos ya que tiene un boolean 
       _id,
       { inCart: false, name, img, price },
       { new: true }
@@ -88,7 +89,7 @@ export const deleteProduct = async (req, res) => {
 
   export const getProducts = async (req, res) => {
     // productos
-    const products = await Product.find();
+    const products = await Repuesto.find();
   
     if (products) {
       res.json({ products });

@@ -22,7 +22,11 @@ const Products = () => {
     <div className="w-full grid grid-cols-4 gap-y-20 gap-x-75 justify-items-center pt-20 mr-96 ">
       {filteredProducts.map((product, i) => (
         <div key={i} className="flex flex-col items-center justify-center space-y-2">
-          <img className="w-full" src={`data:image/png;base64,${product.img}`} alt={product.name} />
+          <img
+              className="w-full h-56" // Utiliza w-full para ocupar el ancho completo del contenedor
+              src={`${product.img}`}
+              alt={product.name}
+            />
           <div>
             <p className="font-Roboto text-center font-bold">{product.name} - ${product.price}</p>
           </div>

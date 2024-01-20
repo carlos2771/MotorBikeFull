@@ -7,6 +7,7 @@ const repuestosSchema = new mongoose.Schema({
     img: { type: String },
     amount: { type: Number, required: true },
     price: { type: Number, required: true },
+    inCart: {type:Boolean, default: false},
     marca: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "marca",

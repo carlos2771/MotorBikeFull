@@ -52,7 +52,36 @@ const Cart = () => {
         cleartCart(); // Assuming you have a function named clearCart
   
         const { cliente, ...restData } = data;
-        const result = cartItems.map((item) => ({ ...item })); // Make sure to create a copy of each item
+        const result = cartItems.map((item) => {
+          // Create a copy of each item
+          const newItem = { ...item };
+  
+          // Resize the image before saving
+          const image = new Image();
+          image.src = newItem.image; // Assuming the image property is present in your item object
+  
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+  
+          // Set the desired dimensions for the resized image
+          const newWidth = 100; // Adjust this value according to your requirements
+          const newHeight = (newWidth / image.width) * image.height;
+  
+          canvas.width = newWidth;
+          canvas.height = newHeight;
+  
+          // Draw the image on the canvas with the new dimensions
+          ctx.drawImage(image, 0, 0, newWidth, newHeight);
+  
+          // Convert the canvas content to a data URL
+          const resizedImage = canvas.toDataURL("image/jpeg");
+  
+          // Update the item's image property with the resized image
+          newItem.image = resizedImage;
+  
+          return newItem;
+        });
+  
         const datosCartCliente = {
           ...restData,
           cart: result,
@@ -69,6 +98,7 @@ const Cart = () => {
       console.error("Error al enviar el carrito y cliente:", error);
     }
   };
+  
   
   return (
     <div className={styles.cartContainer}>
