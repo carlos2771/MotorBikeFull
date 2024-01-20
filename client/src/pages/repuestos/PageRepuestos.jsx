@@ -144,7 +144,7 @@ export default function PageRepuestos() {
 
   const columns = [
     {
-      field: "nombre_repuesto",
+      field: "name",
       headerName: "Repuesto",
       width: 160,
       headerClassName: 'custom-header',
@@ -158,14 +158,14 @@ export default function PageRepuestos() {
       valueGetter: (params) => params.row.marca.nombre_marca,
     },
     {
-      field: "cantidad",
+      field: "amount",
       headerName: "Cantidad",
       width: 120,
       headerClassName: 'custom-header',
       valueFormatter: (params) => formatCurrency2(params.value),
     },
     {
-      field: "precio",
+      field: "price",
       headerName: "Precio",
       width: 170,
       headerClassName: 'custom-header',
@@ -250,7 +250,7 @@ export default function PageRepuestos() {
                         {
                           repuestos.find(
                             (repuesto) => repuesto._id === params.row._id
-                          )?.nombre_repuesto
+                          )?.name
                         }
                       </Tabla>
                     </tr>
@@ -275,7 +275,7 @@ export default function PageRepuestos() {
                       <Tabla >
                       {
                     repuestos.find((repuesto) => repuesto._id === params.row._id)
-                      ?.cantidad
+                      ?.amount
                   }
                       </Tabla>
                     </tr>
@@ -287,7 +287,7 @@ export default function PageRepuestos() {
                       <Tabla >
                       {
                     repuestos.find((repuesto) => repuesto._id === params.row._id)
-                      ?.precio
+                      ?.price
                   }
                     
                       </Tabla>

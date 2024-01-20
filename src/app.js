@@ -15,7 +15,12 @@ import comprasRoutes from "./routes/compras.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import cartClienteRoutes from "./routes/cart_cliente.routes.js";
 import cors from 'cors';
+import bodyParser from "body-parser";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const app = express();
 
 app.use(cors({
@@ -24,7 +29,10 @@ app.use(cors({
 }));
 
 app.use(morgan("dev"));
-app.use(express.json({ limit: '10mb' })); // Ajusta el límite según tus necesidades
+// app.use(express.json({ limit: '10mb' })); // Ajusta el límite según tus necesidades
+// app.use(express.json());
+// app.use(bodyParser.json({ limit: '10mb' }));
+app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
 app.use("/api", authRoutes);
 app.use("/api", taskRoutes);

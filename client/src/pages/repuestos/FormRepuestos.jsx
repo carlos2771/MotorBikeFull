@@ -3,7 +3,12 @@ import { useRepuestos } from "../../context/RepuestosContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMarcas } from "../../context/MarcasContext";
-import { NegativeRequired, NombreRequired, RepuestoRequired, NombreRepuestoRequired } from "../../utils/validations";
+import {
+  NegativeRequired,
+  NombreRequired,
+  RepuestoRequired,
+  NombreRepuestoRequired,
+} from "../../utils/validations";
 import Swal from "sweetalert2";
 
 export default function FormRepuesto() {
@@ -24,6 +29,7 @@ export default function FormRepuesto() {
   const params = useParams();
   const [selectedMarca, setSelectedMarca] = useState();
   const [activeMarcas, setActiveMarcas] = useState([]);
+  const [imageBase64, setImageBase64] = useState("");
 
   useEffect(() => {
     try {
@@ -34,7 +40,9 @@ export default function FormRepuesto() {
   }, []);
 
   useEffect(() => {
-    const activeMarcasList = marcas.filter(marca => marca.estado === "Activo");
+    const activeMarcasList = marcas.filter(
+      (marca) => marca.estado === "Activo"
+    );
     setActiveMarcas(activeMarcasList);
   }, [marcas]);
 
@@ -42,11 +50,12 @@ export default function FormRepuesto() {
     (async () => {
       if (params.id) {
         const repuesto = await getRepuesto(params.id);
-        setValue("nombre_repuesto", repuesto.nombre_repuesto);
+        setValue("name", repuesto.name);
+        setValue("img", repuesto.img);
+        setValue("amount", repuesto.amount);
         setValue("marca", repuesto.marca);
         setSelectedMarca(repuesto.marca);
-        setValue("cantidad", repuesto.cantidad);
-        setValue("precio", repuesto.precio);
+        setValue("price", repuesto.price);
       }
     })();
   }, []);
@@ -62,7 +71,21 @@ export default function FormRepuesto() {
     }
   }, [selectedMarca]);
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageBase64(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const onSubmit = handleSubmit(async (data) => {
+    data.img = imageBase64;
+    console.log("datos aness",data);
+    console.log("img",data.img);
     if (params.id) {
       const res = updateRepuesto(params.id, data);
       const Toast = Swal.mixin({
@@ -82,6 +105,7 @@ export default function FormRepuesto() {
       });
       if (res) navigate("/repuestos");
     } else {
+      console.log("como se ven los datos",data);
       const res = await createRepuesto(data);
       const Toast = Swal.mixin({
         toast: true,
@@ -131,18 +155,42 @@ export default function FormRepuesto() {
         ))}
 
         <h1 className="text-2xl flex justify-center ">Agregar Repuesto</h1>
-        <form className="mt-10" onSubmit={onSubmit}>
-          <label>Nombre Repuesto<span className="text-red-500">*</span></label>
+        <form className="mt-10" onSubmit={onSubmit} >
+          <label>
+            Nombre Repuesto<span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
-            placeholder='Nombre'
-            {...register("nombre_repuesto", NombreRepuestoRequired)}
-            className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
+            placeholder="Nombre"
+            {...register("name", NombreRepuestoRequired)}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             autoFocus
           />
-          {errors.nombre_repuesto && <p className="text-red-500">{errors.nombre_repuesto.message}</p>}
+          {errors.nombre_repuesto && (
+            <p className="text-red-500">{errors.nombre_repuesto.message}</p>
+          )}
+          <label>
+            Imagen Repuesto<span className="text-red-500">*</span>
+          </label>
+          <input
+            type="file"
+            onChange={handleImageChange}
+            
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+            autoFocus
+          />
+          {errors.img && <p className="text-red-500">{errors.img.message}</p>}
+          {imageBase64 && (
+            <img
+              src={imageBase64}
+              alt="Preview"
+              style={{ width: "40%", marginTop: "10px" }}
+            />
+          )}
 
-          <label>Marca<span className="text-red-500">*</span></label>
+          <label>
+            Marca<span className="text-red-500">*</span>
+          </label>
           <select
             {...register("marca", RepuestoRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
@@ -155,24 +203,34 @@ export default function FormRepuesto() {
               </option>
             ))}
           </select>
-          {errors.marca && <p className="text-red-500">{errors.marca.message}</p>}
+          {errors.marca && (
+            <p className="text-red-500">{errors.marca.message}</p>
+          )}
 
-          <label>Cantidad<span className="text-red-500">*</span></label>
+          <label>
+            Cantidad<span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
-            placeholder='Cantidad'
-            {...register("cantidad", NegativeRequired)}
-            className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
-          />
-          {errors.cantidad && <p className="text-red-500">{errors.cantidad.message}</p>}
-
-          <label>Precio del repuesto<span className="text-red-500">*</span></label>
-          <input
-            placeholder="precio"
-            {...register("precio", NegativeRequired)}
+            placeholder="Cantidad"
+            {...register("amount", NegativeRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
-          {errors.precio && <p className="text-red-500">{errors.precio.message}</p>}
+          {errors.cantidad && (
+            <p className="text-red-500">{errors.cantidad.message}</p>
+          )}
+
+          <label>
+            Precio del repuesto<span className="text-red-500">*</span>
+          </label>
+          <input
+            placeholder="precio"
+            {...register("price", NegativeRequired)}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+          />
+          {errors.precio && (
+            <p className="text-red-500">{errors.precio.message}</p>
+          )}
 
           <label>Estado</label>
           <select
@@ -182,12 +240,26 @@ export default function FormRepuesto() {
             <option value={"Activo"}>Activo</option>
             <option value={"Inactivo"}>Inactivo</option>
           </select>
+          <select
+            {...register("InCart")}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2 hidden"
+          >
+            <option value={false}>Inactivo</option>
+          </select>
 
-          <button className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d" type="submit">
+          <button
+            className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d"
+            type="submit"
+          >
             Guardar
           </button>
           <button>
-            <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/repuestos">Cancelar</Link>
+            <Link
+              className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  "
+              to="/repuestos"
+            >
+              Cancelar
+            </Link>
           </button>
         </form>
       </div>

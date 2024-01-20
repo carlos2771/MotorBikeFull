@@ -3,23 +3,14 @@ import mongoose from "mongoose";
 
 //Estructurar los datos que representan a los clientes en la base de datos.
 const repuestosSchema = new mongoose.Schema({
-    nombre_repuesto: {
-        type: String, //Tipo String
-        required: true, //Es requerido
-
-    },
+    name: { type: String, required: true, unique: true },
+    img: { type: String },
+    amount: { type: Number, required: true },
+    price: { type: Number, required: true },
     marca: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "marca",
         required: true,
-    },
-    cantidad: {
-        type: Number, //Tipo String
-        required: true, //Es requerido
-    },
-    precio: {
-        type: Number, //Tipo String
-        required: true, //Es requerido
     },
     estado: {
         type: String,
