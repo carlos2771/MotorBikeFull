@@ -1,6 +1,6 @@
-import Cart from "../models/cart.js"
+
 import CartCliente from "../models/cart_cliente.js"
-import Cliente from "../models/cart_cliente.js"
+import Repuesto from "../models/repuestos.model.js"
 
 
 export const getCartClient = async (req, res) => {
@@ -49,3 +49,24 @@ export const getCartClien = async(req, res) =>{
     return res.status(500).json({ message: "Error al obtener cartCliente ", error });
   }
 }
+
+
+export const updateCartClient = async (req, res) => {
+  
+    try {
+      const cartCliente = await CartCliente.findById(req.params.id);
+  
+      if (!cartCliente) {
+        return res.status(404).json({ message: "CartCliente no encontrado" });
+      }
+  
+      // Llamar al método 'anular'
+      await cartCliente.anular();
+  
+      res.json({ message: "CartCliente anulado correctamente" });
+    } catch (error) {
+      console.error("Error al anular CartCliente", error);
+      return res.status(500).json({ message: "Error al anular CartCliente", error: error.message });
+    }
+};
+

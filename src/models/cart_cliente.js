@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import Repuesto from "../models/repuestos.model.js";
 const generateRandomCode = (length) => {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let code = "";
@@ -17,10 +17,14 @@ const CartClienteSchema = new mongoose.Schema({
     //   img: { type: String },voy a eliminar imagen para no sobre cargar la solicitud
       amount: { type: Number },
       price: { type: Number },
-    },
+    }, 
   ],
   total: { type: Number }, // Nuevo campo para almacenar el total
   codigo: {type: String},
+  anulado: {
+    type: Boolean,
+    default: false,
+  },
 });
 // voy a eliminar imagen para no sobre cargar la solicitud
 // para calcular el total antes de guardar
@@ -37,6 +41,28 @@ CartClienteSchema.pre("save", function (next) {
 
   next(); // Continuar con el proceso de guardado
 });
+CartClienteSchema.methods.anular = async function () {
+  // Verificar si ya está anulado
+  if (this.anulado) {
+    throw new Error("La venta ya está anulada.");
+  }
+
+  // Recorrer los elementos en la subcolección 'cart'
+  for (const cartItem of this.cart) {
+    // Buscar el repuesto por nombre en la colección 'repuestos'
+    const repuesto = await Repuesto.findOne({ name: cartItem.name });
+
+    // Si se encuentra el repuesto, incrementar la cantidad
+    if (repuesto) {
+      repuesto.amount += cartItem.amount;
+      await repuesto.save();
+    }
+  }
+
+  // Marcar la venta como anulada
+  this.anulado = true;
+  await this.save();
+};
 
 const CartClienteModel = mongoose.model("CartCliente", CartClienteSchema);
 

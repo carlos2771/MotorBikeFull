@@ -6,12 +6,24 @@ import Repuesto from "../models/repuestos.model.js";
 
 export const addProductCart = async (req, res) => {
   const { name, img, price } = req.body;
-
-
+  
   /* Nos fijamos si tenemos el producto */
   const estaEnProducts = await Repuesto.findOne({ name });
   console.log(estaEnProducts, "para ver que retorna");
+  
+  if (!estaEnProducts) {
+      return res.status(400).json({
+          mensaje: "Este producto no se encuentra en nuestra base de datos",
+      });
+  }
 
+  if (estaEnProducts.amount <= 0) {
+      return res.status(400).json({
+          mensaje: "No hay stock disponible para este producto",
+      });
+  }
+  estaEnProducts.amount -=1
+  await estaEnProducts.save()
   /* Nos fijamos si todos los campos vienen con info */
   const noEstaVacio = name !== "" && img !== "" && price !== "";
 
@@ -58,19 +70,22 @@ export const deleteProduct = async (req, res) => {
   
     /* Buscamos el producto en el carrito */
     const productInCart = await Cart.findById(productId);
+    
   
     /* Buscamos el producto en nuestra DB por el nombre del que esta en el carrito */
     const { name, img, price, _id } = await Repuesto.findOne({
       name: productInCart.name,
     });
+    const dato = await Repuesto.findOne({
+      name: productInCart.name,
+    });
+   
+    dato.amount +=1
+    await dato.save()
   
     /* Buscamos y eliminamos el producto con la id */
     await Cart.findByIdAndDelete(productId);
     
-    /* Buscamos y editamos la prop inCart: false */
-    /* Le pasamos la id del producto en la DB */
-    /* La prop a cambiar y las demas */
-    /* Y el new para devolver el producto editado */
     await Repuesto.findByIdAndUpdate( // se actualiza para poder sacarlo de la base de datos ya que tiene un boolean 
       _id,
       { inCart: false, name, img, price },
@@ -128,29 +143,37 @@ export const deleteProduct = async (req, res) => {
       /* Si esta el producto en el carrito y quiero agregar */
     } else if (productBuscado && query === "add") {
       body.amount = body.amount + 1;
-  
-      await Cart.findByIdAndUpdate(productId, body, {
-        new: true,
-      }).then((product) => {
-        res.json({
-          mensaje: `El producto: ${product.name} fue actualizado`,
-          product,
-        });
-      });
-  
-      /* Si esta el producto en el carrito y quiero sacar */
-    } else if (productBuscado && query === "del") {
-      body.amount = body.amount - 1;
-  
-      await Cart.findByIdAndUpdate(productId, body, {
-        new: true,
-      }).then((product) =>
-        res.json({
-          mensaje: `El producto: ${product.name} fue actualizado`,
-          product,
-        })
+
+      // Actualiza la cantidad en el carrito y resta 1 al stock
+      await Cart.findByIdAndUpdate(productId, body, { new: true }).then(
+          async (product) => {
+              const repuesto = await Repuesto.findOne({ name: product.name });
+              repuesto.amount -= 1;
+              await repuesto.save();
+
+              res.json({
+                  mensaje: `El producto: ${product.name} fue actualizado`,
+                  product,
+              });
+          }
       );
-    } else {
+  }  else if (productBuscado && query === "del") {
+    body.amount = body.amount - 1;
+
+    // Actualiza la cantidad en el carrito y suma 1 al stock
+    await Cart.findByIdAndUpdate(productId, body, { new: true }).then(
+        async (product) => {
+            const repuesto = await Repuesto.findOne({ name: product.name });
+            repuesto.amount += 1;
+            await repuesto.save();
+
+            res.json({
+                mensaje: `El producto: ${product.name} fue actualizado`,
+                product,
+            });
+        }
+    );
+} else {
       res.status(400).json({ mensaje: "Ocurrio un error" });    
     }
   };
@@ -216,7 +239,7 @@ export const cleartCart = async (req, res) => {
     const deleteCart = await Cart.deleteMany({});
     
     // Actualiza el estado 'inCart' a false en todos los productos
-    const updateProducts = await Product.updateMany({}, { inCart: false });
+    const updateProducts = await Repuesto.updateMany({}, { inCart: false });
 
     // Verifica si se eliminaron carritos y se actualizaron productos
     if (deleteCart.deletedCount === 0 && updateProducts.nModified === 0) {

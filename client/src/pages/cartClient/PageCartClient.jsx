@@ -5,27 +5,24 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Tabla, Titulo } from "../../components/Tabla";
+import Detalle from "../../components/Detalle";
+import Swal from "sweetalert2";
 import {
-  faEnvelope,
-  faDownload,
   faIdCard,
-  faUser,
-  faPhone,
-  faPen,
   faTools,
   faPlus,
-  faPencil,
   faBan,
-  faCheck,
   faInfoCircle,
-  faAddressCard,
-  faRegistered,
   faDollarSign,
-  faHashtag,
+  faScrewdriverWrench,
+  faShoppingCart,
+  faLock,
+
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function PageCartClient() {
-  const { getCartClient, cartClientes } = useCartCliente();
+  const { getCartClient, cartClientes, getCartCliente, updateCartCliente } = useCartCliente();
 
   useEffect(() => {
     try {
@@ -34,28 +31,222 @@ export default function PageCartClient() {
       console.error("Error al obtener compras:", error);
     }
   }, []);
-  const columns = [
+  useEffect(() => {
+    try {
+      getCartCliente(id);
+    } catch (error) {
+      console.error("Error al obtener compras:", error);
+    }
+  }, []);
 
+  const mostrarAlerta = (id, anulado) => {
+    const title = anulado ? "Anulado" : "Anular";
+    const text = anulado
+      ? "Esta venta ya ha sido anulada."
+      : "¿Estás seguro de anular la venta?";
+    const buttonText = anulado ? "Entendido" : "Sí";
+
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: anulado ? "info" : "warning",
+      showCancelButton: !anulado,
+      confirmButtonText: buttonText,
+      cancelButtonText: "No",
+      background: "#334155",
+      color: "white",
+      iconColor: "#2563eb",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-blue-600 hover:text-white hover:bg-blue-600",
+        cancelButton:
+          "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
+      },
+    }).then((result) => {
+      if (!anulado && result.isConfirmed) {
+        cambiarEstado(id, anulado);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Se ha modificado",
+        });
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "warning",
+          title: "No se ha modificado",
+        });
+      }
+    });
+  };
+
+  const cambiarEstado = (id, anulado) => {
+    const nuevoEstado = anulado ? "Activo" : "Inactivo";
+    updateCartCliente(id, { estado: nuevoEstado }).then(() => {
+      getCartClient();
+    });
+  };
+
+  const columns = [
     {
       field: "codigo",
       headerName: "codigo",
       width: 170,
-      headerClassName: 'custom-header',
-      
+      headerClassName: "custom-header",
     },
     {
       field: "nombre_cliente",
       headerName: "Cliente",
       width: 170,
-      headerClassName: 'custom-header',
+      headerClassName: "custom-header",
       valueGetter: (params) => params.row.cliente.nombre_cliente,
     },
     {
       field: "total",
       headerName: "Total_Venta",
       width: 170,
-      headerClassName: 'custom-header',
-      
+      headerClassName: "custom-header",
+    },
+    {
+      field: "acciones",
+      headerName: "Acciones",
+      width: 170,
+      headerClassName: "custom-header",
+      renderCell: (params) => {
+        const estado = params.row.estado;
+        return (
+          <div>
+            <button
+              className={
+                params.row.anulado
+                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-orange-500 hover:text-white hover:bg-orange-500"
+                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-blue-600 hover:text-white hover:bg-blue-600"
+              }
+              onClick={() => mostrarAlerta(params.row._id, params.row.anulado)}
+            >
+              {params.row.anulado ? (
+                <FontAwesomeIcon icon={faLock} />
+              ) : (
+                <FontAwesomeIcon icon={faBan} />
+              )}
+            </button>
+            <button>
+              <Detalle
+                metodo={() => getCartCliente(params.row._id)}
+                id={params.row._id}
+              >
+                <table>
+                  <tbody>
+                    <Titulo>
+                      <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                      Detalles del Cliente
+                    </Titulo>
+
+                    <tr>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                        Codigo
+                      </Tabla>
+                      <Tabla>
+                        {
+                          cartClientes.find(
+                            (codigo) => codigo._id === params.row._id
+                          )?.codigo
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                        Nombre
+                      </Tabla>
+                      <Tabla>
+                        {
+                          cartClientes.find(
+                            (cliente) => cliente._id === params.row._id
+                          )?.cliente.nombre_cliente
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
+                        Total de la venta
+                      </Tabla>
+                      <Tabla>
+                        {
+                          cartClientes.find(
+                            (total) => total._id === params.row._id
+                          )?.total
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                    <Tabla>
+                        <FontAwesomeIcon icon={faScrewdriverWrench} className="mr-2" />
+                        repuestos vendidos
+                      </Tabla>
+                    <Tabla>
+                      {cartClientes
+                        .find((cliente) => cliente._id === params.row._id)
+                        ?.cart?.map((repuesto, index) => (
+                          <span key={index}>
+                            {repuesto.name}
+                            {index <
+                              cartClientes.find((c) => c._id === params.row._id)
+                                ?.cart?.length -
+                                1 && ", "}
+                          </span>
+                        ))}
+                    </Tabla>
+                    </tr>
+                    <tr>
+                    <Tabla>
+                        <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
+                        Cantidad
+                      </Tabla>
+                    <Tabla>
+                      {cartClientes
+                        .find((cliente) => cliente._id === params.row._id)
+                        ?.cart?.map((repuesto, index) => (
+                          <span key={index}>
+                            {repuesto.amount}
+                            {index <
+                              cartClientes.find((c) => c._id === params.row._id)
+                                ?.cart?.length -
+                                1 && ","}
+                          </span>
+                        ))}
+                    </Tabla>
+                    </tr>
+                  </tbody>
+                </table>
+              </Detalle>
+            </button>
+          </div>
+        );
+      },
     },
   ];
 

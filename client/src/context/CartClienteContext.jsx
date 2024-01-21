@@ -1,7 +1,7 @@
 import { useContext, useState, createContext, useEffect } from "react";
 
 
-import { createCartClienteRequest, getCartClientesRequest } from "../api/cartCliente";
+import { createCartClienteRequest, getCartClientesRequest, updateCartClientRequest, getCartClienteRequest  } from "../api/cartCliente";
 
 
 const CartClienteContext = createContext()
@@ -29,6 +29,15 @@ export function CartClienteProvider({children}){
           console.error("cont",error);
         }
       };
+    const getCartCliente = async () => {
+        try {
+          const res = await getCartClienteRequest(id);
+          console.log("ress1",res);
+          setCartClientes(res)
+        } catch (error) {
+          console.error("cont",error);
+        }
+      };
 
 
       const createCartCliente = async (data) => {
@@ -42,13 +51,23 @@ export function CartClienteProvider({children}){
         }
     }
 
+    const updateCartCliente = async (id, client) => {
+      try {
+        return await updateCartClientRequest (id, client);
+      } catch (error) {
+        console.error(error);
+        setErrors(error.response.data.message)
+      }
+    };
     return(
         <CartClienteContext.Provider 
         value={{
             cartClientes,
             errors,
             getCartClient,
-            createCartCliente
+            getCartCliente,
+            createCartCliente,
+            updateCartCliente
         }}
         >
             {children}
