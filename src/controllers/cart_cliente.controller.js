@@ -38,9 +38,6 @@ export const createCartCliente = async (req, res) => {
         await Repuesto.findOneAndUpdate({name: cartData.name}, { amount: cantidadRestanteRepuesto });
       }
 
-
-
-
       const nuevaCartCliente = new CartCliente({
         cliente: clienteId,
         cart
