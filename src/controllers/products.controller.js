@@ -10,6 +10,22 @@ export const addProductCart = async (req, res) => {
   /* Nos fijamos si tenemos el producto */
   const estaEnProducts = await Repuesto.findOne({ name });
   // console.log(estaEnProducts, "para ver que retorna");
+  
+  if (!estaEnProducts) {
+      return res.status(400).json({
+          mensaje: "Este producto no se encuentra en nuestra base de datos",
+      });
+  }
+
+  if (estaEnProducts.amount <= 0) {
+      return res.status(400).json({
+          mensaje: "No hay stock disponible para este producto",
+      });
+  }
+  estaEnProducts.amount -=1
+  await estaEnProducts.save()
+  /* Nos fijamos si todos los campos vienen con info */
+  const noEstaVacio = name !== "" && img !== "" && price !== "";
 
   /* Nos fijamos si el producto ya esta en el carrito */
   const estaEnElCarrito = await Cart.findOne({ name });
@@ -21,7 +37,7 @@ export const addProductCart = async (req, res) => {
     });
 
     /* Si nos envian algo y no esta en el carrito lo agregamos */
-  } else if ( !estaEnElCarrito) {
+  } else if (noEstaVacio && !estaEnElCarrito) {
     const newProductInCart = new Cart({ name, img, price, amount: 1 });
 
     /* Y actualizamos la prop inCart: true en nuestros productos */
@@ -84,21 +100,23 @@ export const deleteProduct = async (req, res) => {
   };
 
 
-  // 
-
+ 
   export const getProducts = async (req, res) => {
-    // productos
-    const products = await Repuesto.find();
+    try {
+      // Obtener productos con amount mayor a cero y estado 'activo'
+      const products = await Repuesto.find({ estado: "Activo" });
   
-    if (products) {
-      res.json({ products });
-    } else {
-      res.json({ mensaje: "No hay productos" });
+      if (products) {
+        res.json({ products });
+      } else {
+        res.json({ mensaje: "No hay productos activos con stock disponible" });
+      }
+    } catch (error) {
+      console.error("Error al obtener productos:", error);
+      res.status(500).json({ mensaje: "Error interno del servidor" });
     }
   };
-  
 
-  // 
 
   export const getProductsCart = async (req, res) => {
     const productsCart = await Cart.find();
@@ -111,7 +129,7 @@ export const deleteProduct = async (req, res) => {
   };
   
 
-   export const putProduct = async (req, res) => {
+  export const putProduct = async (req, res) => {
     const { productId } = req.params;
     const { query } = req.query;
     const body = req.body;
@@ -127,33 +145,40 @@ export const deleteProduct = async (req, res) => {
       /* Si esta el producto en el carrito y quiero agregar */
     } else if (productBuscado && query === "add") {
       body.amount = body.amount + 1;
-  
-      await Cart.findByIdAndUpdate(productId, body, {
-        new: true,
-      }).then((product) => {
-        res.json({
-          mensaje: `El producto: ${product.name} fue actualizado`,
-          product,
-        });
-      });
-  
-      /* Si esta el producto en el carrito y quiero sacar */
-    } else if (productBuscado && query === "del") {
-      body.amount = body.amount - 1;
-  
-      await Cart.findByIdAndUpdate(productId, body, {
-        new: true,
-      }).then((product) =>
-        res.json({
-          mensaje: `El producto: ${product.name} fue actualizado`,
-          product,
-        })
+
+      // Actualiza la cantidad en el carrito y resta 1 al stock
+      await Cart.findByIdAndUpdate(productId, body, { new: true }).then(
+          async (product) => {
+              const repuesto = await Repuesto.findOne({ name: product.name });
+              repuesto.amount -= 1;
+              await repuesto.save();
+
+              res.json({
+                  mensaje: `El producto: ${product.name} fue actualizado`,
+                  product,
+              });
+          }
       );
-    } else {
+  }  else if (productBuscado && query === "del") {
+    body.amount = body.amount - 1;
+
+    // Actualiza la cantidad en el carrito y suma 1 al stock
+    await Cart.findByIdAndUpdate(productId, body, { new: true }).then(
+        async (product) => {
+            const repuesto = await Repuesto.findOne({ name: product.name });
+            repuesto.amount += 1;
+            await repuesto.save();
+
+            res.json({
+                mensaje: `El producto: ${product.name} fue actualizado`,
+                product,
+            });
+        }
+    );
+} else {
       res.status(400).json({ mensaje: "Ocurrio un error" });    
     }
   };
-  
 
 import fs from "fs"
 // import base64 from 'base64-js';
