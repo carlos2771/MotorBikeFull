@@ -25,7 +25,6 @@ export function VentasServicioProvider({ children }) {
   const getVentasServicios = async () => {
     try {
       const res = await getVentasServiciosRequest();
-      console.log(res);
       setVentasServicios(res);
     } catch (error) {
       console.error(error);
@@ -34,7 +33,7 @@ export function VentasServicioProvider({ children }) {
 
   const createVentaServicio = async (venta) => {
     try {
-      return  await createVentasServiciosRequest(venta);
+      return await createVentasServiciosRequest(venta);
     } catch (error) {
       setErrors(error.response.data.message);
       console.log(error);
@@ -47,7 +46,6 @@ export function VentasServicioProvider({ children }) {
       return res;
     } catch (error) {
       console.error(error);
-      
     }
   };
 
@@ -59,17 +57,27 @@ export function VentasServicioProvider({ children }) {
       setErrors(error.response.data.message);
     }
   };
-  
+
   const deleteVentaServicio = async (id) => {
     try {
       const res = await deleteVentasServiciosRequest(id);
-      console.log(res);
       if (res.status === 204) {
         setVentasServicios(ventasServicios.filter((venta) => venta._id !== id));
       }
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const getVentasServiciosDelDia = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return ventasServicios.filter((venta) => {
+      const ventaDate = new Date(venta.createdAt);
+      ventaDate.setHours(0, 0, 0, 0);
+      return ventaDate.getTime() === today.getTime();
+    }).length;
   };
 
   useEffect(() => {
@@ -90,7 +98,8 @@ export function VentasServicioProvider({ children }) {
         createVentaServicio,
         getVentaServicio,
         updateVentaServicio,
-        deleteVentaServicio
+        deleteVentaServicio,
+        getVentasServiciosDelDia
       }}
     >
       {children}
