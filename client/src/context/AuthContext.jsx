@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
       const response = await registerRequest(user);
       console.log(response);
       setUser(response); // Actualizar el usuario con los datos recibidos
+      setLoading(false)
        // Establecer la autenticacións a true
     } catch (error) {
       console.log(error.response.data);
@@ -44,6 +45,7 @@ export const AuthProvider = ({ children }) => {
       setUser(response);
       // setUser(response.data); si tiene algun error en el login, pruebe esto
       setIsAuthenticated(true);
+      setLoading(false)
       console.log("data",response);
     } catch (error) {
       console.log(error);
@@ -53,8 +55,9 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     Cookies.remove("token");
-    setUser(null);
+    setUser(null)
     setIsAuthenticated(false);
+    
   };
 
   // const enviarToken = async (email) => {
@@ -151,21 +154,21 @@ export const AuthProvider = ({ children }) => {
       console.log('entro');
       const cookies = Cookies.get();
 
-      if (!cookies.token) {
-        setIsAuthenticated(false);
+      if (cookies.token) {
         setLoading(false);
+        setIsAuthenticated(true);
         return;
       }
       try {
         const res = await verifyTokenRequest(cookies.token); 
-        if (!res.data) return setIsAuthenticated(false);
-        setIsAuthenticated(true);
+        if (res.data) return setIsAuthenticated(true);
+        setIsAuthenticated(false);
         setUser(res.data);
         
       } catch (error) {
         console.log(error);
         setIsAuthenticated(false);
-        setLoading(false);
+        setLoading(true);
       }
     };
 
