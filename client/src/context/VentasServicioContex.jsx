@@ -31,6 +31,19 @@ export function VentasServicioProvider({ children }) {
     }
   };
 
+  //AQUI VOY A OBTENER LOS SERVICIOS ACTIVOS DE LOS MECANICOS PARA PODER MOSTRAR EN LAS SIMPLECARDS
+  const getTotalServiciosActivosPorMecanico = () => {
+    const totalPorMecanico = {};
+    ventasServicios.forEach((venta) => {
+      if (venta.estado === 'Activo') {
+        const mecanicoId = venta.mecanico._id;
+        const precioServicio = venta.precio_servicio;
+        totalPorMecanico[mecanicoId] = (totalPorMecanico[mecanicoId] || 0) + precioServicio;
+      }
+    });
+    return totalPorMecanico;
+  };
+
   const createVentaServicio = async (venta) => {
     try {
       return await createVentasServiciosRequest(venta);
@@ -62,7 +75,11 @@ export function VentasServicioProvider({ children }) {
     try {
       const res = await deleteVentasServiciosRequest(id);
       if (res.status === 204) {
-        setVentasServicios(ventasServicios.filter((venta) => venta._id !== id));
+        setVentasServicios((prevVentas) =>
+          prevVentas.map((venta) =>
+            venta._id === id ? { ...venta, estado: 'Inactivo' } : venta
+          )
+        );
       }
     } catch (error) {
       console.error(error);
@@ -72,12 +89,15 @@ export function VentasServicioProvider({ children }) {
   const getVentasServiciosDelDia = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
-    return ventasServicios.filter((venta) => {
+  
+    // Filtra las ventas activas del día
+    const ventasActivasDelDia = ventasServicios.filter((venta) => {
       const ventaDate = new Date(venta.createdAt);
       ventaDate.setHours(0, 0, 0, 0);
-      return ventaDate.getTime() === today.getTime();
-    }).length;
+      return ventaDate.getTime() === today.getTime() && venta.estado === 'Activo';
+    });
+  
+    return ventasActivasDelDia.length;
   };
 
   useEffect(() => {
@@ -99,7 +119,8 @@ export function VentasServicioProvider({ children }) {
         getVentaServicio,
         updateVentaServicio,
         deleteVentaServicio,
-        getVentasServiciosDelDia
+        getVentasServiciosDelDia,
+        getTotalServiciosActivosPorMecanico
       }}
     >
       {children}
