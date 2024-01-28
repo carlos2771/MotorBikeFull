@@ -140,6 +140,14 @@ export const verifyToken = async (req, res) => {
     });
   });
 };
+const verificarUsuario = async (email) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new Error('Email no registrado');
+  }
+  return user;
+};
+
 
 export const enviarToken = async (req, res) => {
 
