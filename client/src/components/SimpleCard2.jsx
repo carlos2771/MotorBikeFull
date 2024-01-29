@@ -22,3 +22,5 @@ export default function SimpleCard2() {
     </div>
   );
 }
+
+//ESTA CARD TIENE EL TOTAL DE DINERO OBTENIDO EN SERVICIOS

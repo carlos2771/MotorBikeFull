@@ -12,3 +12,5 @@ export default function SimpleCard() {
     </div>
   );
 }
+
+//ESTA CARD TIENE EL CONTEO DE SERVICIOS REALIZADOS ACTIVOS

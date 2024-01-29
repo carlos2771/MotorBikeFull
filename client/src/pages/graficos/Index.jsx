@@ -3,6 +3,7 @@ import {CharBar} from "../../components/CharBar";
 import React from "react";
 import SimpleCard from "../../components/SimpleCard";
 import SimpleCard2 from "../../components/SimpleCard2";
+import SimpleCard3 from "../../components/SimpleCard3";
 
 
 
@@ -16,6 +17,10 @@ return (
       
       <div className="col-start-2">
         <SimpleCard />
+      </div>
+
+      <div className="col-start-3">
+        <SimpleCard3 />
       </div>
       
     

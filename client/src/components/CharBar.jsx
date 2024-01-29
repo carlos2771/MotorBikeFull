@@ -173,6 +173,7 @@ export function CharBar() {
         },
       },
     },
+    indexAxis: 'y',
   };
 
   return (
