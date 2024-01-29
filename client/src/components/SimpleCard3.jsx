@@ -18,8 +18,8 @@ export default function SimpleCard3() {
   // Renderizar la tarjeta con el total de ventas formateado
   return (
     <div className="bg-slate-700 shadow-lg shadow-blue-600/40 max-w-sm w-full p-5 rounded-md mt-9">
-      <h1 className="text-white text-2xl font-bold mb-2">Ventas de repuestos:</h1>
-      <p className="text-green-500 text-5xl font-bold">{formattedTotalVentas}</p>
+      <h1 className="text-white text-2xl font-bold mb-2">Ventas:</h1>
+      <p className="text-blue-300 text-5xl font-bold">{formattedTotalVentas}</p>
     </div>
   );
 }

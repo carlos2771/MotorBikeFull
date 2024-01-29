@@ -4,13 +4,15 @@ import { Bar } from "react-chartjs-2";
 import { format, startOfDay, endOfDay } from 'date-fns';  
 import "./CharBar.css";
 import Swal from 'sweetalert2';
+import SimpleCard2 from "./SimpleCard2";
 
 ChartJS.register(BarElement, Tooltip, Legend, CategoryScale, LinearScale);
 
-export function CharBar() {
+export function CharBar({setTotalMostrado}) {
   const [ventasServicios, setVentasServicios] = useState([]);
   const [startDate, setStartDate] = useState(startOfDay(new Date()));  // Iniciar con el comienzo del día actual
   const [endDate, setEndDate] = useState(endOfDay(new Date()));  
+  // const [totalMostrado, setTotalMostrado] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -53,9 +55,17 @@ export function CharBar() {
   
       const data = await response.json();
       setVentasServicios(data);
+
+      const sumasPorMecanico = sumarVentasPorMecanico();
+      const totalMostradoActualizado = Object.values(sumasPorMecanico).reduce(
+        (total, monto) => total + monto,
+        0
+      );
+
+      setTotalMostrado(totalMostradoActualizado);
+
     } catch (error) {
       console.error("Error fetching data:", error);
-      // Puedes manejar el error como desees
     }
   };
 
