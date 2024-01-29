@@ -19,7 +19,7 @@ export default function Header() {
   const navigate = useNavigate();
   // Actualizar el enlace activo cuando cambia la ubicación
   useEffect(() => {
-    if(location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/Register") {
+    if(location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/register" && location.pathname !== "/reestablecer") {                 
       navigate("/login");
     }
     
