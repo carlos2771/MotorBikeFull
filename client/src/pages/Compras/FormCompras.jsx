@@ -201,7 +201,7 @@ export default function FormCompra() {
                       key={repuesto._id}
                       value={repuesto._id}
                     >
-                      {repuesto.nombre_repuesto}
+                      {repuesto.name}
                     </option>
                   ))}
                 </select>
