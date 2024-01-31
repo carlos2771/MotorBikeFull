@@ -107,6 +107,8 @@ export default function FormCompra() {
       codigo: codigo,
       repuestos: repuestosList.map((repuesto) => ({
         repuesto: repuesto.repuesto,
+        nombre_repuesto: repuesto.repuesto.name,
+        marca_repuesto: repuesto.repuesto.marca,
         cantidad_repuesto: repuesto.cantidad_repuesto,
         precio_unitario: repuesto.precio_unitario,
         precio_total: repuesto.cantidad_repuesto * repuesto.precio_unitario,
@@ -252,7 +254,7 @@ export default function FormCompra() {
           <ul>
             {repuestosList.map((repuesto, index) => (
               <li key={index}>
-                {repuesto.repuesto.nombre_repuesto} - Cantidad: {repuesto.cantidad_repuesto}, Precio Unitario: {repuesto.precio_unitario}, Precio Total: {repuesto.precio_total}
+                {repuesto.repuesto.name} - Cantidad: {repuesto.cantidad_repuesto}, Precio Unitario: {repuesto.precio_unitario}, Precio Total: {repuesto.precio_total}
                 <button
                   className="ml-2 text-red-500"
                   onClick={() => eliminarRepuesto(index)}

@@ -10,6 +10,12 @@ const comprasSchema = new mongoose.Schema(
           ref: "repuestos",
           required: true,
         },
+        nombre_repuesto: { // Agregar campo para el nombre del repuesto
+          type: String,
+        },
+        marca_repuesto: { // Agregar campo para el nombre del repuesto
+          type: String,
+        },
         cantidad_repuesto: {
           type: Number,
           required: true,
