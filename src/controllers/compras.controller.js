@@ -3,7 +3,7 @@ import Repuesto from "../models/repuestos.model.js";
 
 export const getCompras = async (req, res) => {
   try {
-    const compras = await Compras.find().populate({ path: 'repuestos.repuesto', select: 'nombre_repuesto' }).sort({createdAt:'desc'});
+    const compras = await Compras.find().populate({ path: 'repuestos.repuesto', select: 'name' }).sort({createdAt:'desc'});
     if (!compras) {
       return res.status(404).json({ message: "Compras no encontradas" });
     }
@@ -44,8 +44,9 @@ export const createCompras = async (req, res) => {
         return res.status(404).json({ message: `Repuesto con ID ${repuestoId} no encontrado` });
       }
 
-      const cantidadRestanteRepuesto = repuestoEncontrado.cantidad + parseInt(cantidad_repuesto);
-      await Repuesto.findByIdAndUpdate(repuestoId, { cantidad: cantidadRestanteRepuesto });
+      // LA VARIABLE ES IGUAL A LA SUMA DE LA CANTIDAD DEL REPUESTO + LA CANTIDAD QUE SE INGRESA EN LA COMPRA
+      const cantidadRestanteRepuesto = repuestoEncontrado.amount + parseInt(cantidad_repuesto);
+      await Repuesto.findByIdAndUpdate(repuestoId, { amount: cantidadRestanteRepuesto });
     }
 
     // Crea una nueva compra con el array completo de repuestos
@@ -81,10 +82,10 @@ export const updateCompras = async (req, res) => {
       const repuesto = await Repuesto.findById(repuestoInfo.repuesto);
 
       if (repuesto) {
-        const cantidadRestanteRepuesto = repuesto.cantidad - repuestoInfo.cantidad_repuesto;
+        const cantidadRestanteRepuesto = repuesto.amount - repuestoInfo.cantidad_repuesto;
 
         await Repuesto.findByIdAndUpdate(repuestoInfo.repuesto, {
-          cantidad: cantidadRestanteRepuesto,
+          amount: cantidadRestanteRepuesto,
         });
       }
     }
