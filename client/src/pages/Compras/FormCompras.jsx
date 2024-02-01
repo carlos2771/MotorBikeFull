@@ -108,7 +108,7 @@ export default function FormCompra() {
       repuestos: repuestosList.map((repuesto) => ({
         repuesto: repuesto.repuesto,
         nombre_repuesto: repuesto.repuesto.name,
-        marca_repuesto: repuesto.repuesto.marca,
+        marca_repuesto: repuesto.repuesto.nombre_marca,
         cantidad_repuesto: repuesto.cantidad_repuesto,
         precio_unitario: repuesto.precio_unitario,
         precio_total: repuesto.cantidad_repuesto * repuesto.precio_unitario,

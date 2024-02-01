@@ -80,11 +80,15 @@ export const createRepuestos = async (req, res) => {
       return res.status(404).json({ message: ["Marca no encontrada"] });
     }
 
+    // Obtener el nombre de la marca
+    const nombreMarca = marcaEncontrada.nombre_marca;
+
     const nuevoRepuesto = new Repuesto({
       name,
       img: imgBase64,
       inCart,
       marca: marcaId,
+      nombre_marca: nombreMarca, // Aquí asignamos el nombre de la marca
       amount: cantidadNumerica,
       price,
       estado,

@@ -55,6 +55,7 @@ export default function FormRepuesto() {
         setValue("amount", repuesto.amount);
         setValue("marca", repuesto.marca);
         setSelectedMarca(repuesto.marca);
+        setValue(repuesto.nombre_marca);
         setValue("price", repuesto.price);
         // setValue("InCart", repuesto.InCart);
       }
