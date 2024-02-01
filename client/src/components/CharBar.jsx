@@ -62,7 +62,7 @@ export function CharBar({setTotalMostrado}) {
         0
       );
 
-      setTotalMostrado(totalMostradoActualizado);
+    
 
     } catch (error) {
       console.error("Error fetching data:", error);
