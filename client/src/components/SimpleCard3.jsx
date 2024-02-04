@@ -1,12 +1,21 @@
 import React from "react";
-import { useCartCliente } from "../context/CartClienteContext";
+import { useCartCliente } from "../context/CartClienteContext"; // Asegúrate de que la ruta sea correcta
 
-export default function SimpleCard3() {
-  // Obtener la información de ventas desde el contexto
+
+const SimpleCard3 = () => {
   const { cartClientes } = useCartCliente();
 
-  // Calcular el total general sumando los totales de las ventas
-  const totalVentas = cartClientes.reduce((total, venta) => total + venta.total, 0);
+  console.log("Todos los datos:", cartClientes);
+
+  // Filtrar solo las ventas activas que no están anuladas
+  const ventasActivas = cartClientes.filter((venta) => !venta.anulado);
+
+
+
+  console.log("Ventas Activas:", ventasActivas);
+
+  // Calcular el total general sumando los totales de las ventas activas
+  const totalVentas = ventasActivas.reduce((total, venta) => total + venta.total, 0);
 
   // Formatear el número con separadores de miles y decimales
   const formattedTotalVentas = new Intl.NumberFormat("es-CO", {
@@ -22,4 +31,6 @@ export default function SimpleCard3() {
       <p className="text-blue-300 text-5xl font-bold">{formattedTotalVentas}</p>
     </div>
   );
-}
+};
+
+export default SimpleCard3;

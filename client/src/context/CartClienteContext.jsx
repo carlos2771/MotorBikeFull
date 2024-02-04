@@ -29,15 +29,18 @@ export function CartClienteProvider({children}){
           console.error("cont",error);
         }
       };
-    const getCartCliente = async () => {
-        try {
-          const res = await getCartClienteRequest(id);
-          console.log("ress1",res);
-          setCartClientes(res)
-        } catch (error) {
-          console.error("cont",error);
-        }
-      };
+
+      
+
+     const getCartCliente = async (id) => { // Agregamos el parámetro id
+    try {
+      const res = await getCartClienteRequest(id);
+      console.log("ress1", res);
+      setCartClientes(res);
+    } catch (error) {
+      console.error("cont", error);
+    }
+  };
 
 
       const createCartCliente = async (data) => {
