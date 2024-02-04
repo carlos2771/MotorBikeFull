@@ -55,6 +55,7 @@ export default function FormRepuesto() {
         setValue("amount", repuesto.amount);
         setValue("marca", repuesto.marca);
         setSelectedMarca(repuesto.marca);
+        setValue(repuesto.nombre_marca);
         setValue("price", repuesto.price);
         // setValue("InCart", repuesto.InCart);
       }
@@ -85,10 +86,10 @@ export default function FormRepuesto() {
 
   const onSubmit = handleSubmit(async (data) => {
     data.img = imageBase64;
-    console.log("datos aness",data);
-    console.log("img",data.img);
+    console.log("datos aness", data);
+    console.log("img", data.img);
     if (params.id) {
-      const res = updateRepuesto(params.id, data);
+      const res = await updateRepuesto(params.id, data);
       const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -105,8 +106,26 @@ export default function FormRepuesto() {
         title: "Actualizado correctamente",
       });
       if (res) navigate("/repuestos");
+      else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "Ya tienes un repuesto similar",
+        });
+      }
+
     } else {
-      console.log("como se ven los datos",data);
+      console.log("como se ven los datos", data);
       const res = await createRepuesto(data);
       const Toast = Swal.mixin({
         toast: true,
@@ -138,7 +157,7 @@ export default function FormRepuesto() {
         });
         Toast.fire({
           icon: "error",
-          title: "No se ha agregado",
+          title: "Ya tienes un repuesto similar",
         });
       }
     }
@@ -149,11 +168,13 @@ export default function FormRepuesto() {
   return (
     <div className="flex items-center justify-center pt-20">
       <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
-        {repuestosErrors.map((error, i) => (
+        {Array.isArray(repuestosErrors) && repuestosErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
         ))}
+
+
 
         <h1 className="text-2xl flex justify-center ">Agregar Repuesto</h1>
         <form className="mt-10" onSubmit={onSubmit} >
@@ -176,7 +197,7 @@ export default function FormRepuesto() {
           <input
             type="file"
             onChange={handleImageChange}
-            
+
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             autoFocus
           />

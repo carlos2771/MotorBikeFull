@@ -1,9 +1,11 @@
 //Importa modulo para trabajar MongoDB en NodeJS
 import mongoose from "mongoose";
+import { string } from "zod";
 
 //Estructurar los datos que representan a los clientes en la base de datos.
 const repuestosSchema = new mongoose.Schema({
-    name: { type: String, required: true, unique: true },
+    name: { type: String, required: true},
+    nombre_marca: {type:String},
     img: { type: String },
     amount: { type: Number, required: true },
     price: { type: Number, required: true },

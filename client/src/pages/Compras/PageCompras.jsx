@@ -1,41 +1,33 @@
-import React, { useEffect, useCallback } from "react";
-
+import React, { useEffect, useCallback, useState } from "react";
 import { useCompras } from "../../context/ComprasContext";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import utc from 'dayjs/plugin/utc';
+import * as XLSX from "xlsx";
+import { faLock, faBan, faDownload, faShoppingBag, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import createTheme from '@mui/material/styles/createTheme';
+import MUIDataTable from "mui-datatables";
+import { Tabla } from "../../components/Tabla";
+import Detalle from "../../components/Detalle"
+
 
 dayjs.locale('es');
 dayjs.extend(utc);
 
-
-// EXCEL IMPORTS  
-import * as XLSX from "xlsx";
-
-
-
-import { faLock, faDollarSign, faBan, faDownload, faInfoCircle, faIdCard, faScrewdriverWrench, faHashtag, faShoppingBag, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Tabla, Titulo } from "../../components/Tabla";
-import Detalle from "../../components/Detalle";
-
 function formatCurrency(value) {
-  // Agrega el signo de peso
   const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
   return formattedValue;
 }
 
 function formatCurrency2(value) {
-  // Solo separa los miles sin agregar el signo de pesos
   const formattedValue = value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   return formattedValue;
 }
-
 
 export default function PageCompras() {
   const {
@@ -122,24 +114,21 @@ export default function PageCompras() {
     });
   };
 
-
-
+  
   const exportarAExcel = useCallback(() => {
     const datos = compras.map((compra) => ({
-      Repuesto: compra.repuestos.map(repuesto => repuesto.repuesto.nombre_repuesto).join(', '), // Unir los nombres con comas si hay varios repuestos
-      'Cantidad': compra.repuestos.map(repuesto => repuesto.cantidad_repuesto).join(', '), // Unir las cantidades con comas si hay varios repuestos
-      'Fecha de compra': dayjs.utc(compra.fecha).locale('es').format("DD [de] MMMM [de] YYYY"), // Formatear la fecha
-      
+      'Nombre': compra.repuestos.map(repuesto => repuesto.repuesto.name).join(', '),
+      'Cantidad': compra.repuestos.map(repuesto => repuesto.cantidad_repuesto).join(', '),
+      'precio unitario': compra.repuestos.map(repuesto => repuesto.precio_unitario).join(', '),
+      'precio total': compra.repuestos.map(repuesto => repuesto.precio_total).join(', '),
+      'Total compra':compra.repuestos.reduce((total, repuesto)=> total + repuesto.precio_total,0),
+      'Fecha de compra': dayjs.utc(compra.fecha).locale('es').format("DD [de] MMMM [de] YYYY"),
+
     }));
-    // Resto de tu lógica para exportar a Excel
 
-    // Resto de tu lógica para exportar a Excel
-
-
-
+    const theme = createTheme();
     const ws = XLSX.utils.json_to_sheet(datos);
 
-    // Agregar formato y bordes
     for (let i = 1; i <= compras.length + 1; i++) {
       for (let j = 0; j < Object.keys(datos[0]).length; j++) {
         const col = String.fromCharCode(65 + j);
@@ -160,23 +149,28 @@ export default function PageCompras() {
     XLSX.writeFile(wb, 'compras.xlsx');
   }, [compras]);
 
-
-
-
-
-  // FECHA
-
   const currentDate = new Date();
   const options = { day: 'numeric', month: 'long', year: 'numeric' };
   const formattedDate = new Intl.DateTimeFormat('es-ES', options).format(currentDate);
 
-  const calcularPrecioTotalCompra = (compra) => {
-    return formatCurrency(compra.repuestos.reduce((total, repuesto) => {
-      return total + repuesto.precio_total;
-    }, 0));
-  };
+ 
+
+  const columnas2 = [
+    { name: "repuesto", label: "Repuesto", options: { filter: true, sort: true } },
+    { name: "cantidad", label: "Cantidad", options: { filter: true, sort: false } },
+    { name: "precioUnitario", label: "Precio Unitario", options: { filter: true, sort: false } },
+    { name: "precioTotal", label: "Precio Total", options: { filter: true, sort: false } },
+  ];
 
 
+
+
+  // ESTE ES EL DEFINITIVO..
+
+
+
+
+  const opcion = { filterType: 'checkbox' };
 
 
   const columns = [
@@ -187,65 +181,14 @@ export default function PageCompras() {
       headerClassName: "custom-header",
       valueGetter: (params) => {
         const repuestos = params.row.repuestos;
-
-        // Verifica si hay repuestos
         if (repuestos && repuestos.length > 0) {
-          // Mapea los nombres de repuestos y únelos con una coma
-          const nombresRepuestos = repuestos.map((repuesto) => repuesto.repuesto.nombre_repuesto);
-          return nombresRepuestos.join(', '); // Muestra los nombres separados por coma
+          const nombresRepuestos = repuestos.map((repuesto) => repuesto.repuesto.name);
+          return nombresRepuestos.join(', ');
         } else {
           return "Nombre no disponible";
         }
       },
     },
-    // Resto de las columnas
-
-
-
-
-    // {
-    //   field: "cantidad_repuesto",
-    //   headerName: "Cantidad Repuesto",
-    //   width: 185,
-    //   headerClassName: "custom-header",
-    //   // valueGetter: (params) => params.row.repuesto.cantidad,
-    // },
-    // {
-    //   field: "precio_unitario",
-    //   headerName: "Precio Unitario",
-    //   width: 170,
-    //   headerClassName: "custom-header",
-    // },
-    // {
-    //   field: "precio_total",
-    //   headerName: "Precio Total",
-    //   width: 170,
-    //   headerClassName: "custom-header",
-    // },
-
-    // {
-    //   field: "fecha",
-    //   headerName: "Fecha",
-    //   width: 250,
-    //   headerClassName: "custom-header",
-    //   renderCell: (params) => {
-    //     console.log(params.value); // Agrega esta línea para imprimir el valor de fecha en la consola
-    //     const date = new Date(params.value);
-    //     const formattedDate = dayjs.utc(date).locale('es').format("DD [de] MMMM [de] YYYY");
-    //     return <div>{formattedDate}</div>;
-    //   },
-
-    // },
-    // ... Otras columnas
-
-
-
-    // {
-    //   field: "estado",
-    //   headerName: "Estado",
-    //   width: 100,
-    //   headerClassName: "custom-header",
-    // },
     {
       field: "createdAt",
       headerName: "Fecha Creacion",
@@ -270,15 +213,6 @@ export default function PageCompras() {
         const estado = params.row.estado;
         return (
           <div>
-            {/* <button
-                className={
-                  params.row.anulado
-                    ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
-                    : "hidden"
-                }
-              >
-                <Link to={`/venta-repuesto/${params.row._id}`}>Editar</Link>
-              </button> */}
             <button
               className={
                 params.row.anulado
@@ -287,268 +221,50 @@ export default function PageCompras() {
               }
               onClick={() => mostrarAlerta(params.row._id, params.row.anulado)}
             >
-
               {params.row.anulado ? <FontAwesomeIcon icon={faLock} /> : <FontAwesomeIcon icon={faBan} />}
             </button>
-
-
             <button>
               <Detalle
                 metodo={() => getCompras(params.row._id)}
                 id={params.row._id}
+                repuestos={params.row.repuestos}
               >
 
 
-                <table className="scroll" style={{ width: '800px' }}>
 
-
-                  <thead>
-                    {/* <Titulo>
-                        <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
-                        Detalles de la compra
-                      </Titulo> */}
-
-                    <tr>
-
-                      <th >
-
-                        {/* <FontAwesomeIcon icon={faScrewdriverWrench} className="mr-2"  */}
-
-                        Repuestos
-
-
-                      </th>
-
-                      <th >
-
-                        {/* <FontAwesomeIcon icon={faScrewdriverWrench} className="mr-2"  */}
-
-                        Cantidad
-
-
-                      </th>
-
-
-                      <th >
-
-
-                        Precio Unitario
-
-
-                      </th>
-
-                      <th >
-                        Precio Total
-                      </th>
-                    </tr>
-
-
-
-                  </thead>
-                  <tbody>
-                    <tr>
-
-                      <td style={{ textAlign: 'center' }}>
-                        {compras.find((compra) => compra._id === params.row._id)
-                          ?.repuestos.map((repuesto, index) => (
-                            <div key={index}>{repuesto.repuesto.nombre_repuesto}</div>
-                          ))}
-                      </td>
-
-                      <td style={{ textAlign: 'center' }}>
-                        {compras.find((compra) => compra._id === params.row._id)
-                          ?.repuestos.map((repuesto, index) => (
-                            <div key={index}>{formatCurrency2(repuesto.cantidad_repuesto)}</div>
-                          ))}
-                      </td>
-
-                      <td style={{ textAlign: 'center' }}>
-                        {compras.find((compra) => compra._id === params.row._id)
-                          ?.repuestos.map((repuesto, index) => (
-                            <div key={index}>{formatCurrency(repuesto.precio_unitario)}</div>
-                          ))}
-                      </td>
-
-
-
-                      <td style={{ textAlign: 'center' }}>
-                        {compras.find((compra) => compra._id === params.row._id)
-                          ?.repuestos.map((repuesto, index) => (
-                            <div key={index}>{formatCurrency(repuesto.precio_total)}</div>
-                          ))}
-                      </td>
-
-                    </tr>
-
-
-                    {/* <Tabla> */}
-
-                    {/* Agregar el icono de ojo en la celda de la tabla */}
-
-                    {/* <FontAwesomeIcon icon={faScrewdriverWrench} className="mr-2" /> */}
-
-
-
-
-                    {/* {compras.find((compra) => compra._id === params.row._id)
-                            ?.repuestos.map((repuesto, index) => (
-                              <div key={index}>{repuesto.repuesto.nombre_repuesto}</div>
-                            ))} */}
-                    {/* </Tabla> */}
-
-                    {/* <tr>
-                        <Tabla>
-                          <FontAwesomeIcon icon={faHashtag} className="mr-2" />
-                          Cantidades de Repuestos
-                        </Tabla>
-                        <Tabla>
-                          {compras.find((compra) => compra._id === params.row._id)
-                            ?.repuestos.map((repuesto, index) => (
-                              <div key={index}>{repuesto.cantidad_repuesto}</div>
-                            ))}
-                        </Tabla>
-                      </tr> */}
-                    {/* 
-                      <tr>
-                        <Tabla>
-                          <FontAwesomeIcon icon={faHashtag} className="mr-2" />
-                          Precio unitario de Repuestos
-                        </Tabla>
-                        <Tabla>
-                          {compras.find((compra) => compra._id === params.row._id)
-                            ?.repuestos.map((repuesto, index) => (
-                              <div key={index}>{repuesto.precio_unitario}</div>
-                            ))}
-                        </Tabla>
-                      </tr> */}
-
-                    {/* <tr>
-                        <Tabla>
-                          <FontAwesomeIcon icon={faHashtag} className="mr-2" />
-                          Precio total de Repuestos
-                        </Tabla>
-                        <Tabla>
-                          {compras.find((compra) => compra._id === params.row._id)
-                            ?.repuestos.map((repuesto, index) => (
-                              <div key={index}>{repuesto.precio_total}</div>
-                            ))}
-                        </Tabla>
-                      </tr> */}
-                    {/* <tr>
-                        <Tabla >
-                          <FontAwesomeIcon icon={faHashtag} className="mr-2" />
-                          Cantidad Repuesto
-                        </Tabla>
-                        <Tabla >
-                          {
-                            compras.find(
-                              (cantidad) => cantidad._id === params.row._id
-                            )?.cantidad_repuesto
-                          }
-                        </Tabla>
-                      </tr> */}
-                    {/* <tr>
-                        <Tabla >
-                          <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
-                          Precio Unitario
-                        </Tabla>
-                        <Tabla >
-                          {
-                            compras.find(
-                              (precio) => precio._id === params.row._id
-                            )?.repuesto.precio_unitario
-                          }
-                        </Tabla>
-                      </tr> */}
-                    {/* <tr>
-                        <Tabla >
-                          <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
-                          Precio Total
-                        </Tabla>
-                        <Tabla >
-                          {
-                            compras.find(
-                              (precio) => precio._id === params.row._id
-                            )?.precio_total
-                          }
-                        </Tabla>
-                      </tr> */}
-
-                    <style>
-                      {
-                        `
-      
-      
-
-      table.scroll tbody,
-  table.scroll thead tr { display: block; }
-
-  table.scroll tbody {
-    height: 250px;
-    overflow-y: auto;
-    
-  }
-
-
-
-  table.scroll tbody td,
-  table.scroll thead th {
-      width: 140px;
-      
-  }
-
-
-
-  thead tr th { 
-    height: 30px;
-    line-height: 30px;
-    /*text-align: left;*/
-  }
-
-  tbody { border-top: 2px solid black; }
-
-  tbody td:last-child, thead th:last-child {
-      border-right: none !important;
-  }
-
-
-
-
-
-
-
-
-      
-      `}
-                    </style>
-
-                  </tbody>
-
-                </table>
-                <div>
-                  <strong>Precio Total Compra:</strong>{" "}
-                  {calcularPrecioTotalCompra(params.row)}
+                
+                <div style={{ maxWidth: '100%', overflowX: 'auto' }}>
+                  <MUIDataTable
+                    title={"Detalle Compras"}
+                    data={compras.find((compra) => compra._id === params.row._id)
+                      ?.repuestos.map((repuesto) => ({
+                        repuesto: repuesto.repuesto.name,
+                        cantidad: repuesto.cantidad_repuesto,
+                        precioUnitario: formatCurrency(repuesto.precio_unitario),
+                        precioTotal: formatCurrency(repuesto.precio_total),
+                      }))}
+                    columns={columnas2}
+                    options={{
+                      responsive: 'standard',
+                      rowsPerPage: 5,
+                      rowsPerPageOptions: 5,
+                      selectableRows: false,
+                      print: false,
+                      download: false,
+                      viewColumns: false,
+                      textLabels: {
+                        toolbar: {
+                          search: "Buscar",
+                          filterTable: "Filtrar tabla",
+                        },
+                        pagination: {
+                          rowsPerPage: "Filas por página:",
+                        },
+                      },
+                    }}
+                    style={{ width: '100%' }} // Ajusta el ancho de la tabla al 100%
+                  />
                 </div>
-
-                <tr>
-                  <td colSpan="4" style={{ textAlign: 'center' }}>
-                    <strong>Proveedor:</strong>{" "}
-                    {params.row.proveedor}
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan="4" style={{ textAlign: 'center' }}>
-                    <strong>Código de compra:</strong>{" "}
-                    {params.row.codigo}
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan="4" style={{ textAlign: 'center' }}>
-                    <strong>Fecha de compra:</strong>{" "}
-                    {dayjs.utc(params.row.fecha).format("DD/MM/YYYY")}
-                  </td>
-                </tr>
-
 
               </Detalle>
             </button>
@@ -558,14 +274,11 @@ export default function PageCompras() {
     },
   ];
 
-
-
-
   return (
     <div className="mt-16">
       <div className="flex justify-between">
-      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faShoppingBag} className="mr-2" />Gestión de Compras</h1>
-      <div className="mx-10 justify-end">
+        <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faShoppingBag} className="mr-2" />Gestión de Compras</h1>
+        <div className="mx-10 justify-end">
           <Link to="/add-compra">
             <button className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
               <FontAwesomeIcon icon={faPlus} />
@@ -598,7 +311,7 @@ export default function PageCompras() {
           sx={{
             color: "white",
             "& .MuiDataGrid-cell": {
-              fontSize: "15px", // Cambia el tamaño de fuente aquí
+              fontSize: "15px",
             },
           }}
           slots={{ toolbar: GridToolbar }}

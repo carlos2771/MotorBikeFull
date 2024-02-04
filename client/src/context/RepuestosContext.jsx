@@ -35,7 +35,6 @@ export function RepuestoProvider({ children }) {
   const createRepuesto = async (repuesto) => {
     try {
       return await createRepuestosRequest(repuesto);
-      console.log("repuesto",repuesto);
       // console.log("ventas:", response);
     } catch (error) {
       setErrors(error.response.data.message);

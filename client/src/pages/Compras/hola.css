@@ -1,0 +1,8 @@
+#nose{
+    background-color: aqua;
+    height: 48%;
+    border: '1px solid black';
+
+
+    width: calc(50%-5px); margin-right: 10px;
+}

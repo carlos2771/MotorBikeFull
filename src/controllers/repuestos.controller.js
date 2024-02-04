@@ -8,7 +8,7 @@ export const getRepuestos = async (req, res) => {
   try {
     const repuestos = await Repuesto.find()
       .populate({ path: "marca", select: "nombre_marca" })
-      .sort({ name: "desc" });
+      .sort({ createdAt: 'desc' });
     if (!repuestos) {
       return res.status(404).json({ message: "repuestos no encontrados" });
     }
@@ -54,6 +54,9 @@ const upload = multer({ storage: storage });
 const uploadMiddleware = () => upload.single("img");
 
 export default uploadMiddleware;
+
+
+
 export const createRepuestos = async (req, res) => {
   try {
     const { name, img, inCart, price, amount, marca: marcaId, estado } = req.body;
@@ -61,14 +64,11 @@ export const createRepuestos = async (req, res) => {
     // Convierte la cantidad a un número (puedes ajustar esto según tus necesidades)
     const cantidadNumerica = parseInt(amount, 10);
 
-    // Verificar si ya existe un repuesto con el mismo nombre y marca
+    // Verificar si ya existe un repuesto con el mismo nombre y misma marca
     const repuestoExistente = await Repuesto.findOne({ name, marca: marcaId });
 
     if (repuestoExistente) {
-      // Si existe, actualiza la cantidad
-      repuestoExistente.amount += cantidadNumerica;
-      await repuestoExistente.save();
-      return res.status(200).json(repuestoExistente);
+      return res.status(400).json({ message: "Ya existe un repuesto con el mismo nombre y marca" });
     }
 
     // Guarda la imagen en base64 directamente desde req.body.img
@@ -80,11 +80,15 @@ export const createRepuestos = async (req, res) => {
       return res.status(404).json({ message: ["Marca no encontrada"] });
     }
 
+    // Obtener el nombre de la marca
+    const nombreMarca = marcaEncontrada.nombre_marca;
+
     const nuevoRepuesto = new Repuesto({
       name,
       img: imgBase64,
       inCart,
       marca: marcaId,
+      nombre_marca: nombreMarca, // Aquí asignamos el nombre de la marca
       amount: cantidadNumerica,
       price,
       estado,
@@ -99,34 +103,22 @@ export const createRepuestos = async (req, res) => {
   }
 };
 
+
 export const updateRepuestos = async (req, res) => {
   try {
-    const { nombre_repuesto, marca: marcaId, cantidad } = req.body;
+    const { name, marca: marcaId, cantidad } = req.body;
 
     // Convertir la cantidad a un número (puedes ajustar esto según tus necesidades)
     const cantidadNumerica = parseInt(cantidad, 10);
 
     // Verificar si ya existe un repuesto con el mismo nombre y marca
     const repuestoExistente = await Repuesto.findOne({
-      nombre_repuesto,
+      name,
       marca: marcaId,
     });
 
     if (repuestoExistente) {
-      // Si existe, actualiza la cantidad
-      repuestoExistente.cantidad += cantidadNumerica;
-      await repuestoExistente.save();
-
-      // Ahora, puedes actualizar otras propiedades si es necesario
-      const repuestoActualizado = await Repuesto.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        {
-          new: true,
-        }
-      );
-
-      return res.status(200).json(repuestoActualizado);
+      return res.status(400).json({ message: "Ya existe un repuesto con el mismo nombre y marca" });
     }
 
     // Si no existe, realiza la actualización normal
@@ -144,11 +136,10 @@ export const updateRepuestos = async (req, res) => {
 
     res.json(repuestoActualizado);
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error al actualizar el repuesto", error });
+    return res.status(500).json({ message: "Error al actualizar el repuesto", error });
   }
 };
+
 
 export const deleteRepuesto = async (req, res) => {
   try {
