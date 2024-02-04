@@ -18,15 +18,29 @@ export default function Header() {
 
   const navigate = useNavigate();
   // Actualizar el enlace activo cuando cambia la ubicación
+
   useEffect(() => {
-    if(location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/register" && location.pathname !== "/reestablecer") {                 
+    const allowedPaths = ["/login", "/", "/register", "/reestablecer", "/reestablecer-password/:code", "/restablecer-password/:code"];
+  
+    if (!allowedPaths.some(path => location.pathname.startsWith(path))) {
       navigate("/login");
     }
-    
+  
     const currentPath = location.pathname;
     setActiveLink(currentPath);
-    console.log("link",location);
+    console.log("link", location);
   }, [location]);
+  
+
+  // useEffect(() => {
+  //   if(location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/register" && location.pathname !== "/reestablecer" ) {                 
+  //     navigate("/login");
+  //   }
+    
+  //   const currentPath = location.pathname;
+  //   setActiveLink(currentPath);
+  //   console.log("link",location);
+  // }, [location]);
   
   
 

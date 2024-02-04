@@ -48,4 +48,10 @@ app.use("/api", comprasRoutes);
 app.use("/api", cartClienteRoutes);
 app.use("/api", cartRoutes);
 
+app.use(express.urlencoded({extended: true}))
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({extended: true}))
+
+// Static
+app.use(express.static(__dirname + '/public'))
 export default app;
