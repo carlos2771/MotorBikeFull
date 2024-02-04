@@ -170,10 +170,13 @@ const cambiarEstado = (id, anulado) => {
               )}
             </button>
             <button>
-              <Detalle
-                metodo={() => getCartCliente(params.row._id)}
-                id={params.row._id}
-              >
+            <Detalle
+  metodo={() => {
+    console.log("params.row._id:", params.row._id);
+    getCartCliente(params.row._id);
+  }}
+  id={params.row._id}
+>
                 <table>
                   <tbody>
                     <Titulo>

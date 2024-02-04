@@ -32,7 +32,7 @@ export function CartClienteProvider({children}){
 
       
 
-     const getCartCliente = async (id) => { // Agregamos el parámetro id
+     const getCartCliente = async (_id) => { // Agregamos el parámetro id
     try {
       const res = await getCartClienteRequest(id);
       console.log("ress1", res);
