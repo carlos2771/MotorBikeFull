@@ -46,67 +46,85 @@ export default function PageCartClient() {
       : "¿Estás seguro de anular la venta?";
     const buttonText = anulado ? "Entendido" : "Sí";
 
-    Swal.fire({
-      title: title,
-      text: text,
-      icon: anulado ? "info" : "warning",
-      showCancelButton: !anulado,
-      confirmButtonText: buttonText,
-      cancelButtonText: "No",
-      background: "#334155",
-      color: "white",
-      iconColor: "#2563eb",
-      buttonsStyling: false,
-      customClass: {
-        confirmButton:
-          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-blue-600 hover:text-white hover:bg-blue-600",
-        cancelButton:
-          "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
-      },
-    }).then((result) => {
-      if (!anulado && result.isConfirmed) {
-        cambiarEstado(id, anulado);
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "success",
-          title: "Se ha modificado",
-        });
-      } else {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "warning",
-          title: "No se ha modificado",
-        });
-      }
-    });
+    if (!anulado) {
+      Swal.fire({
+        title: title,
+        text: text,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: buttonText,
+        cancelButtonText: "No",
+        background: "#334155",
+        color: "white",
+        iconColor: "#2563eb",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton:
+            "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-blue-600 hover:text-white hover:bg-blue-600",
+          cancelButton:
+            "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          cambiarEstado(id, anulado);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "success",
+            title: "Se ha modificado",
+          });
+        } else {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "warning",
+            title: "No se ha modificado",
+          });
+        }
+      });
+    } else {
+      // Si la venta está anulada, solo mostrar un mensaje indicando que no se puede realizar ninguna acción
+      Swal.fire({
+        title: "Acción no permitida",
+        text: "Esta venta ya ha sido anulada y no se puede modificar.",
+        icon: "info",
+        background: "#334155",
+        color: "white",
+        iconColor: "#2563eb",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton:
+            "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-blue-600 hover:text-white hover:bg-blue-600",
+        },
+      });
+    }
   };
 
-  const cambiarEstado = (id, anulado) => {
+const cambiarEstado = (id, anulado) => {
     const nuevoEstado = anulado ? "Activo" : "Inactivo";
     updateCartCliente(id, { estado: nuevoEstado }).then(() => {
       getCartClient();
     });
-  };
+};
+
 
   const columns = [
     {
@@ -152,10 +170,13 @@ export default function PageCartClient() {
               )}
             </button>
             <button>
-              <Detalle
-                metodo={() => getCartCliente(params.row._id)}
-                id={params.row._id}
-              >
+            <Detalle
+  metodo={() => {
+    console.log("params.row._id:", params.row._id);
+    getCartCliente(params.row._id);
+  }}
+  id={params.row._id}
+>
                 <table>
                   <tbody>
                     <Titulo>

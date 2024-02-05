@@ -30,18 +30,25 @@ export function VentasServicioProvider({ children }) {
       console.error(error);
     }
   };
+  
 
-  //AQUI VOY A OBTENER LOS SERVICIOS ACTIVOS DE LOS MECANICOS PARA PODER MOSTRAR EN LAS SIMPLECARDS
-  const getTotalServiciosActivosPorMecanico = () => {
-    const totalPorMecanico = {};
-    ventasServicios.forEach((venta) => {
-      if (venta.estado === 'Activo') {
-        const mecanicoId = venta.mecanico._id;
-        const precioServicio = venta.precio_servicio;
-        totalPorMecanico[mecanicoId] = (totalPorMecanico[mecanicoId] || 0) + precioServicio;
-      }
+  const getTotalServiciosActivosDelDia = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Filtra las ventas activas del día
+    const ventasActivasDelDia = ventasServicios.filter((venta) => {
+      const ventaDate = new Date(venta.createdAt);
+      ventaDate.setHours(0, 0, 0, 0);
+      return ventaDate.getTime() === today.getTime() && venta.estado === 'Activo';
     });
-    return totalPorMecanico;
+
+    // Calcula el total en dinero de los servicios activos del día
+    const totalDelDia = ventasActivasDelDia.reduce((total, venta) => {
+      return total + venta.precio_servicio;
+    }, 0);
+
+    return totalDelDia;
   };
 
   const createVentaServicio = async (venta) => {
@@ -86,6 +93,7 @@ export function VentasServicioProvider({ children }) {
     }
   };
 
+ 
   const getVentasServiciosDelDia = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -120,7 +128,7 @@ export function VentasServicioProvider({ children }) {
         updateVentaServicio,
         deleteVentaServicio,
         getVentasServiciosDelDia,
-        getTotalServiciosActivosPorMecanico
+        getTotalServiciosActivosDelDia
       }}
     >
       {children}
