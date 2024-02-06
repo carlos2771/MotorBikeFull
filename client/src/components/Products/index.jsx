@@ -28,7 +28,9 @@ const Products = () => {
               alt={product.name}
             />
           <div>
+          
             <p className="font-Roboto text-center font-bold">{product.name} - ${product.price}</p>
+            <p className="font-Roboto text-center font-bold "> Existencia {product.amount}</p>
           </div>
           {!product.inCart ? (
             <button

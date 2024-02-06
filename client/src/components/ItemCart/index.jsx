@@ -14,7 +14,7 @@ export const ItemCart = ({ item }) => {
       <img className= "h-1" src={` ${item.img}`}alt={item.name} />
       <div className={styles.dataContainer}>
         <div className={styles.left}>
-          <p>{item.name}</p>
+          <p> {item.name}</p>
           <div className={styles.buttons}>
             <button onClick={() => editItemToCart(item._id, "add", amount)}>
               AGREGAR

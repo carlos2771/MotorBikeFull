@@ -62,6 +62,14 @@ export function CartClienteProvider({children}){
         setErrors(error.response.data.message)
       }
     };
+    useEffect(() => {
+      if (errors.length > 0) {
+        const timer = setTimeout(() => {
+          setErrors([]);
+        }, 3000);
+        return () => clearTimeout(timer);
+      }
+    }, [errors]);
     return(
         <CartClienteContext.Provider 
         value={{

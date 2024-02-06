@@ -6,7 +6,7 @@ import { useClientes } from "../../context/ClientContext";
 import { useForm } from "react-hook-form";
 import { useCartCliente } from "../../context/CartClienteContext";
 import { Link, useNavigate } from "react-router-dom";
-
+import { ClienteRequired, NombreRequired } from "../../utils/validations"
 const Cart = () => {
   const navigate = useNavigate();
   const [cartOpen, setCartOpen] = useState(false);
@@ -19,7 +19,7 @@ const Cart = () => {
     setValue,
     formState: { errors },
   } = useForm();
-  const { createCartCliente } = useCartCliente();
+  const { createCartCliente, errors:Errors } = useCartCliente();
 
   useEffect(() => {
     try {
@@ -47,9 +47,8 @@ const Cart = () => {
 
   const onSubmit = async (data) => {
     try {
-      if (data) {
-        navigate("/home-page");
-        cleartCart(); // Assuming you have a function named clearCart
+      
+         // Assuming you have a function named clearCart
   
         const { cliente, ...restData } = data;
         const result = cartItems.map((item) => {
@@ -91,9 +90,14 @@ const Cart = () => {
         const res = await createCartCliente(datosCartCliente);
         console.log("Datos antes de enviar:", datosCartCliente);
         console.log("cartcliente", res);
-      } else {
-        console.log("no se pudo renderizar");
-      }
+
+        if(res && !res.error){
+          navigate("/home-page");
+          cleartCart();
+        }else{
+          console.log("huvo un error");
+        }
+      
     } catch (error) {
       console.error("Error al enviar el carrito y cliente:", error);
     }
@@ -102,6 +106,7 @@ const Cart = () => {
   
   return (
     <div className={styles.cartContainer}>
+
       <div
         onClick={() => setCartOpen(!cartOpen)}
         className={styles.buttonCartContainer}
@@ -154,6 +159,11 @@ const Cart = () => {
       {cartItems && cartOpen && (
         <div className={styles.cart}>
           <h2>Tu carrito</h2>
+          {Errors.map((error, i) => (
+          <div className="bg-red-500 p-2 text-white" key={i}>
+            {error}
+          </div>
+        ))}
 
           {cartItems.length === 0 ? (
             <p className={styles.cartVacio}>Tu carrito esta vacio</p>
@@ -165,9 +175,7 @@ const Cart = () => {
               <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
                 <div>
                   <select
-                    {...register("cliente", {
-                      required: "Selecciona un cliente",
-                    })}
+                    {...register("cliente", ClienteRequired)}
                     onChange={(e) => setValue("cliente", e.target.value)}
                     className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
                   >
@@ -178,6 +186,7 @@ const Cart = () => {
                       </option>
                     ))}
                   </select>
+                  {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
                 </div>
                 <button type="submit">Enviar</button>
               </form>

@@ -89,7 +89,7 @@ export const deleteProduct = async (req, res) => {
   export const getProducts = async (req, res) => {
     try {
       // Obtener productos con amount mayor a cero y estado 'activo'
-      const products = await Repuesto.find({ estado: "Activo" });
+      const products = await Repuesto.find({ estado: "Activo", amount: { $gt: 0 } });
   
       if (products) {
         res.json({ products });

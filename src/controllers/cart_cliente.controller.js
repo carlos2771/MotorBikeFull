@@ -19,7 +19,7 @@ export const getCartClient = async (req, res) => {
 export const createCartCliente = async (req, res) => {
     try {
       const { cart, cliente: clienteId } = req.body;
-
+      
       for(const cartData of cart){
         const respuestoEncontrado = await Repuesto.findOne({ name: cartData.name })
         if (!respuestoEncontrado) {
@@ -32,7 +32,8 @@ export const createCartCliente = async (req, res) => {
         console.log("cantidad existente",respuestoEncontrado.amount);
 
         if(cantidadActualRepuesto< cantidadVender){
-          return res.status(400).json({ message: ["Cantidad insuficiente del repuesto"] });
+          console.log("Cantidad insuficiente del repuesto", cartData.name);
+          return res.status(400).json({ message: [`Cantidad insuficiente del repuesto: ${cartData.name} stock: ${cantidadActualRepuesto}`], });
         }
         const cantidadRestanteRepuesto = cantidadActualRepuesto - cantidadVender;
         await Repuesto.findOneAndUpdate({name: cartData.name}, { amount: cantidadRestanteRepuesto });
