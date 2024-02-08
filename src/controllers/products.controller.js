@@ -7,82 +7,74 @@ import Repuesto from "../models/repuestos.model.js";
 export const addProductCart = async (req, res) => {
   const { name, img, price } = req.body;
   
-  /* Nos fijamos si tenemos el producto */
-  const estaEnProducts = await Repuesto.findOne({ name });
-  // console.log(estaEnProducts, "para ver que retorna");
-  
-  if (!estaEnProducts) {
-      return res.status(400).json({
-          mensaje: "Este producto no se encuentra en nuestra base de datos",
+  try {
+    // Verificar si el producto está en la base de datos
+    const estaEnProducts = await Repuesto.findOne({ name });
+
+    if (!estaEnProducts) {
+      return res.status(400).json({ mensaje: "Este producto no se encuentra en nuestra base de datos" });
+    }
+
+    // Verificar si el producto ya está en el carrito
+    const estaEnElCarrito = await Cart.findOne({ name });
+
+    // Si el producto no está en el carrito, lo agregamos
+    if (!estaEnElCarrito) {
+      const newProductInCart = new Cart({ name, img, price, amount: 1 });
+
+      // Actualizamos la propiedad inCart en el producto
+      await Repuesto.findByIdAndUpdate(estaEnProducts._id, { inCart: true });
+
+      // Guardamos el nuevo producto en el carrito
+      await newProductInCart.save();
+
+      return res.json({
+        mensaje: `El producto fue agregado al carrito`,
+        product: newProductInCart,
       });
-  }
-
-  /* Nos fijamos si el producto ya esta en el carrito */
-  const estaEnElCarrito = await Cart.findOne({ name });
-
-  /* Si no tenemos el producto */
-  if (!estaEnProducts) {
-    res.status(400).json({
-      mensaje: "Este producto no se encuentra en nuestra base de datos",
-    });
-
-    /* Si nos envian algo y no esta en el carrito lo agregamos */
-  } else if (!estaEnElCarrito) {
-    const newProductInCart = new Cart({ name, img, price, amount: 1 });
-
-    /* Y actualizamos la prop inCart: true en nuestros productos */
-    await Repuesto.findByIdAndUpdate(
-      estaEnProducts?._id, // interrogacion para acceder a las propiedades de un objeto y para ver si es nulo o indefinido. retorna undefined
-      { inCart: true, name, img, price },
-      { new: true }
-    )
-      .then((product) => {
-        newProductInCart.save();
-        res.json({
-          mensaje: `El producto fue agregado al carrito`,
-          product,
-        });
-      })
-      .catch((error) => console.error(error));
-
-    /* Y si esta en el carrito avisamos */
-  } else if (estaEnElCarrito) {
-    res.status(400).json({
-      mensaje: "El producto ya esta en el carrito",
-    });
+    } else {
+      return res.status(400).json({ mensaje: "El producto ya está en el carrito" });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({ mensaje: "Error interno del servidor" });
   }
 };
 
 
 
 export const deleteProduct = async (req, res) => {
+  try {
     const { productId } = req.params;
-  
-    /* Buscamos el producto en el carrito */
+    
+    // Buscamos el producto en el carrito
     const productInCart = await Cart.findById(productId);
     
-  
-    /* Buscamos el producto en nuestra DB por el nombre del que esta en el carrito */
-    const { name, img, price, _id } = await Repuesto.findOne({
-      name: productInCart.name,
-    });
-   
+    if (!productInCart) {
+      return res.status(404).json({ mensaje: "Producto no encontrado en el carrito" });
+    }
+    
+    // Buscamos el producto en nuestra DB por el nombre del que está en el carrito
+    const { name, img, price, _id } = await Repuesto.findOne({ name: productInCart.name });
+    
+    if (!_id) {
+      return res.status(404).json({ mensaje: "Producto no encontrado en la base de datos" });
+    }
 
-    /* Buscamos y eliminamos el producto con la id */
+    // Buscamos y eliminamos el producto con la ID
     await Cart.findByIdAndDelete(productId);
     
-    await Repuesto.findByIdAndUpdate( // se actualiza para poder sacarlo de la base de datos ya que tiene un boolean 
-      _id,
-      { inCart: false, name, img, price },
-      { new: true }
-    )
-      .then((product) => {
-        res.json({
-          mensaje: `El producto ${product.name} fue eliminado del carrito`,
-        });
-      })
-      .catch((error) => res.json({ mensaje: "Hubo un error" }));
-  };
+    // Actualizamos el producto en la base de datos
+    await Repuesto.findByIdAndUpdate(_id, { inCart: false });
+
+    return res.json({
+      mensaje: `El producto ${name} fue eliminado del carrito`,
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({ mensaje: "Hubo un error en el servidor" });
+  }
+};
 
 
  
@@ -113,47 +105,49 @@ export const deleteProduct = async (req, res) => {
     }
   };
   
-export const putProduct = async (req, res) => {
-  const { productId } = req.params;
-  const { query } = req.query;
-  const body = req.body;
-
-  /* Buscamos el producto en el carrito */
-  const productBuscado = await Cart.findById(productId);
-
-  /* Si no hay query 'add' o 'del' */
-  if (!query) {
-    res.status(404).json({ mensaje: "Debes enviar una query" });
-
-    /* Si esta el producto en el carrito y quiero agregar */
-  } else if (productBuscado && query === "add") {
-    body.amount = body.amount + 1;
-
-    await Cart.findByIdAndUpdate(productId, body, {
-      new: true,
-    }).then((product) => {
-      res.json({
+  export const putProduct = async (req, res) => {
+    const { productId } = req.params;
+    const { query } = req.query;
+    const body = req.body;
+  
+    try {
+      let product;
+  
+      // Verificar si el producto está en el carrito
+      const productBuscado = await Cart.findById(productId);
+  
+      if (!productBuscado) {
+        return res.status(404).json({ mensaje: "Producto no encontrado en el carrito" });
+      }
+  
+      // Realizar las acciones según la query
+      if (query === "add") {
+        body.amount = (productBuscado.amount || 0) + 1;
+      } else if (query === "del") {
+        if (productBuscado.amount <= 1) {
+          return res.status(400).json({ mensaje: "La cantidad mínima alcanzada" });
+        }
+        body.amount = (productBuscado.amount || 0) - 1;
+      } else {
+        return res.status(400).json({ mensaje: "Query inválida" });
+      }
+  
+      // Actualizar el producto en el carrito
+      product = await Cart.findByIdAndUpdate(productId, body, { new: true });
+  
+      if (!product) {
+        return res.status(404).json({ mensaje: "Producto no encontrado" });
+      }
+  
+      return res.json({
         mensaje: `El producto: ${product.name} fue actualizado`,
         product,
       });
-    });
-
-    /* Si esta el producto en el carrito y quiero sacar */
-  } else if (productBuscado && query === "del") {
-    body.amount = body.amount - 1;
-
-    await Cart.findByIdAndUpdate(productId, body, {
-      new: true,
-    }).then((product) =>
-      res.json({
-        mensaje: `El producto: ${product.name} fue actualizado`,
-        product,
-      })
-    );
-  } else {
-    res.status(400).json({ mensaje: "Ocurrio un error" });
-  }
-};
+    } catch (error) {
+      console.error("Error:", error);
+      return res.status(500).json({ mensaje: "Error interno del servidor" });
+    }
+  };
 
 
 
