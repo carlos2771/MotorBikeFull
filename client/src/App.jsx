@@ -81,7 +81,7 @@ export default function App() {
                               
                            {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
                             <BrowserRouter>
-                              <main className='min-h-screen bg-gradient-to-tr from-[#1E293B] via-[#0f172a] to-[#1E293B] px-8 md:px-14 lg:px-36 pb-10 pt-7'>  
+                              <main className='min-h-screen bg-gradient-to-tr from-[#1E293B] via-[#0f172a] to-[#1E293B] px-8 md:px-14 lg:px-36 pb-10 pt-7 '>  
                                 <Navbar/>
                                 <Routes>
                                   <Route path="/" element={<HomePage />} />
