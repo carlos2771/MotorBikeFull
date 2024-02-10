@@ -84,10 +84,10 @@ export const codeCompra = {
 
 
 export const NegativeRequired = {
-  required: "Campo requerido",
+  required: "Requerido",
   pattern: {
     value: negative,
-    message: "Solo numeros mayores a cero ",
+    message: "Solo numero mayor a cero",
   },
 };
 
@@ -112,7 +112,7 @@ export const fecha = {
 
 
 export const RepuestoRequired = {
-  required: "Campo requerido ",
+  required: "Requerido ",
   message: "Campo requerido ¿"
 };
 

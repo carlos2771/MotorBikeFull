@@ -15,6 +15,9 @@ import MUIDataTable from "mui-datatables";
 import { Tabla } from "../../components/Tabla";
 import Detalle from "../../components/Detalle"
 
+import {faUser, faBarcode, faCalendarDays} from "@fortawesome/free-solid-svg-icons";
+
+
 
 dayjs.locale('es');
 dayjs.extend(utc);
@@ -114,14 +117,16 @@ export default function PageCompras() {
     });
   };
 
-  
+
+
+
   const exportarAExcel = useCallback(() => {
     const datos = compras.map((compra) => ({
       'Nombre': compra.repuestos.map(repuesto => repuesto.repuesto.name).join(', '),
       'Cantidad': compra.repuestos.map(repuesto => repuesto.cantidad_repuesto).join(', '),
       'precio unitario': compra.repuestos.map(repuesto => repuesto.precio_unitario).join(', '),
       'precio total': compra.repuestos.map(repuesto => repuesto.precio_total).join(', '),
-      'Total compra':compra.repuestos.reduce((total, repuesto)=> total + repuesto.precio_total,0),
+      'Total compra': compra.repuestos.reduce((total, repuesto) => total + repuesto.precio_total, 0),
       'Fecha de compra': dayjs.utc(compra.fecha).locale('es').format("DD [de] MMMM [de] YYYY"),
 
     }));
@@ -153,7 +158,7 @@ export default function PageCompras() {
   const options = { day: 'numeric', month: 'long', year: 'numeric' };
   const formattedDate = new Intl.DateTimeFormat('es-ES', options).format(currentDate);
 
- 
+
 
   const columnas2 = [
     { name: "repuesto", label: "Repuesto", options: { filter: true, sort: true } },
@@ -232,22 +237,24 @@ export default function PageCompras() {
 
 
 
-                
+
                 <div style={{ maxWidth: '100%', overflowX: 'auto' }}>
                   <MUIDataTable
+                    className="miTablaPersonalizada"
                     title={"Detalle Compras"}
                     data={compras.find((compra) => compra._id === params.row._id)
                       ?.repuestos.map((repuesto) => ({
                         repuesto: repuesto.repuesto.name,
-                        cantidad: repuesto.cantidad_repuesto,
+                        cantidad: formatCurrency2(repuesto.cantidad_repuesto),
                         precioUnitario: formatCurrency(repuesto.precio_unitario),
                         precioTotal: formatCurrency(repuesto.precio_total),
                       }))}
                     columns={columnas2}
                     options={{
+                      sort: false,
                       responsive: 'standard',
-                      rowsPerPage: 5,
-                      rowsPerPageOptions: 5,
+                      rowsPerPage: 3,
+                      rowsPerPageOptions: 3,
                       selectableRows: false,
                       print: false,
                       download: false,
@@ -258,13 +265,155 @@ export default function PageCompras() {
                           filterTable: "Filtrar tabla",
                         },
                         pagination: {
+                          displayRows: "de",
                           rowsPerPage: "Filas por página:",
                         },
+                        filter: {
+                          all: 'Todos',
+                          title: 'Filtros',
+                          reset: 'Reiniciar',
+                        }
                       },
                     }}
                     style={{ width: '100%' }} // Ajusta el ancho de la tabla al 100%
                   />
                 </div>
+
+
+                <style>{
+                  `
+
+                // .tss-ynxllk-MUIDataTableFilter-root{
+                //   background-color: #1e293b;
+                // }
+                .miTablaPersonalizada .tss-11quiee-MUIDataTable-paper{
+                  background-color: #1e293b;
+                }
+
+
+                .miTablaPersonalizada .tss-1qtl85h-MUIDataTableBodyCell-root{
+                  background-color: #1e293b;
+                  color: white;
+                }
+
+                .miTablaPersonalizada .tss-gm6zfk-MUIDataTableHeadCell-fixedHeader{
+                  background-color: #1e293b;
+                  color: white; 
+                  
+                  
+                  
+}
+
+                .miTablaPersonalizada .css-rqglhn-MuiTable-root{
+                  margin-top: 10px;
+                  
+
+
+                }
+
+                // PRIMER CAJA DE LA TABLA
+                .miTablaPersonalizada .tss-gm6zfk-MUIDataTableHeadCell-fixedHeaderr{
+                  background-color: red; 
+                  color: red;
+                  
+                }
+
+                // ULTIMA CAJA DE LA TABLA
+                .miTablaPersonalizada .tss-1ork7hi-MUIDataTablePagination-tableCellContainer{
+                   background-color: red
+                
+                }
+
+
+                .miTablaPersonalizada .tss-1ork7hi-MUIDataTablePagination-tableCellContainer{
+                 
+                  
+                  padding: 10px;
+                  background-color: #1e293b; 
+                }
+
+                .miTablaPersonalizada .MuiToolbar-gutters{
+                  
+                  // background-color: #93c5fd;
+                   background-color: #1e293b;
+                  color: white; 
+                  
+                }
+
+                .miTablaPersonalizada .css-i4bv87-MuiSvgIcon-root{
+                  color: white;
+                }
+
+                .miTablaPersonalizada .css-1x51dt5-MuiInputBase-input-MuiInput-input{
+                  color: white;
+                }
+
+
+
+            
+
+                // .miTablaPersonalizada .MuiToolbar-root{
+                
+                //   color: white;
+                // }
+                
+
+                .miTablaPersonalizada .tss-1qjwhn0-MUIDataTableBody-emptyTitle{
+                  color: white; 
+                }
+
+                .miTablaPersonalizada .tss-1cdcmys-MUIDataTable-responsiveBase{
+                  background-color: #1e293b;
+                }
+
+
+                
+
+
+                // NO HAY REPUESTOS AÚN
+                .miTablaPersonalizada .MuiTypography-body1{
+                  color: red;
+                  
+                }
+
+                .miTablaPersonalizada {
+                  background-color: #1e293b;
+                  margin-top
+                  border: 1px solid #2563eb
+                  
+              }
+
+                
+                `}</style>
+                <table style={{marginLeft: '1px'}}>
+                  <tbody>
+                    <tr>
+                      <Tabla >
+                      <FontAwesomeIcon icon={faUser} /> Proveedor
+                      </Tabla>
+                      <Tabla >
+                      <FontAwesomeIcon icon={faBarcode} /> Codigo
+                      </Tabla>
+                      <Tabla >
+                      <FontAwesomeIcon icon={faCalendarDays} />  Fecha
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                      {params.row.proveedor}
+                      </Tabla>
+                      <Tabla >
+                      {params.row.codigo}
+                      </Tabla>
+                      <Tabla >
+                      {dayjs.utc(params.row.fecha).format("DD/MM/YYYY")}
+                      </Tabla>
+                </tr>
+                      
+                  </tbody>
+
+                </table>
+
 
               </Detalle>
             </button>
@@ -317,6 +466,9 @@ export default function PageCompras() {
           slots={{ toolbar: GridToolbar }}
         />
       </Box>
+
+
+
     </div>
   );
 }

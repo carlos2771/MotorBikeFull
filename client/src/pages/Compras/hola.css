@@ -2,7 +2,58 @@
     background-color: aqua;
     height: 48%;
     border: '1px solid black';
-
-
+    font-size: 10px;
+    color: cornflowerblue;
     width: calc(50%-5px); margin-right: 10px;
+    border-left: 1px solid blue;
 }
+
+
+
+
+
+
+.contenedorPrincipal{
+
+    background-color: black;
+    width: 90%;
+    max-width: 1050px;
+    height: auto;
+    margin-top: 5%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+.divGris{
+    background-color: grey;
+    width: 50%;
+    height: 400px;
+}
+
+style={{
+    backgroundColor: 'grey',
+    width: '50%',
+    height: '400px',
+  }}
+
+@media (breakpoint) {
+    .contenedorPrincipal{
+        background-color: red;
+    }
+}
+
+
+
+
+
+style={{
+    backgroundColor: 'black', // Color de fondo negro
+    width: '90%',             // Ancho del div es el 80% del contenedor padre
+    maxWidth: '1050px',       // Máximo ancho del div es de 1050 píxeles
+    height: 'auto',           // La altura se ajustará automáticamente al contenido
+    marginTop: '5%',          // Margen superior del 5% del contenedor padre
+    padding: '20px',           // Agregar un espacio interno de 20px
+    boxSizing: 'border-box'   // Incluir el padding en el ancho y alto
+  }}
+>
