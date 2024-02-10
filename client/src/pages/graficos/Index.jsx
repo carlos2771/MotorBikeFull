@@ -3,6 +3,7 @@ import { CharBar } from "../../components/CharBar";
 import SimpleCard from "../../components/SimpleCard";
 import SimpleCard3 from "../../components/SimpleCard3";
 import SimpleCard2 from "../../components/SimpleCard2";
+import SimpleCard4 from "../../components/SimpleCard4";
 
 export default function GraficosPage() {
 
@@ -18,6 +19,10 @@ export default function GraficosPage() {
 
       <div className="col-start-3">
         <SimpleCard3 />
+      </div>
+
+      <div className="col-start-4">
+        <SimpleCard4 />
       </div>
 
       <div className="col-start-1">
