@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useVentasServicios } from "../context/VentasServicioContex";
 
 export default function SimpleCard2() {
-  const { getTotalServiciosActivosDelDia } = useVentasServicios();
+  const { getTotalServiciosActivosDelDia, getVentasServicios } = useVentasServicios();
+
+  useEffect(() => {
+    // Llamamos a la función para obtener los datos de ventas de servicios
+    getVentasServicios();
+  }, []);
+
+  // Obtenemos el total de servicios activos del día
   const totalServiciosActivosDelDia = getTotalServiciosActivosDelDia();
 
   // Formatear el número con separadores de miles y decimales

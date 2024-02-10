@@ -1,11 +1,15 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useCartCliente } from "../context/CartClienteContext"; // Asegúrate de que la ruta sea correcta
 
 
 const SimpleCard3 = () => {
-  const { cartClientes } = useCartCliente();
+  const { cartClientes,getCartClient } = useCartCliente();
 
-  console.log("Todos los datos:", cartClientes);
+  useEffect(() => {
+    // Llamamos a la función para obtener los datos de las ventas
+    getCartClient();
+  }, []);
+
 
   // Filtrar solo las ventas activas que no están anuladas
   const ventasActivas = cartClientes.filter((venta) => !venta.anulado);

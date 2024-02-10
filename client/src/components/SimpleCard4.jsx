@@ -3,8 +3,13 @@ import { useCompras } from "../context/ComprasContext";
 
 const SimpleCard4 = () => {
   // Obtenemos el contexto de compras
-  const { compras } = useCompras();
+  const { compras, getCompras } = useCompras();
   const [totalCompras, setTotalCompras] = useState(0);
+
+  useEffect(() => {
+    // Llamamos a la función para obtener las compras
+    getCompras();
+  }, []);
 
   useEffect(() => {
     // Filtramos las compras que no están anuladas
