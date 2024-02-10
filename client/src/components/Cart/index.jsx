@@ -39,7 +39,7 @@ const Cart = () => {
     );
   }, [cartItems]);
 
-  /* Obtenemos el precio total */
+  /* Obtenemos el precio total */ 
   const total = cartItems?.reduce(
     (previous, current) => previous + current.amount * current.price,
     0
@@ -50,7 +50,7 @@ const Cart = () => {
       
          // Assuming you have a function named clearCart
   
-        const { cliente, ...restData } = data;
+        const { cliente,descuento, ...restData } = data;
         const result = cartItems.map((item) => {
           // Create a copy of each item
           const newItem = { ...item };
@@ -80,11 +80,12 @@ const Cart = () => {
   
           return newItem;
         });
-  
+        const descuentoNumber = parseInt(descuento);
         const datosCartCliente = {
           ...restData,
           cart: result,
           cliente,
+          descuento:descuentoNumber,
         };
   
         const res = await createCartCliente(datosCartCliente);
@@ -187,6 +188,12 @@ const Cart = () => {
                     ))}
                   </select>
                   {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
+                  <input
+                  type="number"
+                  {...register("descuento")}
+                  placeholder="Descuento"
+                  className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
+                />
                 </div>
                 <button type="submit">Enviar</button>
               </form>

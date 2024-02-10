@@ -21,6 +21,11 @@ const CartClienteSchema = new mongoose.Schema({
   ],
   total: { type: Number }, // Nuevo campo para almacenar el total
   codigo: {type: String},
+  descuento:{
+    type: Number,
+    
+  },
+  
   anulado: {
     type: Boolean,
     default: false,
@@ -33,8 +38,9 @@ CartClienteSchema.pre("save", function (next) {
     (acc, cartItem) => acc + cartItem.amount * cartItem.price,
     0
   );
-  this.total = cartTotal; // Asignar el total al campo total en el documento principal
-  const randomCode = generateRandomCode(4);
+  this.total = cartTotal - (this.descuento || 0);
+    const randomCode = generateRandomCode(4);
+    this.codigo = randomCode;
 
   // Asignar el código al campo 'codigo'
   this.codigo = randomCode;
