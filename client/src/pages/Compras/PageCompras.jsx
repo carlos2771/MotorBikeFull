@@ -419,7 +419,7 @@ export default function PageCompras() {
                   </tbody>
 
                 </table>
-
+{/* TOTAL DE LA COMPRA */}
                 <h1>Total {calcularPrecioTotalCompra(params.row)}
                 </h1>
               </Detalle>
