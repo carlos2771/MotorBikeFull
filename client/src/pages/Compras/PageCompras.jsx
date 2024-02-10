@@ -15,7 +15,7 @@ import MUIDataTable from "mui-datatables";
 import { Tabla } from "../../components/Tabla";
 import Detalle from "../../components/Detalle"
 
-import {faUser, faBarcode, faCalendarDays} from "@fortawesome/free-solid-svg-icons";
+import { faUser, faBarcode, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 
 
 
@@ -31,6 +31,12 @@ function formatCurrency2(value) {
   const formattedValue = value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   return formattedValue;
 }
+
+const calcularPrecioTotalCompra = (compra) => {
+  return formatCurrency(compra.repuestos.reduce((total, repuesto) => {
+    return total + repuesto.precio_total;
+  }, 0));
+};
 
 export default function PageCompras() {
   const {
@@ -385,36 +391,37 @@ export default function PageCompras() {
 
                 
                 `}</style>
-                <table style={{marginLeft: '1px'}}>
+                <table style={{ marginLeft: '1px' }}>
                   <tbody>
                     <tr>
                       <Tabla >
-                      <FontAwesomeIcon icon={faUser} /> Proveedor
+                        <FontAwesomeIcon icon={faUser} /> Proveedor
                       </Tabla>
                       <Tabla >
-                      <FontAwesomeIcon icon={faBarcode} /> Codigo
+                        <FontAwesomeIcon icon={faBarcode} /> Codigo
                       </Tabla>
                       <Tabla >
-                      <FontAwesomeIcon icon={faCalendarDays} />  Fecha
+                        <FontAwesomeIcon icon={faCalendarDays} />  Fecha
                       </Tabla>
                     </tr>
                     <tr>
                       <Tabla >
-                      {params.row.proveedor}
+                        {params.row.proveedor}
                       </Tabla>
                       <Tabla >
-                      {params.row.codigo}
+                        {params.row.codigo}
                       </Tabla>
                       <Tabla >
-                      {dayjs.utc(params.row.fecha).format("DD/MM/YYYY")}
+                        {dayjs.utc(params.row.fecha).format("DD/MM/YYYY")}
                       </Tabla>
-                </tr>
-                      
+                    </tr>
+
                   </tbody>
 
                 </table>
 
-
+                <h1>Total {calcularPrecioTotalCompra(params.row)}
+                </h1>
               </Detalle>
             </button>
           </div>
