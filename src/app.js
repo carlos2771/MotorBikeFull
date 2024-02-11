@@ -12,6 +12,7 @@ import rolesRoutes from "./routes/roles.routes.js";
 import roles_permisosRoutes from "./routes/roles_permisos.routes.js";
 import ventas_repuestosRoutes from "./routes/ventas_repuestos.routes.js";
 import comprasRoutes from "./routes/compras.routes.js";
+import rolRoutes from "./routes/rols.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import cartClienteRoutes from "./routes/cart_cliente.routes.js";
 import cors from 'cors';
@@ -47,6 +48,8 @@ app.use("/api", ventas_repuestosRoutes);
 app.use("/api", comprasRoutes);
 app.use("/api", cartClienteRoutes);
 app.use("/api", cartRoutes);
+app.use("/api", rolRoutes);
+
 
 app.use(express.urlencoded({extended: true}))
 app.set('view engine', 'ejs');

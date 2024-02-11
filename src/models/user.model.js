@@ -26,6 +26,15 @@ const userSchema = new mongoose.Schema({
     code: { 
         type: String 
     },
+    rol: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'rols' // Referencia al modelo de roles
+    },
+    estado:{
+        type: String,
+    }
+
+
 },{
     timestamps: true
 })

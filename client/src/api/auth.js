@@ -36,6 +36,3 @@ export const actualizarPasswordRequest = async(code, password,confirmPassword) =
     const res = await axiosClient.post(`/reestablecer-password/${code}`, {password, confirmPassword});
     return res.data
 }
-
-
-

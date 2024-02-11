@@ -29,32 +29,26 @@ export const getRol = async (req, res) => {
 
 
 // Crea un nuevo Rol
-export const createRol = async(req, res) =>{
+ export const createRol = async (req, res) => {
     try {
-        const  {nombre_rol, estado} = req.body
-
-        const rolFound = await Roles.findOne({nombre_rol})
-        if(rolFound) return res.status(400).json({message:["El nombre del rol ya existe"]});
-        
-        // para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
-        console.log(req.user) // para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
-        
-         // Crea una nueva instancia del modelo 'Rol' con los datos del rol
-        const newRol = new Roles({
-            nombre_rol, estado
-        })
-
-        // Guarda el nuevo Rol en la base de datos
-        const saveRol =  await newRol.save()
-
-        // Devuelve el Rol creado en formato JSON
-       res.json(saveRol)
+      const { nombre_rol, estado, permisos } = req.body;
+  
+      const rolFound = await Roles.findOne({ name: nombre_rol });
+      if (rolFound) return res.status(400).json({ message: ["El nombre del rol ya existe"] });
+  
+      const newRol = new Roles({
+        name: nombre_rol,
+        status: estado,
+        permissions: permisos, // Guardar permisos seleccionados
+      });
+  
+      const saveRol = await newRol.save();
+      res.json(saveRol);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-    catch(error){
-        res.status(500).json({ message: error.message });
-    }
-}
-
+  };
+  
 // Actualiza un cliente por su ID
 export const updateRol = async(req, res) =>{
     try {

@@ -66,6 +66,16 @@ export default function Navbar() {
                     </Link>
                   </Render>
                   <Render>
+                    <Link to="/rol" className="flex ms-10 p-2">
+                      <FontAwesomeIcon icon={faUsers} className="mr-2" /> Roles
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link to="/usuarios" className="flex ms-10 p-2">
+                      <FontAwesomeIcon icon={faUsers} className="mr-2" /> Usuarios
+                    </Link>
+                  </Render>
+                  <Render>
                     <Link to="/clientes" className="flex ms-10 p-2">
                       <FontAwesomeIcon icon={faUsers} className="mr-2" /> Clientes
                     </Link>
