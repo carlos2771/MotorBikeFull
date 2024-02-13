@@ -62,6 +62,7 @@ export default function FormCompra() {
   const [codigo, setCodigo] = useState("");
   const [fechaCompra, setFechaCompra] = useState("");
   const [precioTotalCompra, setPrecioTotalCompra] = useState(0);
+  const [activeRepuestos, setActiveRepuestos] = useState([]);
 
   useEffect(() => {
     try {
@@ -71,6 +72,13 @@ export default function FormCompra() {
       console.error("Error al obtener repuestos:", error);
     }
   }, []);
+
+  useEffect(() => {
+    const activeRepuestosList = repuestos.filter(
+      (repuesto) => repuesto.estado === 'Activo'
+    );
+    setActiveRepuestos(activeRepuestosList)
+  }, [repuestos]);
 
   useEffect(() => {
     setAvailableRepuestos(repuestos);
@@ -317,7 +325,7 @@ export default function FormCompra() {
                       setSelectedRepuesto(e.target.value);
                     }}
                   >
-                    {availableRepuestos.map((repuesto) => (
+                    {activeRepuestos.map((repuesto) => (
                       <option key={repuesto._id} value={repuesto._id}>
                         {repuesto.name} - {repuesto.nombre_marca}
                       </option>

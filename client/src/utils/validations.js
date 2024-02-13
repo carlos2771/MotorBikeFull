@@ -47,14 +47,22 @@ export const NombreRepuestoRequired = {
 }
 
 
-
 // VALIDACIÓN PARA VALIDAR EL NOMBRE DEL REPUESTO
 export const NombreProveedor = {
   required: "Requerido",
-  validate: (value) => /^[A-Za-z0-9\s.,()_-]{4,50}$/.test(value) || "Solo numeros y letras",
+  validate: (value) => {
+    if (!value.trim()) {
+      return "Valor incorrecto";
+    }
+    return /^[A-Za-z0-9\s.,()_-]{4,50}$/.test(value) || "Valor incorrecto";
+  },
   maxLength: { value: 50, message: "Máximo 50 caracteres" },
   minLength: { value: 4, message: "Mínimo 4 caracteres" }
-};
+}
+
+
+
+
 
 // VALIDACIÓN PARA VALIDAR LA CANTIDAD DEL REPUESTO
 export const NegativeRequired = {

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback  } from "react";
+import React, { useEffect, useCallback } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { useMarcas } from "../../context/MarcasContext";
@@ -6,12 +6,12 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMotorcycle, faDownload, faPlus, faPencil , faBan,  faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faMotorcycle, faDownload, faPlus, faPencil, faBan, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default function PageMarcas() {
-  const { marcas, getMarcas, deleteMarca,updateMarca } = useMarcas();
-  
-  
+  const { marcas, getMarcas, deleteMarca, updateMarca } = useMarcas();
+
+
   useEffect(() => {
     try {
       getMarcas();
@@ -24,7 +24,7 @@ export default function PageMarcas() {
     const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
     const text = estado === "Activo" ? "¿Estás seguro de inhabilitar la marca?" : "¿Estás seguro de habilitar la marca?";
     const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
-    
+
     Swal.fire({
       title: title,
       text: text,
@@ -58,31 +58,32 @@ export default function PageMarcas() {
           icon: "success",
           title: "Se ha modificado"
         });
-      }else {
+      } else {
         const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        }
-      });
-      Toast.fire({
-        icon: "error",
-        title: "No se ha modificado"
-      });
-    }}
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "error",
+          title: "No se ha modificado"
+        });
+      }
+    }
     );
-    
+
   };
 
   const cambiarEstado = (id, estado) => {
     const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
     updateMarca(id, { estado: nuevoEstado }).then(() => {
-        getMarcas();
+      getMarcas();
     });
   };
   const exportarAExcel = useCallback(() => {
@@ -153,7 +154,7 @@ export default function PageMarcas() {
     //   headerName: "Fecha Creacion",
     //   width: 220,
     //   headerClassName: "font-custom text-lg",
- 
+
     //   renderCell: (params) => {
     //     const date = new Date(params.value);
     //     const formattedDate = date.toLocaleDateString("es-ES", {
@@ -182,13 +183,13 @@ export default function PageMarcas() {
                 <FontAwesomeIcon icon={faPencil} />
               </Link>
             </button>
-          {/* <button
+            {/* <button
             className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
             onClick={() => mostrarAlerta(params.row._id)}
           >
             Eliminar
           </button> */}
-           <button title="Activar/Inactivar"
+            <button title="Activar/Inactivar"
               className={
                 estado === "Activo"
                   ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
@@ -198,7 +199,7 @@ export default function PageMarcas() {
             >
               {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
             </button>
-        </div>
+          </div>
         );
       },
     },
@@ -207,21 +208,21 @@ export default function PageMarcas() {
   return (
     <div className="mt-16">
       <div className="flex justify-between">
-      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faMotorcycle} className="mr-2" />Gestión de Marcas</h1>
-      <div className="mx-16 justify-end flex">
-        <Link to="/add-marca">
-        <button  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
-        <FontAwesomeIcon icon={faPlus} />
-          </button>
-        </Link>
-        <button
+        <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faMotorcycle} className="mr-2" />Gestión de Marcas</h1>
+        <div className="mx-16 justify-end flex">
+          <Link to="/add-marca">
+            <button className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
+          </Link>
+          <button
             onClick={exportarAExcel}
-            className="px-4 py-2 mx-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent" 
+            className="px-4 py-2 mx-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
             title="Descargar excel"
           >
             <FontAwesomeIcon icon={faDownload} />
           </button>
-      </div>
+        </div>
       </div>
 
       <Box sx={{ width: "100%" }}>
@@ -230,7 +231,7 @@ export default function PageMarcas() {
           rows={marcas}
           columns={columns}
           getRowId={(row) => row._id}
-         
+
           initialState={{
             pagination: {
               paginationModel: {
@@ -239,7 +240,7 @@ export default function PageMarcas() {
             },
           }}
           pageSizeOptions={[5]}
-         
+
           disableRowSelectionOnClick
           sx={{
             color: "white",
