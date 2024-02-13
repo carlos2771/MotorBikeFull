@@ -104,10 +104,10 @@ export default function PageRepuestos() {
 
   const exportarAExcel = useCallback(() => {
     const datos = repuestos.map((repuesto) => ({
-      Nombre: repuesto.nombre_repuesto,
+      Nombre: repuesto.name,
       Marca: repuesto.marca.nombre_marca,
-      Cantidad: repuesto.cantidad,
-      Precio: repuesto.precio,
+      Cantidad: repuesto.amount,
+      Precio: repuesto.price,
       Estado: repuesto.estado,
     }));
 
