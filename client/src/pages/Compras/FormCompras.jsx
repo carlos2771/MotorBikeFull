@@ -466,11 +466,14 @@ export default function FormCompra() {
                 .miTablaPersonalizada .tss-1qtl85h-MUIDataTableBodyCell-root{
                   background-color: #1e293b;
                   color: white;
+                  border-bottom-color: #2351b3;
                 }
 
                 .miTablaPersonalizada .tss-gm6zfk-MUIDataTableHeadCell-fixedHeader{
                   background-color: #1e293b;
                   color: white; 
+                  border-bottom-color: #2351b3;
+                  
                   
                   
                   
@@ -502,6 +505,10 @@ export default function FormCompra() {
                   
                   padding: 10px;
                   background-color: #1e293b; 
+                  
+                  
+                  border-bottom-color: #2351b3;
+                  
                 }
 
                 .miTablaPersonalizada .MuiToolbar-gutters{
@@ -671,7 +678,7 @@ transform: scale(0.3);
   margin-left: 20px;
   width: 90%;
   max-width: 1050px;
-  height: 800px;
+  height: 850px;
   margin-top: 2%;
   padding: 20px;
   box-sizing: border-box;
