@@ -60,7 +60,8 @@ export default function PageCompras() {
       ? "Esta compra ya ha sido anulada."
       : "¿Estás seguro de anular la compra?";
     const buttonText = anulado ? "Entendido" : "Sí";
-
+    
+   if (!anulado) {
     Swal.fire({
       title: title,
       text: text,
@@ -79,7 +80,7 @@ export default function PageCompras() {
           "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
       },
     }).then((result) => {
-      if (!anulado && result.isConfirmed) {
+      if (result.isConfirmed) {
         cambiarEstado(id, anulado);
         const Toast = Swal.mixin({
           toast: true,
@@ -114,7 +115,23 @@ export default function PageCompras() {
         });
       }
     });
-  };
+  }else {
+    // Si la compra está anulada, solo mostrar un mensaje indicando que no se puede realizar ninguna acción
+    Swal.fire({
+      title: "Acción no permitida",
+      text: "Esta compra ya ha sido anulada y no se puede modificar.",
+      icon: "info",
+      background: "#334155",
+      color: "white",
+      iconColor: "#2563eb",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-blue-600 hover:text-white hover:bg-blue-600",
+      },
+    });
+  }
+};
 
   const cambiarEstado = (id, anulado) => {
     const nuevoEstado = anulado ? "Activo" : "Inactivo";
@@ -479,6 +496,7 @@ export default function PageCompras() {
           slots={{ toolbar: GridToolbar }}
         />
       </Box>
+      
 
 
 

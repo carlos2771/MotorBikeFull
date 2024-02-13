@@ -4,15 +4,14 @@ import { Bar } from "react-chartjs-2";
 import { format, startOfDay, endOfDay } from 'date-fns';  
 import "./CharBar.css";
 import Swal from 'sweetalert2';
-import SimpleCard2 from "./SimpleCard2";
 
 ChartJS.register(BarElement, Tooltip, Legend, CategoryScale, LinearScale);
 
-export function CharBar({setTotalMostrado}) {
+export function CharBar() {
   const [ventasServicios, setVentasServicios] = useState([]);
   const [startDate, setStartDate] = useState(startOfDay(new Date()));  // Iniciar con el comienzo del día actual
   const [endDate, setEndDate] = useState(endOfDay(new Date()));  
-  // const [totalMostrado, setTotalMostrado] = useState(0);
+ 
 
   useEffect(() => {
     fetchData();
@@ -206,5 +205,3 @@ export function CharBar({setTotalMostrado}) {
     
   );
 }
-
-export default CharBar;
