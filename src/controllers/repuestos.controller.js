@@ -61,11 +61,17 @@ export const createRepuestos = async (req, res) => {
   try {
     const { name, img, inCart, price, amount, marca: marcaId, estado } = req.body;
 
+    // Normalizar el nombre del repuesto a minúsculas
+    const nombreNormalizado = name.toLowerCase();
+
     // Convierte la cantidad a un número (puedes ajustar esto según tus necesidades)
     const cantidadNumerica = parseInt(amount, 10);
 
-    // Verificar si ya existe un repuesto con el mismo nombre y misma marca
-    const repuestoExistente = await Repuesto.findOne({ name, marca: marcaId });
+    // Verificar si ya existe un repuesto con el mismo nombre (ignorando mayúsculas/minúsculas) y misma marca
+    const repuestoExistente = await Repuesto.findOne({
+      name: { $regex: new RegExp('^' + nombreNormalizado + '$', 'i') },
+      marca: marcaId
+    });
 
     if (repuestoExistente) {
       return res.status(400).json({ message: "Ya existe un repuesto con el mismo nombre y marca" });
@@ -84,7 +90,7 @@ export const createRepuestos = async (req, res) => {
     const nombreMarca = marcaEncontrada.nombre_marca;
 
     const nuevoRepuesto = new Repuesto({
-      name,
+      name: nombreNormalizado,
       img: imgBase64,
       inCart,
       marca: marcaId,
@@ -104,30 +110,33 @@ export const createRepuestos = async (req, res) => {
 };
 
 
+
 export const updateRepuestos = async (req, res) => {
   try {
-    const { name, marca: marcaId, cantidad } = req.body;
+    const { name, marca: marcaId, cantidad, estado } = req.body;
+
+    // Verificar si name está definido antes de normalizar
+    const nombreNormalizado = name ? name.toLowerCase() : '';
 
     // Convertir la cantidad a un número (puedes ajustar esto según tus necesidades)
-    const cantidadNumerica = parseInt(cantidad, 10);
+    const cantidadNumerica = cantidad;
 
-    // Verificar si ya existe un repuesto con el mismo nombre y marca
+    // Verificar si ya existe un repuesto con el mismo nombre (ignorando mayúsculas/minúsculas) y marca
     const repuestoExistente = await Repuesto.findOne({
-      name,
+      name: { $regex: new RegExp('^' + nombreNormalizado + '$', 'i') },
       marca: marcaId,
+      _id: { $ne: req.params.id } // Excluimos el repuesto actual de la búsqueda
     });
 
     if (repuestoExistente) {
       return res.status(400).json({ message: "Ya existe un repuesto con el mismo nombre y marca" });
     }
 
-    // Si no existe, realiza la actualización normal
+    // Encuentra el repuesto que se va a actualizar
     const repuestoActualizado = await Repuesto.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      {
-        new: true,
-      }
+      req.body, // Incluye el estado en los datos a actualizar
+      { new: true } // Devuelve el repuesto actualizado
     );
 
     if (!repuestoActualizado) {
@@ -136,9 +145,13 @@ export const updateRepuestos = async (req, res) => {
 
     res.json(repuestoActualizado);
   } catch (error) {
+    console.error("Error al actualizar el repuesto:", error);
     return res.status(500).json({ message: "Error al actualizar el repuesto", error });
   }
 };
+
+
+
 
 
 export const deleteRepuesto = async (req, res) => {

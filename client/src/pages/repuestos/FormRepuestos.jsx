@@ -188,8 +188,8 @@ export default function FormRepuesto() {
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             autoFocus
           />
-          {errors.nombre_repuesto && (
-            <p className="text-red-500">{errors.nombre_repuesto.message}</p>
+          {errors.name && (
+            <p className="text-red-500">{errors.name.message}</p>
           )}
           <label>
             Imagen Repuesto<span className="text-red-500">*</span>
@@ -238,8 +238,8 @@ export default function FormRepuesto() {
             {...register("amount", NegativeRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
-          {errors.cantidad && (
-            <p className="text-red-500">{errors.cantidad.message}</p>
+          {errors.amount && (
+            <p className="text-red-500">{errors.amount.message}</p>
           )}
 
           <label>
@@ -250,8 +250,8 @@ export default function FormRepuesto() {
             {...register("price", NegativeRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
-          {errors.precio && (
-            <p className="text-red-500">{errors.precio.message}</p>
+          {errors.price && (
+            <p className="text-red-500">{errors.price.message}</p>
           )}
 
           <label>Estado</label>

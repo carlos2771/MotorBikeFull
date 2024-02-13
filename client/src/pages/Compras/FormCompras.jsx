@@ -7,7 +7,7 @@ dayjs.extend(utc);
 
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRepuestos } from "../../context/RepuestosContext";
-import { NegativeRequired, RepuestoRequired, fecha, nombre_RepuestoValidacion, codeCompra, NombreMaRequired } from "../../utils/validations";
+import { NegativeRequired, RepuestoRequired, fecha, nombre_RepuestoValidacion, codeCompra, NombreMaRequired, NombreRepuestoRequired, NombreProveedor } from "../../utils/validations";
 // IMPORT DEL DATATABLE
 import MUIDataTable from "mui-datatables";
 import { faLock, faDollarSign, faBan, faDownload, faInfoCircle, faIdCard, faScrewdriverWrench, faHashtag, faShoppingBag, faPlus, faTrash, faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -167,6 +167,33 @@ export default function FormCompra() {
   ];
 
 
+  // Variable para controlar si la fecha es válida o no
+  const [isValidFecha, setIsValidFecha] = useState(true);
+
+  // Lógica para verificar si la fecha es válida
+  const validarFecha = (fecha) => {
+    const anioActual = new Date().getFullYear();
+    const anioIngresado = new Date(fecha).getFullYear();
+    return anioIngresado === anioActual;
+  };
+
+
+  // Evento de cambio en el input de fecha
+  const handleFechaChange = (e) => {
+    const fechaIngresada = e.target.value;
+    // Verificar si la fecha ingresada es válida
+    const isValid = validarFecha(fechaIngresada);
+    // Actualizar el estado isValidFecha en función de la validación
+    setIsValidFecha(isValid);
+    // También podrías realizar otras acciones necesarias aquí
+    setFechaCompra(fechaIngresada);
+  };
+
+
+
+
+
+
 
   const eliminarRepuesto = (index) => {
     const repuestoEliminado = repuestosList[index];
@@ -202,7 +229,16 @@ export default function FormCompra() {
             className="bg-slate-800 b-20 border-blue-600 text-white px-4 py-2 my-2 outline-none"
             style={{ marginRight: '10px', borderRadius: '10px', border: '1px solid #2563eb' }}
             type="date"
+            {...register("fecha", { min: `${currentYear}-01-01`, max: `${currentYear}-12-31` })}
+            onChange={handleFechaChange}
           />
+  <br />
+          {/* Mostrar mensaje de error si la fecha no es válida */}
+          {!isValidFecha && (
+            <p className="text-red-500 mb-2" style={{}}>
+              Ingresa una fecha del año actual.
+            </p>
+          )}
         </div>
 
 
@@ -221,10 +257,7 @@ export default function FormCompra() {
                     }}
                     type="text"
                     placeholder="Solo letras"
-                    {...register("proveedorCompra", {
-                      ...nombre_RepuestoValidacion,
-                      required: "Requerido",
-                    })}
+                    {...register("proveedorCompra", NombreProveedor)}
                     list="listaProveedores"
                   />
 
@@ -252,10 +285,7 @@ export default function FormCompra() {
                     style={{ width: '100%', padding: '5px' }}
                     type="text"
                     placeholder="Numeros y letras"
-                    {...register("codigo", {
-                      ...NombreMaRequired,
-                      required: "Requerido",
-                    })}
+                    {...register("codigo", NombreProveedor)}
                   />
                   {errors.codigo && (
                     <p className="text-red-500 mt-2" style={{ position: 'absolute', top: '80%', left: 0 }}>
@@ -330,7 +360,7 @@ export default function FormCompra() {
                     type="text"
                     placeholder="Numeros mayores a cero"
 
-                    {...register(`repuestos.${index}.precio_unitario`, RepuestoRequired)}
+                    {...register(`repuestos.${index}.precio_unitario`, NegativeRequired)}
                   />
 
                   {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].precio_unitario && (
@@ -359,7 +389,7 @@ export default function FormCompra() {
           ))}
 
 
-         
+
 
 
 
@@ -384,7 +414,7 @@ export default function FormCompra() {
                     cantidad: formatCurrency2(CantidadNumber),
                     precioUnitario: formatCurrency(precioUnitarioNumber), // Asignar el número convertido
                     precioTotal: formatCurrency(repuesto.precio_total),
-                    
+
                   };
                 })}
 
@@ -532,12 +562,12 @@ export default function FormCompra() {
             </div>
             <br />
 
-            <div style={{ borderBottomColor: '1px solid white', padding: '5px', backgroundColor: '#12263a', borderRadius: '10px'}}>
+            <div style={{ borderBottomColor: '1px solid white', padding: '5px', backgroundColor: '#12263a', borderRadius: '10px' }}>
 
-            <h1 style={{fontWeight: 'bold', textAlign: 'center'}}>Total Compra: <span style={{color: '#93c5fd'}}>{formatCurrency(precioTotalCompra)}</span></h1>
+              <h1 style={{ fontWeight: 'bold', textAlign: 'center' }}>Total Compra: <span style={{ color: '#93c5fd' }}>{formatCurrency(precioTotalCompra)}</span></h1>
             </div>
 
-            
+
 
           </div>
 
@@ -551,15 +581,15 @@ export default function FormCompra() {
               Guardar
             </button>
             <Link className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5" to="/compras">Cancelar</Link>
-  
+
           </div>
         </div>
 
-         {/* ESTILOS DE CSS */}
-         <style>
+        {/* ESTILOS DE CSS */}
+        <style>
 
 
-{`
+          {`
 
 input[type="date"]::-webkit-calendar-picker-indicator {
 background-color: white;
@@ -739,7 +769,7 @@ transform: scale(0.3);
 }
 `}
 
-</style>
+        </style>
 
       </form>
 

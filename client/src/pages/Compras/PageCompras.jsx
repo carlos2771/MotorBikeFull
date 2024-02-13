@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import utc from 'dayjs/plugin/utc';
 import * as XLSX from "xlsx";
-import { faLock, faBan, faDownload, faShoppingBag, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faLock, faBan, faDownload, faShoppingBag, faPlus, faDollar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import createTheme from '@mui/material/styles/createTheme';
 import MUIDataTable from "mui-datatables";
@@ -130,8 +130,8 @@ export default function PageCompras() {
     const datos = compras.map((compra) => ({
       'Nombre': compra.repuestos.map(repuesto => repuesto.repuesto.name).join(', '),
       'Cantidad': compra.repuestos.map(repuesto => repuesto.cantidad_repuesto).join(', '),
-      'precio unitario': compra.repuestos.map(repuesto => repuesto.precio_unitario).join(', '),
-      'precio total': compra.repuestos.map(repuesto => repuesto.precio_total).join(', '),
+      'Precio unitario': compra.repuestos.map(repuesto => repuesto.precio_unitario).join(', '),
+      'Precio total': compra.repuestos.map(repuesto => repuesto.precio_total).join(', '),
       'Total compra': compra.repuestos.reduce((total, repuesto) => total + repuesto.precio_total, 0),
       'Fecha de compra': dayjs.utc(compra.fecha).locale('es').format("DD [de] MMMM [de] YYYY"),
 
@@ -244,7 +244,7 @@ export default function PageCompras() {
 
 
 
-                <div style={{ maxWidth: '100%', overflowX: 'auto' }}>
+                <div style={{ maxWidth: '100%', overflowX: 'auto', marginBottom: '10px' }}>
                   <MUIDataTable
                     className="miTablaPersonalizada"
                     title={"Detalle Compras"}
@@ -390,14 +390,19 @@ export default function PageCompras() {
               }
 
                 
-                `}</style>
+                `}
+                
+                </style>
                 <table style={{ marginLeft: '1px' }}>
                   <tbody>
                     <tr>
                       <Tabla >
-                        <FontAwesomeIcon icon={faUser} /> Proveedor
+                        <FontAwesomeIcon icon={faDollar} /> Total
                       </Tabla>
                       <Tabla >
+                        <FontAwesomeIcon icon={faUser} /> Proveedor
+                      </Tabla>
+                      <Tabla>
                         <FontAwesomeIcon icon={faBarcode} /> Codigo
                       </Tabla>
                       <Tabla >
@@ -405,6 +410,9 @@ export default function PageCompras() {
                       </Tabla>
                     </tr>
                     <tr>
+                      <Tabla >
+                      {calcularPrecioTotalCompra(params.row)}
+                      </Tabla>
                       <Tabla >
                         {params.row.proveedor}
                       </Tabla>
@@ -419,9 +427,7 @@ export default function PageCompras() {
                   </tbody>
 
                 </table>
-{/* TOTAL DE LA COMPRA */}
-                <h1>Total {calcularPrecioTotalCompra(params.row)}
-                </h1>
+                
               </Detalle>
             </button>
           </div>
@@ -434,15 +440,15 @@ export default function PageCompras() {
     <div className="mt-16">
       <div className="flex justify-between">
         <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faShoppingBag} className="mr-2" />Gestión de Compras</h1>
-        <div className="mx-10 justify-end">
+        <div className="mx-16 justify-end">
           <Link to="/add-compra">
-            <button className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
+            <button className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
               <FontAwesomeIcon icon={faPlus} />
             </button>
           </Link>
           <button
             onClick={exportarAExcel}
-            className="px-4 py-2 mx-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
+            className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
             title="Descargar excel"
           >
             <FontAwesomeIcon icon={faDownload} />
