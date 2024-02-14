@@ -3,11 +3,13 @@ import { Line } from 'react-chartjs-2';
 import axios from 'axios';
 import 'chart.js/auto';
 import "./CharBar.css"; // Importa el archivo de estilos CSS
+import Swal from 'sweetalert2';
+import { startOfDay, endOfDay } from 'date-fns'; // Importar funciones de date-fns
 
 const LineChart = () => {
   const [data, setData] = useState({});
-  const [startDate, setStartDate] = useState(new Date()); // Estado para la fecha de inicio
-  const [endDate, setEndDate] = useState(new Date()); // Estado para la fecha de fin
+  const [startDate, setStartDate] = useState(startOfDay(new Date())); // Configurar la fecha inicial al comienzo del día actual
+  const [endDate, setEndDate] = useState(endOfDay(new Date())); // Configurar la fecha final al final del día actual
 
   useEffect(() => {
     fetchData();
@@ -15,6 +17,21 @@ const LineChart = () => {
 
   const fetchData = async () => {
     try {
+      if (startDate > endDate) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'La fecha de inicio no puede ser mayor que la fecha de final',
+          background: "#334155",
+          color: "white",
+          buttonsStyling: false,
+          customClass: {
+            confirmButton: "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500"
+          }
+        });
+        return;
+      }
+
       const url = 'http://localhost:3000/api/compras';
       const response = await axios.get(url, { withCredentials: true });
       console.log('Response:', response);
@@ -22,11 +39,17 @@ const LineChart = () => {
         throw new Error('No data found');
       }
 
-      const fetchedData = response.data;
-      console.log('Fetched data:', fetchedData);
+      const fetchedData = response.data.filter(compra => !compra.anulado); // Filtrar las compras que no están anuladas y que estén dentro del rango de fechas
+      const filteredData = fetchedData.filter(compra => {
+        const fechaCompra = new Date(compra.fecha);
+        return fechaCompra >= startDate && fechaCompra <= endDate;
+      });
 
+      console.log('Fetched data:', fetchedData);
+      console.log('Filtered data:', filteredData);
+  
       const totalPorMes = {};
-      fetchedData.forEach(compra => {
+      filteredData.forEach(compra => {
         const fechaCompra = new Date(compra.fecha);
         const mes = fechaCompra.toLocaleString('default', { month: 'long' });
         const dia = fechaCompra.getDate();
@@ -34,7 +57,7 @@ const LineChart = () => {
         totalPorMes[label] = (totalPorMes[label] || 0) + 1;
       });
       console.log('Total por mes:', totalPorMes);
-
+  
       if (Object.keys(totalPorMes).length === 0) {
         console.log('No hay datos para mostrar en la gráfica');
         return;
@@ -72,7 +95,7 @@ const LineChart = () => {
               className="chart-bar-date-input"
               type="date"
               value={startDate.toISOString().split('T')[0]}
-              onChange={(e) => setStartDate(new Date(e.target.value))}
+              onChange={(e) => setStartDate(startOfDay(new Date(e.target.value)))}
             />
           </div>
           <div>
@@ -81,7 +104,7 @@ const LineChart = () => {
               className="chart-bar-date-input"
               type="date"
               value={endDate.toISOString().split('T')[0]}
-              onChange={(e) => setEndDate(new Date(e.target.value))}
+              onChange={(e) => setEndDate(endOfDay(new Date(e.target.value)))}
             />
           </div>
         </div>

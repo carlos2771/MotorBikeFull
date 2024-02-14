@@ -56,19 +56,10 @@ export function CharBar() {
       const data = await response.json();
       setVentasServicios(data);
 
-      const sumasPorMecanico = sumarVentasPorMecanico();
-      const totalMostradoActualizado = Object.values(sumasPorMecanico).reduce(
-        (total, monto) => total + monto,
-        0
-      );
-
-   
-
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
 
   const sumarVentasPorMecanico = () => {
     const sumas = {};
@@ -131,18 +122,16 @@ export function CharBar() {
     return sumas;
   };
   
-  
-  
-  
   const formatDate = (date) => date.toISOString().split("T")[0];
-  
+
+  const sumasPorMecanico = sumarVentasPorMecanico();
 
   const data = {
-    labels: Object.keys(sumarVentasPorMecanico()),
+    labels: Object.keys(sumasPorMecanico),
     datasets: [
       {
         label: "Precio de los servicios",
-        data: Object.values(sumarVentasPorMecanico()),
+        data: Object.values(sumasPorMecanico),
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",
@@ -164,6 +153,7 @@ export function CharBar() {
       },
     ],
   };
+
   const options = {
     scales: {
       x: {
@@ -200,9 +190,11 @@ export function CharBar() {
           <input className="chart-bar-date-input" type="date" onChange={(e) => setEndDate(new Date(e.target.value))} />
         </div>
       </div>
-      <Bar data={data} options={options} />
+      {Object.keys(sumasPorMecanico).length === 0 ? (
+        <p>No hay datos disponibles para mostrar en la gráfica</p>
+      ) : (
+        <Bar data={data} options={options} />
+      )}
     </div>
-    
-    
   );
 }
