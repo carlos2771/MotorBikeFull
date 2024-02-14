@@ -1,0 +1,28 @@
+/* DateFilter.css */
+.date-filter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.date-label {
+    margin-bottom: 5px;
+}
+
+.date-picker {
+    margin-bottom: 10px;
+}
+
+.filter-button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.filter-button:hover {
+    background-color: #45a049;
+}
