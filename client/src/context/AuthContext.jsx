@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { registerRequest, loginRequest, verifyTokenRequest , enviarTokenRequest, validarTokenRequest, actualizarPasswordRequest, } from "../api/auth"; // Corregí "verifyTokentRequet" a "verifyTokenRequest".
 import Cookies from "js-cookie";
+import { Navigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
@@ -9,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
+  
 
   // const signup = async (user) => {
   //   try {
@@ -29,6 +31,7 @@ export const AuthProvider = ({ children }) => {
       const response = await registerRequest(user);
       console.log(response);
       setUser(response); // Actualizar el usuario con los datos recibidos
+      setLoading(false)
        // Establecer la autenticacións a true
     } catch (error) {
       console.log(error.response.data);
@@ -42,6 +45,7 @@ export const AuthProvider = ({ children }) => {
       setUser(response);
       // setUser(response.data); si tiene algun error en el login, pruebe esto
       setIsAuthenticated(true);
+      setLoading(false)
       console.log("data",response);
     } catch (error) {
       console.log(error);
@@ -51,31 +55,78 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     Cookies.remove("token");
-    setUser(null);
+    setUser(null)
     setIsAuthenticated(false);
+    
   };
 
+  // const enviarToken = async (email) => {
+  //   try {
+  //     const response = await enviarTokenRequest(email);
+  //     console.log(response);
+  //     console.log("se creo correctamente el token")
+  //     console.log("se envio correctamente el email")
+  //   } catch (error) {
+  //     console.log(error.response.data);
+  //     setErrors(error.response.data.message);
+  //   }
+  // };
+
+  // AuthContext.jsx
   const enviarToken = async (email) => {
     try {
-      const response = await enviarTokenRequest(email);
-      console.log(response);
-      console.log("se creo correctamente el token")
-      console.log("se envio correctamente el email")
+        // Lógica para enviar el token al correo electrónico (debería implementarse según tus necesidades)
+        console.log('se envio correctamente el email');
+        
+        // Lógica para verificar si el correo electrónico está registrado (debería implementarse según tus necesidades)
+        const isEmailRegistered = await enviarTokenRequest(email);
+
+        if (isEmailRegistered) {
+            console.log('se creo correctamente el token');
+            return true;  // El correo electrónico está registrado
+        } else {
+            console.log(`El correo electrónico ${email} no está registrado.`);
+            return false;  // El correo electrónico no está registrado
+        }
     } catch (error) {
-      console.log(error.response.data);
-      setErrors(error.response.data.message);
+        console.error(error);
+        return false;  // Manejo de errores, el correo electrónico no está registrado
     }
   };
+
+  // const validarToken = async (code) => {
+  //   try {
+  //     const response = await validarTokenRequest(code);
+  //     console.log(response);
+  //     console.log();
+  //   } catch (error) {
+  //     console.log(error.response.data);
+  //     setErrors(error.response.data.message);
+  //   }
+  // };
+
   const validarToken = async (code) => {
     try {
+      // Hacer la solicitud para validar el token
       const response = await validarTokenRequest(code);
-      console.log(response);
-      console.log();
+  
+      // Verificar si la respuesta indica que el código es válido
+      // const isValidCode = response && response.status === 200 && response.data && response.data.valid;
+  
+      if (response) {
+        console.log('El código es válido.');
+        return true;
+      } else {
+        console.log('El código no es válido.');
+        return false;
+      }
     } catch (error) {
-      console.log(error.response.data);
-      setErrors(error.response.data.message);
+      console.error(error);
+      setErrors(error.response?.data?.message || 'Error al validar el código.');
+      return false;
     }
   };
+  
   const actualizarPassword = async (code,  password, confirmPassword ) => {
     try {
       console.log("Código:", code);
@@ -103,21 +154,21 @@ export const AuthProvider = ({ children }) => {
       console.log('entro');
       const cookies = Cookies.get();
 
-      if (!cookies.token) {
-        setIsAuthenticated(false);
+      if (cookies.token) {
         setLoading(false);
+        setIsAuthenticated(true);
         return;
       }
       try {
         const res = await verifyTokenRequest(cookies.token); 
-        if (!res.data) return setIsAuthenticated(false);
-        setIsAuthenticated(true);
+        if (res.data) return setIsAuthenticated(true);
+        setIsAuthenticated(false);
         setUser(res.data);
-        setLoading(false);
+        
       } catch (error) {
         console.log(error);
         setIsAuthenticated(false);
-        setLoading(false);
+        setLoading(true);
       }
     };
 

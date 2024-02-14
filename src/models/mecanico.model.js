@@ -22,6 +22,7 @@ const mecanicoSchema = new mongoose.Schema({
     direccion_mecanico:{
         type: String,  //Tipo String
         required: true, //Es requerido
+        trim: true,
         
     },
     estado:{

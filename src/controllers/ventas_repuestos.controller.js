@@ -4,7 +4,7 @@ import Cliente from "../models/cliente.model.js";
 
 export const getVentas_Repuestos = async (req, res) => {
   try {
-    const ventas_repuestos = await Ventas_Repuestos.find().populate({ path: 'cliente', select: 'nombre_cliente' }) .populate({ path: 'repuesto', select: 'nombre_repuesto' });
+    const ventas_repuestos = await Ventas_Repuestos.find().populate({ path: 'cliente', select: 'nombre_cliente' }) .populate({ path: 'repuestos.repuesto', select: 'nombre_repuesto' });
     if (!ventas_repuestos) {
       return res.status(404).json({ message: "Venta_Repuestos no encontrados" });
     }
@@ -28,52 +28,56 @@ export const getVenta_Repuesto = async (req, res) => {
 
 export const createVentas_Repuestos = async (req, res) => {
   try {
-    const {
-      repuesto: repuestoId,
-      cantidad_repuesto,
-      precio_unitario,
-      precio_total,
-      cliente: clienteId,
-      estado
-    } = req.body;
-
+    const { repuestos, cliente: clienteId, precio_total } = req.body;
+    console.log("Request Body (backend):", req.body);
     // Verifica si el cliente existe
     const clienteEncontrado = await Cliente.findById(clienteId);
     if (!clienteEncontrado) {
-      return res.status(404).json({ message: "Cliente no encontrado" });
+      return res.status(404).json({ message: ["Cliente no encontrado"] });
     }
-    const repuestoEncontrado = await Repuesto.findById(repuestoId);
-    if (!repuestoEncontrado) {
-      return res.status(404).json({ message: "Repuesto no encontrado" });
-    }
-    // Obtiene la cantidad actual del repuesto
-    const cantidadActualRepuesto = repuestoEncontrado.cantidad;
-  
-    // Verifica si hay suficiente cantidad disponible del repuesto
-    if (cantidadActualRepuesto < cantidad_repuesto) {
-      return res.status(400).json({ message: ["Cantidad insuficiente del repuesto"] });
+    const camposFaltantes = [];
+    if (!repuestos) camposFaltantes.push("repuestos");
+    if (!clienteId) camposFaltantes.push("cliente");
+    if (!precio_total) camposFaltantes.push("precio_total");
+
+    if (camposFaltantes.length > 0) {
+      const mensajeError = `Los siguientes campos son obligatorios: ${camposFaltantes.join(", ")}`;
+      return res.status(400).json({ message: [mensajeError] });
     }
 
-    // Resta la cantidad vendida de la cantidad actual del repuesto
-    const cantidadRestanteRepuesto = cantidadActualRepuesto - cantidad_repuesto;
-    await Repuesto.findByIdAndUpdate(repuestoId, { cantidad: cantidadRestanteRepuesto });
+    console.log("precio_total:", precio_total);
+    // Realiza las validaciones y actualizaciones para cada repuesto en la lista
+    for (const repuestoData of repuestos) {
+      const repuestoEncontrado = await Repuesto.findById(repuestoData.repuesto);
+      if (!repuestoEncontrado) {
+        return res.status(404).json({ message: ["Repuesto no encontrado"] });
+      }
 
-    // Crea una nueva venta de servicio asociada al cliente
-    const nuevaVentaRepuesto = new Ventas_Repuestos({
-      repuesto: repuestoId,
-      cantidad_repuesto,
-      precio_unitario,
-      precio_total,
+      const cantidadActualRepuesto = repuestoEncontrado.cantidad;
+      const cantidadVender = repuestoData.cantidad_vender;
+
+      if (cantidadActualRepuesto < cantidadVender) {
+        return res.status(400).json({ message: ["Cantidad insuficiente del repuesto"] });
+      }
+
+      const cantidadRestanteRepuesto = cantidadActualRepuesto - cantidadVender;
+      await Repuesto.findByIdAndUpdate(repuestoData.repuesto, { cantidad: cantidadRestanteRepuesto });
+    }
+    
+    // Crea la venta de repuestos asociada al cliente
+    const nuevaVentaRepuestos = new Ventas_Repuestos({
+      repuestos,
       cliente: clienteId,
-      estado
+      precio_total
     });
 
-    // Guarda la venta de servicio en la base de datos
-    const ventaRepuestoGuardada = await nuevaVentaRepuesto.save();
+    // Guarda la venta de repuestos en la base de datos
+    const ventaRepuestosGuardada = await nuevaVentaRepuestos.save();
 
-    res.status(201).json(ventaRepuestoGuardada);
+    res.status(201).json(ventaRepuestosGuardada);
   } catch (error) {
-    return res.status(500).json({ message: "Error al crear la venta de repuesto", error });
+    console.error(error);
+    return res.status(500).json({ message: ["Error al crear la venta de repuestos"], error });
   }
 };
 

@@ -38,14 +38,20 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.4",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.7",
     "react-datepicker": "^4.23.0",
+    "react-number-format": "^5.3.1",
     "styled-components": "^6.1.0",
     "sweetalert2": "^11.6.13",
     "xlsx": "^0.18.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "sharp": "^0.33.2",
+    "body-parser": "^1.20.2",
+    "multer": "^1.4.5-lts.1",
+    "fs": "^0.0.1-security"
   }
 }

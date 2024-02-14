@@ -67,7 +67,7 @@ export const createMecanico = async(req, res) =>{
 export const getMecanicos = async(req, res) =>{
     try {
         // Consulta todos los mecanicos en la base de datos
-        const mecanicos = await Mecanico.find()
+        const mecanicos = await Mecanico.find().sort({createdAt : 'desc'})
 
         // Si no se encuentran los mecanicos, devuelve un código de estado 404 y un mensaje de error
         if(!mecanicos){
@@ -101,7 +101,7 @@ export const createMecanico = async(req, res) =>{
         const  { nombre_mecanico, cedula_mecanico, telefono_mecanico, direccion_mecanico, estado, tipo} = req.body
 
         const cedulaFound = await Mecanico.findOne({cedula_mecanico})
-        if(cedulaFound) return res.status(400).json({message:["cedula de mecanico ya existe"]});
+        if(cedulaFound) return res.status(400).json({message:["El documento del mecanico ya existe"]});
         
         // para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
         console.log(req.user) 

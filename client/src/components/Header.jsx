@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import {  useNavigate,useLocation } from "react-router-dom";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -16,11 +16,33 @@ export default function Header() {
   const [activeLink, setActiveLink] = useState(null);
   const location = useLocation();
 
+  const navigate = useNavigate();
   // Actualizar el enlace activo cuando cambia la ubicación
+
   useEffect(() => {
+    const allowedPaths = ["/login", "/", "/register", "/reestablecer", "/reestablecer-password/:code", "/restablecer-password/:code"];
+  
+    if (!allowedPaths.some(path => location.pathname.startsWith(path))) {
+      navigate("/login");
+    }
+  
     const currentPath = location.pathname;
     setActiveLink(currentPath);
+    console.log("link", location);
   }, [location]);
+  
+
+  // useEffect(() => {
+  //   if(location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/register" && location.pathname !== "/reestablecer" ) {                 
+  //     navigate("/login");
+  //   }
+    
+  //   const currentPath = location.pathname;
+  //   setActiveLink(currentPath);
+  //   console.log("link",location);
+  // }, [location]);
+  
+  
 
   return (
     <Disclosure as="nav" className="bg-slate-700 fixed top-0 left-0 right-0 shadow-md z-20" >

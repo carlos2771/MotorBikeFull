@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback} from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { useClientes } from "../../context/ClientContext";
@@ -6,8 +6,9 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faIdCard, faUsers, faUser, faPhone, faPlus, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faIdCard, faUsers, faUser, faPhone, faPlus, faPencil , faBan, faMars, faCheck, faInfoCircle, faAddressCard, faCircleInfo, faDownload} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
+import * as XLSX from "xlsx";
 
 export default function PageClientes() {
   const { clientes, getClientes, deleteCliente, updateCliente, getCliente } =
@@ -20,6 +21,7 @@ export default function PageClientes() {
       console.error("Error al obtener clientes:", error);
     }
   }, []);
+  
   useEffect(() => {
     try {
       getCliente(id);
@@ -100,18 +102,59 @@ export default function PageClientes() {
     });
   };
 
+  const exportarAExcel = useCallback(() => {
+    const datos = clientes.map((cliente) => ({
+      Tipo : cliente.tipo,
+      Cedula: cliente.cedula,
+      Nombre: cliente.nombre_cliente,
+      Genero: cliente.sexo,
+      Email: cliente.email_cliente,
+      Telefono: cliente.telefono_cliente,
+      Estado: cliente.estado,
+    }));
 
+    const ws = XLSX.utils.json_to_sheet(datos);
+
+    // Agregar formato a los títulos (encabezados) y establecer autoFilter
+    ws["!cols"] = [{ wch: 15 }, { wch: 20 }, { wch: 15 }, { wch: 30 }, { wch: 15 }];
+    ws["!rows"] = [{ hpx: 20, outlineLevel: 0, hidden: false }];
+
+    // Establecer el formato de fondo y negrita para los títulos
+    for (let i = 0; i < 5; i++) {
+      const col = String.fromCharCode(65 + i); // Convertir número a letra (A, B, C, ...)
+      ws[`${col}1`].s = { font: { bold: true }, fill: { patternType: "solid", fgColor: { rgb: "#66FFCC" } } };
+    }
+
+    // Agregar formato a las celdas de datos y bordes
+    for (let i = 2; i <= clientes.length + 1; i++) {
+      for (let j = 0; j < 5; j++) {
+        const col = String.fromCharCode(65 + j);
+        const cell = `${col}${i}`;
+        ws[cell].s = {
+          fill: { patternType: "solid", fgColor: { rgb: "#FFFFFF" } },
+          border: { left: { style: "thin", color: { rgb: "#000000" } }, right: { style: "thin", color: { rgb: "#000000" } }, top: { style: "thin", color: { rgb: "#000000" } }, bottom: { style: "thin", color: { rgb: "#000000" } } },
+        };
+      }
+    }
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Clientes");
+    XLSX.writeFile(wb, "clientes.xlsx");
+
+  }, [clientes]);
 
   const columns = [
     {
       field: "cedula",
-      headerName: "Cedula",
+      headerName: "Documento",
       width: 180,
+      headerClassName: "font-custom text-lg"
     },
     {
       field: "nombre_cliente",
-      headerName: "Nombre",
+      headerName: "Nombre Completo",
       width: 200,
+      headerClassName: "font-custom text-lg"
     },
     // {
     //   field: "sexo",
@@ -125,13 +168,15 @@ export default function PageClientes() {
     // },
     {
       field: "telefono_cliente",
-      headerName: "Telefono",
+      headerName: "Teléfono",
       width: 190,
+      headerClassName: "font-custom text-lg"
     },
     {
       field: "estado",
       headerName: "Estado",
       width: 100,
+      headerClassName: "font-custom text-lg"
     },
     // {
     //   field: "createdAt",
@@ -152,6 +197,7 @@ export default function PageClientes() {
       field: "acciones",
       headerName: "Acciones",
       width: 200,
+      headerClassName: "font-custom text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("estado", estado);
@@ -195,7 +241,7 @@ export default function PageClientes() {
                         Detalles del Cliente
                     </Titulo>
                     <tr>
-                      <Tabla >
+                      <Tabla>
                         <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
                         Tipo Documento
                       </Tabla>
@@ -209,7 +255,7 @@ export default function PageClientes() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
-                        Cedula
+                        Documento
                       </Tabla>
                       <Tabla >
                       {
@@ -220,7 +266,7 @@ export default function PageClientes() {
                     </tr>
                     <tr>
                       <Tabla >
-                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                        <FontAwesomeIcon icon={faUser} className="mr-2" />
                         Nombre
                       </Tabla>
                       <Tabla >
@@ -233,7 +279,7 @@ export default function PageClientes() {
                     </tr>
                     <tr>
                       <Tabla >
-                        <FontAwesomeIcon icon={faUser} className="mr-2" />
+                        <FontAwesomeIcon icon={faMars} className="mr-2" />
                         Sexo
                       </Tabla>
                       <Tabla >
@@ -285,12 +331,17 @@ export default function PageClientes() {
     <div className="mt-16">
       <div className="flex justify-between">
       <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faUsers} className="mr-2" />Gestión de Clientes</h1>
-      <div className="mx-10 justify-end">
+      <div className="mx-16 justify-end">
         <Link to="/add-cliente">
-        <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
+        <button  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
         <FontAwesomeIcon icon={faPlus} />
           </button>
         </Link>
+        <button
+          onClick={exportarAExcel}
+          className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent" title="Descargar excel"
+        ><FontAwesomeIcon icon={faDownload} />
+        </button>
       </div>
       </div>
       
@@ -313,7 +364,7 @@ export default function PageClientes() {
           sx={{
             color: "white",
             "& .MuiDataGrid-cell": {
-              fontSize: "18px",
+              fontSize: "15px",
             },
           }}
           slots={{ toolbar: GridToolbar }}

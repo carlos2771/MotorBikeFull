@@ -21,11 +21,11 @@ export const useCompras = () => {
 export function CompraProvider({ children }) {
   const [compras, setCompras] = useState([]);
   const [errors, setErrors] = useState([]);
+  const [proveedores, setProveedores] = useState([]);
 
   const getCompras = async () => {
     try {
       const res = await getComprasRequest();
-      console.log(res);
       setCompras(res);
     } catch (error) {
       console.error(error);
@@ -34,8 +34,7 @@ export function CompraProvider({ children }) {
 
   const createCompra = async (compra) => {
     try {
-      return  await createComprasRequest(compra);
-      // console.log("ventas:", response);
+      return await createComprasRequest(compra);
     } catch (error) {
       setErrors(error.response.data.message);
       console.log(error);
@@ -59,11 +58,10 @@ export function CompraProvider({ children }) {
       setErrors(error.response.data.message);
     }
   };
-  
+
   const deleteCompra = async (id) => {
     try {
       const res = await deleteComprasRequest(id);
-      console.log(res);
       if (res.status === 204) {
         setCompras(compras.filter((compra) => compra._id !== id));
       }
@@ -81,11 +79,25 @@ export function CompraProvider({ children }) {
     }
   }, [errors]);
 
+  useEffect(() => {
+    const fetchProveedores = async () => {
+      try {
+        const proveedoresData = await getProveedores();
+        setProveedores(proveedoresData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProveedores();
+  }, []);
+
   return (
     <CompraContext.Provider
       value={{
         compras,
         errors,
+        proveedores,
         getCompras,
         createCompra,
         getCompra,

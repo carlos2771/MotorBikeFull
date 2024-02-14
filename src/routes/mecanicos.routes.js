@@ -20,7 +20,7 @@ router.delete("/mecanico/:id", authRequired, deleteMecanico)
 router.put("/mecanico/:id", authRequired, validateSchema(mecanicoSchema), updateMecanico) 
 =======
 router.get("/mecanicos/:id", authRequired, getMecanico) 
-router.post("/mecanicos", authRequired, validateSchema(mecanicoSchema) ,createMecanico) 
+router.post("/mecanicos", authRequired,createMecanico) 
 router.delete("/mecanicos/:id", authRequired, deleteMecanico) 
 router.put("/mecanicos/:id", authRequired, updateMecanico) 
 >>>>>>> 60306eb967723c91bfbcf96a43887b3680169091

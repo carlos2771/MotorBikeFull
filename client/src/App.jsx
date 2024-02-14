@@ -59,6 +59,14 @@ import ActualizarPassword from "./pages/ActualizarPassword";
 import ValidarCodePage from "./pages/ValidarCodePage";
 >>>>>>> 60306eb967723c91bfbcf96a43887b3680169091
 
+import Home from "./components/Home"
+import { CartProvider } from "./context/CartContext";
+
+import { CartClienteProvider } from "./context/CartClienteContext";
+import PageCartClient from "./pages/cartClient/PageCartClient";
+
+
+
 export default function App() {
 
   return (
@@ -66,6 +74,7 @@ export default function App() {
       <AuthProvider>
         {/* Para validar las rutas de las tareas */}
 
+      
         <TaskProvider>
           <ClienteProvider>
             <VentasRepuestoProvider>
@@ -119,9 +128,13 @@ export default function App() {
                       <MecanicoProvider>
                         <MarcaProvider>
                           <CompraProvider>
+                            <CartProvider>
+                              <CartClienteProvider>
+
+                              
                            {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
                             <BrowserRouter>
-                              <main className='min-h-screen bg-gradient-to-tr from-[#1E293B] via-[#0f172a] to-[#1E293B] px-8 md:px-14 lg:px-36 pb-10 pt-7'>  
+                              <main className='min-h-screen bg-gradient-to-tr from-[#1E293B] via-[#0f172a] to-[#1E293B] px-8 md:px-14 lg:px-36 pb-10 pt-7 '>  
                                 <Navbar/>
                                 <Routes>
                                   <Route path="/" element={<HomePage />} />
@@ -136,7 +149,10 @@ export default function App() {
                                     <Route path="/tasks" element={<TaskPaje />} />
                                     <Route path="/add-task" element={<TaskFormPage />} />
                                     <Route path="/tasks/:id" element={<TaskFormPage />} />
+                                    <Route path="/home" element={<Home/>} />
+                                    <Route path="/home-page" element={<PageCartClient/>} />
                                     
+                                   
                                     <Route path="/profile" element={<ProfilePage />} />
                                     <Route path="/clientes" element={<PageClientes />} />
                                     <Route path="/add-cliente" element={<FormCliente />} />
@@ -183,6 +199,8 @@ export default function App() {
                                 </Routes>
                               </main>
                             </BrowserRouter>
+                            </CartClienteProvider>
+                            </CartProvider>
                           </CompraProvider>
                         </MarcaProvider>
                       </MecanicoProvider>
@@ -194,6 +212,7 @@ export default function App() {
             </VentasRepuestoProvider>
           </ClienteProvider>
         </TaskProvider>
+  
       </AuthProvider>
     </div>
   );

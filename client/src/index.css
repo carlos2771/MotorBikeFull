@@ -14,14 +14,15 @@ body{
 }
 
 .MuiDataGrid-columnHeaders {
-  background-color: #00aeff9b !important;
+  background-color: #003cffab !important;
   }
 
 .MuiDataGrid-toolbarContainer{
-  background-color: #00aeff9b !important;
+  background-color: #003cffab !important;
   border-bottom: 1px solid white !important;
 }
 
 .MuiDataGrid-toolbarContainer button{
   color: white !important;
 }
+

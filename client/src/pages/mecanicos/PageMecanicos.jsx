@@ -103,7 +103,7 @@ export default function PageMecanico() {
 =======
   const mostrarAlerta = (id, estado) => {
     const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
-    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar el cliente?" : "¿Estás seguro de habilitar el cliente?";
+    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar el mecánico?" : "¿Estás seguro de habilitar el mecánico?";
     const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
 
     Swal.fire({
@@ -169,7 +169,6 @@ export default function PageMecanico() {
 
   const exportarAExcel = useCallback(() => {
     const datos = mecanicos.map((mecanico) => ({
-      Tipo_Documento: mecanico.tipo,
       Cedula: mecanico.cedula_mecanico,
       Nombre: mecanico.nombre_mecanico,
       Telefono: mecanico.telefono_mecanico,
@@ -216,68 +215,32 @@ export default function PageMecanico() {
     },
     {
         field: "cedula_mecanico",
-        headerName: "Cédula",
+        headerName: "Documento",
         width: 200,
         headerClassName: "font-custom text-lg",
     },
     {
       field: "nombre_mecanico",
-      headerName: "Nombre",
-      width: 190,
+      headerName: "Nombre Completo",
+      width: 250,
       headerClassName: "font-bold text-lg"
 
     },
-    // {
-    //   field: "telefono_mecanico",
-    //   headerName: "Telefono",
-    //   width: 200,
-    //   headerClassName: "font-bold text-lg"
-     
-    // },
-    // {
-    //   field: "direccion_mecanico",
-    //   headerName: "Direccion",
-    //   width: 200,
-    //   headerClassName: "font-bold text-lg"
-     
-    // },
-    // {
-    //   field: "estado",
-    //   headerName: "Estado",
-    //   width: 100,
-    //   headerClassName: "font-bold text-lg"
-
-    // },
-    // {
-    //   field: "createdAt",
-    //   headerName: "Fecha Creacion",
-    //   width: 240,
-    //   headerClassName: "font-bold text-lg",
- 
-    //   renderCell: (params) => {
-    //     const date = new Date(params.value);
-    //     const formattedDate = date.toLocaleDateString("es-ES", {
-    //       year: "numeric",
-    //       month: "long",
-    //       day: "numeric",
-    //     });
-    //     return <div>{formattedDate}</div>;
-    //   },
-    // },
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 300,
+      width: 250,
       headerClassName: "font-bold text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("Estado", estado);
         return (
           <div>
-            <button className={estado === "Activo" ? "" : "hidden"}>
+            <button className={estado === "Activo" ? "" : "hidden"} title="Editar">
               <Link
                 className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
                 to={`/mecanico/${params.row._id}`}
+                
               >
                 <FontAwesomeIcon icon={faPencil} />
               </Link>
@@ -288,7 +251,7 @@ export default function PageMecanico() {
           >
             Eliminar
           </button> */}
-           <button
+           <button title="Activar/Inactivar"
               className={
                 estado === "Activo"
                   ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
@@ -298,7 +261,7 @@ export default function PageMecanico() {
             >
               {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
             </button>
-            <button className={estado === "Activo" ? "" : "hidden"}>
+            <button className={estado === "Activo" ? "" : "hidden"} title="Ver detalle">
               <Detalle
                 metodo={() => getMecanicos(params.row._id)}
                 id={params.row._id}
@@ -326,7 +289,7 @@ export default function PageMecanico() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faIdCard} className="mr-2" />
-                        Cedula
+                        Documento
                       </Tabla>
                       <Tabla >
                         {
@@ -339,7 +302,7 @@ export default function PageMecanico() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faUser} className="mr-2" />
-                        Nombre
+                        Nombre Completo
                       </Tabla>
                       <Tabla >
                       {
@@ -351,7 +314,7 @@ export default function PageMecanico() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faPhone} className="mr-2" />
-                        Telefono
+                        Teléfono
                       </Tabla>
                       <Tabla >
                       {
@@ -363,7 +326,7 @@ export default function PageMecanico() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faHome} className="mr-2" />
-                        Direccion
+                        Dirección
                       </Tabla>
                       <Tabla >
                       {
@@ -415,7 +378,7 @@ export default function PageMecanico() {
     <div className="mt-16">
       <div className="flex justify-between">
       <h1 className="text-2xl mx-auto ml-16 font-custom"> <FontAwesomeIcon icon="wrench" className="mr-2" />Gestión de Mecánicos</h1>
-      <div className="mx-20 ml-2 justify-end flex">
+      <div className="mx-16 justify-end flex">
         <Link to="/add-mecanico">
           <button  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
           <FontAwesomeIcon icon={faPlus} />

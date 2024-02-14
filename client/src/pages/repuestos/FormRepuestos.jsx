@@ -3,8 +3,13 @@ import { useRepuestos } from "../../context/RepuestosContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMarcas } from "../../context/MarcasContext";
-import { NegativeRequired, NombreRequired, RepuestoRequired } from "../../utils/validations";
-
+import {
+  NegativeRequired,
+  NombreRequired,
+  RepuestoRequired,
+  NombreRepuestoRequired,
+} from "../../utils/validations";
+import Swal from "sweetalert2";
 
 export default function FormRepuesto() {
   const {
@@ -23,20 +28,8 @@ export default function FormRepuesto() {
   const navigate = useNavigate();
   const params = useParams();
   const [selectedMarca, setSelectedMarca] = useState();
-
-  useEffect(() => {
-    (async () => {
-      if (params.id) {
-        const repuesto = await getRepuesto(params.id);
-        setValue("nombre_repuesto", repuesto.nombre_repuesto);
-        setValue("marca", repuesto.marca);
-        setSelectedMarca(repuesto.marca);
-        setValue("cantidad", repuesto.cantidad);
-        setValue("precio", repuesto.precio);
-
-      }
-    })();
-  }, []);
+  const [activeMarcas, setActiveMarcas] = useState([]);
+  const [imageBase64, setImageBase64] = useState("");
 
   useEffect(() => {
     try {
@@ -47,142 +40,249 @@ export default function FormRepuesto() {
   }, []);
 
   useEffect(() => {
+    const activeMarcasList = marcas.filter(
+      (marca) => marca.estado === "Activo"
+    );
+    setActiveMarcas(activeMarcasList);
+  }, [marcas]);
+
+  useEffect(() => {
+    (async () => {
+      if (params.id) {
+        const repuesto = await getRepuesto(params.id);
+        setValue("name", repuesto.name);
+        setValue("img", repuesto.img);
+        setValue("amount", repuesto.amount);
+        setValue("marca", repuesto.marca);
+        setSelectedMarca(repuesto.marca);
+        setValue(repuesto.nombre_marca);
+        setValue("price", repuesto.price);
+        // setValue("InCart", repuesto.InCart);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
     if (selectedMarca) {
       const selectedMarcaData = marcas.find(
         (marca) => marca._id === selectedMarca
       );
       if (selectedMarcaData) {
-        // setValue("precio_unitario", selectedRepuestoData.precio);
         setValue("nombre_marca", selectedMarca.nombre_marca);
       }
     }
   }, [selectedMarca]);
 
-  const onSubmit = handleSubmit(async (data) => {
-
-
-    if (params.id) {
-      const res = updateRepuesto(params.id, data);
-      if (res) navigate("/repuestos")
-    } else {
-      const res = await createRepuesto(data);
-      if (res) navigate("/repuestos")
-
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageBase64(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
+  };
 
+  const onSubmit = handleSubmit(async (data) => {
+    data.img = imageBase64;
+    console.log("datos aness", data);
+    console.log("img", data.img);
+    if (params.id) {
+      const res = await updateRepuesto(params.id, data);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Actualizado correctamente",
+      });
+      if (res) navigate("/repuestos");
+      else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "Ya tienes un repuesto similar",
+        });
+      }
+
+    } else {
+      console.log("como se ven los datos", data);
+      const res = await createRepuesto(data);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Agregado correctamente",
+      });
+      if (res) navigate("/repuestos");
+      else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "Ya tienes un repuesto similar",
+        });
+      }
+    }
   });
 
   console.log(repuestosErrors);
 
-
-
   return (
     <div className="flex items-center justify-center pt-20">
       <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
-        {repuestosErrors.map((error, i) => (
+        {Array.isArray(repuestosErrors) && repuestosErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
         ))}
 
 
-        <h1 className="text-2xl flex justify-center ">Agregar repuesto</h1>
-        <form className="mt-10" onSubmit={onSubmit}>
 
-
-
-          <label>Nombre Repuesto<span className="text-red-500">*</span></label>
+        <h1 className="text-2xl flex justify-center ">Agregar Repuesto</h1>
+        <form className="mt-10" onSubmit={onSubmit} >
+          <label>
+            Nombre Repuesto<span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
-            placeholder='Nombre'
-            {...register("nombre_repuesto", NombreRequired)}
-            className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
+            placeholder="Nombre"
+            {...register("name", NombreRepuestoRequired)}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             autoFocus
           />
-          {errors.nombre_repuesto && <p className="text-red-500">{errors.nombre_repuesto.message}</p>}
+          {errors.name && (
+            <p className="text-red-500">{errors.name.message}</p>
+          )}
+          <label>
+            Imagen Repuesto<span className="text-red-500">*</span>
+          </label>
+          <input
+            type="file"
+            onChange={handleImageChange}
 
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+            autoFocus
+          />
+          {errors.img && <p className="text-red-500">{errors.img.message}</p>}
+          {imageBase64 && (
+            <img
+              src={imageBase64}
+              alt="Preview"
+              style={{ width: "40%", marginTop: "10px" }}
+            />
+          )}
 
-          <label>Marca<span className="text-red-500">*</span></label>
+          <label>
+            Marca<span className="text-red-500">*</span>
+          </label>
           <select
             {...register("marca", RepuestoRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-            onChange={(e) => selectedMarca(e.target.value)}
+            onChange={(e) => setSelectedMarca(e.target.value)}
           >
             <option value="">Selecciona una marca</option>
-            {marcas.map((marca) => (
+            {activeMarcas.map((marca) => (
               <option key={marca._id} value={marca._id}>
                 {marca.nombre_marca}
               </option>
             ))}
           </select>
-          {errors.marca && <p className="text-red-500">{errors.marca.message}</p>}
+          {errors.marca && (
+            <p className="text-red-500">{errors.marca.message}</p>
+          )}
 
-
-          <label>Cantidad<span className="text-red-500">*</span></label>
+          <label>
+            Cantidad<span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
-            placeholder='Cantidad'
-            {...register("cantidad", NegativeRequired)}
-            className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
-            
-          />
-          {errors.cantidad && <p className="text-red-500">{errors.cantidad.message}</p>}
-
-
-          <label>Precio del repuesto<span className="text-red-500">*</span></label>
-          <input
-            placeholder="precio"
-            {...register("precio", NegativeRequired)}
+            placeholder="Cantidad"
+            {...register("amount", NegativeRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           />
-          {errors.precio && <p className="text-red-500">{errors.precio.message}</p>}
+          {errors.amount && (
+            <p className="text-red-500">{errors.amount.message}</p>
+          )}
 
+          <label>
+            Precio del repuesto<span className="text-red-500">*</span>
+          </label>
+          <input
+            placeholder="precio"
+            {...register("price", NegativeRequired)}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+          />
+          {errors.price && (
+            <p className="text-red-500">{errors.price.message}</p>
+          )}
 
-
-            {/* ESTADO DEL REPUESTO */}
-          <label >Estado</label>
+          <label>Estado</label>
           <select
             {...register("estado")}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
-            <option value={"Activo"} >
-              Activo
-            </option>
-            <option value={"Inactivo"} >
-              Inactivo
-            </option>
-
+            <option value={"Activo"}>Activo</option>
+            <option value={"Inactivo"}>Inactivo</option>
           </select>
-
-
-
-
-          {/* <label>Precio total</label> */}
           {/* <input
-            placeholder="Precio Total"
-            {...register("precio_total")}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-          /> */}
+            {...register("InCart")}
+            value={false}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2 hidden"
+          >
+            
+          </input> */}
 
-
-          {/* <label >Estado</label>
-          <select
-        {...register("estado")}
-        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-        >
-          <option value={"Activo"} >
-            Activo
-          </option>
-          <option value={"Inactivo"} >
-            Inactivo
-          </option>
-
-        </select> */}
-          <button className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d" type="submit">
+          <button
+            className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d"
+            type="submit"
+          >
             Guardar
           </button>
           <button>
-            <Link className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  " to="/repuestos">Cancelar</Link>
+            <Link
+              className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  "
+              to="/repuestos"
+            >
+              Cancelar
+            </Link>
           </button>
         </form>
       </div>
