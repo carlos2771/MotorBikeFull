@@ -1,0 +1,28 @@
+/*clases de tailwind*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  background-color: #1E293B;
+  color: white;
+  
+}
+.custom-header {
+  font-size: 19px; /* Tamaño de fuente personalizado */
+  font-weight: bold; /* Otras propiedades de estilo según sea necesario */
+}
+
+.MuiDataGrid-columnHeaders {
+  background-color: #003cffab !important;
+  }
+
+.MuiDataGrid-toolbarContainer{
+  background-color: #003cffab !important;
+  border-bottom: 1px solid white !important;
+}
+
+.MuiDataGrid-toolbarContainer button{
+  color: white !important;
+}
+
