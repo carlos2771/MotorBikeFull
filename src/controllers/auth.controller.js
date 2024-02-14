@@ -257,21 +257,12 @@ export const login = async (req, res) => {
       username: userFound.username,
     }); // del usuario encontrado creeme un token con el id del usuario encontrado
 
-<<<<<<< HEAD
-    // tokent frontend y backend
-    // res.cookie("token", token, {
-    //   httpOnly: process.env.NODE_ENV !== "development",
-    //   secure: true,
-    //   sameSite: "none",
-    // });
-=======
     //tokent frontend y backend
     res.cookie("token", token, {
       httpOnly: process.env.NODE_ENV !== "development",
       secure: true,
       sameSite: "none",
     });
->>>>>>> 60306eb967723c91bfbcf96a43887b3680169091
     res.cookie("token", token)
     res.json({
       // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use
