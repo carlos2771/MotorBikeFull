@@ -275,8 +275,8 @@ const cambiarEstado = (id, anulado) => {
     <div className="mt-16 ">
       <div className="flex justify-between">
         <h1 className="text-2xl text-start ml-16">
-          <FontAwesomeIcon icon={faTools} className="mr-2" />
-          Gestión de Repuestos
+          <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
+          Gestión de Ventas Repuestos
         </h1>
         <div className="mx-16 justify-end">
           <Link to="/home">
