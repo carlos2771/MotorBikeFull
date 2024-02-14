@@ -101,7 +101,7 @@ export default function FormUsuarios() {
           <label>Nombre de Usuario<span className="text-red-500">*</span></label>
           <input
             type="text"
-            placeholder='username'
+            placeholder='Nombre de usuario'
             {...register("username")}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
             autoFocus
@@ -113,7 +113,7 @@ export default function FormUsuarios() {
             placeholder='email'
             {...register("email")}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
-            autoFocus
+            
           />
           {errors.email && <p className="text-red-500">{errors.email.message}</p>}
           <label>Password<span className="text-red-500">*</span></label>
@@ -122,7 +122,7 @@ export default function FormUsuarios() {
             placeholder='password'
             {...register("password")}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
-            autoFocus
+            
           />
           {errors.password && (
             <p className="text-red-500">{errors.password.message}</p>
