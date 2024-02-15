@@ -183,7 +183,10 @@ export function CharBar() {
       <div className="chart-bar-date-input-container">
         <div>
           <label>Fecha inicial: </label>
-          <input className="chart-bar-date-input" type="date" onChange={(e) => setStartDate(new Date(e.target.value))} />
+          <input 
+          className="chart-bar-date-input" 
+          type="date"
+           onChange={(e) => setStartDate(new Date(e.target.value))} />
         </div>
         <div>
           <label>Fecha final: </label>
