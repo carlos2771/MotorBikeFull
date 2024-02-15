@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useUsuario } from "../../context/usuariosContext";
+import { useRoles } from "../../context/RolsContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { NombreMaRequired } from "../../utils/validations";
 import Swal from "sweetalert2";
 
@@ -10,6 +11,12 @@ export default function FormUsuarios() {
   const { createUsuario, getUsuario, updateUsuario, errors: usuarioErrors } = useUsuario();
   const navigate = useNavigate();
   const params = useParams();
+  
+  const [roles, setRoles] = useState([]); // Estado para almacenar la lista de roles
+  const [selectedRol, setSelectedRol] = useState(""); // Estado para almacenar el rol seleccionado
+
+
+
 
   useEffect(() => {
     (async () => {
@@ -19,16 +26,18 @@ export default function FormUsuarios() {
         setValue("email", usuario.email);
         setValue("password", usuario.password);
         setValue("estado", usuario.estado);
+        setSelectedRol(usuario.rol);
       } else {
         setValue("estado", "Activo");
       }
     })();
   }, []);
 
-  const onSubmit = handleSubmit(async(data) => {
-    if(params.id){
-        updateUsuario(params.id, data)
-       const Toast = Swal.mixin({
+  const onSubmit = handleSubmit(async (data) => {
+    data.rol = selectedRol; // Agrega el rol seleccionado al objeto de datos antes de enviarlo al backend
+    if (params.id) {
+      updateUsuario(params.id, data);
+      const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
         showConfirmButton: false,
@@ -43,50 +52,27 @@ export default function FormUsuarios() {
         icon: "success",
         title: "Actualizado correctamente",
       });
-       navigate("/usuarios")
-    }else{
-      const res = await createUsuario(data)
-
-            console.log(data)
-            console.log("se creo")
-        navigate("/usuarios")
-  
-    //   const Toast = Swal.mixin({
-    //     toast: true,
-    //     position: "top-end",
-    //     showConfirmButton: false,
-    //     timer: 3000,
-    //     timerProgressBar: true,
-    //     didOpen: (toast) => {
-    //       toast.onmouseenter = Swal.stopTimer;
-    //       toast.onmouseleave = Swal.resumeTimer;
-    //     },
-    //   });
-    //   Toast.fire({
-    //     icon: "success",
-    //     title: "Agregado correctamente",
-    //   });
-    //   if(res){navigate('/usuarios')}
-    //   else{
-    //     const Toast = Swal.mixin({
-    //       toast: true,
-    //       position: "top-end",
-    //       showConfirmButton: false,
-    //       timer: 3000,
-    //       timerProgressBar: true,
-    //       didOpen: (toast) => {
-    //         toast.onmouseenter = Swal.stopTimer;
-    //         toast.onmouseleave = Swal.resumeTimer;
-    //       },
-    //     });
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: "No se ha agregado",
-    //     });
-    //   }
+      navigate("/usuarios");
+    } else {
+      const res = await createUsuario(data);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Agregado correctamente",
+      });
+      navigate("/usuarios");
     }
-    
-  })
+  });
 
   return (
     <div className='flex items-center justify-center pt-20'>
@@ -127,21 +113,20 @@ export default function FormUsuarios() {
           {errors.password && (
             <p className="text-red-500">{errors.password.message}</p>
           )}
-          <label>Estado</label>
+          <label>Rol</label>
           <select
-            {...register("estado")}
+            {...register("rol")}
+            value={selectedRol}
+            onChange={(e) => setSelectedRol(e.target.value)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
-            <option value={"Activo"} >
-              Activo
-            </option>
-            <option value={"Inactivo"} >
-              Inactivo
-            </option>
+            <option value="">Seleccionar rol</option>
+            {roles.map((rol) => (
+              <option key={rol._id} value={rol._id}>
+                {rol.nombre}
+              </option>
+            ))}
           </select>
-          {errors.password && (
-            <p className="text-red-500">{errors.estado.message}</p>
-          )}
 
           <button className='px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
             Guardar

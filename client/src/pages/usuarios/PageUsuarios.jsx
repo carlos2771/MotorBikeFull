@@ -90,6 +90,7 @@ export default function PageUsuarios() {
       "Nombre de Usuario": usuario.username,
       "Email" : usuario.email,
       "Estado": usuario.estado,
+      "Rol": usuario.rol,
       "Fecha Creacion": usuario.createdAt,
     }));
 
@@ -155,6 +156,12 @@ export default function PageUsuarios() {
       width: 200,
       headerClassName: "font-custom text-lg"
 
+    },
+    {
+      field: "rol",
+      headerName: "Rol",
+      width: 200,
+      headerClassName: "font-custom text-lg"
     },
     // {
     //   field: "createdAt",
