@@ -180,11 +180,16 @@ export default function FormCompra() {
 
   // Lógica para verificar si la fecha es válida
   const validarFecha = (fecha) => {
-    const anioActual = new Date().getFullYear();
-    const anioIngresado = new Date(fecha).getFullYear();
-    return anioIngresado === anioActual;
-  };
+    const fechaIngresada = new Date(fecha);
+    const fechaActual = new Date();
 
+    // Verificar si la fecha ingresada no es futura y está dentro del mes actual
+    return (
+      fechaIngresada <= fechaActual &&
+      fechaIngresada.getMonth() === fechaActual.getMonth() &&
+      fechaIngresada.getFullYear() === fechaActual.getFullYear()
+    );
+  };
 
   // Evento de cambio en el input de fecha
   const handleFechaChange = (e) => {
@@ -240,11 +245,11 @@ export default function FormCompra() {
             {...register("fecha", { min: `${currentYear}-01-01`, max: `${currentYear}-12-31` })}
             onChange={handleFechaChange}
           />
-  <br />
+          <br />
           {/* Mostrar mensaje de error si la fecha no es válida */}
           {!isValidFecha && (
             <p className="text-red-500 mb-2" style={{}}>
-              Ingresa una fecha del año actual.
+              Ingresa una fecha válida
             </p>
           )}
         </div>
@@ -314,23 +319,31 @@ export default function FormCompra() {
                   <br />
                   <br />
 
-                  <select size={5}
+                  <select
+                    size={5}
                     className="bg-slate-800 border border-3 border-blue-600"
                     style={{ marginLeft: '5%', width: '90%', borderRadius: '10px', padding: '15px', cursor: 'pointer', outline: 'none' }}
                     name=""
                     id=""
                     {...register(`repuestos.${index}.repuesto`, RepuestoRequired)}
-
                     onChange={(e) => {
                       setSelectedRepuesto(e.target.value);
                     }}
                   >
-                    {activeRepuestos.map((repuesto) => (
-                      <option key={repuesto._id} value={repuesto._id}>
-                        {repuesto.name} - {repuesto.nombre_marca}
-                      </option>
-                    ))}
+                    {activeRepuestos.map((repuesto) => {
+                      // Filtrar repuestos disponibles para seleccionar
+                      if (!repuestosList.find((item) => item.repuesto._id === repuesto._id)) {
+                        return (
+                          <option key={repuesto._id} value={repuesto._id}>
+                            {repuesto.name} - {repuesto.nombre_marca}
+                          </option>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
                   </select>
+
 
                   {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].repuesto && errors.repuestos[index].repuesto.message && (
                     <p style={{ marginTop: '-2px', marginLeft: '7%' }} className="text-red-500">{errors.repuestos[index].repuesto.message}</p>
@@ -384,13 +397,14 @@ export default function FormCompra() {
                   type="submit"
                   className="noselect"
                   style={{ color: 'black', marginBottom: '10px' }}
-
+                  disabled={availableRepuestos.length === 0} // Deshabilitar el botón si no hay repuestos disponibles
                 >
                   <span className="text">Agregar</span>
                   <span className="icon">
                     <FontAwesomeIcon icon={faPlus} style={{ color: "white" }} />
                   </span>
                 </button>
+
               </div>
 
             </div>
@@ -684,7 +698,7 @@ transform: scale(0.3);
   
   background-color: #374151;
   margin-left: 20px;
-  width: 90%;
+  width: 100%;
   max-width: 1050px;
   height: 850px;
   margin-top: 2%;
