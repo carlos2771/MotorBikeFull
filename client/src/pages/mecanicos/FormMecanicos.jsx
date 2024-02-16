@@ -10,6 +10,7 @@ import {
   DireccionRequired,
   NombreMeRequired,
   PasaporteRequired,
+  CedulaExtRequired,
 } from "../../utils/validations";
 import Swal from "sweetalert2"
 
@@ -50,10 +51,17 @@ export default function FormMecanico() {
     if (selectedTipo === "Pasaporte") {
       
       register("cedula_mecanico", PasaporteRequired);
-    } else {
+
+    } else if(selectedTipo === "Cedula Extranjera") {
+
+      register("cedula_mecanico", CedulaExtRequired);
+    }
+    else {
       register("cedula_mecanico", CedulaRequired);
     }
   };
+
+  
 
   const onSubmit = handleSubmit(async (data) => {
     if (params.id) {
@@ -131,10 +139,9 @@ export default function FormMecanico() {
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value={""}>Selecciona el tipo de documento</option>
-            <option value={"Cedula"}>Cédula</option>
-            <option value={"Tarjeta Identidad"}>Tarjeta Identidad</option>
+            <option value={"Cedula"}>Cédula Ciudadania</option>
+            <option value={"Cedula Extranjera"}>Cédula Extranjera</option>
             <option value={"Pasaporte"}>Pasaporte</option>
-            <option value={"Otro"}>Otro</option>
           </select>
           {errors.tipo && (
             <p className="text-red-500">{errors.tipo.message}</p>
