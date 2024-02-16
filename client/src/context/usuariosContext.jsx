@@ -16,16 +16,16 @@ export const useUsuario = () => {
 export const UsuarioProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [errors, setErrors] = useState([]);
-  const [usuarios, setUsuarios] = useState([]);
   
   
   const getUsuarios = async () => {
     try {
       const res = await getUsuariosRequest();
-      setUsuarios(res);
+      setUser(res);
+      console.log(res);
     } catch (error) {
-      console.error(error);
-      setErrors([error.message]);
+      console.error("error get,",error);
+      
     }
   };
   const getUsuario = async (id) => {
@@ -39,44 +39,49 @@ export const UsuarioProvider = ({ children }) => {
 
   const createUsuario = async (usuario) => {
     try {
-      const res = await createUsuarioRequest(usuario);
-      setUsuarios([...usuarios, res]);
+      return await createUsuarioRequest(usuario);
+       console.log("usuarios",usuario);
     } catch (error) {
       console.error(error);
-      setErrors([error.message]);
+      setErrors(error.message.data.message);
     }
   };
 
   const updateUsuario = async (id, usuario) => {
     try {
-      const res = await updateUsuarioRequest(id, usuario);
-      setUsuarios(usuarios.map((u) => (u.id === id ? { ...u, ...res } : u)));
+      return await updateUsuarioRequest(id, usuario);
+     
     } catch (error) {
       console.error(error);
       setErrors([error.message]);
     }
   };
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors]);
 
   const deleteUsuario = async (id) => {
     try {
       await deleteUsuarioRequest(id);
-      setUsuarios(usuarios.filter((u) => u.id !== id));
     } catch (error) {
       console.error(error);
-      setErrors([error.message]);
+      setErrors(error.message.data);
     }
   };
 
-  useEffect(() => {
-    getUsuarios();
-  }, []);
 
 
 
   return (
     <UsuarioContext.Provider 
     value={{
-      errors, usuarios,
+      errors,
+      user,
       getUsuarios,
       createUsuario,
       updateUsuario,

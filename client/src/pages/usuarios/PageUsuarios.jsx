@@ -4,19 +4,18 @@ import Box from "@mui/material/Box";
 import { useUsuario } from "../../context/usuariosContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import * as XLSX from "xlsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMotorcycle, faDownload, faPlus, faPencil , faBan,  faCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default function PageUsuarios() {
-  const { usuarios, getUsuarios, deleteUsuario, updateUsuario } = useUsuario();
+  const { user, getUsuarios} = useUsuario()
   
   
   useEffect(() => {
     try {
-        getUsuarios();
+      getUsuarios();
     } catch (error) {
-      console.error("Error al obtener los Usuarios:", error);
+      console.error("Error al obtener los usuarios:", error);
     }
   }, []);
 
@@ -79,61 +78,13 @@ export default function PageUsuarios() {
     
   };
 
-  const cambiarEstado = (id, estado) => {
-    const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
-    updateUsuario(id, { estado: nuevoEstado }).then(() => {
-        getUsuarios();
-    });
-  };
-  const exportarAExcel = useCallback(() => {
-    const datos = usuarios.map((usuario) => ({
-      "Nombre de Usuario": usuario.username,
-      "Email" : usuario.email,
-      "Estado": usuario.estado,
-      "Rol": usuario.rol,
-      "Fecha Creacion": usuario.createdAt,
-    }));
+  // const cambiarEstado = (id, estado) => {
+  //   const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
+  //   updateUsuario(id, { estado: nuevoEstado }).then(() => {
+  //       getUsuarios();
+  //   });
+  // };
 
-    const ws = XLSX.utils.json_to_sheet(datos);
-
-    // Agregar formato a los títulos (encabezados) y establecer autoFilter
-    ws["!cols"] = [
-      { wch: 25 },
-      { wch: 20 },
-      { wch: 30 },
-    ];
-    ws["!rows"] = [{ hpx: 20, outlineLevel: 0, hidden: false }];
-
-    // Establecer el formato de fondo y negrita para los títulos
-    for (let i = 0; i < 3; i++) {
-      const col = String.fromCharCode(65 + i); // Convertir número a letra (A, B, C, ...)
-      ws[`${col}1`].s = {
-        font: { bold: true },
-        fill: { patternType: "solid", fgColor: { rgb: "#66FFCC" } },
-      };
-    }
-
-    // Agregar formato a las celdas de datos y bordes
-    for (let i = 2; i <= usuarios.length + 1; i++) {
-      for (let j = 0; j < 3; j++) {
-        const col = String.fromCharCode(65 + j);
-        const cell = `${col}${i}`;
-        ws[cell].s = {
-          fill: { patternType: "solid", fgColor: { rgb: "#FFFFFF" } },
-          border: {
-            left: { style: "thin", color: { rgb: "#000000" } },
-            right: { style: "thin", color: { rgb: "#000000" } },
-            top: { style: "thin", color: { rgb: "#000000" } },
-            bottom: { style: "thin", color: { rgb: "#000000" } },
-          },
-        };
-      }
-    }
-
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Usuarios");
-    XLSX.writeFile(wb, "usuarios.xlsx");
-  }, [usuarios]);
 
   const columns = [
     {
@@ -144,25 +95,31 @@ export default function PageUsuarios() {
 
     },
     {
-        field: "email",
-        headerName: "email",
-        width: 300,
-        headerClassName: "font-custom text-lg"
-  
-      },
-    {
       field: "estado",
       headerName: "Estado",
       width: 200,
-      headerClassName: "font-custom text-lg"
+      headerClassName: "font-custom text-lg",
+      valueGetter: (params) => {
+        const estado = params.row.estado;
+    
+        // Verifica si hay un rol asignado
+        if (estado ) {
+          return estado;
+        } else {
+          return ""; // Si no hay un rol asignado, devuelve una cadena vacía
+        }
+      },
 
     },
     {
-      field: "rol",
+      field: "name",
       headerName: "Rol",
       width: 200,
-      headerClassName: "font-custom text-lg"
+      headerClassName: "font-custom text-lg",
+      valueGetter: (params) => params.row.rol.name,
+
     },
+  
     // {
     //   field: "createdAt",
     //   headerName: "Fecha Creacion",
@@ -186,7 +143,7 @@ export default function PageUsuarios() {
       headerClassName: "font-custom text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
-        // console.log("estadin", estado);
+        console.log("estadin", estado);
         return (
           <div>
             <button className={estado === "Activo" ? "" : "hidden"} title="Editar">
@@ -229,23 +186,17 @@ export default function PageUsuarios() {
         <FontAwesomeIcon icon={faPlus} />
           </button>
         </Link>
-        <button
-            onClick={exportarAExcel}
-            className="px-4 py-2 mx-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent" 
-            title="Descargar excel"
-          >
-            <FontAwesomeIcon icon={faDownload} />
-          </button>
+
       </div>
       </div>
 
       <Box sx={{ width: "100%" }}>
         <DataGrid
           className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
-          rows={usuarios}
+          rows={user || []}
           columns={columns}
           getRowId={(row) => row._id}
-
+         
           initialState={{
             pagination: {
               paginationModel: {

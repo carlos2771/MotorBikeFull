@@ -8,13 +8,12 @@ import mecanicosRoutes from "./routes/mecanicos.routes.js";
 import ventas_serviciosRoutes from "./routes/ventas_servicios.routes.js";
 import marcaRoutes from "./routes/marca.routes.js";
 import repuestosRoutes from "./routes/repuestos.routes.js";
-import rolesRoutes from "./routes/roles.routes.js";
-import roles_permisosRoutes from "./routes/roles_permisos.routes.js";
 import ventas_repuestosRoutes from "./routes/ventas_repuestos.routes.js";
 import comprasRoutes from "./routes/compras.routes.js";
 import rolRoutes from "./routes/rols.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import cartClienteRoutes from "./routes/cart_cliente.routes.js";
+import usuariosRoutes from "./routes/user.routes.js"
 import cors from 'cors';
 import bodyParser from "body-parser";
 import { fileURLToPath } from 'url';
@@ -42,13 +41,13 @@ app.use("/api", mecanicosRoutes);
 app.use("/api", marcaRoutes);
 app.use("/api", ventas_serviciosRoutes);
 app.use("/api", repuestosRoutes);
-app.use("/api", rolesRoutes);
-app.use("/api", roles_permisosRoutes);
+
 app.use("/api", ventas_repuestosRoutes);
 app.use("/api", comprasRoutes);
 app.use("/api", cartClienteRoutes);
 app.use("/api", cartRoutes);
 app.use("/api", rolRoutes);
+app.use("/api", usuariosRoutes);
 
 
 app.use(express.urlencoded({extended: true}))

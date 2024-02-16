@@ -11,12 +11,16 @@ export default function FormUsuarios() {
   const { createUsuario, getUsuario, updateUsuario, errors: usuarioErrors } = useUsuario();
   const navigate = useNavigate();
   const params = useParams();
+  const {roles, getRoles} = useRoles()
   
-  const [roles, setRoles] = useState([]); // Estado para almacenar la lista de roles
-  const [selectedRol, setSelectedRol] = useState(""); // Estado para almacenar el rol seleccionado
 
-
-
+  useEffect(() => {
+    try {
+      getRoles()
+    } catch (error) {
+      console.error("Error al obtener roles:", error);
+    }
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -34,7 +38,7 @@ export default function FormUsuarios() {
   }, []);
 
   const onSubmit = handleSubmit(async (data) => {
-    data.rol = selectedRol; // Agrega el rol seleccionado al objeto de datos antes de enviarlo al backend
+    console.log("antes",data);
     if (params.id) {
       updateUsuario(params.id, data);
       const Toast = Swal.mixin({
@@ -72,6 +76,7 @@ export default function FormUsuarios() {
       });
       navigate("/usuarios");
     }
+    console.log("despues", data );
   });
 
   return (
@@ -113,17 +118,24 @@ export default function FormUsuarios() {
           {errors.password && (
             <p className="text-red-500">{errors.password.message}</p>
           )}
+          <label>Estado</label>
+          <select
+            {...register("estado")}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+          >
+            <option value={"Activo"}>Activo</option>
+            <option value={"Inactivo"}>Inactivo</option>
+          </select>
           <label>Rol</label>
           <select
             {...register("rol")}
-            value={selectedRol}
             onChange={(e) => setSelectedRol(e.target.value)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value="">Seleccionar rol</option>
             {roles.map((rol) => (
               <option key={rol._id} value={rol._id}>
-                {rol.nombre}
+                {rol.name}
               </option>
             ))}
           </select>
