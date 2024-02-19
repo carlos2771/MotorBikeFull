@@ -57,6 +57,14 @@ export default function Navbar() {
                  <FontAwesomeIcon icon={faChevronLeft} />
                 </button>
                 <div onClick={() => setOpen(false)}>
+                <Render>
+                    <Link
+                      to="/graficos"  
+                      className="flex ms-10 p-2"
+                    >
+                      <FontAwesomeIcon icon={faChartBar} className="mr-2" /> Dashboard
+                    </Link>
+                  </Render>
                   <Render>
                     <Link
                       to="/tasks"
@@ -124,14 +132,7 @@ export default function Navbar() {
                       <FontAwesomeIcon icon={faShoppingBag} className="mr-2" /> Compras
                     </Link>
                   </Render>
-                  <Render>
-                    <Link
-                      to="/graficos"  
-                      className="flex ms-10 p-2"
-                    >
-                      <FontAwesomeIcon icon={faChartBar} className="mr-2" /> Dashboard
-                    </Link>
-                  </Render>
+                  
                   {/* <Render>
                     <Link
                       to="/"

@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@material-tailwind/react";
 import { EmailRequired, EstadoRequired ,PasswordRequire, NombreMaRequired } from "../utils/validations";
 import { useSpring, animated } from 'react-spring';
-
+import Swal from "sweetalert2";
 
 
 export default function registerPage() {
@@ -27,10 +27,26 @@ export default function registerPage() {
 
   const onSubmit = handleSubmit((values) => {
     signup(values);
-    if (values) navigate("/login")
-    console.log(values); // para que me  muestre los valores ingresados del formulario
+    if (values){
+      Swal.fire({
+        icon: "success",
+        title: "Bienvenid@",
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+      navigate("/login")}
+    console.log("Aca los valores", values); // para que me  muestre los valores ingresados del formulario
   });
   console.log(registerErrors);
+
+  
 
   const formAnimation = useSpring({
     from: { opacity: 0, transform: 'translateY(-50px)' },
