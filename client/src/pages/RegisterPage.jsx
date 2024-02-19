@@ -6,6 +6,8 @@ import { Input } from "@material-tailwind/react";
 import { EmailRequired, EstadoRequired ,PasswordRequire, NombreMaRequired } from "../utils/validations";
 import { useSpring, animated } from 'react-spring';
 
+
+
 export default function registerPage() {
   const {
     register,
@@ -34,6 +36,7 @@ export default function registerPage() {
     from: { opacity: 0, transform: 'translateY(-50px)' },
     to: { opacity: 1, transform: 'translateY(0)' },
   });
+  
 
   return (
     <div>
@@ -77,6 +80,15 @@ export default function registerPage() {
           {errors.password && (
             <p className="text-red-500">{errors.password.message}</p>
           )}
+          <select
+            {...register("estado")}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2 hidden"
+          >
+            <option value={"Activo"}>Activo</option>
+            <option value={"Inactivo"}>Inactivo</option>
+          </select>
+
+
           <div className="flex justify-center">
             <button
               className="px-5 py-1 text-sm m-2 text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"

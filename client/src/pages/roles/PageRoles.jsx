@@ -138,7 +138,7 @@ export default function PageRoles() {
       {
         field: "name",
         headerName: "Nombre Rol",
-        width: 450,
+        width: 250,
         headerClassName: "font-custom text-lg"
   
       },
@@ -152,7 +152,7 @@ export default function PageRoles() {
       {
         field: "status",
         headerName: "Estado",
-        width: 200,
+        width: 100,
         headerClassName: "font-custom text-lg"
   
       },

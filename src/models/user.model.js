@@ -28,7 +28,8 @@ const userSchema = new mongoose.Schema({
     },
     rol: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'rols' // Referencia al modelo de roles
+        ref: 'rols', // Referencia al modelo de roles
+        default: '65d3be9fbd31896adff06e70' // Establecer el valor por defecto aquí
     },
     estado:{
         type: String,
