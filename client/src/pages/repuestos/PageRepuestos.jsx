@@ -279,9 +279,9 @@ export default function PageRepuestos() {
                       <Tabla>
                         {formatCurrency2(
                           repuestos.find((repuesto) => repuesto._id === params.row._id)
-                            ?.amount
+                            ?.amountñ
                         )}
-                        {repuestos.find((repuesto) => repuesto._id === params.row._id)?.amount}
+                        
                       </Tabla>
                     </tr>
                     <tr>

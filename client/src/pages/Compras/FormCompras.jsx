@@ -800,9 +800,9 @@ transform: scale(0.3);
 .contenedorPrincipal {
   
   background-color: #374151;
-  margin-left: 20px;
+  
   width: 100%;
-  max-width: 1050px;
+  max-width: 1090px;
   height: 850px;
   margin-top: 2%;
   padding: 20px;
