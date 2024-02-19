@@ -40,7 +40,7 @@ export const NombreRepuestoRequired = {
     if (!value.trim()) {
       return "Este campo no puede estar vacío";
     }
-    return /^[A-Za-z0-9\s.,()_-]{4,50}$/.test(value) || "Solo se permiten letras, números y algunos caracteres especiales";
+    return /^[A-Za-z0-9\s.,()_\-¡!@#$%^&*;:'"+=\/\\<>?[\]{}|`~]{4,50}$/.test(value) || "Solo se permiten letras, números y algunos caracteres especiales";
   },
   maxLength: { value: 50, message: "Máximo 50 caracteres" },
   minLength: { value: 4, message: "Mínimo 4 caracteres" }
@@ -49,7 +49,7 @@ export const NombreRepuestoRequired = {
 
 // VALIDACIÓN PARA VALIDAR EL NOMBRE DEL REPUESTO
 export const NombreProveedor = {
-  required: "Requerido", 
+  required: "Requerido",
   validate: (value) => {
     if (!value.trim()) {
       return "Valor incorrecto";
@@ -115,10 +115,12 @@ export const CedulaRequired = {
 
 export const nombre_RepuestoValidacion = {
   required: "Campo requerido",
-  validate: (value) => /^(?! +$)[A-Za-z0-9\s]+$/.test(value.trim()) || "No se permite solo espacio",
-  maxLength: { value: 50, message: "Maximo 50 caracteres" },
-  minLength: { value: 4, message: "Minimo 4 caracteres" }
+  validate: (value) => /^(?! +$)[A-Za-z0-9\s\/]+$/.test(value.trim()) || "No se permite solo espacio",
+  maxLength: { value: 50, message: "Máximo 50 caracteres" },
+  minLength: { value: 4, message: "Mínimo 4 caracteres" }
 };
+
+
 
 export const codeCompra = {
   required: "Campo requerido",

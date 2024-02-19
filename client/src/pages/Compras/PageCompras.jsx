@@ -12,10 +12,10 @@ import { faLock, faBan, faDownload, faShoppingBag, faPlus, faDollar } from "@for
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import createTheme from '@mui/material/styles/createTheme';
 import MUIDataTable from "mui-datatables";
-import { Tabla } from "../../components/Tabla";
+import { Tabla, Titulo } from "../../components/Tabla";
 import Detalle from "../../components/Detalle"
 
-import { faUser, faBarcode, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faBarcode, faCalendarDays, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 
 
@@ -60,78 +60,78 @@ export default function PageCompras() {
       ? "Esta compra ya ha sido anulada."
       : "¿Estás seguro de anular la compra?";
     const buttonText = anulado ? "Entendido" : "Sí";
-    
-   if (!anulado) {
-    Swal.fire({
-      title: title,
-      text: text,
-      icon: anulado ? "info" : "warning",
-      showCancelButton: !anulado,
-      confirmButtonText: buttonText,
-      cancelButtonText: "No",
-      background: "#334155",
-      color: "white",
-      iconColor: "#2563eb",
-      buttonsStyling: false,
-      customClass: {
-        confirmButton:
-          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-blue-600 hover:text-white hover:bg-blue-600",
-        cancelButton:
-          "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        cambiarEstado(id, anulado);
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "success",
-          title: "Se ha modificado",
-        });
-      } else {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "warning",
-          title: "No se ha modificado",
-        });
-      }
-    });
-  }else {
-    // Si la compra está anulada, solo mostrar un mensaje indicando que no se puede realizar ninguna acción
-    Swal.fire({
-      title: "Acción no permitida",
-      text: "Esta compra ya ha sido anulada y no se puede modificar.",
-      icon: "info",
-      background: "#334155",
-      color: "white",
-      iconColor: "#2563eb",
-      buttonsStyling: false,
-      customClass: {
-        confirmButton:
-          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-blue-600 hover:text-white hover:bg-blue-600",
-      },
-    });
-  }
-};
+
+    if (!anulado) {
+      Swal.fire({
+        title: title,
+        text: text,
+        icon: anulado ? "info" : "warning",
+        showCancelButton: !anulado,
+        confirmButtonText: buttonText,
+        cancelButtonText: "No",
+        background: "#334155",
+        color: "white",
+        iconColor: "#2563eb",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton:
+            "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-blue-600 hover:text-white hover:bg-blue-600",
+          cancelButton:
+            "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          cambiarEstado(id, anulado);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "success",
+            title: "Se ha modificado",
+          });
+        } else {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "warning",
+            title: "No se ha modificado",
+          });
+        }
+      });
+    } else {
+      // Si la compra está anulada, solo mostrar un mensaje indicando que no se puede realizar ninguna acción
+      Swal.fire({
+        title: "Acción no permitida",
+        text: "Esta compra ya ha sido anulada y no se puede modificar.",
+        icon: "info",
+        background: "#334155",
+        color: "white",
+        iconColor: "#2563eb",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton:
+            "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-blue-600 hover:text-white hover:bg-blue-600",
+        },
+      });
+    }
+  };
 
   const cambiarEstado = (id, anulado) => {
     const nuevoEstado = anulado ? "Activo" : "Inactivo";
@@ -202,24 +202,31 @@ export default function PageCompras() {
 
 
   const columns = [
+
     {
-      field: "repuestos",
-      headerName: "Repuesto",
-      width: 400,
+      field: "codigo",
+      headerName: "Código de Compra", // Cambia el encabezado según lo que desees mostrar
+      width: 200, // Ajusta el ancho según tus necesidades
       headerClassName: "custom-header",
-      valueGetter: (params) => {
-        const repuestos = params.row.repuestos;
-        if (repuestos && repuestos.length > 0) {
-          const nombresRepuestos = repuestos.map((repuesto) => repuesto.repuesto.name);
-          return nombresRepuestos.join(', ');
-        } else {
-          return "Nombre no disponible";
-        }
-      },
+      valueGetter: (params) => params.row.codigo, // Obtén el código de la compra
+    },
+    {
+      field: "proveedor",
+      headerName: "Proveedor", // Cambia el encabezado según lo que desees mostrar
+      width: 200, // Ajusta el ancho según tus necesidades
+      headerClassName: "custom-header",
+      valueGetter: (params) => params.row.proveedor, // Obtén el código de la compra
+    },
+    {
+      field: "totalCompra",
+      headerName: "Total de Compra",
+      width: 200,
+      headerClassName: "custom-header",
+      valueGetter: (params) => calcularPrecioTotalCompra(params.row),
     },
     {
       field: "createdAt",
-      headerName: "Fecha Creacion",
+      headerName: "Fecha Compra",
       width: 300,
       headerClassName: "custom-header",
       renderCell: (params) => {
@@ -261,46 +268,6 @@ export default function PageCompras() {
 
 
 
-                <div style={{ maxWidth: '100%', overflowX: 'auto', marginBottom: '10px' }}>
-                  <MUIDataTable
-                    className="miTablaPersonalizada"
-                    title={"Detalle Compras"}
-                    data={compras.find((compra) => compra._id === params.row._id)
-                      ?.repuestos.map((repuesto) => ({
-                        repuesto: repuesto.repuesto.name,
-                        cantidad: formatCurrency2(repuesto.cantidad_repuesto),
-                        precioUnitario: formatCurrency(repuesto.precio_unitario),
-                        precioTotal: formatCurrency(repuesto.precio_total),
-                      }))}
-                    columns={columnas2}
-                    options={{
-                      sort: false,
-                      responsive: 'standard',
-                      rowsPerPage: 3,
-                      rowsPerPageOptions: 3,
-                      selectableRows: false,
-                      print: false,
-                      download: false,
-                      viewColumns: false,
-                      textLabels: {
-                        toolbar: {
-                          search: "Buscar",
-                          filterTable: "Filtrar tabla",
-                        },
-                        pagination: {
-                          displayRows: "de",
-                          rowsPerPage: "Filas por página:",
-                        },
-                        filter: {
-                          all: 'Todos',
-                          title: 'Filtros',
-                          reset: 'Reiniciar',
-                        }
-                      },
-                    }}
-                    style={{ width: '100%' }} // Ajusta el ancho de la tabla al 100%
-                  />
-                </div>
 
 
                 <style>{
@@ -408,12 +375,19 @@ export default function PageCompras() {
 
                 
                 `}
-                
+
                 </style>
                 <table style={{ marginLeft: '1px' }}>
                   <tbody>
                     <tr>
-                      <Tabla >
+                      <td colSpan="4" style={{ border: '1px solid #2e4f91', padding: '5px', backgroundColor: '#2e4f91', fontSize: '25px', textAlign: 'center' }}>
+                        <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                        Datos de la compra
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <Tabla>
                         <FontAwesomeIcon icon={faDollar} /> Total
                       </Tabla>
                       <Tabla >
@@ -428,7 +402,7 @@ export default function PageCompras() {
                     </tr>
                     <tr>
                       <Tabla >
-                      {calcularPrecioTotalCompra(params.row)}
+                        {calcularPrecioTotalCompra(params.row)}
                       </Tabla>
                       <Tabla >
                         {params.row.proveedor}
@@ -444,10 +418,58 @@ export default function PageCompras() {
                   </tbody>
 
                 </table>
-                
+                <br />
+
+
+                <div style={{ maxWidth: '100%', overflowX: 'auto', marginBottom: '10px' }}>
+                  <MUIDataTable
+                    className="miTablaPersonalizada"
+                    title={"Detalle Compras"}
+                    data={compras.find((compra) => compra._id === params.row._id)
+                      ?.repuestos.map((repuesto) => ({
+                        repuesto: repuesto.repuesto.name,
+                        cantidad: formatCurrency2(repuesto.cantidad_repuesto),
+                        precioUnitario: formatCurrency(repuesto.precio_unitario),
+                        precioTotal: formatCurrency(repuesto.precio_total),
+                      }))}
+                    columns={columnas2}
+                    options={{
+                      sort: false,
+                      responsive: 'standard',
+                      rowsPerPage: 3,
+                      rowsPerPageOptions: 3,
+                      selectableRows: false,
+                      print: false,
+                      download: false,
+                      viewColumns: false,
+                      textLabels: {
+                        body: {
+                          noMatch: "No se encontraron los repuestos", // Aquí cambias el mensaje
+                        },
+                        toolbar: {
+                          search: "Buscar",
+                          filterTable: "Filtrar tabla",
+                        },
+                        pagination: {
+                          displayRows: "de",
+                          rowsPerPage: "Filas por página:",
+                        },
+                        filter: {
+                          all: 'Todos',
+                          title: 'Filtros',
+                          reset: 'Reiniciar',
+                        }
+                      },
+                    }}
+                    style={{ width: '100%' }} // Ajusta el ancho de la tabla al 100%
+                  />
+                </div>
+
               </Detalle>
             </button>
           </div>
+
+
         );
       },
     },
@@ -496,7 +518,7 @@ export default function PageCompras() {
           slots={{ toolbar: GridToolbar }}
         />
       </Box>
-      
+
 
 
 
