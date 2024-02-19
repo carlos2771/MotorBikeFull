@@ -1,14 +1,14 @@
-import React, { useEffect, useCallback} from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { useRepuestos } from '../../context/RepuestosContext'
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { Link } from 'react-router-dom';
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faDownload ,faIdCard, faUser, faPhone, faPen, faTools, faPlus,faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faRegistered, faDollarSign, faHashtag} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faDownload, faIdCard, faUser, faPhone, faPen, faTools, faPlus, faPencil, faBan, faCheck, faInfoCircle, faAddressCard, faRegistered, faDollarSign, faHashtag } from "@fortawesome/free-solid-svg-icons";
 
 import Detalle from "../../components/Detalle";
-import {Tabla, Titulo} from "../../components/Tabla";
+import { Tabla, Titulo } from "../../components/Tabla";
 
 function formatCurrency(value) {
   // Agrega el signo de peso
@@ -231,71 +231,76 @@ export default function PageRepuestos() {
             </button>
             <button className={estado === "Activo" ? "" : "hidden"} title='Ver detalle'>
               <Detalle
-                metodo={() => getRepuestos (params.row._id)}
+                metodo={() => getRepuestos(params.row._id)}
                 id={params.row._id}
               >
                 <table>
                   <tbody>
-                    <Titulo>
+                    <tr>
+                      <td colSpan="3" style={{ border: '1px solid #2e4f91', padding: '10px', backgroundColor: '#2e4f91', fontSize: '25px', textAlign: 'center' }}>
                         <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
                         Detalles del Repuesto
-                    </Titulo>
-
+                      </td>
+                    </tr>
                     <tr>
-                      <Tabla >
+                      <Tabla>
                         <FontAwesomeIcon icon={faIdCard} className="mr-2" />
                         Nombre
                       </Tabla>
-                      <Tabla >
-                        {
-                          repuestos.find(
-                            (repuesto) => repuesto._id === params.row._id
-                          )?.name
-                        }
+                      <Tabla>
+                        {repuestos.find((repuesto) => repuesto._id === params.row._id)?.name}
                       </Tabla>
+                      <td rowSpan={4} style={{ border: '1px solid #2e4f91', width: '30%', minWidth: '170px' }}>
+                        <img
+                          src={
+                            repuestos.find(
+                              (repuesto) => repuesto._id === params.row._id
+                            )?.img
+                          }
+                          alt="Imagen de repuesto"
+                          style={{ width: '100px', height: '100px', marginLeft: '20%' }} // Define el tamaño de la imagen según tus necesidades
+                        />
+                      </td>
                     </tr>
                     <tr>
-                      <Tabla >
+                      <Tabla>
                         <FontAwesomeIcon icon={faRegistered} className="mr-2" />
                         Marca
                       </Tabla>
-                      <Tabla >
-                        {
-                          repuestos.find(
-                            (marca) => marca._id === params.row._id
-                          )?.marca.nombre_marca
-                        }
+                      <Tabla>
+                        {repuestos.find((marca) => marca._id === params.row._id)?.marca.nombre_marca}
                       </Tabla>
                     </tr>
                     <tr>
-                      <Tabla >
+                      <Tabla>
                         <FontAwesomeIcon icon={faHashtag} className="mr-2" />
                         Cantidad
                       </Tabla>
-                      <Tabla >
-                      {
-                    repuestos.find((repuesto) => repuesto._id === params.row._id)
-                      ?.amount
-                  }
+                      <Tabla>
+                        {formatCurrency2(
+                          repuestos.find((repuesto) => repuesto._id === params.row._id)
+                            ?.amount
+                        )}
+                        {repuestos.find((repuesto) => repuesto._id === params.row._id)?.amount}
                       </Tabla>
                     </tr>
                     <tr>
-                      <Tabla >
+                      <Tabla>
                         <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
                         Precio
                       </Tabla>
-                      <Tabla >
-                      {
-                    repuestos.find((repuesto) => repuesto._id === params.row._id)
-                      ?.price
-                  }
-                    
+                      <Tabla>
+                        {formatCurrency(
+                          repuestos.find((repuesto) => repuesto._id === params.row._id)
+                            ?.price
+                        )}
                       </Tabla>
                     </tr>
                   </tbody>
-                  
                 </table>
-                
+
+
+
               </Detalle>
             </button>
           </div>
@@ -304,26 +309,27 @@ export default function PageRepuestos() {
     },
   ];
 
+
   return (
     <div className="mt-16 ">
       <div className="flex justify-between">
-      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faTools} className="mr-2" />Gestión de Repuestos</h1>
+        <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faTools} className="mr-2" />Gestión de Repuestos</h1>
         <div className="mx-16 justify-end">
           <Link to="/add-repuesto">
-            <button  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
-            <FontAwesomeIcon icon={faPlus} />
+            <button className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
+              <FontAwesomeIcon icon={faPlus} />
             </button>
           </Link>
           <button
-          onClick={exportarAExcel}
-          className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent" title="Descargar excel"
-        ><FontAwesomeIcon icon={faDownload} />
-        </button>
+            onClick={exportarAExcel}
+            className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent" title="Descargar excel"
+          ><FontAwesomeIcon icon={faDownload} />
+          </button>
         </div>
       </div>
-      
 
-{/* <div className="flex justify-between">
+
+      {/* <div className="flex justify-between">
       <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faBuilding} className="mr-2" />Gestión de Marcas</h1>
       <div className="mx-10 justify-end">
         <Link to="/add-marca">
