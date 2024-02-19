@@ -103,7 +103,7 @@ export const CedulaRequired = {
   },
   maxLength: {
     value: 10,
-    message: "El maximo de caracteres es de 12"
+    message: "El maximo de caracteres es de 10"
   },
   minLength: {
     value: 7,
@@ -189,12 +189,12 @@ export const NombreMaRequired = {
   minLength: { value: 4, message: "Minimo 4 caracteres" }
 };
 
-export const PasaporteRequired = {
-  required: "Campo requerido",
-  validate: (value) => /^(?=(.*[A-Za-z]){4})(?=(.*\d){4})[A-Za-z0-9\s]+$/.test(value.trim()) || "Debe contener al menos 4 letras y 4 números",
-  maxLength: { value: 16, message: "Máximo 16 caracteres" },
-  minLength: { value: 8, message: "Mínimo 8 caracteres" }
-};
+// export const PasaporteRequired = {
+//   required: "Campo requerido",
+//   validate: (value) => /^(?=(.*[A-Za-z]){4})(?=(.*\d){4})[A-Za-z0-9\s]+$/.test(value.trim()) || "Debe contener al menos 4 letras y 4 números",
+//   maxLength: { value: 16, message: "Máximo 16 caracteres" },
+//   minLength: { value: 8, message: "Mínimo 8 caracteres" }
+// };
 
 export const CedulaExtRequired = {
   required: "Campo requerido",
