@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tabla, Titulo } from "../../components/Tabla";
 import Detalle from "../../components/Detalle";
 import Swal from "sweetalert2";
+import MUIDataTable from "mui-datatables";
+
 import {
   faIdCard,
   faTools,
@@ -18,11 +20,11 @@ import {
   faScrewdriverWrench,
   faShoppingCart,
   faLock,
-
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function PageCartClient() {
-  const { getCartClient, cartClientes, getCartCliente, updateCartCliente } = useCartCliente();
+  const { getCartClient, cartClientes, getCartCliente, updateCartCliente } =
+    useCartCliente();
 
   useEffect(() => {
     try {
@@ -118,13 +120,35 @@ export default function PageCartClient() {
     }
   };
 
-const cambiarEstado = (id, anulado) => {
+  const cambiarEstado = (id, anulado) => {
     const nuevoEstado = anulado ? "Activo" : "Inactivo";
     updateCartCliente(id, { estado: nuevoEstado }).then(() => {
       getCartClient();
     });
-};
+  };
 
+  const columnas2 = [
+    {
+      name: "repuesto",
+      label: "Repuesto",
+      options: { filter: true, sort: true },
+    },
+    {
+      name: "cantidad",
+      label: "Cantidad",
+      options: { filter: true, sort: false },
+    },
+    {
+      name: "precioUnitarios",
+      label: "Precio Unitario",
+      options: { filter: true, sort: false },
+    },
+    {
+      name: "precioTotal",
+      label: "Precio Total",
+      options: { filter: true, sort: false },
+    },
+  ];
 
   const columns = [
     {
@@ -132,6 +156,22 @@ const cambiarEstado = (id, anulado) => {
       headerName: "codigo",
       width: 170,
       headerClassName: "custom-header",
+    },
+    {
+      field: "cart",
+      headerName: "Repuestos",
+      width: 250,
+      headerClassName: "custom-header",
+      renderCell: (params) => (
+        <>
+          {params.row.cart.map((repuesto, index) => (
+            <span key={index}>
+              {repuesto.name}
+              {index < params.row.cart.length - 1 && ", "}
+            </span>
+          ))}
+        </>
+      ),
     },
     {
       field: "nombre_cliente",
@@ -145,6 +185,7 @@ const cambiarEstado = (id, anulado) => {
       headerName: "Total_Venta",
       width: 170,
       headerClassName: "custom-header",
+      
     },
     {
       field: "acciones",
@@ -170,25 +211,192 @@ const cambiarEstado = (id, anulado) => {
               )}
             </button>
             <button>
-            <Detalle
-  metodo={() => {
-    console.log("params.row._id:", params.row._id);
-    getCartCliente(params.row._id);
-  }}
-  id={params.row._id}
->
+              <Detalle
+                metodo={() => {
+                  console.log("params.row._id:", params.row._id);
+                  getCartCliente(params.row._id);
+                }}
+                id={params.row._id}
+              >
+                <div
+                  style={{
+                    maxWidth: "100%",
+                    overflowX: "auto",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <MUIDataTable
+                    className="miTablaPersonalizada"
+                    title={"Detalle Compras"}
+                    data={
+                      cartClientes
+                        .find((cart) => cart._id === params.row._id)
+                        ?.cart?.map((repuesto, index) => ({
+                          id: index,
+                          repuesto: repuesto.name,
+                          cantidad: repuesto.amount,
+                          precioUnitarios: repuesto.price,
+                          precioTotal: repuesto.price * repuesto.amount
+                         
+                        })) || []
+                    } // Manejar el caso en que cartClientes.find(...) no encuentra nada
+                    columns={columnas2}
+                    options={{
+                      sort: false,
+                      responsive: "standard",
+                      rowsPerPage: 3,
+                      rowsPerPageOptions: [3], // Debes proporcionar un array, no solo un número
+                      selectableRows: false,
+                      print: false,
+                      download: false,
+                      viewColumns: false,
+                      textLabels: {
+                        toolbar: {
+                          search: "Buscar",
+                          filterTable: "Filtrar tabla",
+                        },
+                        pagination: {
+                          displayRows: "de",
+                          rowsPerPage: "Filas por página:",
+                        },
+                        filter: {
+                          all: "Todos",
+                          title: "Filtros",
+                          reset: "Reiniciar",
+                        },
+                      },
+                    }}
+                    style={{ width: "100%" }} // Ajusta el ancho de la tabla al 100%
+                  />
+                </div>
+
+                
+                <style>{
+                  `
+
+                // .tss-ynxllk-MUIDataTableFilter-root{
+                //   background-color: #1e293b;
+                // }
+                .miTablaPersonalizada .tss-11quiee-MUIDataTable-paper{
+                  background-color: #1e293b;
+                }
+
+
+                .miTablaPersonalizada .tss-1qtl85h-MUIDataTableBodyCell-root{
+                  background-color: #1e293b;
+                  color: white;
+                }
+
+                .miTablaPersonalizada .tss-gm6zfk-MUIDataTableHeadCell-fixedHeader{
+                  background-color: #1e293b;
+                  color: white; 
+                  
+                  
+                  
+}
+
+                .miTablaPersonalizada .css-rqglhn-MuiTable-root{
+                  margin-top: 10px;
+                  
+
+
+                }
+
+                // PRIMER CAJA DE LA TABLA
+                .miTablaPersonalizada .tss-gm6zfk-MUIDataTableHeadCell-fixedHeaderr{
+                  background-color: red; 
+                  color: red;
+                  
+                }
+
+                // ULTIMA CAJA DE LA TABLA
+                .miTablaPersonalizada .tss-1ork7hi-MUIDataTablePagination-tableCellContainer{
+                   background-color: red
+                
+                }
+
+
+                .miTablaPersonalizada .tss-1ork7hi-MUIDataTablePagination-tableCellContainer{
+                 
+                  
+                  padding: 10px;
+                  background-color: #1e293b; 
+                }
+
+                .miTablaPersonalizada .MuiToolbar-gutters{
+                  
+                  // background-color: #93c5fd;
+                   background-color: #1e293b;
+                  color: white; 
+                  
+                }
+
+                .miTablaPersonalizada .css-i4bv87-MuiSvgIcon-root{
+                  color: white;
+                }
+
+                .miTablaPersonalizada .css-1x51dt5-MuiInputBase-input-MuiInput-input{
+                  color: white;
+                }
+
+
+
+            
+
+                // .miTablaPersonalizada .MuiToolbar-root{
+                
+                //   color: white;
+                // }
+                
+
+                .miTablaPersonalizada .tss-1qjwhn0-MUIDataTableBody-emptyTitle{
+                  color: white; 
+                }
+
+                .miTablaPersonalizada .tss-1cdcmys-MUIDataTable-responsiveBase{
+                  background-color: #1e293b;
+                }
+
+
+                
+
+
+                // NO HAY REPUESTOS AÚN
+                .miTablaPersonalizada .MuiTypography-body1{
+                  color: red;
+                  
+                }
+
+                .miTablaPersonalizada {
+                  background-color: #1e293b;
+                  margin-top
+                  border: 1px solid #2563eb
+                  
+              }
+
+                
+                `}
+                
+                </style>
+                
                 <table>
                   <tbody>
-                    <Titulo>
-                      <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
-                      Detalles del Cliente
-                    </Titulo>
-
                     <tr>
-                      <Tabla>
+                    <Tabla>
                         <FontAwesomeIcon icon={faIdCard} className="mr-2" />
                         Codigo
                       </Tabla>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                        Nombre
+                      </Tabla>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
+                        Total de la venta
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      
                       <Tabla>
                         {
                           cartClientes.find(
@@ -196,12 +404,8 @@ const cambiarEstado = (id, anulado) => {
                           )?.codigo
                         }
                       </Tabla>
-                    </tr>
-                    <tr>
-                      <Tabla>
-                        <FontAwesomeIcon icon={faIdCard} className="mr-2" />
-                        Nombre
-                      </Tabla>
+                    
+                    
                       <Tabla>
                         {
                           cartClientes.find(
@@ -209,12 +413,7 @@ const cambiarEstado = (id, anulado) => {
                           )?.cliente.nombre_cliente
                         }
                       </Tabla>
-                    </tr>
-                    <tr>
-                      <Tabla>
-                        <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
-                        Total de la venta
-                      </Tabla>
+                    
                       <Tabla>
                         {
                           cartClientes.find(
@@ -223,44 +422,7 @@ const cambiarEstado = (id, anulado) => {
                         }
                       </Tabla>
                     </tr>
-                    <tr>
-                    <Tabla>
-                        <FontAwesomeIcon icon={faScrewdriverWrench} className="mr-2" />
-                        repuestos vendidos
-                      </Tabla>
-                    <Tabla>
-                      {cartClientes
-                        .find((cliente) => cliente._id === params.row._id)
-                        ?.cart?.map((repuesto, index) => (
-                          <span key={index}>
-                            {repuesto.name}
-                            {index <
-                              cartClientes.find((c) => c._id === params.row._id)
-                                ?.cart?.length -
-                                1 && ", "}
-                          </span>
-                        ))}
-                    </Tabla>
-                    </tr>
-                    <tr>
-                    <Tabla>
-                        <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
-                        Cantidad
-                      </Tabla>
-                    <Tabla>
-                      {cartClientes
-                        .find((cliente) => cliente._id === params.row._id)
-                        ?.cart?.map((repuesto, index) => (
-                          <span key={index}>
-                            {repuesto.amount}
-                            {index <
-                              cartClientes.find((c) => c._id === params.row._id)
-                                ?.cart?.length -
-                                1 && ","}
-                          </span>
-                        ))}
-                    </Tabla>
-                    </tr>
+                   
                   </tbody>
                 </table>
               </Detalle>
@@ -275,8 +437,8 @@ const cambiarEstado = (id, anulado) => {
     <div className="mt-16 ">
       <div className="flex justify-between">
         <h1 className="text-2xl text-start ml-16">
-          <FontAwesomeIcon icon={faTools} className="mr-2" />
-          Gestión de Repuestos
+          <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
+          Gestión de Ventas Repuestos
         </h1>
         <div className="mx-16 justify-end">
           <Link to="/home">

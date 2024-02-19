@@ -68,13 +68,14 @@ export const createCompras = async (req, res) => {
 
 export const updateCompras = async (req, res) => {
   try {
-    const compra = await Compras.findByIdAndUpdate(
-      req.params.id,
-      { anulado: true },
-      { new: true }
-    );
+    const compra = await Compras.findById(req.params.id);
+
     if (!compra) {
       return res.status(404).json({ message: "Compra no encontrada" });
+    }
+
+    if (compra.anulado) {
+      return res.status(400).json({ message: ["La compra ya ha sido anulada anteriormente"] });
     }
 
     // Restaurar la cantidad de repuestos en el documento "Repuestos"
@@ -99,6 +100,7 @@ export const updateCompras = async (req, res) => {
     return res.status(500).json({ message: "Error al anular la compra", error });
   }
 };
+
 
 
 // export const updateCompras = async (req, res) => {

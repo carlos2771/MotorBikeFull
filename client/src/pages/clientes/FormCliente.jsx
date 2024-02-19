@@ -100,15 +100,15 @@ export default function FormCliente() {
 
 
   return (
-    <div className='flex items-center justify-center pt-20 '>
+    <div className='flex items-center justify-center  lg:pt-10  max-lg:w-45 max-md:w-41 max-lg:pt-6 max-sm:text-xs'>
       
-    <div className='bg-slate-700 max-w-lg w-full p-10 shadow-lg shadow-blue-600/40 '>
+    <div className='bg-slate-700  max-w-lg w-full p-10 shadow-lg shadow-blue-600/40 '>
     {clientesErrors.map((error, i) => (
       <div className="bg-red-500 p-2 text-white" key={i}>
             {error}
           </div>
         ))} 
-        <h1 className="text-2xl flex justify-center ">Agregar cliente</h1>
+        <h1 className="text-2xl flex justify-center max-sm:text-base ">Agregar cliente</h1>
       <form className="mt-10" onSubmit={onSubmit}>
       <label>
             Tipo Documento<span className="text-red-500">*</span>
@@ -116,7 +116,7 @@ export default function FormCliente() {
           <select
         {...register("tipo", NombreRequired)}
         onChange={(e) => handleTipoChange(e.target.value)}
-        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2" autoFocus
+        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 " autoFocus
         >
           <option value={""}>Selecciona el tipo de documento</option>
           <option value={"Cedula"} >
@@ -197,11 +197,11 @@ export default function FormCliente() {
         </select>
       
         <div>
-        <button className='px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
+        <button className=' max-sm:text-xs px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ' type="submit">
           Guardar
         </button>
         <button>
-          <Link className="px-5 py-1 ml-3 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30" to="/clientes">Cancelar</Link>
+          <Link className=" max-sm:text-xs px-5 py-1 ml-3 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30" to="/clientes">Cancelar</Link>
         </button>
         </div>
         

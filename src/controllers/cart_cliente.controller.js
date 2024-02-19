@@ -18,13 +18,14 @@ export const getCartClient = async (req, res) => {
 
 export const createCartCliente = async (req, res) => {
     try {
-      const { cart, cliente: clienteId } = req.body;
+      const { cart,descuento, cliente: clienteId } = req.body;
       
       for(const cartData of cart){
         const respuestoEncontrado = await Repuesto.findOne({ name: cartData.name })
         if (!respuestoEncontrado) {
           return res.status(404).json({ message: ["Repuesto no encontrado"] });
         }
+        
 
         const cantidadActualRepuesto = respuestoEncontrado.amount
         const cantidadVender = cartData.amount
@@ -37,11 +38,22 @@ export const createCartCliente = async (req, res) => {
         }
         const cantidadRestanteRepuesto = cantidadActualRepuesto - cantidadVender;
         await Repuesto.findOneAndUpdate({name: cartData.name}, { amount: cantidadRestanteRepuesto });
+    
       }
+      const cartTotal = cart.reduce(
+        (acc, cartItem) => acc + cartItem.amount * cartItem.price,
+        0
+    );
+    
+      const total = cartTotal - (descuento || 0);
 
+      // Validar si el descuento es mayor al total
+      if (descuento > cartTotal) {
+          return res.status(400).json({ message: ['El descuento no puede ser mayor que el total'] });
+      }
       const nuevaCartCliente = new CartCliente({
         cliente: clienteId,
-        cart
+        cart, descuento, total
       });
   
   

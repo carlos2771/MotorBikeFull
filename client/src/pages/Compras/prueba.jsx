@@ -10,7 +10,7 @@ import { useRepuestos } from "../../context/RepuestosContext";
 import { NegativeRequired, RepuestoRequired, fecha, nombre_RepuestoValidacion, codeCompra, NombreMaRequired, NombreRepuestoRequired, NombreProveedor } from "../../utils/validations";
 // IMPORT DEL DATATABLE
 import MUIDataTable from "mui-datatables";
-import { faLock, faDollarSign, faBan, faDownload, faInfoCircle, faIdCard, faScrewdriverWrench, faHashtag, faShoppingBag, faPlus, faTrash, faCheck, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faLock, faDollarSign, faBan, faDownload, faInfoCircle, faIdCard, faScrewdriverWrench, faHashtag, faShoppingBag, faPlus, faTrash, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const currentYear = dayjs().year();
 
@@ -62,17 +62,22 @@ export default function FormCompra() {
   const [codigo, setCodigo] = useState("");
   const [fechaCompra, setFechaCompra] = useState("");
   const [precioTotalCompra, setPrecioTotalCompra] = useState(0);
+
   const [activeRepuestos, setActiveRepuestos] = useState([]);
 
   // Agregar un nuevo estado para almacenar el término de búsqueda
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [allRepuestos, setAllRepuestos] = useState([]);
 
+
+
+  // Filtrar los repuestos disponibles en función del término de búsqueda
+  // Filtrar los repuestos disponibles en función del término de búsqueda
+  // Filtrar los repuestos disponibles en función del término de búsqueda
   const filteredRepuestos = searchTerm.trim() === "" ? activeRepuestos : activeRepuestos.filter(repuesto =>
-    repuesto.name.toLowerCase().includes(searchTerm) || repuesto.nombre_marca.toLowerCase().includes(searchTerm)
+    repuesto.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-
 
 
 
@@ -82,10 +87,6 @@ export default function FormCompra() {
   }, [searchTerm]);
 
 
-  const handleSearchTermChange = event => {
-    const searchTerm = event.target.value.toLowerCase(); // Convertir el término de búsqueda a minúsculas
-    setSearchTerm(searchTerm);
-  };
 
 
   useEffect(() => {
@@ -98,6 +99,10 @@ export default function FormCompra() {
   }, []);
 
   useEffect(() => {
+    setAllRepuestos(repuestos);
+  }, [repuestos]);
+
+  useEffect(() => {
     const activeRepuestosList = repuestos.filter(
       (repuesto) => repuesto.estado === 'Activo'
     );
@@ -108,12 +113,18 @@ export default function FormCompra() {
     setAvailableRepuestos(repuestos);
   }, [repuestos]);
 
+
+  // Manejar cambios en el término de búsqueda
+  const handleSearchTermChange = event => {
+    setSearchTerm(event.target.value);
+  };
+
+
+
   const onSubmit = handleSubmit((data) => {
     setProveedorCompra(data.proveedorCompra);
     setCodigo(data.codigo);
     setFechaCompra(data.fecha);
-    // Restablecer el valor del input de búsqueda a una cadena vacía
-    setSearchTerm('');
 
     const repuestoData = {
       repuesto: repuestos.find((repuesto) => repuesto._id === data.repuestos[0].repuesto),
@@ -137,7 +148,6 @@ export default function FormCompra() {
         acc[`repuestos.${index}.repuesto`] = "";
         acc[`repuestos.${index}.cantidad_repuesto`] = "";
         acc[`repuestos.${index}.precio_unitario`] = "";
-
         return acc;
       }, {}),
       fecha: data.fecha,
@@ -248,7 +258,9 @@ export default function FormCompra() {
   };
 
   return (
-    <div className="contenedorPrincipal shadow-lg shadow-blue-600/40">
+    <div className="contenedorPrincipal shadow-lg shadow-blue-600/40"
+
+    >
       {comprasErrors.map((error, i) => (
         <div className="bg-red-500 p-2 text-white" key={i}>
           {error}
@@ -334,124 +346,37 @@ export default function FormCompra() {
               </div>
 
 
-              <div className="divRojo" key={item.id} style={{ marginBottom: '130px' }}>
-
-
-
-                {/* SELECT DE LOS REPUESTOS */}
-                <div style={{ position: 'relative', width: '100%', marginTop: '100px' }}>
-
-
-
-
-
-
-
-                  <label style={{ marginLeft: '25px', marginTop: '100px' }}>Selecciona un repuesto <span style={{ color: 'red' }}>*</span></label>
-                  <input
-                    id="search"
-                    value={searchTerm}
-                    onChange={handleSearchTermChange}
-                    className="input-search"
-                    placeholder="Buscar..."
-                  />
-              
-
-                  
-
-
-                  <style>{
-
-                    `
-                    
-                    
-
-                    .input-search {
-                      background-color: #12263a;
-                      width: calc(100% - 40px); /* Ajusta el ancho del input menos el ancho del icono */
-                      padding: 3px; /* Espacio interno del input */
-                      border-radius: 10px; /* Esquinas redondeadas */
-                      box-sizing: border-box; /* Incluye el padding y borde en el ancho total */
-                      font-size: 16px; /* Tamaño de fuente */
-                      outline: none;
-                      color: 
-                      #bababa;
-                      margin-left: 5%; /* Ajusta el margen izquierdo según sea necesario */
-                      margin-bottom: 5px;
-                    }
-                    
-                    .search-icon {
-                      position: relative;
-                      bottom: -7px; 
-                      right: 20px; /* Ajusta la posición según sea necesario */
-                      transform: translateY(-50%);
-                      color: white; /* Color del icono */
-                      cursor: pointer;
-                    }
-                    
-                    
-                    
-                    @media (max-width: 768px) {
-                      .input-search {
-                        font-size: 14px; /* Reducir el tamaño de fuente en pantallas más pequeñas si es necesario */
-                      }
-
-                      .busq{
-                        width: 10%; /* Ajusta el ancho para dispositivos móviles */
-                        height: 30px; /* Ajusta la altura para dispositivos móviles */
-                        font-size: 12px; /* Ajusta el tamaño de fuente para dispositivos móviles */
-                      }
-                    }
-                    `
-                  }</style>
-
-
-
-
-
-
-
-                  {/* 
-                  <input type="text"
-                    style={{ color: 'black' }}
-                    id="search"
-                    value={searchTerm}
-                    onChange={handleSearchTermChange}
-                    placeholder="Buscar" /> */}
-
-                  <select
-                    size={5}
-                    className="bg-slate-800 border border-3 border-blue-600"
-                    style={{ marginLeft: '5%', width: '90%', borderRadius: '10px', padding: '15px', cursor: 'pointer', outline: 'none' }}
-                    name=""
-                    id=""
-                    {...register(`repuestos.${index}.repuesto`, RepuestoRequired)}
-                    onChange={(e) => {
-                      setSelectedRepuesto(e.target.value);
-                    }}
-                  >
-                    {filteredRepuestos.length === 0 ? (
-                      <option disabled style={{ marginLeft: '30%', marginTop: '10%' }}>No hay coincidencias</option>
-                    ) : (
-                      filteredRepuestos.map((repuesto) => {
-                        // Filtrar repuestos disponibles para seleccionar
-                        if (!repuestosList.find((item) => item.repuesto._id === repuesto._id)) {
-                          return (
-                            <option key={repuesto._id} value={repuesto._id}>
-                              {repuesto.name} - {repuesto.nombre_marca}
-                            </option>
-                          );
-                        } else {
-                          return null;
-                        }
-                      })
-                    )}
-                  </select>
-
-                  {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].repuesto && errors.repuestos[index].repuesto.message && (
-                    <p style={{ marginTop: '-2px', marginLeft: '7%' }} className="text-red-500">{errors.repuestos[index].repuesto.message}</p>
-                  )}
-                </div>
+              <div>
+                <label htmlFor="search">Buscar Repuesto:</label>
+                <input
+                  type="text"
+                  id="search"
+                  value={searchTerm}
+                  onChange={handleSearchTermChange}
+                  placeholder="Buscar repuesto..."
+                />
+                <select
+                  size={5}
+                  className="bg-slate-800 border border-3 border-blue-600"
+                  style={{ marginLeft: '5%', width: '90%', borderRadius: '10px', padding: '15px', cursor: 'pointer', outline: 'none' }}
+                  name=""
+                  id=""
+                  {...register(`repuestos.${index}.repuesto`, RepuestoRequired)}
+                  onChange={(e) => {
+                    setSelectedRepuesto(e.target.value);
+                  }}
+                >
+                  {filteredRepuestos.map((repuesto) => {
+                    return (
+                      <option key={repuesto._id} value={repuesto._id}>
+                        {repuesto.name} - {repuesto.nombre_marca}
+                      </option>
+                    );
+                  })}
+                </select>
+                {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].repuesto && errors.repuestos[index].repuesto.message && (
+                  <p style={{ marginTop: '-2px', marginLeft: '7%' }} className="text-red-500">{errors.repuestos[index].repuesto.message}</p>
+                )}
               </div>
 
 

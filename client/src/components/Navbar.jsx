@@ -91,23 +91,23 @@ export default function Navbar() {
                     </Link>
                   </Render>
                   <Render>
-                    <Link to="/home-page" className="flex ms-10 p-2">
-                      <FontAwesomeIcon icon={faMotorcycle} className="mr-2" />Home
-                    </Link>
-                  </Render>
-                  <Render>
                     <Link to="/repuestos" className="flex ms-10 p-2">
                       <FontAwesomeIcon icon={faTools} className="mr-2" /> Repuestos
                     </Link>
                   </Render>
                   <Render>
+                    <Link to="/home-page" className="flex ms-10 p-2">
+                      <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />Ventas repuestos
+                    </Link>
+                  </Render>
+                  {/* <Render>
                     <Link
                       to="/ventas-repuestos"
                       className="flex ms-10 p-2"
                     >
                       <FontAwesomeIcon icon={faShoppingCart} className="mr-2" /> Ventas Repuestos
                     </Link>
-                  </Render>
+                  </Render> */}
                   <Render>
                     <Link
                       to="/ventas-servicios"
