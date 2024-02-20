@@ -25,26 +25,65 @@ export default function registerPage() {
   //   console.log("entro");
   // }, [isAuthenticated]);
 
-  const onSubmit = handleSubmit((values) => {
-    signup(values);
-    if (values){
-      Swal.fire({
-        icon: "success",
-        title: "Bienvenid@",
+  const onSubmit = handleSubmit(async (values) => {
+    try {
+      const response = await signup(values);
+      if (response.message) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Bienvenid@",
+        });
+        navigate("/login");
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "mala",
+        });
+        navigate("/login");
+      }
+    } catch (error) {
+      // Error de red u otro error, muestra el mensaje de error
+      setErrorMessage(error.message || "Error en el registro");
+      const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,
         didOpen: (toast) => {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
         },
       });
-      navigate("/login")}
-    console.log("Aca los valores", values); // para que me  muestre los valores ingresados del formulario
+      Toast.fire({
+        icon: "error",
+        title: "Error",
+      });
+      navigate("/login");
+    }
   });
-  console.log(registerErrors);
 
   
 
