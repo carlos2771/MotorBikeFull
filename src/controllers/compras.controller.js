@@ -32,6 +32,7 @@ export const createCompras = async (req, res) => {
 
     // Verifica si hay repuestos proporcionados en la solicitud
     if (!repuestos || repuestos.length === 0) {
+      console.log("dsoifnosdi");
       return res.status(400).json({ message: "Debe proporcionar al menos un repuesto" });
     }
 
