@@ -85,10 +85,10 @@ export default function FormMecanico() {
             autoFocus
           />
           {errors.nombre_marca && <p className="text-red-500">{errors.nombre_marca.message}</p>}
-          <label>Estado</label>
+          <label className="hidden">Estado</label>
           <select
             {...register("estado")}
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2 hidden"
           >
             <option value={"Activo"} >
               Activo
