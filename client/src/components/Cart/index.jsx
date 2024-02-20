@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useCartCliente } from "../../context/CartClienteContext";
 import { Link, useNavigate } from "react-router-dom";
 import { ClienteRequired, NombreRequired } from "../../utils/validations"
+
 const Cart = () => {
   const navigate = useNavigate();
   const [cartOpen, setCartOpen] = useState(false);
@@ -20,7 +21,7 @@ const Cart = () => {
     formState: { errors },
   } = useForm();
   const { createCartCliente, errors:Errors } = useCartCliente();
-
+  
   useEffect(() => {
     try {
       getClientes();
@@ -32,29 +33,66 @@ const Cart = () => {
   /* Traemos del context los productos del carrito */
   const { cartItems, cleartCart } = useContext(CartContext);
 
+  console.log("items",cartItems);
+  const [totalCart, setTotalCart] = useState(0);
+  const [descuento, setDescuento] = useState(0); // Estado para el descuento
+  const [unidades, setUnidades] = useState([])
+
+  const handleUpdateUnit = ({name,unit}) => {
+    const exist = unidades.find((unidad)=> unidad.name === name)
+    if(exist){
+      const saveUnit = unidades.map((unidad)=> unidad.name === name ? {...unidad, unit} : unidad)
+      setUnidades(saveUnit)
+    }else {
+      setUnidades([...unidades, {name, unit}])
+    }
+  }
+  console.log("perro",unidades);
+
   /* Cada vez que se modifica el carrito, actualizamos la cantidad de productos */
   useEffect(() => {
     setProductsLength(
       cartItems?.reduce((previous, current) => previous + current.amount, 0) // reduce para reducir el array a un solo valor
     );
+    setUnidades(cartItems.map((cart)=> ({name:cart.name, unit:1})))
   }, [cartItems]);
 
   /* Obtenemos el precio total */ 
-  const total = cartItems?.reduce(
-    (previous, current) => previous + current.amount * current.price,
-    0
-  );
+  useEffect(() => {
+    const total = cartItems?.reduce(
+      (previous, current) => previous + current.amount * current.price,
+      0
+    );
+    // Restar el descuento del total
+    const validateDescuento = isNaN(descuento)? 0:descuento
+    console.log("validate", validateDescuento);
+    const totalConDescuento = total - validateDescuento;
+    setTotalCart(totalConDescuento > 0 ? totalConDescuento : 0); // Asegurarse de que el total no sea negativo
+    console.log("totaldes",totalConDescuento);
+  }, [cartItems, descuento]);
 
+  const updateTotal = (itemId, newAmount) => {
+    const updatedTotal = cartItems.reduce((acc, item) => {
+      if (item._id === itemId) {
+        return acc + newAmount * item.price;
+      }
+      return acc + item.amount * item.price;
+    }, 0);
+    setTotalCart(updatedTotal);
+  };
+
+
+ 
   const onSubmit = async (data) => {
     try {
       
-         // Assuming you have a function named clearCart
+         // aqui no se devuelva mas
   
         const { cliente,descuento, ...restData } = data;
         const result = cartItems.map((item) => {
           // Create a copy of each item
           const newItem = { ...item };
-  
+          
           // Resize the image before saving
           const image = new Image();
           image.src = newItem.image; // Assuming the image property is present in your item object
@@ -77,8 +115,9 @@ const Cart = () => {
   
           // Update the item's image property with the resized image
           newItem.image = resizedImage;
-  
-          return newItem;
+          const newAmount = unidades.find((unidad)=> unidad.name === newItem.name )
+          console.log("new", newAmount);
+          return {...newItem, amount:newAmount.unit};
         });
         const descuentoNumber = parseInt(descuento);
         const datosCartCliente = {
@@ -103,8 +142,7 @@ const Cart = () => {
       console.error("Error al enviar el carrito y cliente:", error);
     }
   };
-  
-  
+
   return (
     <div className={styles.cartContainer}>
 
@@ -171,7 +209,7 @@ const Cart = () => {
           ) : (
             <div className={styles.productsContainer}>
               {cartItems.map((item, i) => (
-                <ItemCart key={i} item={item} />
+                <ItemCart key={i} item={item} updateTotal={updateTotal} handleUpadateUnit={handleUpdateUnit}/>
               ))}
               <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
                 <div>
@@ -189,9 +227,10 @@ const Cart = () => {
                   </select>
                   {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
                   <input
-                  type="number"
+                  
                   {...register("descuento")}
                   placeholder="Descuento"
+                  onChange={(e) => setDescuento(parseInt(e.target.value))}
                   className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
                 />
                 </div>
@@ -200,7 +239,7 @@ const Cart = () => {
             </div>
           )}
 
-          <h2 className={styles.total}>Total: ${total}</h2>
+          <h2 className={styles.total}>Total: ${totalCart}</h2>
         </div>
       )}
     </div>
