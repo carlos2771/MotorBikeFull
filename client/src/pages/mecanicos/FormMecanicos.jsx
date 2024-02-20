@@ -9,7 +9,6 @@ import {
   TelefonoRequired,
   DireccionRequired,
   NombreMeRequired,
-  PasaporteRequired,
   CedulaExtRequired,
 } from "../../utils/validations";
 import Swal from "sweetalert2"
@@ -91,23 +90,13 @@ export default function FormMecanico() {
           toast.onmouseleave = Swal.resumeTimer;
         },
       });
-      Toast.fire({
-        icon: "success",
-        title: "Agregado correctamente",
-      });
-      if (res) navigate("/mecanicos");
-      else{
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
+      if (res) {
+        Toast.fire({
+          icon: "success",
+          title: "Agregado correctamente",
         });
+        navigate("/mecanicos");
+      } else {
         Toast.fire({
           icon: "error",
           title: "No se ha agregado",
@@ -115,6 +104,7 @@ export default function FormMecanico() {
       }
     }
   });
+  
 
   return (
     <div className="flex items-center justify-center pt-20">
@@ -135,7 +125,7 @@ export default function FormMecanico() {
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value={""}>Selecciona el tipo de documento</option>
-            <option value={"Cedula"}>Cédula Ciudadania</option>
+            <option value={"Cedula Ciudadania"}>Cédula Ciudadania</option>
             <option value={"Cedula Extranjera"}>Cédula Extranjera</option>
           </select>
           {errors.tipo && (

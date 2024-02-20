@@ -32,32 +32,36 @@ export const getMecanico = async (req, res) => {
     }
   };
 
+
 // Crea un nuevo mecanico
-export const createMecanico = async(req, res) =>{
+export const createMecanico = async (req, res) => {
     try {
-        // Extrae los datos del mecanico, del cuerpo de la solicitud
-        const  { nombre_mecanico, cedula_mecanico, telefono_mecanico, direccion_mecanico, estado, tipo} = req.body
+        const { nombre_mecanico, cedula_mecanico, telefono_mecanico, direccion_mecanico, estado, tipo } = req.body;
 
-        const cedulaFound = await Mecanico.findOne({cedula_mecanico})
-        if(cedulaFound) return res.status(400).json({message:["El documento del mecanico ya existe"]});
-        
-        // para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
-        console.log(req.user) 
+        // Verifica si la cédula ya está registrada para cualquier tipo de documento
+        const cedulaFound = await Mecanico.findOne({ cedula_mecanico });
 
-        // Crea una nueva instancia del modelo 'Mecanico' con los datos del mecanico
+        if (cedulaFound) {
+            // Si la cédula existe, verifica si el tipo de documento coincide
+            if (cedulaFound.tipo === tipo) return res.status(400).json({ message: ["Ya existe un mecánico con este número de cédula y tipo de documento." ]});
+            
+        }
+
+        // Crea una nueva instancia del modelo 'Mecanico' con los datos del mecánico
         const newMecanico = new Mecanico({
-            nombre_mecanico, cedula_mecanico, telefono_mecanico, direccion_mecanico, estado, tipo
-        })
+            nombre_mecanico, cedula_mecanico, telefono_mecanico, direccion_mecanico, estado,
+            tipo
+        });
 
-        // Guarda el nuevo mecanico en la base de datos
-        const saveMecanico =  await newMecanico.save()
+        // Guarda el nuevo mecánico en la base de datos
+        const saveMecanico = await newMecanico.save();
 
-        // Devuelve el mecanico creado en formato JSON
-        res.status(201).json(saveMecanico)
+        // Devuelve el mecánico creado en formato JSON
+        res.status(201).json(saveMecanico);
     } catch (error) {
-    res.status(500).json({ message: error.message });
-   }
-}
+        res.status(500).json({ message: error.message });
+    }
+};
 
 // Actualiza un mecanico por su ID
 export const updateMecanico= async(req, res) =>{
