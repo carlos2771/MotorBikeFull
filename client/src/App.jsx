@@ -56,6 +56,14 @@ import { CartClienteProvider } from "./context/CartClienteContext";
 import PageCartClient from "./pages/cartClient/PageCartClient";
 
 
+import PageUsuarios from "./pages/usuarios/PageUsuarios";
+import FormUsuarios from "./pages/usuarios/FormUsuarios";
+
+import { RolesProvider } from "./context/RolsContext";
+import PageRoles from "./pages/roles/PageRoles";
+import FormRoles from "./pages/roles/FormRoles";
+
+import { UsuarioProvider } from "./context/usuariosContext";
 
 export default function App() {
 
@@ -77,6 +85,8 @@ export default function App() {
                           <CompraProvider>
                             <CartProvider>
                               <CartClienteProvider>
+                                <RolesProvider>
+                                  <UsuarioProvider>
 
                               
                            {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
@@ -105,48 +115,60 @@ export default function App() {
                                     <Route path="/add-cliente" element={<FormCliente />} />
                                     <Route path="/cliente/:id" element={<FormCliente />} />
 
-                                    <Route path="/profile" element={<ProfilePage />} />
-                                    <Route path="/clientes" element={<PageClientes />} />
-                                    <Route path="/add-cliente" element={<FormCliente />} />
-                                    <Route path="/cliente/:id" element={<FormCliente />} />
+                                            <Route path="/profile" element={<ProfilePage />} />
+                                            <Route path="/clientes" element={<PageClientes />} />
+                                            <Route path="/add-cliente" element={<FormCliente />} />
+                                            <Route path="/cliente/:id" element={<FormCliente />} />
 
-                                    <Route path="/permisos" element={<PermisosPage />} />
-                                    <Route path="/add-permiso" element={<FormPermisos />} />
-                                    <Route path="/permiso/:id" element={<FormPermisos />} />
+                                            <Route path="/permisos" element={<PermisosPage />} />
+                                            <Route path="/add-permiso" element={<FormPermisos />} />
+                                            <Route path="/permiso/:id" element={<FormPermisos />} />
 
-                                    <Route path="/ventas-repuestos" element={<PageVentaRepuestos />} />
-                                    <Route path="/add-venta-repuesto" element={<FormVentaRepuesto />} />
-                                    <Route path="/venta-repuesto/:id" element={<FormVentaRepuesto />} />
+                                            <Route path="/ventas-repuestos" element={<PageVentaRepuestos />} />
+                                            <Route path="/add-venta-repuesto" element={<FormVentaRepuesto />} />
+                                            <Route path="/venta-repuesto/:id" element={<FormVentaRepuesto />} />
 
-                                    <Route path="/ventas-servicios" element={<PageVentaServicios />} />
-                                    <Route path="/add-venta-servicio" element={<FormVentaServicio />} />
-                                    <Route path="/ventas-servicios/:id" element={<FormVentaServicio />} />
+                                            <Route path="/ventas-servicios" element={<PageVentaServicios />} />
+                                            <Route path="/add-venta-servicio" element={<FormVentaServicio />} />
+                                            <Route path="/ventas-servicios/:id" element={<FormVentaServicio />} />
 
-                                    <Route path="/repuestos" element={<PageRepuestos />} />
-                                    <Route path="/add-repuesto" element={<FormRepuesto />} />
-                                    <Route path="/repuestos/:id" element={<FormRepuesto />} />
+                                            <Route path="/repuestos" element={<PageRepuestos />} />
+                                            <Route path="/add-repuesto" element={<FormRepuesto />} />
+                                            <Route path="/repuestos/:id" element={<FormRepuesto />} />
 
-                                    <Route path="/mecanicos" element={<PageMecanico />} />
-                                    <Route path="/add-mecanico" element={<FormMecanico />} />
-                                    <Route path="/mecanico/:id" element={<FormMecanico />} />
+                                            <Route path="/mecanicos" element={<PageMecanico />} />
+                                            <Route path="/add-mecanico" element={<FormMecanico />} />
+                                            <Route path="/mecanico/:id" element={<FormMecanico />} />
 
-                                    <Route path="/marcas" element={<PageMarcas />} />
-                                    <Route path="/add-marca" element={<FormMarca />} />
-                                    <Route path="/marca/:id" element={<FormMarca />} />
+                                            <Route path="/marcas" element={<PageMarcas />} />
+                                            <Route path="/add-marca" element={<FormMarca />} />
+                                            <Route path="/marca/:id" element={<FormMarca />} />
 
-                                    <Route path="/mecanicos/:id" element={<VerMecanico />} />
+                                            <Route path="/mecanicos/:id" element={<VerMecanico />} />
 
-                                    <Route path="/compras" element={<PageCompras />} />
-                                    <Route path="/add-compra" element={<FormCompras />} />
-                                    <Route path="/compras/:id" element={<FormCompras />} />
+                                            <Route path="/compras" element={<PageCompras />} />
+                                            <Route path="/add-compra" element={<FormCompras />} />
+                                            <Route path="/compras/:id" element={<FormCompras />} />
 
-                                    <Route path="/graficos" element={<Graficos />} />
+                                            <Route path="/graficos" element={<Graficos />} />
 
-                                  </Route>
-                                </Routes>
-                              </main>
-                            </BrowserRouter>
-                            </CartClienteProvider>
+                                            <Route path="/usuarios" element={<PageUsuarios />} />
+                                            <Route path="/add-usuario" element={<FormUsuarios />} />
+                                            <Route path="/usuarios/:id" element={<FormUsuarios />} />
+                                            
+
+                                            <Route path="/rol" element={<PageRoles />} />
+                                            <Route path="/add-roles" element={<FormRoles />} />
+                                            <Route path="/rol/:id" element={<FormRoles />} />
+
+
+                                          </Route>
+                                        </Routes>
+                                      </main>
+                                    </BrowserRouter>
+                                  </UsuarioProvider>
+                                </RolesProvider>
+                              </CartClienteProvider>
                             </CartProvider>
                           </CompraProvider>
                         </MarcaProvider>

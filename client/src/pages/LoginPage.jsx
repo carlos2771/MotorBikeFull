@@ -34,7 +34,7 @@ export default function LoginPage() {
         icon: "success",
         title: "Bienvenid@",
       });
-      navigate('/tasks');
+      navigate('/graficos');
     }
   }, [isAuthenticated]);
 
