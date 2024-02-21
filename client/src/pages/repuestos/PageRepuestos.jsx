@@ -281,7 +281,7 @@ export default function PageRepuestos() {
                           repuestos.find((repuesto) => repuesto._id === params.row._id)
                             ?.amount
                         )}
-                        {repuestos.find((repuesto) => repuesto._id === params.row._id)?.amount}
+                        
                       </Tabla>
                     </tr>
                     <tr>
