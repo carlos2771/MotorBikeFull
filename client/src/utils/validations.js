@@ -99,11 +99,11 @@ export const CedulaRequired = {
   required: "Campo requerido",
   pattern: {
     value: numberPattern,
-    message: "Cedula solo contiene numeros ",
+    message: "Debe contener solo numeros",
   },
   maxLength: {
     value: 10,
-    message: "El maximo de caracteres es de 12"
+    message: "El maximo de caracteres es de 10"
   },
   minLength: {
     value: 7,
@@ -196,7 +196,7 @@ export const DireccionRequired = {
 export const NombreMeRequired = {
   required: "Campo requerido",
   validate: (value) => /^[A-Za-z\s]+$/.test(value.trim()) || "Ingresa un nombre valido",
-  maxLength: { value: 75, message: "El maximo de caracteres es de 75" },
+  maxLength: { value: 35, message: "El maximo de caracteres es de 35" },
   minLength: { value: 6, message: "Ingresa el nombre completo, minimo 6 caracteres" }
 };
 
@@ -204,14 +204,30 @@ export const NombreMaRequired = {
   required: "Campo requerido",
   validate: (value) => /^(?! +$)[A-Za-z0-9\s]+$/.test(value.trim()) || "Ingresa un nombre valido",
   maxLength: { value: 50, message: "Maximo 50 caracteres" },
-  minLength: { value: 4, message: "Minimo 4 caracteres" }
+  minLength: { value: 1, message: "Minimo 1 caracter" }
 };
 
-export const PasaporteRequired = {
+// export const PasaporteRequired = {
+//   required: "Campo requerido",
+//   validate: (value) => /^(?=(.*[A-Za-z]){4})(?=(.*\d){4})[A-Za-z0-9\s]+$/.test(value.trim()) || "Debe contener al menos 4 letras y 4 números",
+//   maxLength: { value: 16, message: "Máximo 16 caracteres" },
+//   minLength: { value: 8, message: "Mínimo 8 caracteres" }
+// };
+
+export const CedulaExtRequired = {
   required: "Campo requerido",
-  validate: (value) => /^(?=(.*[A-Za-z]){4})(?=(.*\d){4})[A-Za-z0-9\s]+$/.test(value.trim()) || "Debe contener al menos 4 letras y 4 números",
-  maxLength: { value: 16, message: "Máximo 16 caracteres" },
-  minLength: { value: 8, message: "Mínimo 8 caracteres" }
+  pattern: {
+    value: numberPattern,
+    message: "Debe contener solo numeros",
+  },
+  maxLength: {
+    value: 12,
+    message: "El maximo de caracteres es de 12"
+  },
+  minLength: {
+    value: 6,
+    message: "El minimo de caracteres es de 6"
+  }
 };
 
 //-----------------------------------------------------------

@@ -7,11 +7,10 @@ const rolSchema = new mongoose.Schema({
   },
   permissions: [{
     type: String,
-    required: true
+    required: true,
   }],
   status: {
     type: String,
-    enum: ['Activo', 'Inactivo'],
     default: 'Activo'
   }
 }, {

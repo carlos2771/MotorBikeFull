@@ -216,7 +216,7 @@ const Cart = () => {
                   <select
                     {...register("cliente", ClienteRequired)}
                     onChange={(e) => setValue("cliente", e.target.value)}
-                    className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
+                    className="w-full bg-slate-700 border-0 border-b-2 border-blue-700 text-white px-4 py-2 my-2"
                   >
                     <option value="">Selecciona un cliente</option>
                     {clientes.map((cliente) => (
@@ -231,7 +231,7 @@ const Cart = () => {
                   {...register("descuento")}
                   placeholder="Descuento"
                   onChange={(e) => setDescuento(parseInt(e.target.value))}
-                  className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
+                  className="w-full bg-slate-700 border-0 border-b-2 border-blue-700 text-white px-4 py-2 my-2"
                 />
                 </div>
                 <button type="submit">Enviar</button>

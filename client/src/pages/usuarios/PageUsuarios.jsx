@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMotorcycle, faDownload, faPlus, faPencil , faBan,  faCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default function PageUsuarios() {
-  const { user, getUsuarios} = useUsuario()
+  const { user, getUsuarios, updateUsuario} = useUsuario()
   
   
   useEffect(() => {
@@ -78,12 +78,12 @@ export default function PageUsuarios() {
     
   };
 
-  // const cambiarEstado = (id, estado) => {
-  //   const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
-  //   updateUsuario(id, { estado: nuevoEstado }).then(() => {
-  //       getUsuarios();
-  //   });
-  // };
+  const cambiarEstado = (id, estado) => {
+    const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
+    updateUsuario(id, { estado: nuevoEstado }).then(() => {
+        getUsuarios();
+    });
+  };
 
 
   const columns = [
