@@ -47,7 +47,7 @@ export default function FormMecanico() {
     // Desregistrando el campo antes de volver a registrarlo
     unregister("cedula_mecanico");
     // Actualiza la validación según el tipo seleccionado
-    if(selectedTipo === "Cedula Extranjera") {
+    if(selectedTipo === "Cedula de Extranjeria") {
 
       register("cedula_mecanico", CedulaExtRequired);
     }
@@ -125,8 +125,8 @@ export default function FormMecanico() {
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value={""}>Selecciona el tipo de documento</option>
-            <option value={"Cedula Ciudadania"}>Cédula Ciudadania</option>
-            <option value={"Cedula Extranjera"}>Cédula Extranjera</option>
+            <option value={"Cedula de Ciudadania"}>Cédula Ciudadania</option>
+            <option value={"Cedula de Extranjeria"}>Cédula Extranjera</option>
           </select>
           {errors.tipo && (
             <p className="text-red-500">{errors.tipo.message}</p>

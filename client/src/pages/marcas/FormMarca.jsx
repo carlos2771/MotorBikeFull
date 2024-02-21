@@ -26,7 +26,7 @@ export default function FormMecanico() {
   const onSubmit = handleSubmit(async (data) => {
     const lowercaseData = {
       ...data,
-      nombre_marca: data.nombre_marca.toLowerCase(),
+      nombre_marca: data.nombre_marca.toUpperCase(),
     };
 
     if (params.id) {
