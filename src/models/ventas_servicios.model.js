@@ -17,6 +17,9 @@ const ventas_serviciosSchema = new mongoose.Schema({
   descripcion: {
     type: String,
   },
+  placa:{
+    type: String,
+  },
   estado: {
     type: String,
     required: true,

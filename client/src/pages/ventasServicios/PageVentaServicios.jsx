@@ -129,7 +129,9 @@ export default function PageVentaServicios() {
         month: 'long',
         day: 'numeric',
       }),
+      Placa: venta.placa,
       Estado: venta.estado,
+
     }));
 
     const ws = XLSX.utils.json_to_sheet(datos);
@@ -171,6 +173,13 @@ export default function PageVentaServicios() {
           width: 170,
           headerClassName: 'custom-header',
           valueGetter: (params) => params.row.cliente.nombre_cliente,
+        },
+        {
+          field: "placa",
+          headerName: "Placa",
+          width: 170,
+          headerClassName: 'custom-header',
+          valueGetter: (params) => params.value.toUpperCase(),
         },
         {
           field: "precio_servicio",
@@ -277,6 +286,18 @@ export default function PageVentaServicios() {
                             (cliente) => cliente._id === params.row._id
                           )?.cliente.nombre_cliente
                         }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faPen} className="mr-2" />
+                        Placa
+                      </Tabla>
+                      <Tabla >
+                      {
+                    ventasServicios.find((placa) => placa._id === params.row._id)
+                      ?.placa.toUpperCase()
+                  }
                       </Tabla>
                     </tr>
                     <tr>

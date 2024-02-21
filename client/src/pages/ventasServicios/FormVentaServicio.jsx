@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../../context/ClientContext";
 import { useMecanicos } from "../../context/MecanicosContext";
-import { NegativeRequired, ClienteRequired, MecanicoRequired, NombreRequired } from "../../utils/validations";
+import { NegativeRequired, ClienteRequired, MecanicoRequired, NombreRequired, placaValidators } from "../../utils/validations";
 import Swal from "sweetalert2";
 
 export default function FormVentaServicio() {
@@ -33,6 +33,7 @@ export default function FormVentaServicio() {
         setValue("cliente", ventaServicio.cliente);
         setValue("precio_servicio", ventaServicio.precio_servicio);
         setValue("descripcion", ventaServicio.descripcion);
+        setValue("placa",ventaServicio.placa);
       }
     })();
   }, []);
@@ -152,13 +153,22 @@ export default function FormVentaServicio() {
           </select>
           {errors.mecanico && <p className="text-red-500">{errors.mecanico.message}</p>}
 
-          <label>Precio del Servicio<span className="text-red-500">*</span></label>
+          <label>Placa de vehículo<span className="text-red-500">*</span></label>
+          <textarea
+            {...register("placa", placaValidators)}
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
+          />
+          {errors.placa && <p className="text-red-500">{errors.placa.message}</p>}
+
+          <label>Precio del servicio<span className="text-red-500">*</span></label>
           <input
             type="number"
             {...register("precio_servicio", NegativeRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
           />
           {errors.precio_servicio && <p className="text-red-500">{errors.precio_servicio.message}</p>}
+
+
 
           <label>Descripción<span className="text-red-500">*</span></label>
           <textarea
