@@ -238,7 +238,7 @@ export default function FormRepuesto() {
           )}
 
           <label>
-            Imagen Repuesto<span className="text-red-500">*</span>
+            Imagen Repuesto<span className="text-red-500"></span>
           </label>
           <input
             type="file"
