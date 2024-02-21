@@ -178,10 +178,10 @@ export default function FormCliente() {
         />
         {errors.telefono_cliente && <p className="text-red-500">{errors.telefono_cliente.message}</p>}
       
-      <label >Estado<span className="text-red-500">*</span></label>
+      <label className="hidden">Estado<span className="text-red-500 ">*</span></label>
         <select
         {...register("estado")}
-        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+        className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2 hidden"
         > 
           <option value={"Activo"} >
             Activo
