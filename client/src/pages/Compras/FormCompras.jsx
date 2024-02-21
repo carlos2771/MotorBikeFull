@@ -13,7 +13,7 @@ import MUIDataTable from "mui-datatables";
 import { faLock, faDollarSign, faBan, faDownload, faInfoCircle, faIdCard, faScrewdriverWrench, faHashtag, faShoppingBag, faPlus, faTrash, faCheck, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const currentYear = dayjs().year();
-
+import Swal from 'sweetalert2';
 
 
 function formatCurrency(value) {
@@ -108,7 +108,9 @@ export default function FormCompra() {
     setAvailableRepuestos(repuestos);
   }, [repuestos]);
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async (data) => {
+
+
     setProveedorCompra(data.proveedorCompra);
     setCodigo(data.codigo);
     setFechaCompra(data.fecha);
@@ -144,6 +146,8 @@ export default function FormCompra() {
       proveedorCompra: data.proveedorCompra,
       codigo: data.codigo,
     });
+
+
   });
 
   const guardarCompra = async () => {
@@ -171,6 +175,21 @@ export default function FormCompra() {
       await createCompra(compraData);
       reset();
       navigate("/compras");
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Agregada correctamente",
+      });
     } catch (error) {
       console.error("Error al crear la compra:", error);
     }
@@ -355,9 +374,9 @@ export default function FormCompra() {
                     className="input-search"
                     placeholder="Buscar..."
                   />
-              
 
-                  
+
+
 
 
                   <style>{
