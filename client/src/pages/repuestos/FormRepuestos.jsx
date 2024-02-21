@@ -191,24 +191,7 @@ export default function FormRepuesto() {
           {errors.name && (
             <p className="text-red-500">{errors.name.message}</p>
           )}
-          <label>
-            Imagen Repuesto<span className="text-red-500">*</span>
-          </label>
-          <input
-            type="file"
-            onChange={handleImageChange}
 
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-            autoFocus
-          />
-          {errors.img && <p className="text-red-500">{errors.img.message}</p>}
-          {imageBase64 && (
-            <img
-              src={imageBase64}
-              alt="Preview"
-              style={{ width: "40%", marginTop: "10px" }}
-            />
-          )}
 
           <label>
             Marca<span className="text-red-500">*</span>
@@ -252,6 +235,25 @@ export default function FormRepuesto() {
           />
           {errors.price && (
             <p className="text-red-500">{errors.price.message}</p>
+          )}
+
+          <label>
+            Imagen Repuesto<span className="text-red-500">*</span>
+          </label>
+          <input
+            type="file"
+            onChange={handleImageChange}
+
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+            autoFocus
+          />
+          {errors.img && <p className="text-red-500">{errors.img.message}</p>}
+          {imageBase64 && (
+            <img
+              src={imageBase64}
+              alt="Preview"
+              style={{ width: "40%", marginTop: "10px" }}
+            />
           )}
 
           <label className="hidden">Estado</label>
