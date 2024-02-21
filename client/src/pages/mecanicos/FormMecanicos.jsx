@@ -9,7 +9,7 @@ import {
   TelefonoRequired,
   DireccionRequired,
   NombreMeRequired,
-  PasaporteRequired,
+  CedulaExtRequired,
 } from "../../utils/validations";
 import Swal from "sweetalert2"
 
@@ -47,13 +47,16 @@ export default function FormMecanico() {
     // Desregistrando el campo antes de volver a registrarlo
     unregister("cedula_mecanico");
     // Actualiza la validación según el tipo seleccionado
-    if (selectedTipo === "Pasaporte") {
-      
-      register("cedula_mecanico", PasaporteRequired);
-    } else {
+    if(selectedTipo === "Cedula de Extranjeria") {
+
+      register("cedula_mecanico", CedulaExtRequired);
+    }
+    else {
       register("cedula_mecanico", CedulaRequired);
     }
   };
+
+  
 
   const onSubmit = handleSubmit(async (data) => {
     if (params.id) {
@@ -87,23 +90,13 @@ export default function FormMecanico() {
           toast.onmouseleave = Swal.resumeTimer;
         },
       });
-      Toast.fire({
-        icon: "success",
-        title: "Agregado correctamente",
-      });
-      if (res) navigate("/mecanicos");
-      else{
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
+      if (res) {
+        Toast.fire({
+          icon: "success",
+          title: "Agregado correctamente",
         });
+        navigate("/mecanicos");
+      } else {
         Toast.fire({
           icon: "error",
           title: "No se ha agregado",
@@ -111,6 +104,7 @@ export default function FormMecanico() {
       }
     }
   });
+  
 
   return (
     <div className="flex items-center justify-center pt-20">
@@ -131,10 +125,8 @@ export default function FormMecanico() {
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value={""}>Selecciona el tipo de documento</option>
-            <option value={"Cedula"}>Cédula</option>
-            <option value={"Tarjeta Identidad"}>Tarjeta Identidad</option>
-            <option value={"Pasaporte"}>Pasaporte</option>
-            <option value={"Otro"}>Otro</option>
+            <option value={"Cedula de Ciudadania"}>Cédula Ciudadania</option>
+            <option value={"Cedula de Extranjeria"}>Cédula Extranjera</option>
           </select>
           {errors.tipo && (
             <p className="text-red-500">{errors.tipo.message}</p>

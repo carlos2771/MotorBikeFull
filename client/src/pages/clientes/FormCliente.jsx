@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form"
 import { useClientes } from "../../context/ClientContext"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
-import { NombreRequired ,EmailRequired, TelefonoRequired, CedulaRequired, PasaporteRequired, NombreMeRequired} from "../../utils/validations"
+import { NombreRequired ,EmailRequired, CedulaExtRequired,TelefonoRequired, CedulaRequired, NombreMeRequired} from "../../utils/validations"
 import Swal from "sweetalert2";
 
 export default function FormCliente() {
@@ -30,9 +30,9 @@ export default function FormCliente() {
     // Desregistrando el campo antes de volver a registrarlo
     unregister("cedula");
     // Actualiza la validación según el tipo seleccionado
-    if (selectedTipo === "Pasaporte") {
+    if (selectedTipo === "Cedula Extranjera") {
       
-      register("cedula", PasaporteRequired);
+      register("cedula", CedulaExtRequired);
     } else {
       register("cedula", CedulaRequired);
     }
@@ -120,14 +120,10 @@ export default function FormCliente() {
         >
           <option value={""}>Selecciona el tipo de documento</option>
           <option value={"Cedula"} >
-            Cédula
+            Cédula de Ciudadania
           </option>
-          <option value={"Tarjeta Identidad"} >
-            Tarjeta Identidad
-          </option>
-          <option value={"Pasaporte"}>Pasaporte</option>
-          <option value={"Otro"} >
-            Otro
+          <option value={"Cedula Extranjera"} >
+            Cédula Extranjera
           </option>
         </select>
         {errors.tipo && <p className="text-red-500">{errors.tipo.message}</p>}
