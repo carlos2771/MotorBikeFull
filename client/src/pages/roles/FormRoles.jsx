@@ -26,21 +26,29 @@ export default function FormRoles() {
         })();
       }, [params.id]);
   
-    const onSubmit = handleSubmit(async (data) => {
-      const lowercaseData = {
-        name: data.name.toLowerCase(),
-        status: data.status,
-        permissions: selectedPermissions, // Agregar permisos seleccionados
-      };
-  
-      if (params.id) {
-        const res = await updateRol(params.id, lowercaseData);
-        handleApiResponse(res, "Actualizado correctamente");
-      } else {
-        const res = await createRol(lowercaseData);
-        handleApiResponse(res, "Agregado correctamente");
+      const onSubmit = handleSubmit(async (data) => {
+        const camelCaseData = {
+          name: toCamelCase(data.name),
+          status: data.status,
+          permissions: selectedPermissions, // Agregar permisos seleccionados
+        };
+      
+        if (params.id) {
+          const res = await updateRol(params.id, camelCaseData);
+          handleApiResponse(res, "Actualizado correctamente");
+        } else {
+          const res = await createRol(camelCaseData);
+          handleApiResponse(res, "Agregado correctamente");
+        }
+      });
+      
+      // Función para convertir texto de lowerCamelCase a camelCase
+      function toCamelCase(text) {
+        return text.replace(/^([A-Z])|[\s-_]+(\w)/g, function(match, p1, p2, offset) {
+          if (p2) return p2.toUpperCase();
+          return p1.toLowerCase();        
+        });
       }
-    });
 
     const handlePermissionChange = (e) => {
         const { value } = e.target;
@@ -113,10 +121,10 @@ export default function FormRoles() {
                 </div>
             ))}
             </div>
-            <label>Estado</label>
+            <label className="hidden">Estado</label>
             <select
               {...register("status")}
-              className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+              className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2 hidden"
             >
               <option value={"Activo"} >
                 Activo
