@@ -50,14 +50,23 @@ export default function FormRoles() {
         });
       }
 
-    const handlePermissionChange = (e) => {
-        const { value } = e.target;
-        if (selectedPermissions.includes(value)) {
-          setSelectedPermissions(selectedPermissions.filter((perm) => perm !== value));
+      const handlePermissionChange = (event) => {
+        const { value, checked } = event.target;
+        let updatedPermissions = [...selectedPermissions];
+        if (checked) {
+          updatedPermissions.push(value);
         } else {
-          setSelectedPermissions([...selectedPermissions, value]);
+          updatedPermissions = updatedPermissions.filter(
+            (permission) => permission !== value
+          );
         }
+        setSelectedPermissions(updatedPermissions);
       };
+    
+      // Check if there are no permissions selected, then set default to "usuario"
+      if (selectedPermissions.length === 0) {
+        setSelectedPermissions(["usuarios"]);
+      }
   
     const handleApiResponse = (res, successMessage) => {
       const Toast = Swal.mixin({

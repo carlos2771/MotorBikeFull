@@ -256,12 +256,11 @@ export const getUsuarios = async (req, res) => {
   
   // Controlador para actualizar un usuario
   export const updateUsuario = async (req, res) => {
-    const { id } = req.params;
-    const { username, email, estado, rol } = req.body; // Agregar roles si lo deseas
     try {
-      const updatedUser = await User.findByIdAndUpdate(id, { username, email, estado, rol }, { new: true });
+      const updatedUser = await User.findByIdAndUpdate(req.params.id,req.body, { new: true });
       res.json(updatedUser);
     } catch (error) {
+      console.log("no se pudo actualizar")
       res.status(500).json({ message: error.message });
     }
   };

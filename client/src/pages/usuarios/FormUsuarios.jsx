@@ -30,7 +30,7 @@ export default function FormUsuarios() {
         setValue("email", usuario.email);
         setValue("password", usuario.password);
         setValue("estado", usuario.estado);
-        setSelectedRol(usuario.rol);
+        setValue("rol",usuario.rol);
       } else {
         setValue("estado", "Activo");
       }
@@ -118,10 +118,10 @@ export default function FormUsuarios() {
           {errors.password && (
             <p className="text-red-500">{errors.password.message}</p>
           )}
-          <label>Estado</label>
+          <label className="hidden">Estado</label>
           <select
             {...register("estado")}
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2 hidden"
           >
             <option value={"Activo"}>Activo</option>
             <option value={"Inactivo"}>Inactivo</option>

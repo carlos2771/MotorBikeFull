@@ -66,14 +66,6 @@ export default function Navbar() {
                     </Link>
                   </Render>
                   <Render>
-                    <Link
-                      to="/tasks"
-                      className="flex ms-10 p-2"
-                    >
-                      <FontAwesomeIcon icon={faTasks} className="mr-2" /> Tareas
-                    </Link>
-                  </Render>
-                  <Render>
                     <Link to="/rol" className="flex ms-10 p-2">
                       <FontAwesomeIcon icon={faUsers} className="mr-2" /> Roles
                     </Link>
@@ -130,6 +122,14 @@ export default function Navbar() {
                       className="flex ms-10 p-2"
                     >
                       <FontAwesomeIcon icon={faShoppingBag} className="mr-2" /> Compras
+                    </Link>
+                  </Render>
+                  <Render>
+                    <Link
+                      to="/tasks"
+                      className="flex ms-10 p-2"
+                    >
+                      <FontAwesomeIcon icon={faTasks} className="mr-2" /> Tareas
                     </Link>
                   </Render>
                   
