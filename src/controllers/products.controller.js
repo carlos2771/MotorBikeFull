@@ -3,7 +3,7 @@ import Cart from "../models/cart.js"
 import multer from "multer";
 import path from "path";
 import Repuesto from "../models/repuestos.model.js";
-
+import CartCliente from "../models/cart_cliente.js"
 export const addProductCart = async (req, res) => {
   const { name, img, price } = req.body;
   
@@ -148,7 +148,44 @@ export const deleteProduct = async (req, res) => {
       return res.status(500).json({ mensaje: "Error interno del servidor" });
     }
   };
-
+  export const putAmount = async (req, res) => {
+    try {
+      const { itemId, newAmount } = req.body;
+  
+      // Verificar si el nuevo monto es un número válido
+      if (!isNaN(newAmount)) {
+        console.log("cantidad debe ser un numero valido");
+        return res.status(400).json({ message: "La cantidad debe ser un número válido" });
+      }
+  
+      // Encontrar el carrito del cliente por su ID
+      const cartCliente = await CartCliente.findById(req.params.id);
+  
+      if (!cartCliente) {
+        return res.status(404).json({ message: "CartCliente no encontrado" });
+      }
+  
+      // Encontrar el ítem en el carrito del cliente por su ID
+      const cartItem = cartCliente.cart.find(item => item._id === itemId);
+  
+      if (!cartItem) {
+        return res.status(404).json({ message: "El ítem no se encontró en el carrito del cliente" });
+      }
+  
+      // Actualizar la cantidad del ítem en el carrito del cliente
+      cartItem.amount = newAmount;
+  
+      // Guardar el carrito del cliente actualizado
+      await cartCliente.save();
+  
+      // Actualizar el total del carrito del cliente (opcional, dependiendo de tus necesidades)
+  
+      res.json({ message: "Cantidad actualizada exitosamente" });
+    } catch (error) {
+      console.error("Error al actualizar la cantidad del ítem en el carrito del cliente", error);
+      return res.status(500).json({ message: "Error al actualizar la cantidad del ítem en el carrito del cliente", error: error.message });
+    }
+  };
 
 
 import fs from "fs"

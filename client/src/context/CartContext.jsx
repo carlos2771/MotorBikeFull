@@ -4,6 +4,7 @@ import {
   getProductsCartRequest,
   addItemToCartRequest,
   editItemToCartRequest,
+  putAmountRequest,
 } from "../api/cart";
 import { axiosClient } from "../api/axiosInstance";
 const CartContext = createContext();
@@ -75,10 +76,20 @@ export function CartProvider({ children }) {
     getProductsCart();
   };
 
+  const putAmount = async(id,amount) =>{
+    try {
+      return await putAmountRequest(id, amount);
+    } catch (error) {
+      console.error(error);
+      
+    }
+  }
+
   return (
     <CartContext.Provider
       value={{
         cartItems,
+        putAmount,
         products,
         addItemToCart,
         editItemToCart,

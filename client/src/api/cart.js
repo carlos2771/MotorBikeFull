@@ -23,3 +23,8 @@ export const editItemToCartRequest = async (id,query, amount) => {
       return response.data
     }
   };
+
+  export const putAmountRequest = async (id,amount) => {
+    const response = await axiosClient.put(`/products-cart/${id}`,amount)
+    return response
+  }
