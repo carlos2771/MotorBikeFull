@@ -438,7 +438,7 @@ export default function PageCartClient() {
       <div className="flex justify-between">
         <h1 className="text-2xl text-start ml-16">
           <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
-          Gestión de Ventas Repuestos
+          Gestión de ventas repuestos
         </h1>
         <div className="mx-16 justify-end">
           <Link to="/home">

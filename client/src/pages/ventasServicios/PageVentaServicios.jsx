@@ -170,14 +170,14 @@ export default function PageVentaServicios() {
         {
           field: "nombre_cliente",
           headerName: "Cliente",
-          width: 170,
+          width: 160,
           headerClassName: 'custom-header',
           valueGetter: (params) => params.row.cliente.nombre_cliente,
         },
         {
           field: "placa",
           headerName: "Placa",
-          width: 170,
+          width: 90,
           headerClassName: 'custom-header',
           valueGetter: (params) => params.value.toUpperCase(),
         },
@@ -187,6 +187,7 @@ export default function PageVentaServicios() {
           width: 185,
           headerClassName: 'custom-header',
           valueFormatter: (params) => formatCurrency(params.value),
+          align: "center" // Esto centra el contenido de la celda
         },
         // {
         //   field: "descripcion",
@@ -199,13 +200,12 @@ export default function PageVentaServicios() {
         {
           field: "createdAt",
           headerName: "Fecha de venta",
-          width: 200,
+          width: 160,
           headerClassName: 'custom-header',
           renderCell: (params) => {
             const date = new Date(params.value);
             date.toLocaleString("en-US", { timeZone: "America/Bogota" });
             const formattedDate = date.toLocaleDateString("es-ES", {
-              year: "numeric",
               month: "long",
               day: "numeric",
             });
@@ -356,7 +356,7 @@ export default function PageVentaServicios() {
       return (
         <div className="mt-16 ">
           <div className="flex justify-between">
-          <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faHandshake} className="mr-2" />Gestión de Ventas Servicios</h1>
+          <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faHandshake} className="mr-2" />Gestión de ventas servicios</h1>
           <div className="mx-16 justify-end flex">
               <Link to="/add-venta-servicio">
               <button  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">

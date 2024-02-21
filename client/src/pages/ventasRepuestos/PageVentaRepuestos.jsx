@@ -281,7 +281,7 @@ export default function PageVentaRepuestos() {
 
   return (
     <div className="mt-16">
-      <h1 className="text-2xl text-start ml-20">Gestionar Ventas Repuestos</h1>
+      <h1 className="text-2xl text-start ml-20">Gestionar ventas repuestos</h1>
       <div className="mx-10 justify-end flex">
         <Link to="/add-venta-repuesto">
           <button className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
