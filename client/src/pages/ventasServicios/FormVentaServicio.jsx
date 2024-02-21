@@ -155,6 +155,7 @@ export default function FormVentaServicio() {
 
           <label>Placa de vehículo<span className="text-red-500">*</span></label>
           <textarea
+            placeholder='Ingresa la placa'
             {...register("placa", placaValidators)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
           />
@@ -162,6 +163,7 @@ export default function FormVentaServicio() {
 
           <label>Precio del servicio<span className="text-red-500">*</span></label>
           <input
+            placeholder='Ingresa el precio'
             type="number"
             {...register("precio_servicio", NegativeRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
@@ -172,6 +174,7 @@ export default function FormVentaServicio() {
 
           <label>Descripción<span className="text-red-500">*</span></label>
           <textarea
+            placeholder='Ingresa una descripción'
             {...register("descripcion", NombreRequired)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
           />
