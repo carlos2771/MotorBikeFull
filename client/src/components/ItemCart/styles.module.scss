@@ -1,6 +1,6 @@
 .cartItem {
     height: 100px;
-    background-color: #3a3a3a;
+    background-color: #374151;
     margin-top: 20px;
     display: flex;
     align-items: center;
@@ -10,6 +10,8 @@
       height: 65px;
       border-radius: 5px;
     }
+    border-bottom-width: 2px;
+    border-color:  rgb(22, 76, 214);
   
     .dataContainer {
       display: flex;
