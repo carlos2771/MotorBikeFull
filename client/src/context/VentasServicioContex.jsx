@@ -40,7 +40,7 @@ export function VentasServicioProvider({ children }) {
     const ventasActivasDelDia = ventasServicios.filter((venta) => {
       const ventaDate = new Date(venta.createdAt);
       ventaDate.setHours(0, 0, 0, 0);
-      return ventaDate.getTime() === today.getTime() && venta.estado === 'Activo';
+      return ventaDate.getTime() === today.getTime() && venta.estado === 'Finalizada';
     });
 
     // Calcula el total en dinero de los servicios activos del día
@@ -102,7 +102,7 @@ export function VentasServicioProvider({ children }) {
     const ventasActivasDelDia = ventasServicios.filter((venta) => {
       const ventaDate = new Date(venta.createdAt);
       ventaDate.setHours(0, 0, 0, 0);
-      return ventaDate.getTime() === today.getTime() && venta.estado === 'Activo';
+      return ventaDate.getTime() === today.getTime() && venta.estado === 'Finalizada';
     });
   
     return ventasActivasDelDia.length;

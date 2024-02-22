@@ -70,7 +70,7 @@ export function CharBar() {
       const estado = venta.estado;
       const fechaVenta = venta.createdAt ? new Date(venta.createdAt) : null;
   
-      if (fechaVenta && estado === "Activo") {
+      if (fechaVenta && estado === "Finalizada") {
         if (startDate && endDate) {
           const formattedStartDate = formatDate(startDate);
           const formattedEndDate = formatDate(endDate);

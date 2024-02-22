@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback } from 'react'
-import { useVentasServicios } from '../../context/VentasServicioContex'
+import React, { useEffect, useCallback } from 'react';
+import { useVentasServicios } from '../../context/VentasServicioContex';
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { Link } from 'react-router-dom';
@@ -17,30 +17,23 @@ function formatCurrency(value) {
   return formattedValue;
 }
 
-
-
 export default function PageVentaServicios() {
   const { ventasServicios, getVentasServicios, deleteVentaServicio, updateVentaServicio } = useVentasServicios()
 
   useEffect(() => {
     try {
       getVentasServicios();
-
     } catch (error) {
       console.error("Error al obtener las ventas:", error);
     }
   }, []);
 
-
   const mostrarAlerta = (id, estado) => {
-    const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
-    const text =
-      estado === "Activo"
-        ? "¿Estás seguro de inhabilitar la venta ?"
-        : "¿Estás seguro de habilitar la venta ?";
-    const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
+    const title = estado === "En proceso" ? "Inhabilitar servicio" : "Habilitar";
+    const text = estado === "En proceso" ? "¿Estás seguro?" : "¿Estás seguro de habilitar la venta ?";
+    const texto = estado === "En proceso" ? "Inhabilitado" : "Habilitado";
 
-    if (estado === "Activo") {
+    if (estado === "En proceso") {
       Swal.fire({
         title: title,
         text: text,
@@ -60,7 +53,7 @@ export default function PageVentaServicios() {
         },
       }).then((result) => {
         if (result.isConfirmed) {
-          cambiarEstado(id, estado);
+          inactivarVenta(id, estado); // Cambiar estado a "Inactivo"
           const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -74,7 +67,7 @@ export default function PageVentaServicios() {
           });
           Toast.fire({
             icon: "success",
-            title: "Se ha modificado",
+            title: "Se ha modificado el servicio",
           });
         } else {
           const Toast = Swal.mixin({
@@ -90,12 +83,11 @@ export default function PageVentaServicios() {
           });
           Toast.fire({
             icon: "error",
-            title: "No se ha modificado",
+            title: "No se ha modificado el servicio",
           });
         }
       });
     } else {
-      // Si la venta está desactivada, solo mostrar un mensaje indicando que no se puede realizar ninguna acción
       Swal.fire({
         title: "Acción no permitida",
         text: "Esta venta ya está desactivada y no se puede modificar.",
@@ -113,9 +105,75 @@ export default function PageVentaServicios() {
   };
 
   const cambiarEstado = (id, estado) => {
-    const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
+    const nuevoEstado = "Finalizada"; // Cambiar el estado a "Finalizada"
     updateVentaServicio(id, { estado: nuevoEstado }).then(() => {
       getVentasServicios();
+    });
+  };
+
+  const inactivarVenta = (id, estado) => {
+    const nuevoEstado = "Inactivo"; // Cambiar el estado a "Inactivo"
+    updateVentaServicio(id, { estado: nuevoEstado }).then(() => {
+      getVentasServicios();
+    });
+  };
+
+  const mostrarAlertaCambiarEstado = (id, estado) => {
+    const title = "Finalizar venta";
+    const text = "¿Estás seguro de finalizar la venta?";
+
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+      background: "#334155",
+      color: "white",
+      iconColor: "#2563eb",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+        cancelButton:
+          "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        cambiarEstado(id, estado); // Cambiar estado a "Finalizada"
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Se ha finalizado la venta",
+        });
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "No se ha finalizado la venta",
+        });
+      }
     });
   };
 
@@ -131,7 +189,6 @@ export default function PageVentaServicios() {
       }),
       Placa: venta.placa,
       Estado: venta.estado,
-
     }));
 
     const ws = XLSX.utils.json_to_sheet(datos);
@@ -156,8 +213,6 @@ export default function PageVentaServicios() {
     XLSX.utils.book_append_sheet(wb, ws, 'VentasServicios');
     XLSX.writeFile(wb, 'ventasServicios.xlsx');
   }, [ventasServicios]);
-
-
 
   const columns = [
     {
@@ -189,13 +244,6 @@ export default function PageVentaServicios() {
       valueFormatter: (params) => formatCurrency(params.value),
       align: "center" // Esto centra el contenido de la celda
     },
-    // {
-    //   field: "descripcion",
-    //   headerName: "Descripcion",
-    //   width: 170,
-    //   editable: true,
-    //   headerClassName: 'custom-header',
-    // }
 
     {
       field: "createdAt",
@@ -220,7 +268,6 @@ export default function PageVentaServicios() {
       headerClassName: 'custom-header',
     },
 
-
     {
       field: "acciones",
       headerName: "Acciones",
@@ -229,91 +276,67 @@ export default function PageVentaServicios() {
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("estado", estado);
+
+
+
         return (
+
           <div>
+           <button
+  title='Cambiar estado'
+  className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-white-500 hover:text-white hover:bg-gray-500 ${estado !== "Finalizada" && estado !== "Inactivo" ? "" : "hidden"}`}
+  onClick={() => mostrarAlertaCambiarEstado(params.row._id, estado)}
+>
+  <FontAwesomeIcon icon={faRotate} />
+</button>
+
+
+
 
             <button
-              title='Cambiar estado'
-              className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-white-500 hover:text-white hover:bg-gray-500 ${estado === "Inactivo" ? "hidden" : ""}`}
-            >
-              <FontAwesomeIcon icon={faRotate} />
-            </button>
-
-
-            <button title='Inactivar'
-              className={
-                estado === "Activo"
-                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
-                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
-              }
+              title='Inactivar'
+              className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${estado === "En proceso" ? "border-red-500 hover:text-white hover:bg-red-500" : "border-indigo-500 hover:text-white hover:bg-indigo-500"} ${estado !== "Finalizada" ? "" : "hidden"}`}
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
-              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faLock} />}
+              {estado === "En proceso" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faLock} />}
             </button>
-            <button className={estado === "Activo" ? "" : "hidden"} title='Ver detalle'>
 
-              <Detalle
-                metodo={() => getVentasServicios(params.row._id)}
-                id={params.row._id}
-              >
+            <button
+              className={estado === "En proceso" || estado === "Finalizada" ? "" : "hidden"} title='Ver detalle'>
+              <Detalle metodo={() => getVentasServicios(params.row._id)} id={params.row._id}>
                 <table>
                   <tbody>
                     <Titulo>
                       <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
                       Detalles de la venta
                     </Titulo>
-
                     <tr>
-                      <Tabla >
+                      <Tabla>
                         <FontAwesomeIcon icon={faUser} className="mr-2" />
                         Mecánico
                       </Tabla>
-                      <Tabla >
-                        {
-                          ventasServicios.find(
-                            (mecanico) => mecanico._id === params.row._id
-                          )?.mecanico.nombre_mecanico
-                        }
-                      </Tabla>
+                      <Tabla>{params.row.mecanico.nombre_mecanico}</Tabla>
                     </tr>
                     <tr>
-                      <Tabla >
+                      <Tabla>
                         <FontAwesomeIcon icon={faUser} className="mr-2" />
                         Cliente
                       </Tabla>
-                      <Tabla >
-                        {
-                          ventasServicios.find(
-                            (cliente) => cliente._id === params.row._id
-                          )?.cliente.nombre_cliente
-                        }
-                      </Tabla>
+                      <Tabla>{params.row.cliente.nombre_cliente}</Tabla>
                     </tr>
                     <tr>
-                      <Tabla >
+                      <Tabla>
                         <FontAwesomeIcon icon={faPen} className="mr-2" />
                         Placa
                       </Tabla>
-                      <Tabla >
-                        {
-                          ventasServicios.find((placa) => placa._id === params.row._id)
-                            ?.placa.toUpperCase()
-                        }
-                      </Tabla>
+                      <Tabla>{params.row.placa.toUpperCase()}</Tabla>
                     </tr>
                     <tr>
-                      <Tabla >
+                      <Tabla>
                         <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
                         Precio de servicio
                       </Tabla>
-                      <Tabla >
-                        {
-                          formatCurrency(
-                            ventasServicios.find((precio) => precio._id === params.row._id)
-                              ?.precio_servicio
-                          )
-                        }
-                      </Tabla>
+                      <Tabla>{formatCurrency(params.row.precio_servicio)}</Tabla>
                     </tr>
                     <tr>
                       <Tabla>
@@ -321,39 +344,31 @@ export default function PageVentaServicios() {
                         Fecha de venta
                       </Tabla>
                       <Tabla>
-                        {
-                          ventasServicios.find((venta) => venta._id === params.row._id)?.createdAt &&
-                          new Date(ventasServicios.find((venta) => venta._id === params.row._id).createdAt).toLocaleDateString("es-ES", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })
-                        }
+                        {new Date(params.row.createdAt).toLocaleDateString("es-ES", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
                       </Tabla>
                     </tr>
                     <tr>
-                      <Tabla >
+                      <Tabla>
                         <FontAwesomeIcon icon={faPen} className="mr-2" />
                         Descripción
                       </Tabla>
-                      <Tabla >
-                        {
-                          ventasServicios.find((descripcion) => descripcion._id === params.row._id)
-                            ?.descripcion
-                        }
-                      </Tabla>
+                      <Tabla>{params.row.descripcion}</Tabla>
                     </tr>
                   </tbody>
-
                 </table>
-
               </Detalle>
             </button>
+
           </div>
         );
       },
     },
   ];
+
   return (
     <div className="mt-16 ">
       <div className="flex justify-between">
