@@ -24,6 +24,11 @@ export const editItemToCartRequest = async (id,query, amount) => {
     }
   };
 
+  export const deleteProductRequest = async(id) => {
+    const response = await axiosClient.delete(`/products-cart/${id}`)
+    return response.data
+  }
+
   export const putAmountRequest = async (id,amount) => {
     const response = await axiosClient.put(`/products-cart/${id}`,amount)
     return response

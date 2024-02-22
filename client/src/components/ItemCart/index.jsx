@@ -2,10 +2,12 @@ import React, { useContext, useState } from "react";
 import CartContext from "../../context/CartContext";
 import styles from "./styles.module.scss";
 
+
 export const ItemCart = ({ item, updateTotal, handleUpadateUnit}) => {
   
   const { amount, price, img, name} = item;
   const [num, setNum] = useState(amount);
+  const { deleteProduct } = useContext(CartContext);
 
   const handleInputChange = (event) => {
     const newValue = Number(event.target.value);
@@ -29,6 +31,7 @@ export const ItemCart = ({ item, updateTotal, handleUpadateUnit}) => {
               className="w-10 text-black text-center"
               
             />
+            <button onClick={async() => await deleteProduct(item._id)}>SACAR</button>
           </div>
         </div>
         <div className={styles.right}>
