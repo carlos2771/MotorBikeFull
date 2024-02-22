@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, } from "react";
 import { useCartCliente } from "../../context/CartClienteContext";
 import { useClientes } from "../../context/ClientContext";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
@@ -22,6 +22,7 @@ import {
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
 
+
 export default function PageCartClient() {
   const { getCartClient, cartClientes, getCartCliente, updateCartCliente } =
     useCartCliente();
@@ -37,9 +38,10 @@ export default function PageCartClient() {
     try {
       getCartCliente(id);
     } catch (error) {
-      console.error("Error al obtener compras:", error);
+      console.error("Error al obtener todo:", error);
     }
   }, []);
+ 
 
   const mostrarAlerta = (id, anulado) => {
     const title = anulado ? "Anulado" : "Anular";
