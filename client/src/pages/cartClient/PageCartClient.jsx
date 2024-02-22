@@ -155,7 +155,7 @@ export default function PageCartClient() {
   const columns = [
     {
       field: "codigo",
-      headerName: "codigo",
+      headerName: "Codigo",
       width: 170,
       headerClassName: "custom-header",
     },
@@ -184,7 +184,7 @@ export default function PageCartClient() {
     },
     {
       field: "total",
-      headerName: "Total_Venta",
+      headerName: "Total Venta",
       width: 170,
       headerClassName: "custom-header",
       
@@ -396,6 +396,10 @@ export default function PageCartClient() {
                         <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
                         Total de la venta
                       </Tabla>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
+                        Descuento
+                      </Tabla>
                     </tr>
                     <tr>
                       
@@ -423,6 +427,15 @@ export default function PageCartClient() {
                           )?.total
                         }
                       </Tabla>
+                      <Tabla>
+                        {
+                          cartClientes.find(
+                            (descuento) => descuento._id === params.row._id
+                          )?.descuento ||0
+                        
+                        }
+                      </Tabla>
+                     
                     </tr>
                    
                   </tbody>
