@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import Detalle from "../../components/Detalle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faLock, faUser, faPen, faDownload, faPencil, faBan, faCalendarDay, faInfoCircle, faDollarSign, faRotate, faHandshake } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faLock, faUser, faPen, faDownload, faPencil, faBan, faCalendarDay, faInfoCircle, faDollarSign, faCheck, faHandshake } from "@fortawesome/free-solid-svg-icons";
 import { Tabla, Titulo } from "../../components/Tabla";
 
 
@@ -29,8 +29,8 @@ export default function PageVentaServicios() {
   }, []);
 
   const mostrarAlerta = (id, estado) => {
-    const title = estado === "En proceso" ? "Inhabilitar servicio" : "Habilitar";
-    const text = estado === "En proceso" ? "¿Estás seguro?" : "¿Estás seguro de habilitar la venta ?";
+    const title = estado === "En proceso" ? "Inhabilitar venta" : "Habilitar";
+    const text = estado === "En proceso" ? "¿Estás seguro de inhabilitar la venta?" : "¿Estás seguro de habilitar la venta ?";
     const texto = estado === "En proceso" ? "Inhabilitado" : "Habilitado";
 
     if (estado === "En proceso") {
@@ -282,13 +282,13 @@ export default function PageVentaServicios() {
         return (
 
           <div>
-           <button
-  title='Cambiar estado'
-  className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-white-500 hover:text-white hover:bg-gray-500 ${estado !== "Finalizada" && estado !== "Inactivo" ? "" : "hidden"}`}
-  onClick={() => mostrarAlertaCambiarEstado(params.row._id, estado)}
->
-  <FontAwesomeIcon icon={faRotate} />
-</button>
+            <button
+              title='Finalizar venta'
+              className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-white-500 hover:text-white hover:bg-gray-500 ${estado !== "Finalizada" && estado !== "Inactivo" ? "" : "hidden"}`}
+              onClick={() => mostrarAlertaCambiarEstado(params.row._id, estado)}
+            >
+              <FontAwesomeIcon icon={faCheck} />
+            </button>
 
 
 
