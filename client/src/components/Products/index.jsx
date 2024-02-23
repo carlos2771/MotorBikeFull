@@ -1,6 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import CartContext from "../../context/CartContext";
 import { useMarcas } from "../../context/MarcasContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping} from "@fortawesome/free-solid-svg-icons";
+
+
 
 const Products = () => {
   const { addItemToCart, products } = useContext(CartContext);
@@ -68,9 +72,9 @@ const Products = () => {
         <option value="desc">Precio descendente</option>
       </select>
 
-      <div className="w-full grid gap-y-20 gap-x-75 justify-items-center pt-20 mr-96 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 max-2xl:grid-cols-1 lg:grid-cols-3 gap-1">
+      <div className=" w-full grid gap-y-20 gap-x-75 justify-items-center pt-20 mr-96 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 max-2xl:grid-cols-1 lg:grid-cols-3 gap-1">
         {sortedProducts().map((product, i) => (
-          <div key={i} className="flex flex-col items-center justify-center space-y-2">
+          <div key={i} className="flex flex-col items-center justify-center space-y-2 ">
             <img
               className="w-full h-56"
               src={`${product.img}`}
@@ -83,13 +87,15 @@ const Products = () => {
             </div>
             {!product.inCart ? (
               <button
-                className="border-none rounded-3px px-5 py-2 cursor-pointer hover:bg-gray-300 text-base max-md:text-2xl"
+                className="max-sm:text-xs px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
                 onClick={async () => await addItemToCart(product)}
               >
-                Add to Cart
+               Agregar al carro 
+
+               <FontAwesomeIcon icon={faCartShopping} />
               </button>
             ) : (
-              <button className="border-none rounded-3px px-5 py-2 max-md:text-2xl ">En el carrito</button>
+              <button className="max-sm:text-xs px-5 py-1 ml-3 text-sm text-withe font-semibold bg-red-500 rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ">En el carrito <FontAwesomeIcon icon={faCartShopping} /> </button>
             )}
           </div>
         ))}

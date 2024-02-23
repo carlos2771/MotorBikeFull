@@ -16,7 +16,7 @@ export default function HomePage() {
       </div>
       <div className='grid grid-cols-1 md:grid-cols-2 mt-10 items-center'>
             <div className='mb-10 mx-10'>
-                <p className='text-white text-[15px] '>MOTO RACER LA 36</p>
+            <p className='text-white text-[30px] font-bold'>MOTO RACER LA 36</p>
                 <p className='text-white text-[30px] font-bold'>Bienvenidos</p>
                 <p className='text-blue-500 text-[30px] font-bold'>Ofrecemos servicios de venta de repuestos, reparación y mantenimiento de motos</p>
             </div>

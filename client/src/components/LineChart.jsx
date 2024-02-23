@@ -33,8 +33,9 @@ const LineChart = () => {
         return;
       }
       
-      const formattedStartDate = format(startDate, 'yyyy-MM-dd');
-      const formattedEndDate = format(endDate, 'yyyy-MM-dd');
+      const formattedStartDate = formatDate(startDate);
+      const formattedEndDate = formatDate(endDate);  // Usar la fecha de fin tal como está
+      
       const purchasesUrl = `http://localhost:3000/api/compras?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
       const salesUrl = `http://localhost:3000/api/Cart-cliente?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
 
@@ -43,13 +44,15 @@ const LineChart = () => {
         axios.get(salesUrl, { withCredentials: true })
       ]);
 
+
       const purchasesData = purchasesResponse.data.filter(compra => !compra.anulado);
       const salesData = salesResponse.data;
 
-      const purchasesByDate = processData(purchasesData);
-      const salesByDate = processData(salesData);
+      const purchasesByDate = processData(purchasesData, startDate, endDate);
+      const salesByDate = processData(salesData, startDate, endDate);
 
       const datesInRange = getDatesInRange(startDate, endDate);
+
 
       const chartData = {
         labels: datesInRange.map(date => format(date, 'yyyy-MM-dd')),
@@ -100,16 +103,23 @@ const LineChart = () => {
     return dates;
   };
 
-  const processData = (data) => {
+  const processData = (data, startDate, endDate) => {
     const processedData = {};
+
+    const startTimestamp = startOfDay(startDate).getTime();
+    const endTimestamp = endOfDay(endDate).getTime();
 
     data.forEach(item => {
       const dateKey = startOfDay(new Date(item.createdAt)).getTime();
-      processedData[dateKey] = (processedData[dateKey] || 0) + 1;
+      if (dateKey >= startTimestamp && dateKey <= endTimestamp) {
+        processedData[dateKey] = (processedData[dateKey] || 0) + 1;
+      }
     });
 
     return processedData;
   };
+
+  const formatDate = (date) => format(date, 'yyyy-MM-dd');
 
   return (
     <div className="chart-line-container chart-position">

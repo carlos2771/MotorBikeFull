@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, } from "react";
 import { useCartCliente } from "../../context/CartClienteContext";
 import { useClientes } from "../../context/ClientContext";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
@@ -22,9 +22,17 @@ import {
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
 
+
 export default function PageCartClient() {
   const { getCartClient, cartClientes, getCartCliente, updateCartCliente } =
     useCartCliente();
+
+    
+function formatCurrency(value) {
+  // Agrega el signo de peso
+  const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+  return formattedValue;
+}
 
   useEffect(() => {
     try {
@@ -37,9 +45,10 @@ export default function PageCartClient() {
     try {
       getCartCliente(id);
     } catch (error) {
-      console.error("Error al obtener compras:", error);
+      console.error("Error al obtener todo:", error);
     }
   }, []);
+ 
 
   const mostrarAlerta = (id, anulado) => {
     const title = anulado ? "Anulado" : "Anular";
@@ -153,7 +162,7 @@ export default function PageCartClient() {
   const columns = [
     {
       field: "codigo",
-      headerName: "codigo",
+      headerName: "Codigo",
       width: 170,
       headerClassName: "custom-header",
     },
@@ -182,9 +191,10 @@ export default function PageCartClient() {
     },
     {
       field: "total",
-      headerName: "Total_Venta",
+      headerName: "Total Venta",
       width: 170,
       headerClassName: "custom-header",
+      valueFormatter: (params) => formatCurrency(params.value),
       
     },
     {
@@ -394,6 +404,10 @@ export default function PageCartClient() {
                         <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
                         Total de la venta
                       </Tabla>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
+                        Descuento
+                      </Tabla>
                     </tr>
                     <tr>
                       
@@ -416,11 +430,26 @@ export default function PageCartClient() {
                     
                       <Tabla>
                         {
-                          cartClientes.find(
-                            (total) => total._id === params.row._id
-                          )?.total
+                          formatCurrency(
+
+                            cartClientes.find(
+                              (total) => total._id === params.row._id
+                            )?.total
+                          )
                         }
                       </Tabla>
+                      <Tabla>
+                        {
+                          formatCurrency(
+
+                            cartClientes.find(
+                              (descuento) => descuento._id === params.row._id
+                            )?.descuento ||0
+                          )
+                        
+                        }
+                      </Tabla>
+                     
                     </tr>
                    
                   </tbody>
@@ -438,7 +467,7 @@ export default function PageCartClient() {
       <div className="flex justify-between">
         <h1 className="text-2xl text-start ml-16">
           <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
-          Gestión de Ventas Repuestos
+          Gestión de ventas repuestos
         </h1>
         <div className="mx-16 justify-end">
           <Link to="/home">
@@ -475,6 +504,7 @@ export default function PageCartClient() {
             },
           }}
           slots={{ toolbar: GridToolbar }}
+          
         />
       </Box>
     </div>

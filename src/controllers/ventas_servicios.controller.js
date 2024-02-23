@@ -33,7 +33,8 @@ export const createVentas_Servicios = async (req, res) => {
             cliente: clienteId,
             precio_servicio,
             descripcion,
-            estado
+            estado,
+            placa
         } = req.body;
 
         // Verifica si el cliente existe
@@ -54,7 +55,8 @@ export const createVentas_Servicios = async (req, res) => {
         cliente: clienteId,
         precio_servicio,
         descripcion,
-        estado
+        estado,
+        placa
         });
 
         // Guarda la venta de servicio en la base de datos

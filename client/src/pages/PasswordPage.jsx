@@ -55,7 +55,7 @@ const PasswordPage = () => {
           title: "El correo no existe",
         });
         // Manejo del error aquí
-        setError(`El Email ${values.email} no está registrado.`);
+        setError(`El correo electrónico ${values.email} no está registrado.`);
         // Limpiar el estado de error después de tres segundos
         setTimeout(() => {
           setError('');
@@ -94,7 +94,7 @@ const PasswordPage = () => {
               type="text"
               {...register("email", EmailRequired)}
               className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-950 border-0 border-b-2 border-sky-500 text-white px-4 py-2 rounded2 my-2"
-              placeholder="Email"
+              placeholder="Correo electrónico"
             />
             {errors.email && (
               <p className="text-red-500">{errors.email.message}</p>

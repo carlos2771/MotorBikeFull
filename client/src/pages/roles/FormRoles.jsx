@@ -50,14 +50,23 @@ export default function FormRoles() {
         });
       }
 
-    const handlePermissionChange = (e) => {
-        const { value } = e.target;
-        if (selectedPermissions.includes(value)) {
-          setSelectedPermissions(selectedPermissions.filter((perm) => perm !== value));
+      const handlePermissionChange = (event) => {
+        const { value, checked } = event.target;
+        let updatedPermissions = [...selectedPermissions];
+        if (checked) {
+          updatedPermissions.push(value);
         } else {
-          setSelectedPermissions([...selectedPermissions, value]);
+          updatedPermissions = updatedPermissions.filter(
+            (permission) => permission !== value
+          );
         }
+        setSelectedPermissions(updatedPermissions);
       };
+    
+      // Check if there are no permissions selected, then set default to "usuario"
+      if (selectedPermissions.length === 0) {
+        setSelectedPermissions(["Usuarios"]);
+      }
   
     const handleApiResponse = (res, successMessage) => {
       const Toast = Swal.mixin({
@@ -97,10 +106,10 @@ export default function FormRoles() {
           ))}
           <h1 className="text-2xl flex justify-center">Agregar Rol </h1>
           <form className="mt-10" onSubmit={onSubmit}>
-            <label>Nombre del Rol<span className="text-red-500">*</span></label>
+            <label>Nombre del rol<span className="text-red-500">*</span></label>
             <input
               type="text"
-              placeholder='Nombre rol'
+              placeholder='Nombre de rol'
               {...register("name", NombreMaRequired)}
               className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
               autoFocus
@@ -108,7 +117,7 @@ export default function FormRoles() {
             {errors.name && <p className="text-red-500">{errors.name.message}</p>}
             <label>Permisos</label>
             <div className="flex flex-wrap">
-            {["dashboard", "usuarios", "roles", "clientes", "mecanicos", "repuestos", "marcas", "compras", "ventas-servicio", "venta-repuesto", "tareas"].map((permiso) => (
+            {["Dashboard", "Usuarios", "Roles", "Clientes", "Mecanicos", "Repuestos", "Marcas", "Compras", "Ventas-servicio", "Venta-repuesto", "Tareas"].map((permiso) => (
                 <div key={permiso} className="flex items-center mr-4 mb-2">
                 <input
                     type="checkbox"

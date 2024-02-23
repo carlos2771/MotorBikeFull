@@ -147,6 +147,22 @@ export const NombreRequired = {
   required: "Campo requerido",
 };
 
+export const placaValidators = {
+  required: "Placa requerida",
+  pattern: {
+    value: /^[a-zA-Z0-9]+$/,
+    message: "La placa solo puede contener letras y números"
+  },
+  minLength: {
+    value: 5,
+    message: "La placa debe tener al menos 5 caracteres"
+  },
+  maxLength: {
+    value: 6,
+    message: "La placa no puede tener más de 6 caracteres"
+  }
+};
+
 
 
 

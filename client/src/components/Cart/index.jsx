@@ -35,7 +35,7 @@ const Cart = () => {
 
   console.log("items",cartItems);
   const [totalCart, setTotalCart] = useState(0);
-  const [descuento, setDescuento] = useState(0); // Estado para el descuento
+  const [descuento, setDescuento] = useState(); // Estado para el descuento
   const [unidades, setUnidades] = useState([])
 
   const handleUpdateUnit = ({name,unit}) => {
@@ -227,19 +227,21 @@ const Cart = () => {
                   </select>
                   {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
                   <input
-                  
+                  type="num"
                   {...register("descuento")}
+                  thousandSeparator={true}
+                  prefix={'$'}
                   placeholder="Descuento"
                   onChange={(e) => setDescuento(parseInt(e.target.value))}
                   className="w-full bg-slate-700 border-0 border-b-2 border-blue-700 text-white px-4 py-2 my-2"
                 />
                 </div>
-                <button type="submit">Enviar</button>
+                <button className="px-5 py-1 mb-4 text-sm text-withe font-semibold rounded-full border  border-blue-600 hover:text-white hover:bg-blue-600 hover:border-transparent shadow-lg shadow-zinc-300/30 d ml-40 " type="submit">Enviar</button>
               </form>
             </div>
           )}
 
-          <h2 className={styles.total}>Total: ${totalCart}</h2>
+          <h2 className={styles.total}>Total: ${totalCart.toLocaleString()}</h2>
         </div>
       )}
     </div>

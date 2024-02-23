@@ -2,18 +2,24 @@ import React, { useContext, useState } from "react";
 import CartContext from "../../context/CartContext";
 import styles from "./styles.module.scss";
 
-export const ItemCart = ({ item, updateTotal, handleUpadateUnit}) => {
+
+export const ItemCart = ({ item, updateTotal, handleUpadateUnit }) => {
   
-  const { amount, price, img, name} = item;
+  const { amount, price, img, name } = item;
   const [num, setNum] = useState(amount);
+  const { deleteProduct } = useContext(CartContext);
 
   const handleInputChange = (event) => {
-    const newValue = Number(event.target.value);
-      setNum(newValue);
-      updateTotal(item._id, newValue);
-      handleUpadateUnit({name,unit:newValue})
-    
+    let newValue = Number(event.target.value);
+    // Verificar si el nuevo valor es 0, si es así, establecerlo en 1 en su lugar
+    if (isNaN(newValue) || newValue <= 0 ) {
+      newValue = "" 
+    }
+    setNum(newValue);
+    updateTotal(item._id, newValue);
+    handleUpadateUnit({ name, unit: newValue });
   };
+  
 
   return (
     <div className={styles.cartItem}>
@@ -27,15 +33,16 @@ export const ItemCart = ({ item, updateTotal, handleUpadateUnit}) => {
               value={num}
               onChange={handleInputChange}
               className="w-10 text-black text-center"
-              
             />
+            <button className="max-sm:text-xs px-3 py-1 ml-3 text-xs text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30" onClick={async() => await deleteProduct(item._id)}>Eliminar</button>
           </div>
         </div>
         <div className={styles.right}>
-          <div>{num}</div>
-          <p>Total: ${num * price}</p>
+          <div>{num.toLocaleString()}</div> {/* Aquí aplicamos el separador de miles */}
+          <p>Total: ${(num * price).toLocaleString()}</p> {/* Aplicamos el separador de miles al total también */}
         </div>
       </div>
     </div>
   );
 };
+

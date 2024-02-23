@@ -295,7 +295,7 @@ export default function PageMecanico() {
   return (
     <div className="mt-16">
       <div className="flex justify-between">
-      <h1 className="text-2xl mx-auto ml-16 font-custom"> <FontAwesomeIcon icon="wrench" className="mr-2" />Gestión de Mecánicos</h1>
+      <h1 className="text-2xl mx-auto ml-16 font-custom"> <FontAwesomeIcon icon="wrench" className="mr-2" />Gestión de mecánicos</h1>
       <div className="mx-16 justify-end flex">
         <Link to="/add-mecanico">
           <button  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">

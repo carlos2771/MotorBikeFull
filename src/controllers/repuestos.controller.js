@@ -78,7 +78,16 @@ export const createRepuestos = async (req, res) => {
     }
 
     // Guarda la imagen en base64 directamente desde req.body.img
-    const imgBase64 = req.body.img;
+    let imgBase64;
+
+    // Verificar si se proporcionó una imagen, si no, utiliza una por defecto
+    if (img) {
+      imgBase64 = img;
+    } else {
+      // Si no se proporciona una imagen, utiliza una imagen por defecto aquí
+      // Puedes reemplazar 'imagen_por_defecto_base64' con tu propia imagen base64 por defecto
+      imgBase64 = 'https://r2.easyimg.io/gvdthk7f0/motorbike_(1).png';
+    }
 
     // Si no existe, crea un nuevo repuesto
     const marcaEncontrada = await Marca.findById(marcaId);

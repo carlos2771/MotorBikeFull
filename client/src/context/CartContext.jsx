@@ -5,6 +5,7 @@ import {
   addItemToCartRequest,
   editItemToCartRequest,
   putAmountRequest,
+  deleteProductRequest,
 } from "../api/cart";
 import { axiosClient } from "../api/axiosInstance";
 const CartContext = createContext();
@@ -85,10 +86,23 @@ export function CartProvider({ children }) {
     }
   }
 
+  const deleteProduct = async (id) =>{
+    try {
+      console.log("entro");
+      const res = await deleteProductRequest(id);
+      getProducts();
+      getProductsCart();
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <CartContext.Provider
       value={{
         cartItems,
+        deleteProduct,
         putAmount,
         products,
         addItemToCart,

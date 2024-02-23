@@ -478,7 +478,7 @@ export default function PageCompras() {
   return (
     <div className="mt-16">
       <div className="flex justify-between">
-        <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faShoppingBag} className="mr-2" />Gestión de Compras</h1>
+        <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faShoppingBag} className="mr-2" />Gestión de compras</h1>
         <div className="mx-16 justify-end">
           <Link to="/add-compra">
             <button className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
