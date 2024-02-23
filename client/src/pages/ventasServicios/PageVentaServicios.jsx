@@ -238,7 +238,7 @@ export default function PageVentaServicios() {
     },
     {
       field: "precio_servicio",
-      headerName: "Precio de servicio",
+      headerName: "Precio Servicio",
       width: 185,
       headerClassName: 'custom-header',
       valueFormatter: (params) => formatCurrency(params.value),
@@ -247,8 +247,8 @@ export default function PageVentaServicios() {
 
     {
       field: "createdAt",
-      headerName: "Fecha de venta",
-      width: 160,
+      headerName: "Fecha Venta",
+      width: 190,
       headerClassName: 'custom-header',
       renderCell: (params) => {
         const date = new Date(params.value);
@@ -334,14 +334,14 @@ export default function PageVentaServicios() {
                     <tr>
                       <Tabla>
                         <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
-                        Precio de servicio
+                        Precio Servicio
                       </Tabla>
                       <Tabla>{formatCurrency(params.row.precio_servicio)}</Tabla>
                     </tr>
                     <tr>
                       <Tabla>
                         <FontAwesomeIcon icon={faCalendarDay} className="mr-2" />
-                        Fecha de venta
+                        Fecha Venta
                       </Tabla>
                       <Tabla>
                         {new Date(params.row.createdAt).toLocaleDateString("es-ES", {

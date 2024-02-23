@@ -199,7 +199,7 @@ export default function FormCompra() {
 
   const columnas2 = [
     { name: "repuesto", label: "Repuesto", options: { filter: true, sort: true } },
-    { name: "marca", label: "marca", options: { filter: true, sort: false } },
+    { name: "Marca", label: "Marca", options: { filter: true, sort: false } },
     { name: "cantidad", label: "Cantidad", options: { filter: true, sort: false } },
     { name: "precioUnitario", label: "Precio Unitario", options: { filter: true, sort: false } },
     { name: "precioTotal", label: "Precio Total", options: { filter: true, sort: false } },
@@ -313,7 +313,7 @@ export default function FormCompra() {
                       width: '100%', padding: '5px'
                     }}
                     type="text"
-                    placeholder="Solo letras"
+                    placeholder="Proveedor"
                     {...register("proveedorCompra", NombreProveedor)}
                     list="listaProveedores"
                   />
@@ -341,7 +341,7 @@ export default function FormCompra() {
                     className="w-full bg-slate-800 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 outline-none"
                     style={{ width: '100%', padding: '5px' }}
                     type="text"
-                    placeholder="Numeros y letras"
+                    placeholder="Código"
                     {...register("codigo", NombreProveedor)}
                   />
                   {errors.codigo && (
@@ -482,7 +482,7 @@ export default function FormCompra() {
                     className="w-full bg-slate-800 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 outline-none"
                     style={{ width: '100%', padding: '5px' }}
                     type="text"
-                    placeholder="Numeros mayores a cero"
+                    placeholder="Cantidad"
                     {...register(`repuestos.${index}.cantidad_repuesto`, NegativeRequired)}
                   />
                   {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].cantidad_repuesto && (
@@ -501,7 +501,7 @@ export default function FormCompra() {
                     className="w-full bg-slate-800 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 outline-none"
                     style={{ width: '100%', padding: '5px' }}
                     type="text"
-                    placeholder="Numeros mayores a cero"
+                    placeholder="Precio Unitario"
 
                     {...register(`repuestos.${index}.precio_unitario`, NegativeRequired)}
                   />

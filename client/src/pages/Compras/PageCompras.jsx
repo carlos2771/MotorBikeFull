@@ -205,7 +205,7 @@ export default function PageCompras() {
 
     {
       field: "codigo",
-      headerName: "Código de Compra", // Cambia el encabezado según lo que desees mostrar
+      headerName: "Código Compra", // Cambia el encabezado según lo que desees mostrar
       width: 200, // Ajusta el ancho según tus necesidades
       headerClassName: "custom-header",
       valueGetter: (params) => params.row.codigo, // Obtén el código de la compra
@@ -219,7 +219,7 @@ export default function PageCompras() {
     },
     {
       field: "totalCompra",
-      headerName: "Total de Compra",
+      headerName: "Total Compra",
       width: 200,
       headerClassName: "custom-header",
       valueGetter: (params) => calcularPrecioTotalCompra(params.row),
@@ -394,7 +394,7 @@ export default function PageCompras() {
                         <FontAwesomeIcon icon={faUser} /> Proveedor
                       </Tabla>
                       <Tabla>
-                        <FontAwesomeIcon icon={faBarcode} /> Codigo
+                        <FontAwesomeIcon icon={faBarcode} /> Código
                       </Tabla>
                       <Tabla >
                         <FontAwesomeIcon icon={faCalendarDays} />  Fecha

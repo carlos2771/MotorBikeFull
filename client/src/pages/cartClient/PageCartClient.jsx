@@ -162,32 +162,40 @@ function formatCurrency(value) {
   const columns = [
     {
       field: "codigo",
-      headerName: "Codigo",
+      headerName: "Código",
       width: 170,
       headerClassName: "custom-header",
     },
-    {
-      field: "cart",
-      headerName: "Repuestos",
-      width: 250,
-      headerClassName: "custom-header",
-      renderCell: (params) => (
-        <>
-          {params.row.cart.map((repuesto, index) => (
-            <span key={index}>
-              {repuesto.name}
-              {index < params.row.cart.length - 1 && ", "}
-            </span>
-          ))}
-        </>
-      ),
-    },
+    // {
+    //   field: "cart",
+    //   headerName: "Repuestos",
+    //   width: 250,
+    //   headerClassName: "custom-header",
+    //   renderCell: (params) => (
+    //     <>
+    //       {params.row.cart.map((repuesto, index) => (
+    //         <span key={index}>
+    //           {repuesto.name}
+    //           {index < params.row.cart.length - 1 && ", "}
+    //         </span>
+    //       ))}
+    //     </>
+    //   ),
+    // },
     {
       field: "nombre_cliente",
       headerName: "Cliente",
       width: 170,
       headerClassName: "custom-header",
       valueGetter: (params) => params.row.cliente.nombre_cliente,
+    },
+    {
+      field: "descuento",
+      headerName: "Descuento",
+      width: 170,
+      headerClassName: "custom-header",
+      valueFormatter: (params) => formatCurrency(params.value),
+      
     },
     {
       field: "total",

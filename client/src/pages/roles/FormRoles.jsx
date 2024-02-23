@@ -117,7 +117,7 @@ export default function FormRoles() {
             {errors.name && <p className="text-red-500">{errors.name.message}</p>}
             <label>Permisos</label>
             <div className="flex flex-wrap">
-            {["Dashboard", "Usuarios", "Roles", "Clientes", "Mecanicos", "Repuestos", "Marcas", "Compras", "Ventas-servicio", "Venta-repuesto", "Tareas"].map((permiso) => (
+            {["Dashboard", "Usuarios", "Roles", "Clientes", "Mecánicos", "Repuestos", "Marcas", "Compras", "Ventas Servicio", "Venta Repuesto", "Tareas",].map((permiso) => (
                 <div key={permiso} className="flex items-center mr-4 mb-2">
                 <input
                     type="checkbox"

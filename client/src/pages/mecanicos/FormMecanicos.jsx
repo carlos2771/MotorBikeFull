@@ -138,8 +138,8 @@ export default function FormMecanico() {
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value={""}>Selecciona el tipo de documento</option>
-            <option value={"Cédula de Ciudadanía"}>Cédula de Ciudadanía</option>
-            <option value={"Cédula de Extranjería"}>Cédula de Extranjería</option>
+            <option value={"Cédula de ciudadanía"}>Cédula de ciudadanía</option>
+            <option value={"Cédula de extranjería"}>Cédula de extranjería</option>
           </select>
           {errors.tipo && (
             <p className="text-red-500">{errors.tipo.message}</p>

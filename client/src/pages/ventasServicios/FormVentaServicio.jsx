@@ -154,7 +154,7 @@ export default function FormVentaServicio() {
           {errors.mecanico && <p className="text-red-500">{errors.mecanico.message}</p>}
 
           <label>Placa de vehículo<span className="text-red-500">*</span></label>
-          <textarea
+          <input
             placeholder='Ingresa la placa'
             {...register("placa", placaValidators)}
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"

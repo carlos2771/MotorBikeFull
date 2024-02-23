@@ -205,7 +205,7 @@ const Cart = () => {
         ))}
 
           {cartItems.length === 0 ? (
-            <p className={styles.cartVacio}>Tu carrito esta vacio</p>
+            <p className="ml-36 font-font-semibold">Tu carrito esta vacio</p>
           ) : (
             <div className={styles.productsContainer}>
               {cartItems.map((item, i) => (
