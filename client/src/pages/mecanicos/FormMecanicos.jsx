@@ -47,7 +47,7 @@ export default function FormMecanico() {
     // Desregistrando el campo antes de volver a registrarlo
     unregister("cedula_mecanico");
     // Actualiza la validación según el tipo seleccionado
-    if(selectedTipo === "Cedula de Extranjeria") {
+    if(selectedTipo === "Cédula de Extranjería") {
 
       register("cedula_mecanico", CedulaExtRequired);
     }
@@ -60,23 +60,36 @@ export default function FormMecanico() {
 
   const onSubmit = handleSubmit(async (data) => {
     if (params.id) {
-      updateMecanico(params.id, data);
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
-      Toast.fire({
-        icon: "success",
-        title: "Actualizado correctamente",
-      });
-      navigate("/mecanicos");
+      try {
+        const res = await updateMecanico(params.id, data);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+    
+        if (res.error) {
+          Toast.fire({
+            icon: "error",
+            title: "Error al actualizar",
+          });
+        } else {
+          // Si la actualización se realizó con éxito, mostrar un mensaje de éxito
+          Toast.fire({
+            icon: "success",
+            title: "Actualizado correctamente",
+          });
+          navigate("/mecanicos");
+        }
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       const res = await createMecanico(data);
       const Toast = Swal.mixin({
@@ -125,8 +138,8 @@ export default function FormMecanico() {
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
           >
             <option value={""}>Selecciona el tipo de documento</option>
-            <option value={"Cedula de Ciudadania"}>Cédula Ciudadania</option>
-            <option value={"Cedula de Extranjeria"}>Cédula Extranjera</option>
+            <option value={"Cédula de Ciudadanía"}>Cédula de Ciudadanía</option>
+            <option value={"Cédula de Extranjería"}>Cédula de Extranjería</option>
           </select>
           {errors.tipo && (
             <p className="text-red-500">{errors.tipo.message}</p>

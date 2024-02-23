@@ -30,7 +30,7 @@ export default function FormCliente() {
     // Desregistrando el campo antes de volver a registrarlo
     unregister("cedula");
     // Actualiza la validación según el tipo seleccionado
-    if (selectedTipo === "Cedula Extranjera") {
+    if (selectedTipo === "Cédula de Extranjería") {
       
       register("cedula", CedulaExtRequired);
     } else {
@@ -42,7 +42,7 @@ export default function FormCliente() {
 
   const onSubmit = handleSubmit(async(data) => {
     if(params.id){
-       updateCliente(params.id, data)
+      const res = await updateCliente(params.id, data)
        const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -54,11 +54,19 @@ export default function FormCliente() {
           toast.onmouseleave = Swal.resumeTimer;
         },
       });
-      Toast.fire({
-        icon: "success",
-        title: "Actualizado correctamente",
-      });
-       navigate("/clientes")
+      if (res.error) {
+        Toast.fire({
+          icon: "error",
+          title: "Error al actualizar",
+        });
+      } else {
+        // Si la actualización se realizó con éxito, mostrar un mensaje de éxito
+        Toast.fire({
+          icon: "success",
+          title: "Actualizado correctamente",
+        });
+        navigate("/clientes");
+      }
     }else{
       const res = await createCliente(data)
       const Toast = Swal.mixin({
@@ -119,11 +127,11 @@ export default function FormCliente() {
         className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 " autoFocus
         >
           <option value={""}>Selecciona el tipo de documento</option>
-          <option value={"Cedula"} >
-            Cédula de Ciudadania
+          <option value={"Cédula de ciudadanía"} >
+            Cédula de Ciudadanía
           </option>
-          <option value={"Cedula Extranjera"} >
-            Cédula Extranjera
+          <option value={"Cédula de Extranjería"} >
+            Cédula de Extranjería
           </option>
         </select>
         {errors.tipo && <p className="text-red-500">{errors.tipo.message}</p>}
@@ -161,9 +169,9 @@ export default function FormCliente() {
 
         </select>
         {errors.sexo && <p className="text-red-500">{errors.sexo.message}</p>}
-      <label >Email</label>
+      <label >Correo Electrónico<span className="text-red-500">*</span></label>
         <input 
-        placeholder='Email'
+        placeholder='Correo Electrónico'
         type="text"
         {...register("email_cliente", EmailRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
@@ -172,7 +180,7 @@ export default function FormCliente() {
       
       <label>Teléfono<span className="text-red-500">*</span></label>
         <input 
-        placeholder='Telefono'
+        placeholder='Teléfono'
         {...register("telefono_cliente", TelefonoRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         />
@@ -200,9 +208,6 @@ export default function FormCliente() {
           <Link className=" max-sm:text-xs px-5 py-1 ml-3 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30" to="/clientes">Cancelar</Link>
         </button>
         </div>
-        
-        
-        
       </form>
     </div>
     </div>

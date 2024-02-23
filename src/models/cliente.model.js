@@ -27,7 +27,6 @@ const clienteSchema = new mongoose.Schema({
     cedula:{
         type: String, //Tipo String
         required: true, //Es requerido
-        unique: true,
         trim: true,
     },
     tipo:{

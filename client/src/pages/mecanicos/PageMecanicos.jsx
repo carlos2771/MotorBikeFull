@@ -136,7 +136,7 @@ export default function PageMecanico() {
     {
       field: "tipo",
       headerName: "Tipo Documento",
-      width: 200,
+      width: 250,
       headerClassName: "font-custom text-lg",
     },
     {
@@ -148,14 +148,21 @@ export default function PageMecanico() {
     {
       field: "nombre_mecanico",
       headerName: "Nombre Completo",
-      width: 250,
+      width: 240,
+      headerClassName: "font-bold text-lg"
+
+    },
+    {
+      field: "telefono_mecanico",
+      headerName: "Teléfono",
+      width: 190,
       headerClassName: "font-bold text-lg"
 
     },
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 250,
+      width: 200,
       headerClassName: "font-bold text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;

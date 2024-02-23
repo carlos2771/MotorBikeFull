@@ -145,6 +145,12 @@ export default function PageClientes() {
 
   const columns = [
     {
+      field: "tipo",
+      headerName: "Tipo Documento",
+      width: 200,
+      headerClassName: "font-custom text-lg",
+    },
+    {
       field: "cedula",
       headerName: "Documento",
       width: 180,
@@ -169,13 +175,13 @@ export default function PageClientes() {
     {
       field: "telefono_cliente",
       headerName: "Teléfono",
-      width: 190,
+      width: 150,
       headerClassName: "font-custom text-lg"
     },
     {
       field: "estado",
       headerName: "Estado",
-      width: 100,
+      width: 120,
       headerClassName: "font-custom text-lg"
     },
     // {
@@ -267,7 +273,7 @@ export default function PageClientes() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faUser} className="mr-2" />
-                        Nombre
+                        Nombre Completo
                       </Tabla>
                       <Tabla >
                         {
@@ -293,7 +299,7 @@ export default function PageClientes() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
-                        Email
+                        Correo Electrónico
                       </Tabla>
                       <Tabla >
                       {
@@ -305,7 +311,7 @@ export default function PageClientes() {
                     <tr>
                       <Tabla >
                         <FontAwesomeIcon icon={faPhone} className="mr-2" />
-                        Telefono
+                        Teléfono
                       </Tabla>
                       <Tabla >
                       {

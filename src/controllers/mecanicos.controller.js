@@ -33,55 +33,72 @@ export const getMecanico = async (req, res) => {
 };
 
 
+
 export const createMecanico = async (req, res) => {
     try {
-        // Extrae los datos del mecánico del cuerpo de la solicitud
         const { nombre_mecanico, cedula_mecanico, telefono_mecanico, direccion_mecanico, estado, tipo } = req.body;
 
-        // Verifica si ya existe un mecánico con la misma cédula pero diferente tipo de documento
-        const existingMecanico = await Mecanico.findOne({ cedula_mecanico, tipo: { $ne: tipo } });
+        // Verificar si el número de cédula ya existe con el mismo tipo de documento
+        const existingMecanico = await Mecanico.findOne({ cedula_mecanico, tipo });
 
         if (existingMecanico) {
-            // Si existe un mecánico con la misma cédula pero diferente tipo de documento, 
-            // se permite agregar este nuevo mecánico
-            const newMecanico = new Mecanico({
-                nombre_mecanico,
-                cedula_mecanico,
-                telefono_mecanico,
-                direccion_mecanico,
-                estado,
-                tipo
-            });
-            const saveMecanico = await newMecanico.save();
-            return res.status(201).json(saveMecanico);
+            return res.status(400).json({ message: ["Ya existe un mecánico con este número de cédula y tipo de documento." ]});
         }
 
-        // Si ya existe un mecánico con la misma cédula y el mismo tipo de documento, se rechaza la solicitud
-        return res.status(400).json({ message: ["Ya existe un mecánico con el mismo número de documento y tipo"] });
+        // Crear una nueva instancia del modelo 'Mecanico' con los datos del mecánico
+        const newMecanico = new Mecanico({
+            nombre_mecanico, cedula_mecanico, telefono_mecanico, direccion_mecanico, estado, tipo
+        });
 
+        // Guardar el nuevo mecánico en la base de datos
+        const savedMecanico = await newMecanico.save();
+
+        res.status(201).json(savedMecanico);
     } catch (error) {
-        return res.status(500).json({ message: ["Error al crear el mecanico"], error });
+        res.status(500).json({ message: "Error al crear el mecánico", error });
     }
-};
-
+}
 
 // Actualiza un mecanico por su ID
 export const updateMecanico = async (req, res) => {
     try {
-        // Busca el mecanico por su ID y actualíza con los datos proporcionados en el cuerpo de la solicitud
-        const mecanico = await Mecanico.findByIdAndUpdate(req.params.id, req.body, {
-            // new y true son para que el guarde los datos nuevos que ingrese el usuario
-            new: true
-        });
+        // Extrae los datos a actualizar del cuerpo de la solicitud
+        const { nombre_mecanico, cedula_mecanico, telefono_mecanico, direccion_mecanico, estado, tipo } = req.body;
+
+        // Busca el mecanico por su ID
+        const mecanico = await Mecanico.findById(req.params.id);
         // Si el mecanico no se encuentra, devuelve un código de estado 404 y un mensaje de error
         if (!mecanico) return res.status(404).json({ message: "Mecanico no encontrado" });
+        
+        // Verificar si existe otro mecánico con el mismo número de cédula y tipo de documento
+        const existingMecanico = await Mecanico.findOne({ cedula_mecanico, tipo });
+
+        // Si encontramos otro mecánico con la misma cédula y tipo de documento, y su ID no es el mismo que estamos actualizando,
+        // entonces no permitimos la actualización y devolvemos un mensaje de error.
+        if (existingMecanico && existingMecanico._id.toString() !== req.params.id) {
+            return res.status(400).json({ message: ["Ya existe un mecánico con este número de cédula y tipo de documento." ]});
+        }
+
+        // Actualiza el mecanico con los datos proporcionados
+        const updatedMecanico = await Mecanico.findByIdAndUpdate(req.params.id, {
+            nombre_mecanico,
+            cedula_mecanico,
+            telefono_mecanico,
+            direccion_mecanico,
+            estado,
+            tipo
+        }, {
+            new: true // Devuelve el documento actualizado
+        });
 
         // Devuelve el mecanico actualizado en formato JSON
-        res.json(mecanico);
+        res.json(updatedMecanico);
     } catch (error) {
-        return res.status(500).json({ message: " Error al actualizar el mecanico", error });
+        return res.status(500).json({ message: ["Error al actualizar el mecánico"], error });
     }
 };
+
+
 
 // Elimina un mecanico por su ID
 export const deleteMecanico = async (req, res) => {
