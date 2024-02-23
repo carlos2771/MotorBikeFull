@@ -128,10 +128,10 @@ export default function FormCliente() {
         >
           <option value={""}>Selecciona el tipo de documento</option>
           <option value={"Cédula de ciudadanía"} >
-            Cédula de Ciudadanía
+            Cédula de ciudadanía
           </option>
-          <option value={"Cédula de Extranjería"} >
-            Cédula de Extranjería
+          <option value={"Cédula de extranjería"} >
+            Cédula de extranjería
           </option>
         </select>
         {errors.tipo && <p className="text-red-500">{errors.tipo.message}</p>}

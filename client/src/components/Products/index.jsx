@@ -59,7 +59,8 @@ const Products = () => {
             <option key={marca._id} value={marca._id}> {/* Asigna el valor del ID de la marca */}
               {marca.nombre_marca}
             </option>
-          ))}
+          ))
+          }
       </select>
 
       <select
@@ -81,9 +82,9 @@ const Products = () => {
               alt={product.name}
             />
             <div className="text-base max-md:text-2xl">
-              <p className="font-Roboto text-center font-bold">{product.name} - ${product.price}</p>
-              <p className="font-Roboto text-center font-bold">{product.nombre_marca}</p> {/* Utiliza el nombre de la marca */}
-              <p className="font-Roboto text-center font-bold "> Existencia {product.amount}</p>
+              <p className="font-Roboto text-center font-font-semibold">{product.name} - ${product.price}</p>
+              <p className="font-Roboto text-center font-font-semibold">{product.nombre_marca}</p> {/* Utiliza el nombre de la marca */}
+              <p className="font-Roboto text-center font-font-semibold "> Existencia {product.amount}</p>
             </div>
             {!product.inCart ? (
               <button

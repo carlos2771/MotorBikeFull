@@ -137,7 +137,7 @@ export default function PageMarcas() {
   const columns = [
     {
       field: "nombre_marca",
-      headerName: "Nombre de Marca",
+      headerName: "Nombre  Marca",
       width: 450,
       headerClassName: "font-custom text-lg"
 
