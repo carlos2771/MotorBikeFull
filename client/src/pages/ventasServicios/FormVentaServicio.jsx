@@ -70,7 +70,7 @@ export default function FormVentaServicio() {
       const transformData = {
         ...data,
         precio_servicio: Number(data.precio_servicio),
-        estado: "Activo",
+        estado: "En proceso",
       };
       const res = await createVentaServicio(transformData);
       const Toast = Swal.mixin({
