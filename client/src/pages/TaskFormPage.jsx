@@ -77,26 +77,26 @@ export default function TaskFormPage() {
     <div className='bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40'>
     <h1 className="text-2xl flex justify-center mb-5">Agregar tarea </h1>
       <form onSubmit={onSubmit}>
-        <label htmlFor="title">Titulo</label>
+        <label htmlFor="title">Título</label>
         <input 
         type="text" 
-        placeholder='Titulo' 
+        placeholder='Título' 
         {...register("title", NombreRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         autoFocus
         />
         {errors.title && <p className="text-red-500">{errors.title.message}</p>}
-        <label htmlFor="description">Descripcion</label>
+        <label htmlFor="description">Descripción</label>
         <textarea 
         rows="3" 
-        placeholder='Descripcion'
+        placeholder='Descripción'
         {...register("description", NombreRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         ></textarea>
         {errors.description && <p className="text-red-500">{errors.description.message}</p>}
 
         
-        <label htmlFor="date">Date</label>
+        <label htmlFor="date">Fecha</label>
         <input className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' type="date"{...register("date")} />
         <div className='justify-end flex mt-6'>
           <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d'>
