@@ -516,6 +516,52 @@ export default function PageCompras() {
             },
           }}
           slots={{ toolbar: GridToolbar }}
+
+          slotProps={{
+            toolbar: {
+              printOptions: { disableToolbarButton: true },
+              csvOptions: { disableToolbarButton: true },
+            }
+          }}
+
+          //Traducir a español
+          localeText={{
+            noRowsLabel: "No se ha encontrado datos.",
+            noResultsOverlayLabel: "No se ha encontrado ningún resultado",
+            toolbarColumns: "Columnas",
+            toolbarColumnsLabel: "Seleccionar columnas",
+            toolbarFilters: "Filtros",
+            toolbarFiltersLabel: "Ver filtros",
+            toolbarFiltersTooltipHide: "Quitar filtros",
+            toolbarFiltersTooltipShow: "Ver filtros",
+            toolbarDensity: "Densidad",
+            toolbarDensityCompact: "Compacta",
+            toolbarDensityStandard: "Estandar",
+            toolbarDensityComfortable: "Confortable",
+            toolbarExport: "Exportar",
+            toolbarExportCSV: "Descargar CSV",
+            toolbarExportPrint: "Imprimir",
+            columnsPanelTextFieldLabel: "Buscar",
+            columnsPanelHideAllButton: "Ocultar todo",
+            columnsPanelShowAllButton: "Mostrar todo",
+            filterPanelColumns: "Columna",
+            filterPanelOperator: "Operador",
+            filterOperatorContains: "Contiene",
+            filterOperatorEquals: "Es igual",
+            filterOperatorStartsWith: "Comienza con",
+            filterOperatorEndsWith: "Termina con",
+            filterOperatorIsEmpty: "Esta vacía",
+            filterOperatorIsNotEmpty: "No esta vacía",
+            filterOperatorIsAnyOf: "Es alguna de",
+            filterPanelInputLabel: "Valor",
+            filterPanelInputPlaceholder: "Filtrar valor",
+            columnMenuSortAsc: "Ordenar en ASC",
+            columnMenuSortDesc: "Ordenar en DESC",
+            columnMenuUnsort: "Desordenar",
+            columnMenuFilter: "Filtrar",
+            columnMenuHideColumn: "Ocultar columna",
+            columnMenuManageColumns: "Manejar columnas"
+          }}
         />
       </Box>
 
