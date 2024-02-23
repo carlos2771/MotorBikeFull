@@ -25,7 +25,7 @@ export default function PageRoles() {
       if (status === "Activo" && id === roles[0]._id) {
         Swal.fire({
           title: "Error",
-          text: "No se puede desactivar el primer rol (Administrador)",
+          text: "No se puede desactivar el Administrador",
           icon: "error",
           background: "#334155",
           color: "white",
