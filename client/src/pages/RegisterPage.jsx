@@ -26,63 +26,8 @@ export default function registerPage() {
   // }, [isAuthenticated]);
 
   const onSubmit = handleSubmit(async (values) => {
-    try {
-      const response = await signup(values);
-      if (response.message) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "success",
-          title: "Bienvenid@",
-        });
+    signup(values);
         navigate("/login");
-      } else {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "error",
-          title: "mala",
-        });
-        navigate("/login");
-      }
-    } catch (error) {
-      // Error de red u otro error, muestra el mensaje de error
-      setErrorMessage(error.message || "Error en el registro");
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
-      Toast.fire({
-        icon: "error",
-        title: "Error",
-      });
-      navigate("/login");
-    }
   });
 
   
