@@ -86,7 +86,7 @@ export const createRepuestos = async (req, res) => {
     } else {
       // Si no se proporciona una imagen, utiliza una imagen por defecto aquí
       // Puedes reemplazar 'imagen_por_defecto_base64' con tu propia imagen base64 por defecto
-      imgBase64 = 'https://repuesto.co/wp-content/uploads/2019/05/repuesto.co-partes-circulo.png';
+      imgBase64 = 'https://r2.easyimg.io/gvdthk7f0/motorbike_(1).png';
     }
 
     // Si no existe, crea un nuevo repuesto

@@ -236,7 +236,7 @@ const Cart = () => {
                   className="w-full bg-slate-700 border-0 border-b-2 border-blue-700 text-white px-4 py-2 my-2"
                 />
                 </div>
-                <button type="submit">Enviar</button>
+                <button className="px-5 py-1 mb-4 text-sm text-withe font-semibold rounded-full border  border-blue-600 hover:text-white hover:bg-blue-600 hover:border-transparent shadow-lg shadow-zinc-300/30 d ml-40 " type="submit">Enviar</button>
               </form>
             </div>
           )}

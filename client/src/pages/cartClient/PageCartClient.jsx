@@ -27,6 +27,13 @@ export default function PageCartClient() {
   const { getCartClient, cartClientes, getCartCliente, updateCartCliente } =
     useCartCliente();
 
+    
+function formatCurrency(value) {
+  // Agrega el signo de peso
+  const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+  return formattedValue;
+}
+
   useEffect(() => {
     try {
       getCartClient();
@@ -187,6 +194,7 @@ export default function PageCartClient() {
       headerName: "Total Venta",
       width: 170,
       headerClassName: "custom-header",
+      valueFormatter: (params) => formatCurrency(params.value),
       
     },
     {
@@ -422,16 +430,22 @@ export default function PageCartClient() {
                     
                       <Tabla>
                         {
-                          cartClientes.find(
-                            (total) => total._id === params.row._id
-                          )?.total
+                          formatCurrency(
+
+                            cartClientes.find(
+                              (total) => total._id === params.row._id
+                            )?.total
+                          )
                         }
                       </Tabla>
                       <Tabla>
                         {
-                          cartClientes.find(
-                            (descuento) => descuento._id === params.row._id
-                          )?.descuento ||0
+                          formatCurrency(
+
+                            cartClientes.find(
+                              (descuento) => descuento._id === params.row._id
+                            )?.descuento ||0
+                          )
                         
                         }
                       </Tabla>
@@ -490,6 +504,7 @@ export default function PageCartClient() {
             },
           }}
           slots={{ toolbar: GridToolbar }}
+          
         />
       </Box>
     </div>
