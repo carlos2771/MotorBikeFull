@@ -74,7 +74,7 @@ const Products = () => {
 
       <div className=" w-full grid gap-y-20 gap-x-75 justify-items-center pt-20 mr-96 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 max-2xl:grid-cols-1 lg:grid-cols-3 gap-1">
         {sortedProducts().map((product, i) => (
-          <div key={i} className="flex flex-col items-center justify-center space-y-2 ">
+          <div key={i} className="flex flex-col items-center justify-center space-y-2">
             <img
               className="w-full h-56"
               src={`${product.img}`}
