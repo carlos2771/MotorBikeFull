@@ -27,12 +27,16 @@ export default function PageCartClient() {
   const { getCartClient, cartClientes, getCartCliente, updateCartCliente } =
     useCartCliente();
 
-    
-function formatCurrency(value) {
-  // Agrega el signo de peso
-  const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
-  return formattedValue;
-}
+    function formatCurrency(value) {
+      // Verificar si value es null o undefined
+      if (value == null) {
+        return ""; // o cualquier otro valor predeterminado que desees
+      }
+      
+      // Agregar el signo de peso
+      const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+      return formattedValue;
+    }
 
   useEffect(() => {
     try {
@@ -194,7 +198,7 @@ function formatCurrency(value) {
       headerName: "Descuento",
       width: 170,
       headerClassName: "custom-header",
-      valueFormatter: (params) => formatCurrency(params.value),
+      valueFormatter: (params) => formatCurrency(params.value) || `$${0}`,
       
     },
     {

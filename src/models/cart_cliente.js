@@ -30,6 +30,7 @@ const CartClienteSchema = new mongoose.Schema({
   codigo: { type: String },
   descuento: {
     type: Number,
+    default: 0
   },
   anulado: {
     type: Boolean,
