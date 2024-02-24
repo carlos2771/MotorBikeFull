@@ -60,9 +60,6 @@ export const NombreProveedor = {
   minLength: { value: 4, message: "Mínimo 4" }
 }
 
-
-
-
 // VALIDACIÓN PARA VALIDAR LA CANTIDAD DEL REPUESTO
 export const NegativeRequired = {
   required: "Requerido",
@@ -71,12 +68,26 @@ export const NegativeRequired = {
   minLength: { value: 1, message: "Mínimo 4" }
 };
 
+// export const PasswordRequire = {
+//   required: "Campo requerido",
+//   minLength: { value: 8, message: "La contraseña debe tener al menos 8 caracteres" },
+//   maxLength: { value: 15, message: "La contraseña no puede tener más de 15 caracteres" },
+  
+// };
 
 export const PasswordRequire = {
   required: "Campo requerido",
-  minLength: { value: 6, message: "La contraseña debe tener al menos 6 caracteres" },
-  maxLength: { value: 12, message: "La contraseña no puede tener más de 12 caracteres" },
-  validate: (value) => /^[^\s]+$/.test(value) || "La contraseña no puede contener espacios",
+  minLength: { value: 8, message: "La contraseña debe tener al menos 8 caracteres" },
+  maxLength: { value: 15, message: "La contraseña no puede tener más de 15 caracteres" },
+  validate: (value) => {
+    if (!value.trim()) {
+      return "La contraseña no puede estar vacía ni contener solo espacios.";
+    }
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,])[A-Za-z\d@$!%*?&.,]{8,15}$/.test(value)) {
+      return "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial (puede ser '.', ',' o '@$!%*?&').";
+    }
+    return true;
+  }
 };
 
 
