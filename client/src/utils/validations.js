@@ -237,6 +237,12 @@ export const CedulaExtRequired = {
     message: "El minimo de caracteres es de 6"
   }
 };
+export const NumeroRequired = {
+  pattern: {
+    value: numberPattern,
+    message: "Debe contener solo numeros y positivos",
+  },
+};
 
 //-----------------------------------------------------------
 

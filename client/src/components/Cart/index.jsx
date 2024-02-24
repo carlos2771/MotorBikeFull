@@ -6,7 +6,7 @@ import { useClientes } from "../../context/ClientContext";
 import { useForm } from "react-hook-form";
 import { useCartCliente } from "../../context/CartClienteContext";
 import { Link, useNavigate } from "react-router-dom";
-import { ClienteRequired, NombreRequired } from "../../utils/validations"
+import { ClienteRequired, NombreRequired, NumeroRequired } from "../../utils/validations"
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -228,13 +228,14 @@ const Cart = () => {
                   {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
                   <input
                   type="num"
-                  {...register("descuento")}
+                  {...register("descuento",NumeroRequired)}
                   thousandSeparator={true}
                   prefix={'$'}
                   placeholder="Descuento"
                   onChange={(e) => setDescuento(parseInt(e.target.value))}
                   className="w-full bg-slate-700 border-0 border-b-2 border-blue-700 text-white px-4 py-2 my-2"
                 />
+                {errors.descuento && <p className="text-red-500">{errors.descuento.message}</p>}
                 </div>
                 <button className="px-5 py-1 mb-4 text-sm text-withe font-semibold rounded-full border  border-blue-600 hover:text-white hover:bg-blue-600 hover:border-transparent shadow-lg shadow-zinc-300/30 d ml-40 " type="submit">Enviar</button>
               </form>
