@@ -6,8 +6,10 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert } from "@material-tailwind/react";
 import { useSpring, animated } from 'react-spring';
 import Swal from "sweetalert2";
+import backgroundImage from './images/yamaha.jpg'; // Importa la imagen de fondo
 
-const PasswordPage = () => {
+
+export default function PasswordPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { enviarToken, isAuthenticated, errors: signinErrors } = useAuth();
   const navigate = useNavigate();
@@ -24,7 +26,9 @@ const PasswordPage = () => {
           toast: true,
           position: "top-end",
           showConfirmButton: false,
-          timer: 3000,
+          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+          color: "white",
+          timer: 5000,
           timerProgressBar: true,
           didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
@@ -33,7 +37,7 @@ const PasswordPage = () => {
         });
         Toast.fire({
           icon: "success",
-          title: "Correo enviado correctamente",
+          title: "Correo enviado correctamente Revisa tu correo electrónico"
         });
         setShouldNavigate(true);
         setEmailValue(values.email);
@@ -43,7 +47,9 @@ const PasswordPage = () => {
           toast: true,
           position: "top-end",
           showConfirmButton: false,
-          timer: 3000,
+          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+          color: "white",
+          timer: 5000,
           timerProgressBar: true,
           didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
@@ -66,11 +72,11 @@ const PasswordPage = () => {
     }
   });
 
-  useEffect(() => {
-    if (shouldNavigate) {
-      navigate(`/restablecer-password/${emailValue}`);
-    }
-  }, [shouldNavigate, emailValue]);
+  // useEffect(() => {
+  //   if (shouldNavigate) {
+  //     navigate(`/restablecer-password/${emailValue}`);
+  //   }
+  // }, [shouldNavigate, emailValue]);
 
   const [error, setError] = useState('');
 
@@ -82,8 +88,10 @@ const PasswordPage = () => {
 
   return (
     <div>
+      <img src={backgroundImage} alt="Background" className="absolute inset-0 object-cover w-full h-full z-0" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] opacity-30 z-10"></div> {/* Fondo azul semi-transparente */}
       <div className='flex h-[calc(100vh-100px)] items-center justify-center '>
-      <animated.div style={formAnimation} >
+      <animated.div style={formAnimation}  className="relative z-20">
         <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md  '>
           {error && <div><Alert className="bg-red-500 p-2 text-white">{error}</Alert></div>}
           <h1 className='text-3xl font-bold my-2 text-center'>Recuperar Contraseña</h1>
@@ -112,4 +120,3 @@ const PasswordPage = () => {
   );
 }
 
-export default PasswordPage;

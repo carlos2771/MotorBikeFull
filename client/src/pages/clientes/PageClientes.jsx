@@ -47,7 +47,7 @@ export default function PageClientes() {
       showCancelButton: true,
       confirmButtonText: "Si",
       cancelButtonText: "No",
-      background: "#334155",
+      background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
       color: "white",
       iconColor: "#2563eb",
       buttonsStyling: false,
@@ -64,7 +64,9 @@ export default function PageClientes() {
           toast: true,
           position: "top-end",
           showConfirmButton: false,
-          timer: 3000,
+          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+          color: "white",
+          timer: 4000,
           timerProgressBar: true,
           didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
@@ -80,7 +82,9 @@ export default function PageClientes() {
           toast: true,
           position: "top-end",
           showConfirmButton: false,
-          timer: 3000,
+          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+          color: "white",
+          timer: 4000,
           timerProgressBar: true,
           didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;

@@ -69,7 +69,7 @@ export default function PageCompras() {
         showCancelButton: !anulado,
         confirmButtonText: buttonText,
         cancelButtonText: "No",
-        background: "#334155",
+        background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
         color: "white",
         iconColor: "#2563eb",
         buttonsStyling: false,
@@ -86,7 +86,9 @@ export default function PageCompras() {
             toast: true,
             position: "top-end",
             showConfirmButton: false,
-            timer: 3000,
+            background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+            color: "white",
+            timer: 4000,
             timerProgressBar: true,
             didOpen: (toast) => {
               toast.onmouseenter = Swal.stopTimer;
@@ -102,7 +104,9 @@ export default function PageCompras() {
             toast: true,
             position: "top-end",
             showConfirmButton: false,
-            timer: 3000,
+            background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+            color: "white",
+            timer: 4000,
             timerProgressBar: true,
             didOpen: (toast) => {
               toast.onmouseenter = Swal.stopTimer;
@@ -121,7 +125,7 @@ export default function PageCompras() {
         title: "Acción no permitida",
         text: "Esta compra ya ha sido anulada y no se puede modificar.",
         icon: "info",
-        background: "#334155",
+        background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
         color: "white",
         iconColor: "#2563eb",
         buttonsStyling: false,
@@ -173,7 +177,7 @@ export default function PageCompras() {
     }
 
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'VentasServicios');
+    XLSX.utils.book_append_sheet(wb, ws, 'compras');
     XLSX.writeFile(wb, 'compras.xlsx');
   }, [compras]);
 

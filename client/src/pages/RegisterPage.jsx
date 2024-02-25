@@ -6,7 +6,7 @@ import { Input } from "@material-tailwind/react";
 import { EmailRequired, EstadoRequired ,PasswordRequire, NombreMaRequired } from "../utils/validations";
 import { useSpring, animated } from 'react-spring';
 import Swal from "sweetalert2";
-
+import backgroundImage from './images/yamaha.jpg'; // Importa la imagen de fondo
 
 export default function registerPage() {
   const {
@@ -26,10 +26,30 @@ export default function registerPage() {
   // }, [isAuthenticated]);
 
   const onSubmit = handleSubmit(async (values) => {
-    signup(values);
-        navigate("/login");
+    try {
+      await signup(values);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+        color: "white",
+        timer: 4000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "¡Registro Exitoso!",
+      });
+      navigate('/login');
+    } catch (error) {
+      console.error("Error durante el registro:", error);
+    }
   });
-
   
 
   const formAnimation = useSpring({
@@ -40,9 +60,10 @@ export default function registerPage() {
 
   return (
     <div>
-      
+      <img src={backgroundImage} alt="Background" className="absolute inset-0 object-cover w-full h-full z-0" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] opacity-30 z-10"></div> {/* Fondo azul semi-transparente */}
       <div className="flex h-[calc(100vh-100px)] items-center justify-center ">
-      <animated.div style={formAnimation} >
+      <animated.div style={formAnimation} className="relative z-20">
       <div className="bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] w-full max-w-md p-10 rounded-md ">
         {registerErrors.map((error, i) => (
           <div className="bg-red-500 p-2 text-white" key={i}>

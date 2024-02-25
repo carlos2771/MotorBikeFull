@@ -96,6 +96,14 @@ export default function Navbar() {
                     </Link>
                   </Render>
                   <Render>
+                    <Link
+                      to="/compras"
+                      className="flex ms-10 p-2"
+                    >
+                      <FontAwesomeIcon icon={faShoppingBag} className="mr-2" /> Compras
+                    </Link>
+                  </Render>
+                  <Render>
                     <Link to="/home-page" className="flex ms-10 p-2">
                       <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />Ventas repuestos
                     </Link>
@@ -114,14 +122,6 @@ export default function Navbar() {
                       className="flex ms-10 p-2"
                     >
                       <FontAwesomeIcon icon={faHandshake} className="mr-2" /> Ventas Servicios
-                    </Link>
-                  </Render>
-                  <Render>
-                    <Link
-                      to="/compras"
-                      className="flex ms-10 p-2"
-                    >
-                      <FontAwesomeIcon icon={faShoppingBag} className="mr-2" /> Compras
                     </Link>
                   </Render>
                   <Render>
