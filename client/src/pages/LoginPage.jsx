@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Alert } from '@material-tailwind/react';
 import { useSpring, animated } from 'react-spring';
 import Swal from "sweetalert2";
+import backgroundImage from './images/yamaha.jpg'; // Importa la imagen de fondo
 
 
 export default function LoginPage() {
@@ -23,7 +24,9 @@ export default function LoginPage() {
         toast: true,
         position: "top-end",
         showConfirmButton: false,
-        timer: 3000,
+        background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+        color: "white",
+        timer: 4000,
         timerProgressBar: true,
         didOpen: (toast) => {
           toast.onmouseenter = Swal.stopTimer;
@@ -46,8 +49,10 @@ export default function LoginPage() {
 
   return (
     <div>
-      <div className='flex h-[calc(100vh-100px)] items-center justify-center '>
-      <animated.div style={formAnimation} >
+      <img src={backgroundImage} alt="Background" className="absolute inset-0 object-cover w-full h-full z-0" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] opacity-30 z-10"></div> {/* Fondo azul semi-transparente */}
+      <div className="relative min-h-screen flex items-center justify-center">
+      <animated.div style={formAnimation} className="relative z-20"> {/* Asegura que el formulario esté por encima de la imagen de fondo */}
       <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md  '>
       {
       signinErrors && Array.isArray(signinErrors) && signinErrors.map((error, i ) => (

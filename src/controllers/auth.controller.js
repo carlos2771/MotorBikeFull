@@ -341,7 +341,7 @@ export const enviarToken = async (req, res) => {
       // Generar un token con una duración limitada
       const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
       
-      const randomToken = generateRandomToken(5);
+      const randomToken = generateRandomToken(100);
       console.log(randomToken);
 
       // Almacenar el token en el usuario en la base de datos
@@ -438,7 +438,7 @@ export const enviarToken = async (req, res) => {
                           Hemos recibido tu petición sobre el reestablecimiento de tu contraseña
                       </p>
                       <p>
-                      Su código de recuperación es: <strong>${code}</strong>
+                      Para continuar con el reestablecimiento, por favor presionar el siguiente boton.
                       </p>
       
                       <!-- Mensaje de gracias -->

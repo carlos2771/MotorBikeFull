@@ -39,7 +39,7 @@ export default function PageMecanico() {
       showCancelButton: true,
       confirmButtonText: "Sí",
       cancelButtonText: "No",
-      background: "#334155",
+      background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
       color: "white",
       iconColor: "#2563eb",
       buttonsStyling: false,
