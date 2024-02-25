@@ -95,7 +95,6 @@ export default function FormRepuesto() {
         position: "top-end",
         showConfirmButton: false,
         background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
-        color: "white",background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
         color: "white",
         timer: 4000,
         timerProgressBar: true,
