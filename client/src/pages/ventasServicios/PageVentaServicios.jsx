@@ -226,7 +226,7 @@ export default function PageVentaServicios() {
     {
       field: "nombre_mecanico",
       headerName: "Mecánico",
-      width: 160,
+      width: 180,
       headerClassName: 'custom-header',
       valueGetter: (params) => params.row.mecanico.nombre_mecanico,
     },
@@ -246,41 +246,43 @@ export default function PageVentaServicios() {
     },
     {
       field: "precio_servicio",
-      headerName: "Precio Servicio",
+      headerName: "Precio servicio",
       width: 185,
       headerClassName: 'custom-header',
+      headerAlign: "center",
       valueFormatter: (params) => formatCurrency(params.value),
       align: "center" // Esto centra el contenido de la celda
     },
 
-    {
-      field: "createdAt",
-      headerName: "Fecha Venta",
-      width: 190,
-      headerClassName: 'custom-header',
-      renderCell: (params) => {
-        const date = new Date(params.value);
-        date.toLocaleString("en-US", { timeZone: "America/Bogota" });
-        const formattedDate = date.toLocaleDateString("es-ES", {
-          month: "long",
-          day: "numeric",
-        });
+    // {
+    //   field: "createdAt",
+    //   headerName: "Fecha Venta",
+    //   width: 140,
+    //   headerClassName: 'custom-header',
+    //   renderCell: (params) => {
+    //     const date = new Date(params.value);
+    //     date.toLocaleString("en-US", { timeZone: "America/Bogota" });
+    //     const formattedDate = date.toLocaleDateString("es-ES", {
+    //       month: "long",
+    //       day: "numeric",
+    //     });
 
-        return <div>{formattedDate}</div>;
-      },
-    },
+    //     return <div>{formattedDate}</div>;
+    //   },
+    // },
     {
       field: "estado",
       headerName: "Estado",
-      width: 105,
+      width: 130,
       headerClassName: 'custom-header',
     },
 
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 200,
+      width: 242,
       headerClassName: "custom-header",
+      headerAlign: "center",
       renderCell: (params) => {
         const estado = params.row.estado;
         console.log("estado", estado);
@@ -292,14 +294,21 @@ export default function PageVentaServicios() {
           <div>
             <button
               title='Finalizar venta'
-              className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-white-500 hover:text-white hover:bg-gray-500 ${estado !== "Finalizada" && estado !== "Inactivo" ? "" : "hidden"}`}
+              className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500 ${estado !== "Finalizada" && estado !== "Inactivo" ? "" : "hidden"}`}
               onClick={() => mostrarAlertaCambiarEstado(params.row._id, estado)}
             >
               <FontAwesomeIcon icon={faCheck} />
             </button>
 
-
-
+            <button className={estado === "En proceso" ? "" : "hidden"}>
+              <Link
+                className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                title="Editar"
+                to={`/ventas-servicios/${params.row._id}`}
+              >
+                <FontAwesomeIcon icon={faPencil} />
+              </Link>
+            </button>
 
             <button
               title='Inactivar'
@@ -308,6 +317,7 @@ export default function PageVentaServicios() {
             >
               {estado === "En proceso" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faLock} />}
             </button>
+
 
             <button
               className={estado === "En proceso" || estado === "Finalizada" ? "" : "hidden"} title='Ver detalle'>
@@ -422,9 +432,10 @@ export default function PageVentaServicios() {
 
           slotProps={{
             toolbar: {
-                printOptions: { disableToolbarButton: true },
-                csvOptions: { disableToolbarButton: true },
-        }}}
+              printOptions: { disableToolbarButton: true },
+              csvOptions: { disableToolbarButton: true },
+            }
+          }}
 
 
           //Traducir a español
@@ -464,7 +475,7 @@ export default function PageVentaServicios() {
             columnMenuFilter: "Filtrar",
             columnMenuHideColumn: "Ocultar columna",
             columnMenuManageColumns: "Manejar columnas"
-        }}
+          }}
         />
       </Box>
     </div>
