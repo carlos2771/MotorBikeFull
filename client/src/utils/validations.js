@@ -4,11 +4,6 @@ const numberPattern = /^[0-9]*$/;
 // VALIDACIÓN PARA CANTIDADES
 const negative = /^[1-9]\d*$/;
 
-
-
-
-
-
 // const nombreRepuesto = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ][a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{3,68}(?: [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{4,68})*[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]$/;
 
 // VALIDACION PARA EL CODIGO DE COMPRAS
@@ -259,3 +254,9 @@ export const NumeroRequired = {
 
 
 
+export const NombreRolRequired = {
+  required: "Campo requerido",
+  validate: (value) => /^[A-Za-z\s]+$/.test(value.trim()) || "Ingresa un nombre valido",
+  maxLength: { value: 35, message: "El maximo de caracteres es de 35" },
+  minLength: { value: 6, message: "Ingresa el nombre completo, minimo 6 caracteres" }
+};

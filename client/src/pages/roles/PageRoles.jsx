@@ -3,10 +3,13 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { useRoles } from "../../context/RolsContext";
 import { Link } from "react-router-dom";
+import Detalle from "../../components/Detalle";
 import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMotorcycle, faDownload, faPlus, faPencil , faBan,  faCheck } from "@fortawesome/free-solid-svg-icons";
+import {Tabla, Titulo} from "../../components/Tabla";
+
+import { faMotorcycle, faDownload, faPlus, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard  } from "@fortawesome/free-solid-svg-icons";
 
 
 export default function PageRoles() {
@@ -224,6 +227,98 @@ export default function PageRoles() {
               >
                 {status === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
               </button>
+              <button className={status === "Activo" ? "" : "hidden"} title="Ver detalle">
+              <Detalle
+                metodo={() => getRoles(params.row._id)}
+                id={params.row._id}
+              >
+                <table>
+                  <tbody>
+                    <Titulo>
+                        <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                        Detalles del Cliente
+                    </Titulo>
+                    <tr>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                        Nombre de rol
+                      </Tabla>
+                      <Tabla >
+                      {
+                    roles.find((rol) => rol._id === params.row._id)
+                      ?.name
+                  }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                        Permisos
+                      </Tabla>
+                      <Tabla >
+                      {
+                    roles.find((rol) => rol._id === params.row._id)
+                      ?.permissions
+                  }
+                      </Tabla>
+                    </tr>
+                    {/* <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faUser} className="mr-2" />
+                        Nombre Completo
+                      </Tabla>
+                      <Tabla >
+                        {
+                          clientes.find(
+                            (cliente) => cliente._id === params.row._id
+                          )?.nombre_cliente
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faMars} className="mr-2" />
+                        Sexo
+                      </Tabla>
+                      <Tabla >
+                        {
+                          clientes.find(
+                            (cliente) => cliente._id === params.row._id
+                          )?.sexo
+                        }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
+                        Correo Electrónico
+                      </Tabla>
+                      <Tabla >
+                      {
+                    clientes.find((cliente) => cliente._id === params.row._id)
+                      ?.email_cliente
+                  }
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla >
+                        <FontAwesomeIcon icon={faPhone} className="mr-2" />
+                        Teléfono
+                      </Tabla>
+                      <Tabla >
+                      {
+                    clientes.find((cliente) => cliente._id === params.row._id)
+                      ?.telefono_cliente
+                  }
+                      </Tabla>
+                    </tr> */}
+                    
+                  </tbody>
+                  
+                </table>
+                
+              </Detalle>
+            </button>
           </div>
           );
         },

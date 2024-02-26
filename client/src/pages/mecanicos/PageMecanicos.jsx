@@ -9,8 +9,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWrench , faPlus, faDownload} from '@fortawesome/free-solid-svg-icons';
 import * as XLSX from "xlsx";
 import Detalle from "../../components/Detalle";
-import { faEnvelope, faIdCard, faUser, faPhone, faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faHome} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faIdCard,faFilePdf, faUser, faPhone, faPen, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard, faHome} from "@fortawesome/free-solid-svg-icons";
 import {Tabla, Titulo} from "../../components/Tabla";
+import { jsPDF } from "jspdf";
 
 // Agrega el icono a la biblioteca
 library.add(faWrench, faPlus);
@@ -99,6 +100,57 @@ export default function PageMecanico() {
     });
   };
 
+  const handleDownloadPDF = async (mecanico) => {
+    try {
+      if (!mecanico) {
+        throw new Error("Mecánico es null. No se puede generar el PDF.");
+      }
+  
+      const pdf = new jsPDF();
+  
+      pdf.setFont("helvetica");
+      const currentDate = new Date();
+      const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
+  
+      pdf.setFontSize(12);
+      pdf.text(`Fecha: ${formattedDate}`, 20, 20);
+      pdf.setFontSize(16);
+      pdf.text("Taller Moto racer la 36", 20, 30);
+      pdf.setFontSize(12);
+      pdf.text("Dirección: cll 36 # 36-37", 20, 40);
+  
+      pdf.setFontSize(12);
+      pdf.text("Nombre del Administrador: Jhonatan Arboleda", 20, 60);
+      pdf.text("Lugar: Medellin", 20, 70);
+  
+      pdf.setFontSize(18);
+      pdf.text(`Información del Mecánico`, 20, 90);
+  
+      pdf.setFontSize(14);
+      pdf.text(`Cedula: ${mecanico.cedula_mecanico}`, 20, 110);
+      pdf.text(`Nombre: ${mecanico.nombre_mecanico}`, 20, 120);
+      pdf.text(`Telefono: ${mecanico.telefono_mecanico}`, 20, 130);
+      pdf.text(`Direccion: ${mecanico.direccion_mecanico}`, 20, 140);
+      pdf.text(`Estado: ${mecanico.estado}`, 20, 150);
+  
+      const blob = pdf.output("blob");
+      const url = URL.createObjectURL(blob);
+  
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `DetalleMecanico_${mecanico.cedula_mecanico}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+  
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error al generar el PDF:", error.message);
+    }
+  };
+  
+
+
   const exportarAExcel = useCallback(() => {
     const datos = mecanicos.map((mecanico) => ({
       Cedula: mecanico.cedula_mecanico,
@@ -169,7 +221,7 @@ export default function PageMecanico() {
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 200,
+      width: 250,
       headerClassName: "font-bold text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
@@ -185,6 +237,13 @@ export default function PageMecanico() {
                 <FontAwesomeIcon icon={faPencil} />
               </Link>
             </button>
+            {/* <button
+              className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-3"
+              onClick={() => handleDownloadPDF(params.row)}
+              disabled={!mecanicos}
+            >
+              <FontAwesomeIcon icon={faFilePdf} className="mr-0" />
+            </button> */}
           {/* <button
             className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
             onClick={() => mostrarAlerta(params.row._id)}
@@ -314,6 +373,7 @@ export default function PageMecanico() {
           className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent" title="Descargar excel"
         ><FontAwesomeIcon icon={faDownload} />
         </button>
+        
       </div>
       </div>
       
