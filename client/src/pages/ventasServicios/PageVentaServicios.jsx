@@ -294,7 +294,7 @@ export default function PageVentaServicios() {
           <div>
             <button
               title='Finalizar venta'
-              className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-white-500 hover:text-white hover:bg-gray-500 ${estado !== "Finalizada" && estado !== "Inactivo" ? "" : "hidden"}`}
+              className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500 ${estado !== "Finalizada" && estado !== "Inactivo" ? "" : "hidden"}`}
               onClick={() => mostrarAlertaCambiarEstado(params.row._id, estado)}
             >
               <FontAwesomeIcon icon={faCheck} />
