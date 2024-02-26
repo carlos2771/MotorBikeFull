@@ -62,7 +62,7 @@ export default function registerPage() {
     <div>
       <img src={backgroundImage} alt="Background" className="absolute inset-0 object-cover w-full h-full z-0" />
       <div className="absolute inset-0 bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] opacity-30 z-10"></div> {/* Fondo azul semi-transparente */}
-      <div className="flex h-[calc(100vh-100px)] items-center justify-center ">
+      <div className="flex h-[calc(100vh-100px)] items-center justify-center pt-20">
       <animated.div style={formAnimation} className="relative z-20">
       <div className="bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] w-full max-w-md p-10 rounded-md ">
         {registerErrors.map((error, i) => (
