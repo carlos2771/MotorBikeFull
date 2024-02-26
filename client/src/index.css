@@ -14,11 +14,14 @@ body{
 }
 
 .MuiDataGrid-columnHeaders {
-  background-color: #003cffab !important;
-  }
+  /* background-color: #276189 !important; */
+  /* background-color: #09456d !important; */
+  background: linear-gradient(to right, #09456d, #276189, #09456d) !important; 
+}
 
 .MuiDataGrid-toolbarContainer{
-  background-color: #003cffab !important;
+   /* background-color: #276189 !important; */
+  background: linear-gradient(to right, #09456d, #276189, #09456d) !important; 
   border-bottom: 1px solid white !important;
 }
 

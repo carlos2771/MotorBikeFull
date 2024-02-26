@@ -15,6 +15,8 @@ import {Tabla, Titulo} from "../../components/Tabla";
 // Agrega el icono a la biblioteca
 library.add(faWrench, faPlus);
 
+
+
 export default function PageMecanico() {
   const { mecanicos, getMecanicos, deleteMecanico,updateMecanico } = useMecanicos();
   
@@ -136,12 +138,13 @@ export default function PageMecanico() {
 
   }, [mecanicos]);
 
+
   const columns = [
     {
       field: "tipo",
       headerName: "Tipo Documento",
       width: 250,
-      headerClassName: "font-custom text-lg",
+      headerClassName: "font-custom text-lg ",
     },
     {
         field: "cedula_mecanico",
@@ -316,6 +319,7 @@ export default function PageMecanico() {
       
       <Box sx={{ width: "100%" }}>
         <DataGrid
+          
           className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
           rows={mecanicos}
           columns={columns}
@@ -331,6 +335,7 @@ export default function PageMecanico() {
          
           disableRowSelectionOnClick
           sx={{
+            background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
             color: "white",
             '& .MuiDataGrid-cell': {
               fontSize: '15px',
@@ -343,10 +348,9 @@ export default function PageMecanico() {
                 printOptions: { disableToolbarButton: true },
                 csvOptions: { disableToolbarButton: true },
         }}}
-
-
           //Traducir a español
           localeText={{
+            
             noRowsLabel: "No se ha encontrado datos.",
             noResultsOverlayLabel: "No se ha encontrado ningún resultado",
             toolbarColumns: "Columnas",

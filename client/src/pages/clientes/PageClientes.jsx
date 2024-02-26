@@ -372,6 +372,7 @@ export default function PageClientes() {
           pageSizeOptions={[5]}
           disableRowSelectionOnClick
           sx={{
+            background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
             color: "white",
             "& .MuiDataGrid-cell": {
               fontSize: "15px",

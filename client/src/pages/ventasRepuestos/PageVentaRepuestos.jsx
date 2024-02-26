@@ -309,6 +309,7 @@ export default function PageVentaRepuestos() {
           pageSizeOptions={[5]}
           disableRowSelectionOnClick
           sx={{
+            background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
             color: "white",
             "& .MuiDataGrid-cell": {
               fontSize: "18px", // Cambia el tamaño de fuente aquí
