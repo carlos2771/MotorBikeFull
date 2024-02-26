@@ -51,7 +51,7 @@ export default function LoginPage() {
     <div>
       <img src={backgroundImage} alt="Background" className="absolute inset-0 object-cover w-full h-full z-0" />
       <div className="absolute inset-0 bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] opacity-30 z-10"></div> {/* Fondo azul semi-transparente */}
-      <div className="relative min-h-screen flex items-center justify-center">
+      <div className="flex h-[calc(100vh-100px)] items-center justify-center">
       <animated.div style={formAnimation} className="relative z-20"> {/* Asegura que el formulario esté por encima de la imagen de fondo */}
       <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md  '>
       {
