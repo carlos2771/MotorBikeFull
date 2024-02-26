@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useRoles } from "../../context/RolsContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { NombreMaRequired } from "../../utils/validations";
+import { NombreMaRequired, NombreRolRequired } from "../../utils/validations";
 import Swal from "sweetalert2";
 
 
@@ -110,7 +110,7 @@ export default function FormRoles() {
             <input
               type="text"
               placeholder='Nombre de rol'
-              {...register("name", NombreMaRequired)}
+              {...register("name", NombreRolRequired)}
               className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
               autoFocus
             />
