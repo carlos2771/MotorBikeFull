@@ -167,7 +167,7 @@ export default function Navbar() {
                       to="/ventas-servicios"
                       className="flex ms-8 p-3 text-white"
                     >
-                      <FontAwesomeIcon icon={faHandshake} className="mr-2" /> Ventas Servicios
+                      <FontAwesomeIcon icon={faHandshake} className="mr-2" /> Ventas servicios
                     </Link>
                   </Render>
                   </div>
