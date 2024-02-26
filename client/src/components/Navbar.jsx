@@ -70,32 +70,32 @@ export default function Navbar() {
                     </Link>
                   </Render>
                   <Render>
-                    <Link to="/rol" className="flex ms-8 p-3">
+                    <Link to="/rol" className="flex ms-8 p-2">
                       <FontAwesomeIcon icon={faUsers} className="mr-2" /> Roles
                     </Link>
                   </Render>
                   <Render>
-                    <Link to="/usuarios" className="flex ms-8 p-3">
+                    <Link to="/usuarios" className="flex ms-8 p-2">
                       <FontAwesomeIcon icon={faUsers} className="mr-2" /> Usuarios
                     </Link>
                   </Render>
                   <Render>
-                    <Link to="/clientes" className="flex ms-8 p-3">
+                    <Link to="/clientes" className="flex ms-8 p-2">
                       <FontAwesomeIcon icon={faUsers} className="mr-2" /> Clientes
                     </Link>
                   </Render>
                   <Render>
-                    <Link to="/mecanicos" className="flex ms-8 p-3">
+                    <Link to="/mecanicos" className="flex ms-8 p-2">
                       <FontAwesomeIcon icon="wrench" className="mr-2" /> Mecánicos
                     </Link>
                   </Render>
                   <Render>
-                    <Link to="/marcas" className="flex ms-8 p-3">
+                    <Link to="/marcas" className="flex ms-8 p-2">
                       <FontAwesomeIcon icon={faMotorcycle} className="mr-2" /> Marcas
                     </Link>
                   </Render>
                   <Render>
-                    <Link to="/repuestos" className="flex ms-8 p-3">
+                    <Link to="/repuestos" className="flex ms-8 p-2">
                       <FontAwesomeIcon icon={faTools} className="mr-2" /> Repuestos
                     </Link>
                   </Render>
