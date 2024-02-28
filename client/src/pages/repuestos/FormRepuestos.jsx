@@ -30,6 +30,10 @@ export default function FormRepuesto() {
   const [selectedMarca, setSelectedMarca] = useState();
   const [activeMarcas, setActiveMarcas] = useState([]);
   const [imageBase64, setImageBase64] = useState("");
+  const [imageName, setImageName] = useState("");
+
+
+
 
   useEffect(() => {
     try {
@@ -50,17 +54,37 @@ export default function FormRepuesto() {
     (async () => {
       if (params.id) {
         const repuesto = await getRepuesto(params.id);
+        // Resto del código...
+        if (repuesto.img) {
+          setImageBase64(repuesto.img);
+          setImageName(repuesto.imgName); // Suponiendo que hay una propiedad imgName en el objeto repuesto
+        }
+      }
+    })();
+  }, [params.id]);
+
+
+  useEffect(() => {
+    (async () => {
+      if (params.id) {
+        const repuesto = await getRepuesto(params.id);
         setValue("name", repuesto.name);
-        setValue("img", repuesto.img);
         setValue("amount", repuesto.amount);
         setValue("marca", repuesto.marca);
         setSelectedMarca(repuesto.marca);
-        setValue(repuesto.nombre_marca);
+        setValue("nombre_marca", repuesto.nombre_marca);
         setValue("price", repuesto.price);
-        // setValue("InCart", repuesto.InCart);
+        setValue("img",repuesto.img)
+
+        // Setear el nombre de la imagen si existe
+        if (repuesto.img) {
+          setImageBase64(repuesto.img);
+          setImageName(repuesto.imgName); // Suponiendo que hay una propiedad imgName en el objeto repuesto
+        }
       }
     })();
-  }, []);
+  }, [params.id]);
+
 
   useEffect(() => {
     if (selectedMarca) {
@@ -76,6 +100,7 @@ export default function FormRepuesto() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setImageName(file.name); // Actualiza el nombre del archivo
       const reader = new FileReader();
       reader.onloadend = () => {
         setImageBase64(reader.result);
@@ -84,8 +109,10 @@ export default function FormRepuesto() {
     }
   };
 
+
   const onSubmit = handleSubmit(async (data) => {
     data.img = imageBase64;
+    
     console.log("datos aness", data);
     console.log("img", data.img);
     if (params.id) {
@@ -249,13 +276,15 @@ export default function FormRepuesto() {
             Imagen Repuesto<span className="text-red-500"></span>
           </label>
           <input
+   
             type="file"
+            {...register("img")}
             onChange={handleImageChange}
-
+            defaultValue={imageName} // Aquí estableces el valor del nombre del archivo
             className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
             autoFocus
           />
-          {errors.img && <p className="text-red-500">{errors.img.message}</p>}
+          {errors.imageBase64 && <p className="text-red-500">{errors.imageBase64.message}</p>}
           {imageBase64 && (
             <img
               src={imageBase64}
@@ -263,6 +292,8 @@ export default function FormRepuesto() {
               style={{ width: "40%", marginTop: "10px" }}
             />
           )}
+
+
 
           <label className="hidden">Estado</label>
           <select
