@@ -62,15 +62,15 @@ export default function Navbar() {
             ></div>
 
             <div
-              className={`${open ? "w-64" : "w-0"
+              className={`${open ? "w-62" : "w-0"
                 } bg-slate-700 min-h-screen fixed top-0 left-0 transition-all duration-300`}
             >
-              <div className={`${!open && "hidden"} pt-3`} style={{ maxHeight: 'calc(100vh - 50px)', overflowY: 'auto' }}>
+              <div className={`${!open && "hidden"}`} style={{ maxHeight: 'calc(100vh - 50px)', overflowY: 'auto' }}>
                 <button
-                  className="ml-4 text-white "
+                  className="bg-slate-700 text-white px-14 pt-2 sticky top-0 "
                   onClick={() => setOpen(false)}
                 >
-                 <h1 className=" flex ml-5 pt-1 text-[20px] font-bold text-white"><FontAwesomeIcon icon={faGears} className="mr-2"/>  Motor <span className='text-blue-300'>Bike</span></h1> 
+                 <h1 className=" flex p-2 text-xl font-bold text-white "><FontAwesomeIcon icon={faGears} className="mr-2"/>  Motor <span className='text-blue-300'>Bike</span></h1> 
                 </button>
                 <div onClick={() => setOpen(false)}>
                   <br />  
