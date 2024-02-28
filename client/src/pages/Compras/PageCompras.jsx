@@ -256,13 +256,13 @@ export default function PageCompras() {
               className={
                 params.row.anulado
                   ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-orange-500 hover:text-white hover:bg-orange-500"
-                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-blue-600 hover:text-white hover:bg-blue-600"
+                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-600 hover:text-white hover:bg-red-600"
               }
               onClick={() => mostrarAlerta(params.row._id, params.row.anulado)}
             >
               {params.row.anulado ? <FontAwesomeIcon icon={faLock} /> : <FontAwesomeIcon icon={faBan} />}
             </button>
-            <button>
+            <button style={{borderRadius: '150px'}}> 
               <Detalle
                 metodo={() => getCompras(params.row._id)}
                 id={params.row._id}
