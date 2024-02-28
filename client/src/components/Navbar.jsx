@@ -8,12 +8,14 @@ import { faTasks,faUser, faShop ,faUserGear ,faUsers, faMotorcycle, faTools, faS
 import logo from '../pages/images/motorbike.png';
 
 export default function Navbar() {
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout, user} = useAuth();
   const [open, setOpen] = useState(true);
   const [usersOpen, setUsersOpen] = useState(false); // Estado para controlar la apertura del acordeón de usuarios
   const [ventasOpen, setVentasOpen] = useState(false);
-  console.log(user);
+ 
+  console.log(user)
 
+  
   const toggleNavbar = () => {
     setOpen(!open);
   };

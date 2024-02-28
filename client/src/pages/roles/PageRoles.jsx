@@ -2,7 +2,7 @@ import React, { useEffect, useCallback  } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { useRoles } from "../../context/RolsContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Detalle from "../../components/Detalle";
 import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
@@ -10,12 +10,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {Tabla, Titulo} from "../../components/Tabla";
 
 import { faMotorcycle, faDownload, faPlus, faPencil , faBan,  faCheck, faInfoCircle, faAddressCard  } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../../hooks/useAuth";
 
 
 export default function PageRoles() {
     const { roles, getRoles, deleteRol,updateRol } = useRoles();
+
+    const { auth, user } = useAuth();
+
+    console.log("hola", auth);
     
-    
+    const navigate = useNavigate();
+
     useEffect(() => {
       try {
         getRoles();
@@ -23,6 +29,24 @@ export default function PageRoles() {
         console.error("Error al obtener roles:", error);
       }
     }, []);
+
+    const mostrarErrorSinPermisos = () => {
+      Swal.fire({
+          title: "Error",
+          text: "No tienes permiso para acceder a esta página",
+          icon: "error",
+          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+          color: "white",
+          iconColor: "#2563eb",
+          buttonsStyling: false,
+          customClass: {
+              confirmButton: "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+          }
+      }).then(()=>{
+          navigate('/tasks');
+      });
+      
+  };
   
     const mostrarAlerta = (id, status) => {
       if (status === "Activo" && id === roles[0]._id) {
@@ -325,7 +349,23 @@ export default function PageRoles() {
       },
     ];
   
-    return (
+    // if (user) {
+    //   const { rol } = user;
+    //   const { permissions } = rol;
+
+    //   console.log("Permisos:", permissions);
+    // } else {
+    //   console.log("No se encontró información del usuario.");
+    // }
+    // permissions.includes('Roles') ?
+
+    const permissions = user?.rol?.permissions || [];
+
+    console.log('permisos', permissions)
+
+    return  (
+      <>
+            {permissions.includes("Roles") ? (
       <div className="mt-16">
         <div className="flex justify-between">
         <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faMotorcycle} className="mr-2" />Gestión de roles</h1>
@@ -417,6 +457,11 @@ export default function PageRoles() {
           />
         </Box>
       </div>
-    );
+    ) : (
+      <h1>Holasss{mostrarErrorSinPermisos()}</h1>
+      
+  )}
+</>
+    )
   }
   

@@ -175,10 +175,12 @@ export const AuthProvider = ({ children }) => {
     checkLogin();
   }, []);
 
+
+
   return (
     <AuthContext.Provider value={{ signup, signin, logout, enviarToken,
       validarToken, actualizarPassword, loading, user, isAuthenticated, errors }}>
-      {children}
+      {children}  
     </AuthContext.Provider>
   );
 };

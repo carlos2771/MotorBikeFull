@@ -243,6 +243,7 @@ export const register = async (req, res) => {
     });
 
     console.log(newUser);
+    console.log("Este es el new user",newUser.rol)
 
     
   } catch (error) {
@@ -250,40 +251,45 @@ export const register = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const userFound = await User.findOne({ email });
-    if (!userFound)return res.status(400).json({ message: ["Usuario no encontrado"] });
+    const { email, password, rol } = req.body;
+    const userFound = await User.findOne({ email }).populate('rol');
+    if (!userFound) return res.status(400).json({ message: ["Usuario no encontrado"] });
 
-    const isMatch = await bcrypt.compare(password, userFound.password); // comparemelo con la contraseña que acaba de ingresar el usuario con la otra que esta guardada en la base de datos
+    const isMatch = await bcrypt.compare(password, userFound.password);
     if (!isMatch)
       return res.status(400).json({ message: ["Usuario/Contraseña incorrecto"] });
 
     const token = await createAccessToken({
       id: userFound._id,
       username: userFound.username,
-    }); // del usuario encontrado creeme un token con el id del usuario encontrado
+    });
 
-    //tokent frontend y backend
     res.cookie("token", token, {
       httpOnly: process.env.NODE_ENV !== "development",
       secure: true,
       sameSite: "none",
     });
     res.cookie("token", token)
+
+    // Ahora, además de devolver el rol, devolvemos los permisos asociados a ese rol
     res.json({
-      // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use
       username: userFound.username,
       email: userFound.email,
+      rol: {
+        name: userFound.rol.name,
+        permissions: userFound.rol.permissions
+      },
       createdAt: userFound.createdAt,
-      updateAt: userFound.updatedAt,
+      updatedAt: userFound.updatedAt,
     });
+    console.log("el roll", rol);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 export const logout = (req, res) => {
   res.cookie("token", "", {
