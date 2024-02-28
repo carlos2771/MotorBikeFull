@@ -2,7 +2,7 @@ import React, { useEffect, useCallback  } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { useRoles } from "../../context/RolsContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Detalle from "../../components/Detalle";
 import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
@@ -20,7 +20,7 @@ export default function PageRoles() {
 
     console.log("hola", auth);
     
-    const navigate = useNavigate();
+    
 
     useEffect(() => {
       try {
@@ -30,23 +30,10 @@ export default function PageRoles() {
       }
     }, []);
 
-    const mostrarErrorSinPermisos = () => {
-      Swal.fire({
-          title: "Error",
-          text: "No tienes permiso para acceder a esta página",
-          icon: "error",
-          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
-          color: "white",
-          iconColor: "#2563eb",
-          buttonsStyling: false,
-          customClass: {
-              confirmButton: "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
-          }
-      }).then(()=>{
-          navigate('/tasks');
-      });
+    
       
-  };
+  
+  
   
     const mostrarAlerta = (id, status) => {
       if (status === "Activo" && id === roles[0]._id) {
@@ -458,8 +445,7 @@ export default function PageRoles() {
         </Box>
       </div>
     ) : (
-      <h1>Holasss{mostrarErrorSinPermisos()}</h1>
-      
+      <Navigate to='/tasks' />
   )}
 </>
     )

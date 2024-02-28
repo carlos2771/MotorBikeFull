@@ -24,8 +24,8 @@ export default function TaskPaje() {
       <div className="flex justify-between">
       <h1 className="text-2xl text-start "><FontAwesomeIcon icon={faTasks} className="mr-2" />Tareas</h1>
       <div className="mx-10 my-1 justify-end">
-      <button  className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
-        <Link to={"/add-task"}>
+      <button  className="" title="Agregar">
+        <Link to={"/add-task"} className="px-4 py-2 mr-8 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent">
           <FontAwesomeIcon icon={faPlus} />
         </Link>
       </button>
