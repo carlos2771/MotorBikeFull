@@ -7,11 +7,7 @@ import nodemailer from "nodemailer";
 // Controlador para crear un nuevo usuario
 export const createUsuario = async (req, res) => {
     const { email, password, username , estado, rol} = req.body;
-    console.log(email)
-    console.log(password)
-    console.log(username)
-    console.log(estado)
-    console.log(rol)
+    console.log({email, password, username,  estado, rol})
     try {
       const userFound = await User.findOne({ email });
       if (userFound) {
@@ -217,11 +213,17 @@ export const createUsuario = async (req, res) => {
         createdAt: userSaved.createdAt,
         updateAt: userSaved.updatedAt,
       });
+
+      console.log("aca paso",newUser.rol)
+
     } catch (error) {
       console.log("error en backend");
       return res.status(500).json({ message: 'Error al crear la CartCliente', error: error.message });
     }
+    
   };
+
+
 
 // Controlador para obtener todos los usuarios
 export const getUsuarios = async (req, res) => {

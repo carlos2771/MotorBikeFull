@@ -14,7 +14,7 @@ export default function registerPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signup, isAuthenticated, errors: registerErrors } = useAuth(); // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
+  const { signup, isAuthenticated, errors: registerErrors} = useAuth(); // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
   const navigate = useNavigate();
 
   // console.log("authh", isAuthenticated);
@@ -49,6 +49,7 @@ export default function registerPage() {
     } catch (error) {
       console.error("Error durante el registro:", error);
     }
+    console.log("jaja", values)
   });
   
 
@@ -56,6 +57,7 @@ export default function registerPage() {
     from: { opacity: 0, transform: 'translateY(-50px)' },
     to: { opacity: 1, transform: 'translateY(0)' },
   });
+  
   
 
   return (
