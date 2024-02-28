@@ -4,16 +4,19 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { NombreMaRequired } from "../../utils/validations";
 import Swal from "sweetalert2";
+import { useState } from "react";
 
 export default function FormMecanico() {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
   const { createMarca, getMarca, updateMarca, errors: marcasErrors } = useMarcas();
   const navigate = useNavigate();
   const params = useParams();
+  const [formTitle, setFormTitle] = useState("Agregar marca");
 
   useEffect(() => {
     (async () => {
       if (params.id) {
+        setFormTitle("Editar marca");
         const marca = await getMarca(params.id);
         setValue("nombre_marca", marca.nombre_marca);
         setValue("estado", marca.estado);
@@ -76,7 +79,7 @@ export default function FormMecanico() {
             {error}
           </div>
         ))}
-        <h1 className="text-2xl flex justify-center">Agregar Marca </h1>
+        <h1 className="text-2xl flex justify-center">{formTitle}</h1>
         <form className="mt-10" onSubmit={onSubmit}>
           <label>Nombre de la Marca<span className="text-red-500">*</span></label>
           <input

@@ -12,10 +12,12 @@ export default function FormRoles() {
     const { createRol, getRol, updateRol, errors: rolesErrors } = useRoles();
     const navigate = useNavigate();
     const params = useParams();
+    const [formTitle, setFormTitle] = useState("Agregar rol");
 
     useEffect(() => {
         (async () => {
           if (params.id) {
+            setFormTitle("Editar rol");
             const rol = await getRol(params.id);
             setValue("name", rol.name);
             setValue("status", rol.status);
@@ -104,7 +106,7 @@ export default function FormRoles() {
               {error}
             </div>
           ))}
-          <h1 className="text-2xl flex justify-center">Agregar Rol </h1>
+          <h1 className="text-2xl flex justify-center">{formTitle}</h1>
           <form className="mt-10" onSubmit={onSubmit}>
             <label>Nombre del rol<span className="text-red-500">*</span></label>
             <input

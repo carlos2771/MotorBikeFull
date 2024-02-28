@@ -11,7 +11,8 @@ export default function FormUsuarios() {
   const { createUsuario, getUsuario, updateUsuario, errors: usuarioErrors } = useUsuario();
   const navigate = useNavigate();
   const params = useParams();
-  const {roles, getRoles} = useRoles()
+  const {roles, getRoles} = useRoles();
+  const [formTitle, setFormTitle] = useState("Agregar usuario");
   
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export default function FormUsuarios() {
   useEffect(() => {
     (async () => {
       if (params.id) {
+        setFormTitle("Editar usuario");
         const usuario = await getUsuario(params.id);
         setValue("username", usuario.username);
         setValue("email", usuario.email);
@@ -91,7 +93,7 @@ export default function FormUsuarios() {
             {error}
           </div>
         ))}
-        <h1 className="text-2xl flex justify-center">Agregar Usuario </h1>
+        <h1 className="text-2xl flex justify-center">{formTitle} </h1>
         <form className="mt-10" onSubmit={onSubmit}>
           <label>Nombre de Usuario<span className="text-red-500">*</span></label>
           <input

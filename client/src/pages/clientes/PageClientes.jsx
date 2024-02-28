@@ -10,6 +10,7 @@ import { faEnvelope, faIdCard, faUsers, faUser, faPhone, faPlus, faPencil , faBa
 import {Tabla, Titulo} from "../../components/Tabla";
 import * as XLSX from "xlsx";
 
+
 export default function PageClientes() {
   const { clientes, getClientes, deleteCliente, updateCliente, getCliente } =
     useClientes();

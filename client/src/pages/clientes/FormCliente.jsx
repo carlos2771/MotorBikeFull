@@ -4,16 +4,19 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { NombreRequired ,EmailRequired, CedulaExtRequired,TelefonoRequired, CedulaRequired, NombreMeRequired} from "../../utils/validations"
 import Swal from "sweetalert2";
+import { useState } from "react";
 
 export default function FormCliente() {
   const {register, unregister,handleSubmit, setValue, formState: {errors}} = useForm()
   const {createCliente, getCliente, updateCliente, errors: clientesErrors} = useClientes()
   const navigate = useNavigate()  
   const params = useParams()
+  const [formTitle, setFormTitle] = useState("Agregar cliente");
 
   useEffect(() => {
     (async () => {
       if (params.id) {
+        setFormTitle("Editar cliente");
         const cliente = await getCliente(params.id);
         console.log("cliente por params", cliente);
         setValue("nombre_cliente", cliente.nombre_cliente);
@@ -122,7 +125,7 @@ export default function FormCliente() {
             {error}
           </div>
         ))} 
-        <h1 className="text-2xl flex justify-center max-sm:text-base ">Agregar cliente</h1>
+        <h1 className="text-2xl flex justify-center max-sm:text-base ">{formTitle}</h1>
       <form className="mt-10" onSubmit={onSubmit}>
       <label>
             Tipo Documento<span className="text-red-500">*</span>

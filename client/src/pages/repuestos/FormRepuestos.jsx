@@ -11,6 +11,7 @@ import {
 } from "../../utils/validations";
 import Swal from "sweetalert2";
 
+
 export default function FormRepuesto() {
   const {
     register,
@@ -30,6 +31,7 @@ export default function FormRepuesto() {
   const [selectedMarca, setSelectedMarca] = useState();
   const [activeMarcas, setActiveMarcas] = useState([]);
   const [imageBase64, setImageBase64] = useState("");
+  const [formTitle, setFormTitle] = useState("Agregar repuesto");
 
   useEffect(() => {
     try {
@@ -49,6 +51,7 @@ export default function FormRepuesto() {
   useEffect(() => {
     (async () => {
       if (params.id) {
+        setFormTitle("Editar repuesto");
         const repuesto = await getRepuesto(params.id);
         setValue("name", repuesto.name);
         setValue("img", repuesto.img);
@@ -184,7 +187,7 @@ export default function FormRepuesto() {
 
 
 
-        <h1 className="text-2xl flex justify-center ">Agregar Repuesto</h1>
+        <h1 className="text-2xl flex justify-center ">{formTitle}</h1>
         <form className="mt-10" onSubmit={onSubmit} >
           <label>
             Nombre Repuesto<span className="text-red-500">*</span>

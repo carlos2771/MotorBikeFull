@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useMecanicos } from "../../context/MecanicosContext";
 import { Link } from "react-router-dom";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 import { useEffect } from "react";
 import {
   NombreRequired,
@@ -12,6 +12,7 @@ import {
   CedulaExtRequired,
 } from "../../utils/validations";
 import Swal from "sweetalert2"
+import { useState } from "react";
 
 export default function FormMecanico() {
   const {
@@ -29,10 +30,12 @@ export default function FormMecanico() {
   } = useMecanicos();
   const navigate = useNavigate();
   const params = useParams();
+  const [formTitle, setFormTitle] = useState("Agregar mecánico");
 
   useEffect(() => {
     (async () => {
       if (params.id) {
+        setFormTitle("Editar mecánico");
         const mecanico = await getMecanico(params.id);
         setValue("tipo", mecanico.tipo);
         setValue("cedula_mecanico", mecanico.cedula_mecanico);
@@ -131,8 +134,9 @@ export default function FormMecanico() {
             {error}
           </div>
         ))}
-        <h1 className="text-2xl flex justify-center">Agregar mecánico</h1>
+        <h1 className="text-2xl flex justify-center">{formTitle}</h1>
         <form className="mt-10" onSubmit={onSubmit}>
+          
           <label>
             Tipo Documento<span className="text-red-500">*</span>
           </label>
