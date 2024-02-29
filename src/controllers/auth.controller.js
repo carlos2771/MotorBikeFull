@@ -256,6 +256,8 @@ export const login = async (req, res) => {
     const { email, password, rol } = req.body;
     const userFound = await User.findOne({ email }).populate('rol');
     if (!userFound) return res.status(400).json({ message: ["Usuario no encontrado"] });
+    if (userFound.estado === "Inactivo")
+      return res.status(400).json({ message: ["El usuario está inactivo"] });
 
     const isMatch = await bcrypt.compare(password, userFound.password);
     if (!isMatch)
