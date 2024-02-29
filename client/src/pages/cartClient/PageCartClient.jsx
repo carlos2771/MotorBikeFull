@@ -3,12 +3,14 @@ import { useCartCliente } from "../../context/CartClienteContext";
 import { useClientes } from "../../context/ClientContext";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tabla, Titulo } from "../../components/Tabla";
 import Detalle from "../../components/Detalle";
 import Swal from "sweetalert2";
 import MUIDataTable from "mui-datatables";
+
+import { useAuth } from "../../hooks/useAuth";
 
 import {
   faIdCard,
@@ -26,6 +28,8 @@ import {
 export default function PageCartClient() {
   const { getCartClient, cartClientes, getCartCliente, updateCartCliente } =
     useCartCliente();
+
+    const { user } = useAuth();
 
     function formatCurrency(value) {
       // Verificar si value es null o undefined
@@ -478,7 +482,11 @@ export default function PageCartClient() {
     },
   ];
 
+  const permissions = user?.rol?.permissions || [];
+
   return (
+    <>
+    {permissions.includes("Venta Repuesto") ? (
     <div className="mt-16 ">
       <div className="flex justify-between">
         <h1 className="text-2xl text-start ml-16">
@@ -514,6 +522,7 @@ export default function PageCartClient() {
           pageSizeOptions={[5]}
           disableRowSelectionOnClick
           sx={{
+            background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
             color: "white",
             "& .MuiDataGrid-cell": {
               fontSize: "15px",
@@ -521,8 +530,58 @@ export default function PageCartClient() {
           }}
           slots={{ toolbar: GridToolbar }}
           
+          slotProps={{
+            toolbar: {
+                printOptions: { disableToolbarButton: true },
+                csvOptions: { disableToolbarButton: true },
+        }}}
+
+
+          //Traducir a español
+          localeText={{
+            noRowsLabel: "No se ha encontrado datos.",
+            noResultsOverlayLabel: "No se ha encontrado ningún resultado",
+            toolbarColumns: "Columnas",
+            toolbarColumnsLabel: "Seleccionar columnas",
+            toolbarFilters: "Filtros",
+            toolbarFiltersLabel: "Ver filtros",
+            toolbarFiltersTooltipHide: "Quitar filtros",
+            toolbarFiltersTooltipShow: "Ver filtros",
+            toolbarDensity: "Densidad",
+            toolbarDensityCompact: "Compacta",
+            toolbarDensityStandard: "Estandar",
+            toolbarDensityComfortable: "Confortable",
+            toolbarExport: "Exportar",
+            toolbarExportCSV: "Descargar CSV",
+            toolbarExportPrint: "Imprimir",
+            columnsPanelTextFieldLabel: "Buscar",
+            columnsPanelHideAllButton: "Ocultar todo",
+            columnsPanelShowAllButton: "Mostrar todo",
+            filterPanelColumns: "Columna",
+            filterPanelOperator: "Operador",
+            filterOperatorContains: "Contiene",
+            filterOperatorEquals: "Es igual",
+            filterOperatorStartsWith: "Comienza con",
+            filterOperatorEndsWith: "Termina con",
+            filterOperatorIsEmpty: "Esta vacía",
+            filterOperatorIsNotEmpty: "No esta vacía",
+            filterOperatorIsAnyOf: "Es alguna de",
+            filterPanelInputLabel: "Valor",
+            filterPanelInputPlaceholder: "Filtrar valor",
+            columnMenuSortAsc: "Ordenar en ASC",
+            columnMenuSortDesc: "Ordenar en DESC",
+            columnMenuUnsort: "Desordenar",
+            columnMenuFilter: "Filtrar",
+            columnMenuHideColumn: "Ocultar columna",
+            columnMenuManageColumns: "Manejar columnas"
+        }}
+
         />
       </Box>
     </div>
-  );
+    ) : (
+      <Navigate to="/tasks" />
+    )}
+  </>
+);
 }

@@ -81,18 +81,30 @@ export const precioRepuesto = {
 export const PasswordRequire = {
   required: "Campo requerido",
   minLength: { value: 8, message: "La contraseña debe tener al menos 8 caracteres" },
-  maxLength: { value: 15, message: "La contraseña no puede tener más de 15 caracteres" },
+  maxLength: { value: 20, message: "La contraseña no puede tener más de 15 caracteres" },
   validate: (value) => {
     if (!value.trim()) {
       return "La contraseña no puede estar vacía ni contener solo espacios.";
     }
-    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,])[A-Za-z\d@$!%*?&.,]{8,15}$/.test(value)) {
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,])[A-Za-z\d@$!%*?&.,]{8,20}$/.test(value)) {
       return "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial (puede ser '.', ',' o '@$!%*?&').";
     }
     return true;
   }
 };
 
+
+export const PasswordRequired = {
+  required: "Campo requerido",
+  minLength: { value: 6, message: "La contraseña debe tener al menos 6 caracteres" },
+  maxLength: { value: 20, message: "La contraseña no puede tener más de 20 caracteres" },
+  validate: (value) => {
+    if (!value.trim()) {
+      return "La contraseña no puede estar vacía ni contener solo espacios.";
+    }
+    return true;
+  }
+};
 
 export const TelefonoRequired = {
   required: "Campo requerido",
@@ -226,7 +238,7 @@ export const NombreMaRequired = {
   required: "Campo requerido",
   validate: (value) => /^(?! +$)[A-Za-z0-9\s]+$/.test(value.trim()) || "Ingresa un nombre valido",
   maxLength: { value: 50, message: "Maximo 50 caracteres" },
-  minLength: { value: 1, message: "Minimo 1 caracter" }
+  minLength: { value: 2, message: "Minimo 2 caracter" }
 };
 
 // export const PasaporteRequired = {

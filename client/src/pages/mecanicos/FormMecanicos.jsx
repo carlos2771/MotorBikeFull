@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useMecanicos } from "../../context/MecanicosContext";
 import { Link } from "react-router-dom";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import {
   NombreRequired,
@@ -11,7 +11,9 @@ import {
   NombreMeRequired,
   CedulaExtRequired,
 } from "../../utils/validations";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
+import { useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function FormMecanico() {
   const {
@@ -29,10 +31,13 @@ export default function FormMecanico() {
   } = useMecanicos();
   const navigate = useNavigate();
   const params = useParams();
+  const [formTitle, setFormTitle] = useState("Agregar mecánico");
+  const { user } = useAuth();
 
   useEffect(() => {
     (async () => {
       if (params.id) {
+        setFormTitle("Editar mecánico");
         const mecanico = await getMecanico(params.id);
         setValue("tipo", mecanico.tipo);
         setValue("cedula_mecanico", mecanico.cedula_mecanico);
@@ -47,16 +52,12 @@ export default function FormMecanico() {
     // Desregistrando el campo antes de volver a registrarlo
     unregister("cedula_mecanico");
     // Actualiza la validación según el tipo seleccionado
-    if(selectedTipo === "Cédula de Extranjería") {
-
+    if (selectedTipo === "Cédula de Extranjería") {
       register("cedula_mecanico", CedulaExtRequired);
-    }
-    else {
+    } else {
       register("cedula_mecanico", CedulaRequired);
     }
   };
-
-  
 
   const onSubmit = handleSubmit(async (data) => {
     if (params.id) {
@@ -75,7 +76,7 @@ export default function FormMecanico() {
             toast.onmouseleave = Swal.resumeTimer;
           },
         });
-    
+
         if (res.error) {
           Toast.fire({
             icon: "error",
@@ -121,109 +122,124 @@ export default function FormMecanico() {
       }
     }
   });
-  
+
+  const permissions = user?.rol?.permissions || [];
 
   return (
-    <div className="flex items-center justify-center pt-20">
-      <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
-        {MecanicoErrors.map((error, i) => (
-          <div className="bg-red-500 p-2 text-white" key={i}>
-            {error}
+    <>
+      {permissions.includes("Mecánicos") ? (
+        <div className="flex items-center justify-center pt-20">
+          <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
+            {MecanicoErrors.map((error, i) => (
+              <div className="bg-red-500 p-2 text-white" key={i}>
+                {error}
+              </div>
+            ))}
+            <h1 className="text-2xl flex justify-center">{formTitle}</h1>
+            <form className="mt-10" onSubmit={onSubmit}>
+              <label>
+                Tipo Documento<span className="text-red-500">*</span>
+              </label>
+              <select
+                {...register("tipo", NombreRequired)}
+                onChange={(e) => handleTipoChange(e.target.value)}
+                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+              >
+                <option value={""}>Selecciona el tipo de documento</option>
+                <option value={"Cédula de ciudadanía"}>
+                  Cédula de ciudadanía
+                </option>
+                <option value={"Cédula de extranjería"}>
+                  Cédula de extranjería
+                </option>
+              </select>
+              {errors.tipo && (
+                <p className="text-red-500">{errors.tipo.message}</p>
+              )}
+              <label>
+                Documento<span className="text-red-500">*</span>
+              </label>
+              <input
+                placeholder="Documento"
+                {...register("cedula_mecanico")}
+                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+                autoFocus
+              />
+              {errors.cedula_mecanico && (
+                <p className="text-red-500">{errors.cedula_mecanico.message}</p>
+              )}
+              <label>
+                Nombre Completo<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Nombre Completo"
+                {...register("nombre_mecanico", NombreMeRequired)}
+                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+                autoFocus
+              />
+              {errors.nombre_mecanico && (
+                <p className="text-red-500">{errors.nombre_mecanico.message}</p>
+              )}
+
+              <label>
+                Teléfono<span className="text-red-500">*</span>
+              </label>
+              <input
+                placeholder="Teléfono Mecánico"
+                {...register("telefono_mecanico", TelefonoRequired)}
+                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+              />
+              {errors.telefono_mecanico && (
+                <p className="text-red-500">
+                  {errors.telefono_mecanico.message}
+                </p>
+              )}
+
+              <label>
+                Dirección<span className="text-red-500">*</span>
+              </label>
+              <input
+                placeholder="Dirección"
+                {...register("direccion_mecanico", DireccionRequired)}
+                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+                autoFocus
+              />
+              {errors.direccion_mecanico && (
+                <p className="text-red-500">
+                  {errors.direccion_mecanico.message}
+                </p>
+              )}
+
+              <label className="hidden">Estado</label>
+              <select
+                {...register("estado")}
+                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2 hidden"
+              >
+                <option value={"Activo"}>Activo</option>
+                <option value={"Inactivo"}>Inactivo</option>
+              </select>
+
+              <button
+                className="px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
+                type="submit"
+              >
+                Guardar
+              </button>
+              <button>
+                <Link
+                  className="px-5 py-1 ml-3 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30"
+                  to="/mecanicos"
+                >
+                  Cancelar
+                </Link>
+              </button>
+            </form>
           </div>
-        ))}
-        <h1 className="text-2xl flex justify-center">Agregar mecánico</h1>
-        <form className="mt-10" onSubmit={onSubmit}>
-          <label>
-            Tipo Documento<span className="text-red-500">*</span>
-          </label>
-          <select
-            {...register("tipo", NombreRequired)}
-            onChange={(e) => handleTipoChange(e.target.value)}
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-          >
-            <option value={""}>Selecciona el tipo de documento</option>
-            <option value={"Cédula de ciudadanía"}>Cédula de ciudadanía</option>
-            <option value={"Cédula de extranjería"}>Cédula de extranjería</option>
-          </select>
-          {errors.tipo && (
-            <p className="text-red-500">{errors.tipo.message}</p>
-          )}
-          <label>
-            Documento<span className="text-red-500">*</span>
-          </label>
-          <input
-            placeholder="Documento"
-            {...register("cedula_mecanico")}
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-            autoFocus
-          />
-          {errors.cedula_mecanico && (
-            <p className="text-red-500">{errors.cedula_mecanico.message}</p>
-          )}
-          <label>
-            Nombre Completo<span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            placeholder="Nombre Completo"
-            {...register("nombre_mecanico", NombreMeRequired)}
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-            autoFocus
-          />
-          {errors.nombre_mecanico && (
-            <p className="text-red-500">{errors.nombre_mecanico.message}</p>
-          )}
-
-          <label>
-            Teléfono<span className="text-red-500">*</span>
-          </label>
-          <input
-            placeholder="Teléfono Mecánico"
-            {...register("telefono_mecanico", TelefonoRequired)}
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-          />
-          {errors.telefono_mecanico && (
-            <p className="text-red-500">{errors.telefono_mecanico.message}</p>
-          )}
-
-          <label>
-            Dirección<span className="text-red-500">*</span>
-          </label>
-          <input
-            placeholder="Dirección"
-            {...register("direccion_mecanico", DireccionRequired)}
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
-            autoFocus
-          />
-          {errors.direccion_mecanico && (
-            <p className="text-red-500">{errors.direccion_mecanico.message}</p>
-          )}
-
-          <label className="hidden">Estado</label>
-          <select
-            {...register("estado")}
-            className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2 hidden"
-          >
-            <option value={"Activo"}>Activo</option>
-            <option value={"Inactivo"}>Inactivo</option>
-          </select>
-
-          <button
-            className="px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
-            type="submit"
-          >
-            Guardar
-          </button>
-          <button>
-            <Link
-              className="px-5 py-1 ml-3 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30"
-              to="/mecanicos"
-            >
-              Cancelar
-            </Link>
-          </button>
-        </form>
-      </div>
-    </div>
+        </div>
+      ) : (
+        <Navigate to="/tasks" />
+      )}
+    </>
   );
 }

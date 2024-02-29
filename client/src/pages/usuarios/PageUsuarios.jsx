@@ -2,14 +2,19 @@ import React, { useEffect, useCallback  } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { useUsuario } from "../../context/usuariosContext";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMotorcycle, faDownload, faPlus, faPencil , faBan,  faCheck } from "@fortawesome/free-solid-svg-icons";
 
+import { useAuth } from "../../hooks/useAuth";
+
 export default function PageUsuarios() {
-  const { user, getUsuarios, updateUsuario} = useUsuario()
+  const { user: users , getUsuarios, updateUsuario} = useUsuario()
   
+  console.log(users, "Hola mundo")
+  const { user } = useAuth();
+  console.log(user, "Putito")
   
   useEffect(() => {
     try {
@@ -180,7 +185,11 @@ export default function PageUsuarios() {
     },
   ];
 
+  const permissions = user?.rol?.permissions || [];
+
   return (
+    <>
+            {permissions.includes("Usuarios") ? (
     <div className="mt-16">
       <div className="flex justify-between">
       <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faMotorcycle} className="mr-2" />Gestión de usuarios</h1>
@@ -197,7 +206,7 @@ export default function PageUsuarios() {
       <Box sx={{ width: "100%" }}>
         <DataGrid
           className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
-          rows={user || []}
+          rows={users || []}
           columns={columns}
           getRowId={(row) => row._id}
          
@@ -267,5 +276,9 @@ export default function PageUsuarios() {
         />
       </Box>
     </div>
-  );
+  ) : (
+    <Navigate to='/tasks' />
+)}
+</>
+  )
 }

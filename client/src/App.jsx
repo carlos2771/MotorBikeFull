@@ -18,10 +18,6 @@ import PageVentaRepuestos from "./pages/ventasRepuestos/PageVentaRepuestos";
 import FormVentaRepuesto from "./pages/ventasRepuestos/FormVentaRepuesto";
 import { VentasRepuestoProvider } from "./context/VentasRepuestoContex"
 
-import PermisosPage from "./pages/Permisos/PermisosPage";
-import { PermisoProvider } from "./context/PermisosContext";
-import FormPermisos from "./pages/Permisos/FormPermiso";
-
 import PageVentaServicios from "./pages/ventasServicios/PageVentaServicios";
 import { VentasServicioProvider } from "./context/VentasServicioContex";
 import FormVentaServicio from "./pages/ventasServicios/FormVentaServicio";
@@ -77,7 +73,6 @@ export default function App() {
           <ClienteProvider>
             <VentasRepuestoProvider>
               <RepuestoProvider>
-                <PermisoProvider>
                   <VentasServicioProvider>
                     <RepuestoProvider>
                       <MecanicoProvider>
@@ -119,10 +114,6 @@ export default function App() {
                                             <Route path="/clientes" element={<PageClientes />} />
                                             <Route path="/add-cliente" element={<FormCliente />} />
                                             <Route path="/cliente/:id" element={<FormCliente />} />
-
-                                            <Route path="/permisos" element={<PermisosPage />} />
-                                            <Route path="/add-permiso" element={<FormPermisos />} />
-                                            <Route path="/permiso/:id" element={<FormPermisos />} />
 
                                             <Route path="/ventas-repuestos" element={<PageVentaRepuestos />} />
                                             <Route path="/add-venta-repuesto" element={<FormVentaRepuesto />} />
@@ -175,7 +166,6 @@ export default function App() {
                       </MecanicoProvider>
                     </RepuestoProvider>
                   </VentasServicioProvider>
-                </PermisoProvider>
               </RepuestoProvider>
             </VentasRepuestoProvider>
           </ClienteProvider>
