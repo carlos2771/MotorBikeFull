@@ -4,7 +4,8 @@ import { useMarcas } from "../../context/MarcasContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping} from "@fortawesome/free-solid-svg-icons";
 
-
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 const Products = () => {
   const { addItemToCart, products } = useContext(CartContext);
@@ -12,6 +13,8 @@ const Products = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMarca, setSelectedMarca] = useState(""); // Estado para el ID de la marca seleccionada
   const [selectedSortOption, setSelectedSortOption] = useState(""); // Estado para la opción de ordenamiento seleccionada
+
+  const { user } = useAuth();
 
   useEffect(() => {
     try {
@@ -38,7 +41,11 @@ const Products = () => {
     return sorted;
   };
 
+  const permissions = user?.rol?.permissions || [];
+
   return (
+    <>
+            {permissions.includes("Venta Repuesto") ? (
     <div>
       <input
         type="text"
@@ -102,7 +109,11 @@ const Products = () => {
         ))}
       </div>
     </div>
-  );
-};
+  ) : (
+    <Navigate to='/tasks' />
+)}
+</>
+  )
+}
 
 export default Products;
