@@ -3,12 +3,14 @@ import { useCartCliente } from "../../context/CartClienteContext";
 import { useClientes } from "../../context/ClientContext";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tabla, Titulo } from "../../components/Tabla";
 import Detalle from "../../components/Detalle";
 import Swal from "sweetalert2";
 import MUIDataTable from "mui-datatables";
+
+import { useAuth } from "../../hooks/useAuth";
 
 import {
   faIdCard,
@@ -26,6 +28,8 @@ import {
 export default function PageCartClient() {
   const { getCartClient, cartClientes, getCartCliente, updateCartCliente } =
     useCartCliente();
+
+    const { user } = useAuth();
 
     function formatCurrency(value) {
       // Verificar si value es null o undefined
@@ -478,7 +482,11 @@ export default function PageCartClient() {
     },
   ];
 
+  const permissions = user?.rol?.permissions || [];
+
   return (
+    <>
+    {permissions.includes("Venta Repuesto") ? (
     <div className="mt-16 ">
       <div className="flex justify-between">
         <h1 className="text-2xl text-start ml-16">
@@ -571,5 +579,9 @@ export default function PageCartClient() {
         />
       </Box>
     </div>
-  );
+    ) : (
+      <Navigate to="/tasks" />
+    )}
+  </>
+);
 }

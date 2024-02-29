@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
-import { EmailRequired, PasswordRequire } from "../utils/validations";
+import { EmailRequired, PasswordRequired } from "../utils/validations";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "@material-tailwind/react";
 import { useSpring, animated } from "react-spring";
@@ -97,7 +97,7 @@ export default function LoginPage() {
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  {...register("password", PasswordRequire)}
+                  {...register("password", PasswordRequired)}
                   className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-950 border-0 border-b-2 border-sky-500 text-white px-4 py-2 rounded2 my-2"
                   placeholder="Contraseña"
                 />
@@ -107,9 +107,9 @@ export default function LoginPage() {
                   onClick={togglePasswordVisibility}
                 >
                   {showPassword ? (
-                    <FontAwesomeIcon icon={faEyeSlash} />
+                    <FontAwesomeIcon icon={faEyeSlash} title="Ocultar"/>
                   ) : (
-                    <FontAwesomeIcon icon={faEye} />
+                    <FontAwesomeIcon icon={faEye} title="Mostrar"/>
                   )}
                 </button>
               </div>
