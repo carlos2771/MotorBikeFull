@@ -17,8 +17,9 @@ export default function PageRoles() {
     const { roles, getRoles, deleteRol,updateRol } = useRoles();
 
     const { user } = useAuth();
-
     
+
+    console.log(user)
     
 
     useEffect(() => {

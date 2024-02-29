@@ -109,6 +109,7 @@ export const AuthProvider = ({ children }) => {
     try {
       // Hacer la solicitud para validar el token
       const response = await validarTokenRequest(code);
+      // setUser(response)
   
       // Verificar si la respuesta indica que el código es válido
       // const isValidCode = response && response.status === 200 && response.data && response.data.valid;
