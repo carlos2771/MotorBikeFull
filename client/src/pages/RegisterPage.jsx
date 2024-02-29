@@ -25,7 +25,7 @@ export default function registerPage() {
   const { signup, isAuthenticated, errors: registerErrors } = useAuth(); // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [passwordError, setPasswordError] = useState("");
+  
 
   // console.log("authh", isAuthenticated);
   // useEffect(() => {
@@ -38,28 +38,6 @@ export default function registerPage() {
   const onSubmit = handleSubmit(async (values) => {
     try {
       await signup(values);
-      // Validar que las contraseñas coincidan
-      if (values.password !== values.confirmPassword) {
-        // setPasswordError('Las contraseñas no coinciden');
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
-          color: "white",
-          timer: 4000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        });
-        Toast.fire({
-          icon: "error",
-          title: "Contraseñas no coinciden",
-        });
-        return;
-      }
       const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -152,16 +130,6 @@ export default function registerPage() {
               {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>
               )}
-              <input
-                type={showPassword ? "text" : "password"}
-                {...register("confirmPassword", PasswordRequire)}
-                className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-950 border-0 border-b-2 border-sky-500 text-white px-4 py-2 rounded2 my-2"
-                placeholder="Confirmar Contraseña"
-              />
-              {errors.confirmPassword && (
-                <p className="text-red-500">{errors.confirmPassword.message}</p>
-              )}
-              {passwordError && <p className="text-red-500">{passwordError}</p>}
               <select
                 {...register("estado")}
                 className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2 hidden"
