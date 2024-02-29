@@ -16,9 +16,8 @@ import { useAuth } from "../../hooks/useAuth";
 export default function PageRoles() {
     const { roles, getRoles, deleteRol,updateRol } = useRoles();
 
-    const { auth, user } = useAuth();
+    const { user } = useAuth();
 
-    console.log("hola", auth);
     
     
 

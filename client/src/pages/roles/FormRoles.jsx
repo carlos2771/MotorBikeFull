@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 import { useRoles } from "../../context/RolsContext";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, Navigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 import { NombreMaRequired, NombreRolRequired } from "../../utils/validations";
 import Swal from "sweetalert2";
-
+import { useAuth } from "../../hooks/useAuth";
 
 export default function FormRoles() {
     const [selectedPermissions, setSelectedPermissions] = useState([]);
@@ -13,6 +13,8 @@ export default function FormRoles() {
     const navigate = useNavigate();
     const params = useParams();
     const [formTitle, setFormTitle] = useState("Agregar rol");
+
+    const { user } = useAuth();
 
     useEffect(() => {
         (async () => {
@@ -67,7 +69,7 @@ export default function FormRoles() {
     
       // Check if there are no permissions selected, then set default to "usuario"
       if (selectedPermissions.length === 0) {
-        setSelectedPermissions(["Usuarios"]);
+        setSelectedPermissions(["Tasks"]);
       }
   
     const handleApiResponse = (res, successMessage) => {
@@ -97,8 +99,12 @@ export default function FormRoles() {
         console.log("no se agrego, el rol ya existe")
       }
     };
+
+    const permissions = user?.rol?.permissions || [];
   
     return (
+      <>
+            {permissions.includes("Roles") ? (
       <div className='flex items-center justify-center pt-20'>
         <div className='bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40'>
           {rolesErrors.map((error, i) => (
@@ -154,6 +160,10 @@ export default function FormRoles() {
           </form>
         </div>
       </div>
-    );
+     ) : (
+      <Navigate to='/tasks' />
+  )}
+</>
+    )
   }
   
