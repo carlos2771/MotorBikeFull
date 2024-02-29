@@ -13,7 +13,7 @@ export default function FormUsuarios() {
   const params = useParams();
   const {roles, getRoles} = useRoles();
   const [formTitle, setFormTitle] = useState("Agregar usuario");
-  
+  const [isEditing, setIsEditing] = useState(false); // Estado para controlar si estamos editando
 
   useEffect(() => {
     try {
@@ -26,11 +26,11 @@ export default function FormUsuarios() {
   useEffect(() => {
     (async () => {
       if (params.id) {
+        setIsEditing(true); // Si tenemos un ID en los parámetros, estamos editando
         setFormTitle("Editar usuario");
         const usuario = await getUsuario(params.id);
         setValue("username", usuario.username);
         setValue("email", usuario.email);
-        setValue("password", usuario.password);
         setValue("estado", usuario.estado);
         setValue("rol",usuario.rol);
       } else {
@@ -110,19 +110,21 @@ export default function FormUsuarios() {
             placeholder='email'
             {...register("email")}
             className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
-            
           />
           {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-          <label>Password<span className="text-red-500">*</span></label>
-          <input
-            type="password"
-            placeholder='password'
-            {...register("password")}
-            className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
-            
-          />
-          {errors.password && (
-            <p className="text-red-500">{errors.password.message}</p>
+          {!isEditing && ( // Renderiza el campo de contraseña solo si no estamos editando
+            <>
+              <label>Password<span className="text-red-500">*</span></label>
+              <input
+                type="password"
+                placeholder='password'
+                {...register("password")}
+                className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
+              />
+              {errors.password && (
+                <p className="text-red-500">{errors.password.message}</p>
+              )}
+            </>
           )}
           <label className="hidden">Estado</label>
           <select
