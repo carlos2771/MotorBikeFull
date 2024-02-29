@@ -79,9 +79,6 @@ export const updateCliente = async (req, res) => {
       if (existingCliente && existingCliente._id.toString() !== req.params.id) {
           return res.status(400).json({ message: ["Ya existe un cliente con este número de cédula y tipo de documento."] });
       }
-      // Verificar si existe otro cliente con el mismo correo electrónico
-      const clientFound = await Cliente.findOne({ email_cliente });
-      if (clientFound) return res.status(400).json({ message: ["El correo electrónico del cliente ya existe"] });
 
       // Actualiza el cliente con los datos proporcionados
       const updatedCliente = await Cliente.findByIdAndUpdate(req.params.id, {
