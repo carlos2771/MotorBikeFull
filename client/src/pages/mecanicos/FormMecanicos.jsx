@@ -50,7 +50,7 @@ export default function FormMecanico() {
     // Desregistrando el campo antes de volver a registrarlo
     unregister("cedula_mecanico");
     // Actualiza la validación según el tipo seleccionado
-    if(selectedTipo === "Cédula de Extranjería") {
+    if(selectedTipo === "Cédula de extranjería") {
 
       register("cedula_mecanico", CedulaExtRequired);
     }
@@ -59,9 +59,19 @@ export default function FormMecanico() {
     }
   };
 
-  
+  // Función para capitalizar la primera letra de cada palabra en un nombre
+  const capitalizeName = (name) => {
+    return name
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
 
   const onSubmit = handleSubmit(async (data) => {
+    // Capitalizar la primera letra de cada palabra en el nombre completo
+    data.nombre_mecanico = capitalizeName(data.nombre_mecanico);
+
     if (params.id) {
       try {
         const res = await updateMecanico(params.id, data);

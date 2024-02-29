@@ -33,17 +33,28 @@ export default function FormCliente() {
     // Desregistrando el campo antes de volver a registrarlo
     unregister("cedula");
     // Actualiza la validación según el tipo seleccionado
-    if (selectedTipo === "Cédula de Extranjería") {
+    if (selectedTipo === "Cédula de extranjería") {
       
       register("cedula", CedulaExtRequired);
     } else {
       register("cedula", CedulaRequired);
     }
   };
+
+  // Función para capitalizar la primera letra de cada palabra en un nombre
+  // const capitalizeName = (name) => {
+  //   return name
+  //     .toLowerCase()
+  //     .split(" ")
+  //     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  //     .join(" ");
+  // };
   
 
-
   const onSubmit = handleSubmit(async(data) => {
+    // Capitalizar la primera letra de cada palabra en el nombre completo
+    // data.nombre_cliente = capitalizeName(data.nombre_cliente);
+
     if(params.id){
       const res = await updateCliente(params.id, data)
        const Toast = Swal.mixin({

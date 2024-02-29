@@ -241,6 +241,14 @@ export const CedulaExtRequired = {
   minLength: {
     value: 6,
     message: "El minimo de caracteres es de 6"
+  },
+  validate: {
+    noLeadingZero: value => {
+      if (value.charAt(0) === '0') {
+        return "La cédula no puede empezar con cero";
+      }
+      return true;
+    }
   }
 };
 export const NumeroRequired = {
