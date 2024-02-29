@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import { useMarcas } from "../../context/MarcasContext";
 import {
   NegativeRequired,
-  NombreRequired,
   RepuestoRequired,
   NombreRepuestoRequired,
+  precioRepuesto,
 } from "../../utils/validations";
 import Swal from "sweetalert2";
 import { useAuth } from "../../hooks/useAuth";
@@ -54,17 +54,37 @@ export default function FormRepuesto() {
       if (params.id) {
         setFormTitle("Editar repuesto");
         const repuesto = await getRepuesto(params.id);
+        // Resto del código...
+        if (repuesto.img) {
+          setImageBase64(repuesto.img);
+          setImageName(repuesto.imgName); // Suponiendo que hay una propiedad imgName en el objeto repuesto
+        }
+      }
+    })();
+  }, [params.id]);
+
+
+  useEffect(() => {
+    (async () => {
+      if (params.id) {
+        const repuesto = await getRepuesto(params.id);
         setValue("name", repuesto.name);
-        setValue("img", repuesto.img);
         setValue("amount", repuesto.amount);
         setValue("marca", repuesto.marca);
         setSelectedMarca(repuesto.marca);
-        setValue(repuesto.nombre_marca);
+        setValue("nombre_marca", repuesto.nombre_marca);
         setValue("price", repuesto.price);
-        // setValue("InCart", repuesto.InCart);
+        setValue("img",repuesto.img)
+
+        // Setear el nombre de la imagen si existe
+        if (repuesto.img) {
+          setImageBase64(repuesto.img);
+          setImageName(repuesto.imgName); // Suponiendo que hay una propiedad imgName en el objeto repuesto
+        }
       }
     })();
-  }, []);
+  }, [params.id]);
+
 
   useEffect(() => {
     if (selectedMarca) {
@@ -80,6 +100,7 @@ export default function FormRepuesto() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setImageName(file.name); // Actualiza el nombre del archivo
       const reader = new FileReader();
       reader.onloadend = () => {
         setImageBase64(reader.result);
@@ -88,8 +109,10 @@ export default function FormRepuesto() {
     }
   };
 
+
   const onSubmit = handleSubmit(async (data) => {
     data.img = imageBase64;
+    
     console.log("datos aness", data);
     console.log("img", data.img);
     if (params.id) {
@@ -243,7 +266,7 @@ export default function FormRepuesto() {
               </label>
               <input
                 placeholder="precio"
-                {...register("price", NegativeRequired)}
+                {...register("price", precioRepuesto)}
                 className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
               />
               {errors.price && (
