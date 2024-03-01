@@ -77,7 +77,7 @@ export default function FormRoles() {
 
   // Check if there are no permissions selected, then set default to "usuario"
   if (selectedPermissions.length === 0) {
-    setSelectedPermissions(["Tasks"]);
+    setSelectedPermissions(["Tareas"]);
   }
 
   const handleApiResponse = (res, successMessage) => {
@@ -114,7 +114,7 @@ export default function FormRoles() {
     <>
       {permissions.includes("Roles") ? (
         <div className="flex items-center justify-center pt-20">
-          <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
+          <div className="bg-slate-700 max-w-lg w-full p-10 shadow-lg shadow-blue-600/40">
             {rolesErrors.map((error, i) => (
               <div className="bg-red-500 p-2 text-white" key={i}>
                 {error}
@@ -148,17 +148,26 @@ export default function FormRoles() {
                   "Compras",
                   "Ventas Servicio",
                   "Venta Repuesto",
-                  "Tareas",
                 ].map((permiso) => (
-                  <div key={permiso} className="flex items-center mr-4 mb-2">
+                  <div key={permiso} className="flex items-center m-2">
                     <input
                       type="checkbox"
                       value={permiso}
                       checked={selectedPermissions.includes(permiso)}
                       onChange={handlePermissionChange}
-                      className="mr-2"
+                      className="hidden"
+                      id={permiso} // Añadimos un id al input
                     />
-                    <label>{permiso}</label>
+                    <label
+                      htmlFor={permiso}
+                      className={`px-4 py-2 rounded-full cursor-pointer ${
+                        selectedPermissions.includes(permiso)
+                          ? "bg-blue-600/40 shadow-sky-300/40 text-white shadow-md"
+                          : "border border-blue-600/40 hover:bg-blue-600/40 text-white hover:shadow-md hover:shadow-sky-300/40"
+                      }`}
+                    >
+                      {permiso}
+                    </label>
                   </div>
                 ))}
               </div>
