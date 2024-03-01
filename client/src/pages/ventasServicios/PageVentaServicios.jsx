@@ -39,6 +39,7 @@ export default function PageVentaServicios() {
     deleteVentaServicio,
     updateVentaServicio,
   } = useVentasServicios();
+  
   const { user } = useAuth();
 
   useEffect(() => {
