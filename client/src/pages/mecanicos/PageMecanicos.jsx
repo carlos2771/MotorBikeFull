@@ -407,13 +407,13 @@ export default function PageMecanico() {
     <>
       {permissions.includes("Mecánicos") ? (
         <div className="mt-16">
-          <div className="flex justify-between">
-            <h1 className="text-2xl mx-auto ml-16 font-custom">
+          <div className="flex flex-col sm:flex-row justify-between items-center mx-16">
+            <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
               {" "}
               <FontAwesomeIcon icon="wrench" className="mr-2" />
               Gestión de mecánicos
             </h1>
-            <div className="mx-16 justify-end flex">
+            <div className="mx-4 sm:mx-0 justify-end flex">
               <Link to="/add-mecanico">
                 <button
                   className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"

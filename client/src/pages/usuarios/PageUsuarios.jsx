@@ -191,9 +191,9 @@ export default function PageUsuarios() {
     <>
             {permissions.includes("Usuarios") ? (
     <div className="mt-16">
-      <div className="flex justify-between">
-      <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faUser} className="mr-2" />Gestión de usuarios</h1>
-      <div className="mx-16 justify-end flex">
+      <div className="flex flex-col sm:flex-row justify-between items-center mx-16">
+      <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0"><FontAwesomeIcon icon={faUser} className="mr-2" />Gestión de usuarios</h1>
+      <div className="mx-4 sm:mx-0 justify-end flex">
         <Link to="/add-usuario">
         <button  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
         <FontAwesomeIcon icon={faPlus} />
