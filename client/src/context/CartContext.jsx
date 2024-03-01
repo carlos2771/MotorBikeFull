@@ -22,9 +22,13 @@ export function CartProvider({ children }) {
   const [products, setProducts] = useState([]);
 
   const getProducts = async () => {
-    await axiosClient
-      .get("/products")
-      .then(({ data }) => setProducts(data.products));
+    try {
+       const res = await getProductsRequest()
+       console.log("los productos mani", res);
+       setProducts(res)
+    } catch (error) {
+      console.log(error, "hay error");
+    }
   };
 
   const getProductsCart = async () => {
@@ -105,6 +109,7 @@ export function CartProvider({ children }) {
         deleteProduct,
         putAmount,
         products,
+        getProducts,
         addItemToCart,
         editItemToCart,
         cleartCart
