@@ -283,7 +283,7 @@ export default function PageRepuestos() {
                 metodo={() => getRepuestos(params.row._id)}
                 id={params.row._id}
               >
-                <table>
+                <table className="min-w-full">
                   <tbody>
                     <tr>
                       <td
@@ -313,26 +313,26 @@ export default function PageRepuestos() {
                         }
                       </Tabla>
                       <td
+                      className=""
                         rowSpan={4}
                         style={{
                           border: "1px solid #2e4f91",
-                          width: "30%",
-                          minWidth: "170px",
+                          // width: "30%",
+                          // minWidth: "170px",
                         }}
                       >
-                        <img
-                          src={
-                            repuestos.find(
-                              (repuesto) => repuesto._id === params.row._id
-                            )?.img
-                          }
-                          alt="Imagen de repuesto"
-                          style={{
-                            width: "100px",
-                            height: "100px",
-                            marginLeft: "20%",
-                          }} // Define el tamaño de la imagen según tus necesidades
-                        />
+                        <div className="flex justify-center items-center ">
+                          <img
+                          className="min-h-20 max-h-40"
+                            src={
+                              repuestos.find(
+                                (repuesto) => repuesto._id === params.row._id
+                              )?.img
+                            }
+                            alt="Imagen de repuesto"
+                            
+                          />
+                        </div>
                       </td>
                     </tr>
                     <tr>

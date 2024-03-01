@@ -243,11 +243,11 @@ export default function PageRoles() {
                 metodo={() => getRoles(params.row._id)}
                 id={params.row._id}
               >
-                <table className="">
+                <table className="min-w-full">
                   <tbody className="">
                     <Titulo>
                         <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
-                        Detalles del Cliente
+                        Detalles del Rol
                     </Titulo>
                     <tr>
                       <Tabla>

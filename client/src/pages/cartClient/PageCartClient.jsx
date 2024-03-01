@@ -248,7 +248,7 @@ export default function PageCartClient() {
                 }}
                 id={params.row._id}
               >
-                <table>
+                <table className="min-w-full">
                   <tbody>
                     <tr>
                     <Tabla>
@@ -320,6 +320,7 @@ export default function PageCartClient() {
                     overflowX: "auto",
                     marginTop: "10px",
                   }}
+                  className="min-w-full"
                 >
                   
                   <MUIDataTable

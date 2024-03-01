@@ -306,7 +306,7 @@ export default function PageMecanico() {
                 metodo={() => getMecanicos(params.row._id)}
                 id={params.row._id}
               >
-                <table>
+                <table className="min-w-full">
                   <tbody>
                     <Titulo>
                       <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
