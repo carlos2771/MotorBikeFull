@@ -205,7 +205,7 @@ export default function PageVentaRepuestos() {
                     <tr>
                       <Tabla>
                         <FontAwesomeIcon icon={faIdCard} className="mr-2" />
-                        Nombre
+                        Cliente
                       </Tabla>
                       <Tabla>
                         {
