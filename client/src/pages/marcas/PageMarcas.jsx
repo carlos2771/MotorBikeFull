@@ -1,33 +1,26 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
-import { useMarcas } from "../../context/MarcasContext";
-import { Link, Navigate  } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMotorcycle, faDownload, faPlus, faPencil, faBan, faCheck } from "@fortawesome/free-solid-svg-icons";
 
+import { useMarcas } from "../../context/MarcasContext";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function PageMarcas() {
-  const { marcas, getMarcas, deleteMarca, updateMarca } = useMarcas();
-
-  const { auth, user } = useAuth();
-
+  const { marcas, getMarcas, updateMarca } = useMarcas();
+  const { user } = useAuth();
 
   useEffect(() => {
-    try {
-      getMarcas();
-    } catch (error) {
-      console.error("Error al obtener marcas:", error);
-    }
+    getMarcas();
   }, []);
 
-  const mostrarAlerta = (id, estado) => {
+  const mostrarAlerta = (id, nombreMarca, estado) => {
     const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
-    const text = estado === "Activo" ? "¿Estás seguro de inhabilitar la marca?" : "¿Estás seguro de habilitar la marca?";
-    const texto = estado === "Activo" ? "Inhabilitado" : "Habilitado";
+    const text = estado === "Activo" ? `¿Estás seguro de inhabilitar la marca ${nombreMarca}?` : `¿Estás seguro de habilitar la marca ${nombreMarca}?`;
 
     Swal.fire({
       title: title,
@@ -47,54 +40,63 @@ export default function PageMarcas() {
     }).then((result) => {
       if (result.isConfirmed) {
         cambiarEstado(id, estado);
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
-          color: "white",
-          timer: 4000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          }
-        });
-        Toast.fire({
-          icon: "success",
-          title: "Se ha modificado"
-        });
-      } else {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
-          color: "white",
-          timer: 4000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          }
-        });
-        Toast.fire({
-          icon: "error",
-          title: "No se ha modificado"
-        });
       }
-    }
-    );
-
+    });
   };
 
   const cambiarEstado = (id, estado) => {
     const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
-    updateMarca(id, { estado: nuevoEstado }).then(() => {
-      getMarcas();
-    });
+  
+    updateMarca(id, { estado: nuevoEstado })
+      .then((marca) => {
+        if (!marca) {
+          // Si la marca no se encuentra, muestra un mensaje de error
+          throw new Error("La marca no se puede inhabilitar, por que esta asociada a un repuesto");
+        }
+        // Muestra un mensaje de éxito según el estado de la marca
+        const successMessage = `La marca se ha ${nuevoEstado === "Activo" ? "habilitado" : "inhabilitado"} correctamente`;
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+          color: "white",
+          timer: 4000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });Toast.fire({
+          icon: "success",
+          title: successMessage,
+        });
+        // Actualiza la lista de marcas
+        getMarcas();
+      })
+      .catch((error) => {
+       
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+          color: "white",
+          timer: 4000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });Toast.fire({
+          icon: "error",
+          title: error.message || "Hubo un error al cambiar el estado de la marca",
+        });
+      });
   };
-  const exportarAExcel = useCallback(() => {
+  
+
+  const exportarAExcel = () => {
     const datos = marcas.map((marca) => ({
       "Nombre de Marca": marca.nombre_marca,
       Estado: marca.estado,
@@ -103,7 +105,6 @@ export default function PageMarcas() {
 
     const ws = XLSX.utils.json_to_sheet(datos);
 
-    // Agregar formato a los títulos (encabezados) y establecer autoFilter
     ws["!cols"] = [
       { wch: 25 },
       { wch: 20 },
@@ -111,16 +112,14 @@ export default function PageMarcas() {
     ];
     ws["!rows"] = [{ hpx: 20, outlineLevel: 0, hidden: false }];
 
-    // Establecer el formato de fondo y negrita para los títulos
     for (let i = 0; i < 3; i++) {
-      const col = String.fromCharCode(65 + i); // Convertir número a letra (A, B, C, ...)
+      const col = String.fromCharCode(65 + i);
       ws[`${col}1`].s = {
         font: { bold: true },
         fill: { patternType: "solid", fgColor: { rgb: "#66FFCC" } },
       };
     }
 
-    // Agregar formato a las celdas de datos y bordes
     for (let i = 2; i <= marcas.length + 1; i++) {
       for (let j = 0; j < 3; j++) {
         const col = String.fromCharCode(65 + j);
@@ -140,7 +139,7 @@ export default function PageMarcas() {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Marcas");
     XLSX.writeFile(wb, "marcas.xlsx");
-  }, [marcas]);
+  };
 
   const columns = [
     {
@@ -155,24 +154,7 @@ export default function PageMarcas() {
       headerName: "Estado",
       width: 200,
       headerClassName: "font-custom text-lg"
-
     },
-    // {
-    //   field: "createdAt",
-    //   headerName: "Fecha Creacion",
-    //   width: 220,
-    //   headerClassName: "font-custom text-lg",
-
-    //   renderCell: (params) => {
-    //     const date = new Date(params.value);
-    //     const formattedDate = date.toLocaleDateString("es-ES", {
-    //       year: "numeric",
-    //       month: "long",
-    //       day: "numeric",
-    //     });
-    //     return <div>{formattedDate}</div>;
-    //   },
-    // },
     {
       field: "acciones",
       headerName: "Acciones",
@@ -180,7 +162,6 @@ export default function PageMarcas() {
       headerClassName: "font-custom text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
-        console.log("estadin", estado);
         return (
           <div>
             <button className={estado === "Activo" ? "" : "hidden"} title="Editar">
@@ -191,19 +172,9 @@ export default function PageMarcas() {
                 <FontAwesomeIcon icon={faPencil} />
               </Link>
             </button>
-            {/* <button
-            className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
-            onClick={() => mostrarAlerta(params.row._id)}
-          >
-            Eliminar
-          </button> */}
-            <button title="Activar/Inactivar"
-              className={
-                estado === "Activo"
-                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
-                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
-              }
-              onClick={() => mostrarAlerta(params.row._id, estado)}
+            <button title={estado === "Activo" ? "Inhabilitar" : "Habilitar"}
+              className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${estado === "Activo" ? "border-red-500 hover:bg-red-500" : "border-indigo-500 hover:bg-indigo-500"}`}
+              onClick={() => mostrarAlerta(params.row._id, params.row.nombre_marca, estado)}
             >
               {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
             </button>
@@ -270,7 +241,6 @@ export default function PageMarcas() {
         }}}
 
 
-          //Traducir a español
           localeText={{
             noRowsLabel: "No se ha encontrado datos.",
             noResultsOverlayLabel: "No se ha encontrado ningún resultado",
@@ -314,5 +284,5 @@ export default function PageMarcas() {
       <Navigate to='/tasks' />
       )}
       </>
-          )
-        }
+  );
+}

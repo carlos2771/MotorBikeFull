@@ -1,5 +1,6 @@
 // Importa el modelo de datos 'Marca' desde "../models/marca.model.js"
 import  Marca from "../models/marca.model.js"
+import Repuesto from "../models/repuestos.model.js"
 
 // Obtiene todas las marcas
 export const getMarcas = async(req, res) =>{
@@ -64,6 +65,15 @@ export const updateMarca= async(req, res) =>{
     try {
         // Extrae el nombre de la marca del cuerpo de la solicitud
         const  {nombre_marca, estado} = req.body
+
+        // Verificar si la marca está asociada a algún repuesto
+        const repuestosAsociados = await Repuesto.find({ marca: req.params.id });
+        if (repuestosAsociados.length > 0 && estado === "Inactivo") {
+            console.log("la marca esta asociada")
+            return res.status(400).json({ message: "No se puede inhabilitar la marca porque está asociada a un repuesto" });
+        }
+
+        console.log("no esta asociada")
 
         const marcaFound = await Marca.findOne({nombre_marca})
         if(marcaFound) return res.status(400).json({message:["La marca ya existe, no se puede actualizar"]});
