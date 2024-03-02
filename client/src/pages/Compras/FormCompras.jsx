@@ -201,7 +201,7 @@ export default function FormCompra() {
 
   const columnas2 = [
     { name: "repuesto", label: "Repuesto", options: { filter: true, sort: true } },
-    { name: "Marca", label: "Marca", options: { filter: true, sort: false } },
+    { name: "marca", label: "Marca", options: { filter: true, sort: false } },
     { name: "cantidad", label: "Cantidad", options: { filter: true, sort: false } },
     { name: "precioUnitario", label: "Precio Unitario", options: { filter: true, sort: false } },
     { name: "precioTotal", label: "Precio Total", options: { filter: true, sort: false } },
