@@ -60,7 +60,15 @@ export const NegativeRequired = {
   required: "Requerido",
   validate: (value) => /^[1-9]\d*$/.test(value) || "Valor incorrecto",
   maxLength: { value: 50, message: "Máximo 50" },
-  minLength: { value: 1, message: "Mínimo 4" }
+  minLength: { value: 1, message: "Mínimo 4"}
+};
+
+//Validación para el precio del repuesto
+export const precioRepuesto = {
+  required: "Requerido",
+  validate: (value) => /^[1-9]\d*$/.test(value) || "Valor incorrecto",
+  maxLength: { value: 30, message: "Máximo 30" },
+  minLength: { value: 4, message: "Mínimo 4"}
 };
 
 // export const PasswordRequire = {

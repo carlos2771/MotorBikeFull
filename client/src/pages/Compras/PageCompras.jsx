@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useState } from "react";
 import { useCompras } from "../../context/ComprasContext";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
-import { Link } from "react-router-dom";
+import { Link, Navigate} from "react-router-dom";
 import Swal from "sweetalert2";
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
@@ -14,6 +14,8 @@ import createTheme from '@mui/material/styles/createTheme';
 import MUIDataTable from "mui-datatables";
 import { Tabla, Titulo } from "../../components/Tabla";
 import Detalle from "../../components/Detalle"
+
+import { useAuth } from "../../hooks/useAuth";
 
 import { faUser, faBarcode, faCalendarDays, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
@@ -45,6 +47,8 @@ export default function PageCompras() {
     deleteCompra,
     updateCompra,
   } = useCompras();
+
+  const { user } = useAuth();
 
   useEffect(() => {
     try {
@@ -381,8 +385,8 @@ export default function PageCompras() {
                 `}
 
                 </style>
-                <table style={{ marginLeft: '1px' }}>
-                  <tbody>
+                <table className="min-w-full">
+                  <tbody className="min-w-full ">
                     <tr>
                       <td colSpan="4" style={{ border: '1px solid #2e4f91', padding: '5px', backgroundColor: '#2e4f91', fontSize: '25px', textAlign: 'center' }}>
                         <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
@@ -425,7 +429,7 @@ export default function PageCompras() {
                 <br />
 
 
-                <div style={{ maxWidth: '100%', overflowX: 'auto', marginBottom: '10px' }}>
+                <div className="min-w-full">
                   <MUIDataTable
                     className="miTablaPersonalizada"
                     title={"Detalle Compras"}
@@ -479,11 +483,15 @@ export default function PageCompras() {
     },
   ];
 
+  const permissions = user?.rol?.permissions || [];
+
   return (
+    <>
+    {permissions.includes("Compras") ? (
     <div className="mt-16">
-      <div className="flex justify-between">
-        <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faShoppingBag} className="mr-2" />Gestión de compras</h1>
-        <div className="mx-16 justify-end">
+      <div className="flex flex-col sm:flex-row justify-between items-center mx-16">
+        <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0"><FontAwesomeIcon icon={faShoppingBag} className="mr-2" />Gestión de compras</h1>
+        <div className="mx-4 sm:mx-0 justify-end flex">
           <Link to="/add-compra">
             <button className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
               <FontAwesomeIcon icon={faPlus} />
@@ -500,7 +508,7 @@ export default function PageCompras() {
       </div>
       <Box sx={{ width: "100%" }}>
         <DataGrid
-          className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
+          className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4 "
           rows={compras}
           columns={columns}
           getRowId={(row) => row._id}
@@ -574,5 +582,10 @@ export default function PageCompras() {
 
 
     </div>
-  );
-}
+    ) : (
+      <Navigate to='/tasks' />
+  )}
+  </>
+    )
+  }
+  

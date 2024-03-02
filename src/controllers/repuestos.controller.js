@@ -67,14 +67,13 @@ export const createRepuestos = async (req, res) => {
     // Convierte la cantidad a un número (puedes ajustar esto según tus necesidades)
     const cantidadNumerica = parseInt(amount, 10);
 
-    // Verificar si ya existe un repuesto con el mismo nombre (ignorando mayúsculas/minúsculas) y misma marca
+    // Verificar si ya existe un repuesto con el mismo nombre (ignorando mayúsculas/minúsculas)
     const repuestoExistente = await Repuesto.findOne({
-      name: { $regex: new RegExp('^' + nombreNormalizado + '$', 'i') },
-      marca: marcaId
+      name: { $regex: new RegExp('^' + nombreNormalizado + '$', 'i') }
     });
 
     if (repuestoExistente) {
-      return res.status(400).json({ message: "Ya existe un repuesto con el mismo nombre y marca" });
+      return res.status(400).json({ message: "Ya existe un repuesto con el mismo nombre" });
     }
 
     // Guarda la imagen en base64 directamente desde req.body.img
@@ -117,6 +116,7 @@ export const createRepuestos = async (req, res) => {
     return res.status(500).json({ message: ["Error al crear el repuesto"], error });
   }
 };
+
 
 
 

@@ -283,7 +283,7 @@ export default function PageRepuestos() {
                 metodo={() => getRepuestos(params.row._id)}
                 id={params.row._id}
               >
-                <table>
+                <table className="min-w-full">
                   <tbody>
                     <tr>
                       <td
@@ -313,26 +313,26 @@ export default function PageRepuestos() {
                         }
                       </Tabla>
                       <td
+                      className=""
                         rowSpan={4}
                         style={{
                           border: "1px solid #2e4f91",
-                          width: "30%",
-                          minWidth: "170px",
+                          // width: "30%",
+                          // minWidth: "170px",
                         }}
                       >
-                        <img
-                          src={
-                            repuestos.find(
-                              (repuesto) => repuesto._id === params.row._id
-                            )?.img
-                          }
-                          alt="Imagen de repuesto"
-                          style={{
-                            width: "100px",
-                            height: "100px",
-                            marginLeft: "20%",
-                          }} // Define el tamaño de la imagen según tus necesidades
-                        />
+                        <div className="flex justify-center items-center ">
+                          <img
+                          className="min-h-20 max-h-40"
+                            src={
+                              repuestos.find(
+                                (repuesto) => repuesto._id === params.row._id
+                              )?.img
+                            }
+                            alt="Imagen de repuesto"
+                            
+                          />
+                        </div>
                       </td>
                     </tr>
                     <tr>
@@ -390,12 +390,12 @@ export default function PageRepuestos() {
     <>
       {permissions.includes("Repuestos") ? (
         <div className="mt-16 ">
-          <div className="flex justify-between">
-            <h1 className="text-2xl text-start ml-16">
+          <div className="flex flex-col sm:flex-row justify-between items-center mx-16">
+            <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
               <FontAwesomeIcon icon={faTools} className="mr-2" />
               Gestión de repuestos
             </h1>
-            <div className="mx-16 justify-end">
+            <div className="mx-4 sm:mx-0 justify-end flex">
               <Link to="/add-repuesto">
                 <button
                   className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"

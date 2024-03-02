@@ -283,7 +283,7 @@ export default function PageClientes() {
                 metodo={() => getCliente(params.row._id)}
                 id={params.row._id}
               >
-                <table>
+                <table className="min-w-full">
                   <tbody>
                     <Titulo>
                       <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
@@ -389,12 +389,12 @@ export default function PageClientes() {
     <>
       {permissions.includes("Clientes") ? (
         <div className="mt-16">
-          <div className="flex justify-between">
-            <h1 className="text-2xl text-start ml-16">
+          <div className="flex flex-col sm:flex-row justify-between items-center mx-16">
+            <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
               <FontAwesomeIcon icon={faUsers} className="mr-2" />
               Gestión de clientes
             </h1>
-            <div className="mx-16 justify-end">
+            <div className="mx-4 sm:mx-0 justify-end flex">
               <Link to="/add-cliente">
                 <button
                   className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"

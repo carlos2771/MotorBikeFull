@@ -110,15 +110,6 @@ export default function App() {
                                     <Route path="/add-cliente" element={<FormCliente />} />
                                     <Route path="/cliente/:id" element={<FormCliente />} />
 
-                                            <Route path="/profile" element={<ProfilePage />} />
-                                            <Route path="/clientes" element={<PageClientes />} />
-                                            <Route path="/add-cliente" element={<FormCliente />} />
-                                            <Route path="/cliente/:id" element={<FormCliente />} />
-
-                                            <Route path="/ventas-repuestos" element={<PageVentaRepuestos />} />
-                                            <Route path="/add-venta-repuesto" element={<FormVentaRepuesto />} />
-                                            <Route path="/venta-repuesto/:id" element={<FormVentaRepuesto />} />
-
                                             <Route path="/ventas-servicios" element={<PageVentaServicios />} />
                                             <Route path="/add-venta-servicio" element={<FormVentaServicio />} />
                                             <Route path="/ventas-servicios/:id" element={<FormVentaServicio />} />
@@ -135,7 +126,7 @@ export default function App() {
                                             <Route path="/add-marca" element={<FormMarca />} />
                                             <Route path="/marca/:id" element={<FormMarca />} />
 
-                                            <Route path="/mecanicos/:id" element={<VerMecanico />} />
+                                            <Route path="/mecanicos/:id" element={<VerMecanico />} /> {/* ¿Que hace este Route? */}
 
                                             <Route path="/compras" element={<PageCompras />} />
                                             <Route path="/add-compra" element={<FormCompras />} />

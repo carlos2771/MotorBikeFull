@@ -2,7 +2,7 @@ import React from "react";
 
 export function Tabla({children }) {
   return (
-    <td className="border px-4 py-2 border-blue-700 shadow-lg text-xl ">
+    <td className="border px-4 py-2 border-blue-700 shadow-lg sm:text-lg table-cell  min-w-full ">
       {children}
     </td>
   );

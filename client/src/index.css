@@ -29,3 +29,10 @@ body{
   color: white !important;
 }
 
+div.MuiTablePagination-root.css-rtrcn9-MuiTablePagination-root div p{
+  color:aliceblue
+}
+
+div.MuiTablePagination-actions button svg{
+  color: white;
+}

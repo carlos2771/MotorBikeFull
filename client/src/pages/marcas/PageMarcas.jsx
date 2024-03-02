@@ -5,7 +5,14 @@ import { Link, Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMotorcycle, faDownload, faPlus, faPencil, faBan, faCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMotorcycle,
+  faDownload,
+  faPlus,
+  faPencil,
+  faBan,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
 
 import { useMarcas } from "../../context/MarcasContext";
 import { useAuth } from "../../hooks/useAuth";
@@ -34,9 +41,11 @@ export default function PageMarcas() {
       iconColor: "#2563eb",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
-        cancelButton: "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500"
-      }
+        confirmButton:
+          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+        cancelButton:
+          "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         cambiarEstado(id, estado);
@@ -146,8 +155,7 @@ export default function PageMarcas() {
       field: "nombre_marca",
       headerName: "Nombre  Marca",
       width: 450,
-      headerClassName: "font-custom text-lg"
-
+      headerClassName: "font-custom text-lg",
     },
     {
       field: "estado",
@@ -164,7 +172,10 @@ export default function PageMarcas() {
         const estado = params.row.estado;
         return (
           <div>
-            <button className={estado === "Activo" ? "" : "hidden"} title="Editar">
+            <button
+              className={estado === "Activo" ? "" : "hidden"}
+              title="Editar"
+            >
               <Link
                 className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
                 to={`/marca/${params.row._id}`}
@@ -176,7 +187,11 @@ export default function PageMarcas() {
               className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${estado === "Activo" ? "border-red-500 hover:bg-red-500" : "border-indigo-500 hover:bg-indigo-500"}`}
               onClick={() => mostrarAlerta(params.row._id, params.row.nombre_marca, estado)}
             >
-              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
+              {estado === "Activo" ? (
+                <FontAwesomeIcon icon={faBan} />
+              ) : (
+                <FontAwesomeIcon icon={faCheck} />
+              )}
             </button>
           </div>
         );
@@ -188,101 +203,108 @@ export default function PageMarcas() {
 
   return (
     <>
-    {permissions.includes("Marcas") ? (
-    <div className="mt-16">
-      <div className="flex justify-between">
-        <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faMotorcycle} className="mr-2" />Gestión de marcas</h1>
-        <div className="mx-16 justify-end flex">
-          <Link to="/add-marca">
-            <button className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" title="Agregar">
-              <FontAwesomeIcon icon={faPlus} />
-            </button>
-          </Link>
-          <button
-            onClick={exportarAExcel}
-            className="px-4 py-2 mx-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
-            title="Descargar excel"
-          >
-            <FontAwesomeIcon icon={faDownload} />
-          </button>
+      {permissions.includes("Marcas") ? (
+        <div className="mt-16">
+          <div className="flex flex-col sm:flex-row justify-between items-center mx-16">
+            <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
+              <FontAwesomeIcon icon={faMotorcycle} className="mr-2" />
+              Gestión de marcas
+            </h1>
+            <div className="mx-4 sm:mx-0 justify-end flex">
+              <div className="flex">
+                <Link to="/add-marca">
+                  <button
+                    className="px-4 py-2 text-sm text-white font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
+                    title="Agregar"
+                  >
+                    <FontAwesomeIcon icon={faPlus} />
+                  </button>
+                </Link>
+                <button
+                  onClick={exportarAExcel}
+                  className="px-4 py-2 ml-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent max-w-full max-h-10"
+                  title="Descargar excel"
+                >
+                  <FontAwesomeIcon icon={faDownload} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <Box sx={{ width: "100%" }}>
+            <DataGrid
+              className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
+              rows={marcas}
+              columns={columns}
+              getRowId={(row) => row._id}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              disableRowSelectionOnClick
+              sx={{
+                background:
+                  "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+                color: "white",
+                "& .MuiDataGrid-cell": {
+                  fontSize: "15px",
+                },
+              }}
+              slots={{ toolbar: GridToolbar }}
+              slotProps={{
+                toolbar: {
+                  printOptions: { disableToolbarButton: true },
+                  csvOptions: { disableToolbarButton: true },
+                },
+              }}
+              //Traducir a español
+              localeText={{
+                noRowsLabel: "No se ha encontrado datos.",
+                noResultsOverlayLabel: "No se ha encontrado ningún resultado",
+                toolbarColumns: "Columnas",
+                toolbarColumnsLabel: "Seleccionar columnas",
+                toolbarFilters: "Filtros",
+                toolbarFiltersLabel: "Ver filtros",
+                toolbarFiltersTooltipHide: "Quitar filtros",
+                toolbarFiltersTooltipShow: "Ver filtros",
+                toolbarDensity: "Densidad",
+                toolbarDensityCompact: "Compacta",
+                toolbarDensityStandard: "Estandar",
+                toolbarDensityComfortable: "Confortable",
+                toolbarExport: "Exportar",
+                toolbarExportCSV: "Descargar CSV",
+                toolbarExportPrint: "Imprimir",
+                columnsPanelTextFieldLabel: "Buscar",
+                columnsPanelHideAllButton: "Ocultar todo",
+                columnsPanelShowAllButton: "Mostrar todo",
+                filterPanelColumns: "Columna",
+                filterPanelOperator: "Operador",
+                filterOperatorContains: "Contiene",
+                filterOperatorEquals: "Es igual",
+                filterOperatorStartsWith: "Comienza con",
+                filterOperatorEndsWith: "Termina con",
+                filterOperatorIsEmpty: "Esta vacía",
+                filterOperatorIsNotEmpty: "No esta vacía",
+                filterOperatorIsAnyOf: "Es alguna de",
+                filterPanelInputLabel: "Valor",
+                filterPanelInputPlaceholder: "Filtrar valor",
+                columnMenuSortAsc: "Ordenar en ASC",
+                columnMenuSortDesc: "Ordenar en DESC",
+                columnMenuUnsort: "Desordenar",
+                columnMenuFilter: "Filtrar",
+                columnMenuHideColumn: "Ocultar columna",
+                columnMenuManageColumns: "Manejar columnas",
+              }}
+            />
+          </Box>
         </div>
-      </div>
-
-      <Box sx={{ width: "100%" }}>
-        <DataGrid
-          className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
-          rows={marcas}
-          columns={columns}
-          getRowId={(row) => row._id}
-
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          pageSizeOptions={[5]}
-
-          disableRowSelectionOnClick
-          sx={{
-            background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
-            color: "white",
-            '& .MuiDataGrid-cell': {
-              fontSize: '15px',
-            },
-          }}
-          slots={{ toolbar: GridToolbar }}
-
-          slotProps={{
-            toolbar: {
-                printOptions: { disableToolbarButton: true },
-                csvOptions: { disableToolbarButton: true },
-        }}}
-
-
-          localeText={{
-            noRowsLabel: "No se ha encontrado datos.",
-            noResultsOverlayLabel: "No se ha encontrado ningún resultado",
-            toolbarColumns: "Columnas",
-            toolbarColumnsLabel: "Seleccionar columnas",
-            toolbarFilters: "Filtros",
-            toolbarFiltersLabel: "Ver filtros",
-            toolbarFiltersTooltipHide: "Quitar filtros",
-            toolbarFiltersTooltipShow: "Ver filtros",
-            toolbarDensity: "Densidad",
-            toolbarDensityCompact: "Compacta",
-            toolbarDensityStandard: "Estandar",
-            toolbarDensityComfortable: "Confortable",
-            toolbarExport: "Exportar",
-            toolbarExportCSV: "Descargar CSV",
-            toolbarExportPrint: "Imprimir",
-            columnsPanelTextFieldLabel: "Buscar",
-            columnsPanelHideAllButton: "Ocultar todo",
-            columnsPanelShowAllButton: "Mostrar todo",
-            filterPanelColumns: "Columna",
-            filterPanelOperator: "Operador",
-            filterOperatorContains: "Contiene",
-            filterOperatorEquals: "Es igual",
-            filterOperatorStartsWith: "Comienza con",
-            filterOperatorEndsWith: "Termina con",
-            filterOperatorIsEmpty: "Esta vacía",
-            filterOperatorIsNotEmpty: "No esta vacía",
-            filterOperatorIsAnyOf: "Es alguna de",
-            filterPanelInputLabel: "Valor",
-            filterPanelInputPlaceholder: "Filtrar valor",
-            columnMenuSortAsc: "Ordenar en ASC",
-            columnMenuSortDesc: "Ordenar en DESC",
-            columnMenuUnsort: "Desordenar",
-            columnMenuFilter: "Filtrar",
-            columnMenuHideColumn: "Ocultar columna",
-            columnMenuManageColumns: "Manejar columnas"
-        }}
-        />
-      </Box>
-    </div>) : (
-      <Navigate to='/tasks' />
+      ) : (
+        <Navigate to="/tasks" />
       )}
-      </>
+    </>
   );
 }

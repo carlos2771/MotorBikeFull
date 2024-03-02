@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCompras } from "../../context/ComprasContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate} from "react-router-dom";
 import utc from "dayjs/plugin/utc";
 import dayjs from 'dayjs';
 dayjs.extend(utc);
@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const currentYear = dayjs().year();
 import Swal from 'sweetalert2';
 
+import { useAuth } from "../../hooks/useAuth";
 
 function formatCurrency(value) {
   const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
@@ -30,6 +31,7 @@ export default function FormCompra() {
 
   const { compras, getCompras } = useCompras(); ///////
 
+  const { user } = useAuth();
 
   const {
     register,
@@ -201,7 +203,7 @@ export default function FormCompra() {
 
   const columnas2 = [
     { name: "repuesto", label: "Repuesto", options: { filter: true, sort: true } },
-    { name: "Marca", label: "Marca", options: { filter: true, sort: false } },
+    { name: "marca", label: "Marca", options: { filter: true, sort: false } },
     { name: "cantidad", label: "Cantidad", options: { filter: true, sort: false } },
     { name: "precioUnitario", label: "Precio Unitario", options: { filter: true, sort: false } },
     { name: "precioTotal", label: "Precio Total", options: { filter: true, sort: false } },
@@ -268,7 +270,11 @@ export default function FormCompra() {
     setAvailableRepuestos([...availableRepuestos, repuestoEliminado.repuesto]);
   };
 
+  const permissions = user?.rol?.permissions || [];
+
   return (
+    <>
+    {permissions.includes("Compras") ? (
     <div className="contenedorPrincipal shadow-lg shadow-blue-600/40">
       {comprasErrors.map((error, i) => (
         <div className="bg-red-500 p-2 text-white" key={i}>
@@ -823,8 +829,8 @@ transform: scale(0.3);
   background-color: #374151;
   
   width: 100%;
-  max-width: 1090px;
-  height: 850px;
+  max-width: 2090px;
+  height: 810px;
   margin-top: 2%;
   padding: 20px;
   box-sizing: border-box;
@@ -931,17 +937,9 @@ transform: scale(0.3);
 
 
 
-  );
-
-
-
-
-
-
-
-
-
-
-
-
+) : (
+  <Navigate to='/tasks' />
+)}
+</>
+)
 }
