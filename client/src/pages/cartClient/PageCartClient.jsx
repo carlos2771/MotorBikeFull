@@ -53,8 +53,11 @@ export default function PageCartClient() {
     const exportarAExcel = () => {
       // Define una función para combinar los repuestos de cada venta en una cadena de texto
       const obtenerRepuestos = (repuestos) => {
-        return repuestos.map((r) => `${r.Cantidad} x ${r.Nombre}`).join(", ");
+        return repuestos.map((r) => `Repuesto: ${r.Nombre} - Cantidad: ${r.Cantidad}`).join("\n");
       };
+  
+      // Calcula el total de todas las ventas
+      const totalVentas = dataForExcel.reduce((total, venta) => total + venta["Total Venta"], 0);
   
       // Transforma los datos en un formato adecuado para el archivo Excel
       const data = dataForExcel.map((venta) => ({
@@ -64,6 +67,15 @@ export default function PageCartClient() {
         "Total Venta": venta["Total Venta"],
         Repuestos: obtenerRepuestos(venta.Repuestos),
       }));
+  
+      // Agrega una fila con el total de ventas al final del array de datos
+      data.push({
+        Codigo: "",
+        Cliente: "",
+        Descuento: "",
+        "Total Venta": totalVentas,
+        Repuestos: "Total de todas las ventas",
+      });
   
       // Crea una hoja de cálculo en formato de libro de trabajo de Excel
       const ws = XLSX.utils.json_to_sheet(data);
