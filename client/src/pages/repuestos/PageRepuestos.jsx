@@ -196,7 +196,7 @@ export default function PageRepuestos() {
       headerClassName: "custom-header",
       valueGetter: (params) => params.row.marca.nombre_marca,
     },
-   
+
     {
       field: "price",
       headerName: "Precio",
@@ -307,7 +307,7 @@ export default function PageRepuestos() {
                         }
                       </Tabla>
                       <td
-                      className=""
+                        className=""
                         rowSpan={4}
                         style={{
                           border: "1px solid #2e4f91",
@@ -317,14 +317,14 @@ export default function PageRepuestos() {
                       >
                         <div className="flex justify-center items-center ">
                           <img
-                          className="min-h-20 max-h-40"
+                            className="min-h-20 max-h-40"
                             src={
                               repuestos.find(
                                 (repuesto) => repuesto._id === params.row._id
                               )?.img
                             }
                             alt="Imagen de repuesto"
-                            
+
                           />
                         </div>
                       </td>
@@ -348,11 +348,12 @@ export default function PageRepuestos() {
                         Cantidad
                       </Tabla>
                       <Tabla>
-                        {
-                          repuestos.find(
+                        
+                          {parseInt(repuestos.find(
                             (repuesto) => repuesto._id === params.row._id
-                          )?.amount
-                        }
+                          )?.amount, 10).toLocaleString()} {/* Convertir a número y aplicar separadores de miles */}
+                        
+
                       </Tabla>
                     </tr>
                     <tr>
