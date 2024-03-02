@@ -196,13 +196,7 @@ export default function PageRepuestos() {
       headerClassName: "custom-header",
       valueGetter: (params) => params.row.marca.nombre_marca,
     },
-    {
-      field: "amount",
-      headerName: "Cantidad",
-      width: 120,
-      headerClassName: "custom-header",
-      valueFormatter: (params) => formatCurrency2(params.value),
-    },
+   
     {
       field: "price",
       headerName: "Precio",
@@ -354,11 +348,11 @@ export default function PageRepuestos() {
                         Cantidad
                       </Tabla>
                       <Tabla>
-                        {formatCurrency2(
+                        {
                           repuestos.find(
                             (repuesto) => repuesto._id === params.row._id
                           )?.amount
-                        )}
+                        }
                       </Tabla>
                     </tr>
                     <tr>

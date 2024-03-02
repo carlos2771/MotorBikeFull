@@ -74,7 +74,7 @@ export default function FormRepuesto() {
         setSelectedMarca(repuesto.marca);
         setValue("nombre_marca", repuesto.nombre_marca);
         setValue("price", repuesto.price);
-        setValue("img",repuesto.img)
+        setValue("img", repuesto.img)
 
         // Setear el nombre de la imagen si existe
         if (repuesto.img) {
@@ -112,7 +112,7 @@ export default function FormRepuesto() {
 
   const onSubmit = handleSubmit(async (data) => {
     data.img = imageBase64;
-    
+
     console.log("datos aness", data);
     console.log("img", data.img);
     if (params.id) {
@@ -249,17 +249,17 @@ export default function FormRepuesto() {
               )}
 
               <label>
-                Cantidad<span className="text-red-500">*</span>
+                Cantidad
               </label>
               <input
+                value={0}
                 type="text"
                 placeholder="Cantidad"
-                {...register("amount", NegativeRequired)}
-                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
+                {...register("amount")}
+                readOnly // Hace que el input no sea editable
+                className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
               />
-              {errors.amount && (
-                <p className="text-red-500">{errors.amount.message}</p>
-              )}
+
 
               <label>
                 Precio del repuesto<span className="text-red-500">*</span>
