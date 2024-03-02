@@ -59,13 +59,13 @@ export default uploadMiddleware;
 
 export const createRepuestos = async (req, res) => {
   try {
-    const { name, img, inCart, price, amount, marca: marcaId, estado } = req.body;
+    const { name, img, inCart, price, marca: marcaId, estado } = req.body;
 
     // Normalizar el nombre del repuesto a minúsculas
     const nombreNormalizado = name.toLowerCase();
 
-    // Convierte la cantidad a un número (puedes ajustar esto según tus necesidades)
-    const cantidadNumerica = parseInt(amount, 10);
+    // Establecer la cantidad del repuesto en cero
+    const amount = 0;
 
     // Verificar si ya existe un repuesto con el mismo nombre (ignorando mayúsculas/minúsculas)
     const repuestoExistente = await Repuesto.findOne({
@@ -103,8 +103,8 @@ export const createRepuestos = async (req, res) => {
       inCart,
       marca: marcaId,
       nombre_marca: nombreMarca, // Aquí asignamos el nombre de la marca
-      amount: cantidadNumerica,
       price,
+      amount, // Establecer la cantidad del repuesto en cero
       estado,
     });
 
@@ -116,6 +116,7 @@ export const createRepuestos = async (req, res) => {
     return res.status(500).json({ message: ["Error al crear el repuesto"], error });
   }
 };
+
 
 
 
@@ -133,12 +134,11 @@ export const updateRepuestos = async (req, res) => {
     // Verificar si ya existe un repuesto con el mismo nombre (ignorando mayúsculas/minúsculas) y marca
     const repuestoExistente = await Repuesto.findOne({
       name: { $regex: new RegExp('^' + nombreNormalizado + '$', 'i') },
-      marca: marcaId,
       _id: { $ne: req.params.id } // Excluimos el repuesto actual de la búsqueda
     });
 
     if (repuestoExistente) {
-      return res.status(400).json({ message: "Ya existe un repuesto con el mismo nombre y marca" });
+      return res.status(400).json({ message: "Ya existe un repuesto con el mismo nombre" });
     }
 
     // Encuentra el repuesto que se va a actualizar
@@ -158,6 +158,7 @@ export const updateRepuestos = async (req, res) => {
     return res.status(500).json({ message: "Error al actualizar el repuesto", error });
   }
 };
+
 
 
 

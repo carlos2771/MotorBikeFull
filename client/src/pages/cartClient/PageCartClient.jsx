@@ -27,7 +27,6 @@ import {
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
 
-
 export default function PageCartClient() {
   const { getCartClient, cartClientes, getCartCliente, updateCartCliente } =
     useCartCliente();
@@ -88,16 +87,18 @@ export default function PageCartClient() {
       XLSX.writeFile(wb, "ventas.xlsx");
     };
 
-    function formatCurrency(value) {
-      // Verificar si value es null o undefined
-      if (value == null) {
-        return ""; // o cualquier otro valor predeterminado que desees
-      }
-      
-      // Agregar el signo de peso
-      const formattedValue = `$${value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
-      return formattedValue;
+  function formatCurrency(value) {
+    // Verificar si value es null o undefined
+    if (value == null) {
+      return ""; // o cualquier otro valor predeterminado que desees
     }
+
+    // Agregar el signo de peso
+    const formattedValue = `$${value
+      .toFixed(0)
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+    return formattedValue;
+  }
 
   useEffect(() => {
     try {
@@ -113,7 +114,6 @@ export default function PageCartClient() {
       console.error("Error al obtener todo:", error);
     }
   }, []);
- 
 
   const mostrarAlerta = (id, anulado) => {
     const title = anulado ? "Anulado" : "Anular";
@@ -263,16 +263,15 @@ export default function PageCartClient() {
       headerName: "Descuento",
       width: 170,
       headerClassName: "custom-header",
-      valueFormatter: (params) => formatCurrency(params.value) || `$${0}`,
-      
+      valueFormatter: (params) => params.value ? `%${params.value}` : "%0",
     },
+    
     {
       field: "total",
       headerName: "Total Venta",
       width: 170,
       headerClassName: "custom-header",
       valueFormatter: (params) => formatCurrency(params.value),
-      
     },
     {
       field: "acciones",
@@ -308,7 +307,7 @@ export default function PageCartClient() {
                 <table className="min-w-full">
                   <tbody>
                     <tr>
-                    <Tabla>
+                      <Tabla>
                         <FontAwesomeIcon icon={faIdCard} className="mr-2" />
                         Codigo
                       </Tabla>
@@ -326,7 +325,6 @@ export default function PageCartClient() {
                       </Tabla>
                     </tr>
                     <tr>
-                      
                       <Tabla>
                         {
                           cartClientes.find(
@@ -334,8 +332,7 @@ export default function PageCartClient() {
                           )?.codigo
                         }
                       </Tabla>
-                    
-                    
+
                       <Tabla>
                         {
                           cartClientes.find(
@@ -343,34 +340,23 @@ export default function PageCartClient() {
                           )?.cliente.nombre_cliente
                         }
                       </Tabla>
-                    
-                      <Tabla>
-                        {
-                          formatCurrency(
 
-                            cartClientes.find(
-                              (total) => total._id === params.row._id
-                            )?.total
-                          )
-                        }
+                      <Tabla>
+                        {formatCurrency(
+                          cartClientes.find(
+                            (total) => total._id === params.row._id
+                          )?.total
+                        )}
                       </Tabla>
                       <Tabla>
-                        {
-                          formatCurrency(
-
-                            cartClientes.find(
-                              (descuento) => descuento._id === params.row._id
-                            )?.descuento ||0
-                          )
-                        
-                        }
+                        {(cartClientes.find(
+                          (descuento) => descuento._id === params.row._id
+                        )?.descuento || 0) + "%"}
                       </Tabla>
-                     
                     </tr>
-                   
                   </tbody>
                 </table>
-                
+
                 <div
                   style={{
                     maxWidth: "100%",
@@ -379,7 +365,6 @@ export default function PageCartClient() {
                   }}
                   className="min-w-full"
                 >
-                  
                   <MUIDataTable
                     className="miTablaPersonalizada"
                     title={"Detalle Compras"}
@@ -391,8 +376,7 @@ export default function PageCartClient() {
                           repuesto: repuesto.name,
                           cantidad: repuesto.amount,
                           precioUnitarios: repuesto.price,
-                          precioTotal: repuesto.price * repuesto.amount
-                         
+                          precioTotal: repuesto.price * repuesto.amount,
                         })) || []
                     } // Manejar el caso en que cartClientes.find(...) no encuentra nada
                     columns={columnas2}
@@ -425,9 +409,8 @@ export default function PageCartClient() {
                   />
                 </div>
 
-                
-                <style>{
-                  `
+                <style>
+                  {`
 
                 // .tss-ynxllk-MUIDataTableFilter-root{
                 //   background-color: #1e293b;
@@ -513,7 +496,6 @@ export default function PageCartClient() {
               }
 
                 `}
-                
                 </style>
               </Detalle>
             </button>
@@ -527,106 +509,107 @@ export default function PageCartClient() {
 
   return (
     <>
-    {permissions.includes("Venta Repuesto") ? (
-    <div className="mt-16 ">
-      <div className="flex flex-col sm:flex-row justify-between items-center mx-16">
-        <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
-          <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
-          Gestión de ventas repuestos
-        </h1>
-        <div className="mx-4 sm:mx-0 justify-end flex">
-          <Link to="/home">
-            <button
-              className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
-              title="Agregar"
-            >
-              <FontAwesomeIcon icon={faPlus} />
-            </button>
-          </Link>
-          <button onClick={exportarAExcel} className="px-4 py-2 ml-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent max-w-full max-h-10"
-          title="Descargar excel">
-             <FontAwesomeIcon icon={faDownload} />
-          </button>
+      {permissions.includes("Venta Repuesto") ? (
+        <div className="mt-16 ">
+          <div className="flex flex-col sm:flex-row justify-between items-center mx-16">
+            <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
+              <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
+              Gestión de ventas repuestos
+            </h1>
+            <div className="mx-4 sm:mx-0 justify-end flex">
+              <Link to="/home">
+                <button
+                  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
+                  title="Agregar"
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+              </Link>
+              <button
+                  onClick={exportarAExcel}
+                  className="px-4 py-2 ml-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent max-w-full max-h-10"
+                  title="Descargar excel"
+                >
+                  <FontAwesomeIcon icon={faDownload} />
+                </button>
+            </div>
+          </div>
+
+          <Box sx={{ width: "100%" }}>
+            <DataGrid
+              className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
+              rows={cartClientes}
+              columns={columns}
+              columnHeader
+              getRowId={(row) => row._id}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              disableRowSelectionOnClick
+              sx={{
+                background:
+                  "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+                color: "white",
+                "& .MuiDataGrid-cell": {
+                  fontSize: "15px",
+                },
+              }}
+              slots={{ toolbar: GridToolbar }}
+              slotProps={{
+                toolbar: {
+                  printOptions: { disableToolbarButton: true },
+                  csvOptions: { disableToolbarButton: true },
+                },
+              }}
+              //Traducir a español
+              localeText={{
+                noRowsLabel: "No se ha encontrado datos.",
+                noResultsOverlayLabel: "No se ha encontrado ningún resultado",
+                toolbarColumns: "Columnas",
+                toolbarColumnsLabel: "Seleccionar columnas",
+                toolbarFilters: "Filtros",
+                toolbarFiltersLabel: "Ver filtros",
+                toolbarFiltersTooltipHide: "Quitar filtros",
+                toolbarFiltersTooltipShow: "Ver filtros",
+                toolbarDensity: "Densidad",
+                toolbarDensityCompact: "Compacta",
+                toolbarDensityStandard: "Estandar",
+                toolbarDensityComfortable: "Confortable",
+                toolbarExport: "Exportar",
+                toolbarExportCSV: "Descargar CSV",
+                toolbarExportPrint: "Imprimir",
+                columnsPanelTextFieldLabel: "Buscar",
+                columnsPanelHideAllButton: "Ocultar todo",
+                columnsPanelShowAllButton: "Mostrar todo",
+                filterPanelColumns: "Columna",
+                filterPanelOperator: "Operador",
+                filterOperatorContains: "Contiene",
+                filterOperatorEquals: "Es igual",
+                filterOperatorStartsWith: "Comienza con",
+                filterOperatorEndsWith: "Termina con",
+                filterOperatorIsEmpty: "Esta vacía",
+                filterOperatorIsNotEmpty: "No esta vacía",
+                filterOperatorIsAnyOf: "Es alguna de",
+                filterPanelInputLabel: "Valor",
+                filterPanelInputPlaceholder: "Filtrar valor",
+                columnMenuSortAsc: "Ordenar en ASC",
+                columnMenuSortDesc: "Ordenar en DESC",
+                columnMenuUnsort: "Desordenar",
+                columnMenuFilter: "Filtrar",
+                columnMenuHideColumn: "Ocultar columna",
+                columnMenuManageColumns: "Manejar columnas",
+              }}
+            />
+          </Box>
         </div>
-      </div>
-
-      <Box sx={{ width: "100%" }}>
-        <DataGrid
-          className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
-          rows={cartClientes}
-          columns={columns}
-          columnHeader
-          getRowId={(row) => row._id}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          pageSizeOptions={[5]}
-          disableRowSelectionOnClick
-          sx={{
-            background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
-            color: "white",
-            "& .MuiDataGrid-cell": {
-              fontSize: "15px",
-            },
-          }}
-          slots={{ toolbar: GridToolbar }}
-          
-          slotProps={{
-            toolbar: {
-                printOptions: { disableToolbarButton: true },
-                csvOptions: { disableToolbarButton: true },
-        }}}
-
-
-          //Traducir a español
-          localeText={{
-            noRowsLabel: "No se ha encontrado datos.",
-            noResultsOverlayLabel: "No se ha encontrado ningún resultado",
-            toolbarColumns: "Columnas",
-            toolbarColumnsLabel: "Seleccionar columnas",
-            toolbarFilters: "Filtros",
-            toolbarFiltersLabel: "Ver filtros",
-            toolbarFiltersTooltipHide: "Quitar filtros",
-            toolbarFiltersTooltipShow: "Ver filtros",
-            toolbarDensity: "Densidad",
-            toolbarDensityCompact: "Compacta",
-            toolbarDensityStandard: "Estandar",
-            toolbarDensityComfortable: "Confortable",
-            toolbarExport: "Exportar",
-            toolbarExportCSV: "Descargar CSV",
-            toolbarExportPrint: "Imprimir",
-            columnsPanelTextFieldLabel: "Buscar",
-            columnsPanelHideAllButton: "Ocultar todo",
-            columnsPanelShowAllButton: "Mostrar todo",
-            filterPanelColumns: "Columna",
-            filterPanelOperator: "Operador",
-            filterOperatorContains: "Contiene",
-            filterOperatorEquals: "Es igual",
-            filterOperatorStartsWith: "Comienza con",
-            filterOperatorEndsWith: "Termina con",
-            filterOperatorIsEmpty: "Esta vacía",
-            filterOperatorIsNotEmpty: "No esta vacía",
-            filterOperatorIsAnyOf: "Es alguna de",
-            filterPanelInputLabel: "Valor",
-            filterPanelInputPlaceholder: "Filtrar valor",
-            columnMenuSortAsc: "Ordenar en ASC",
-            columnMenuSortDesc: "Ordenar en DESC",
-            columnMenuUnsort: "Desordenar",
-            columnMenuFilter: "Filtrar",
-            columnMenuHideColumn: "Ocultar columna",
-            columnMenuManageColumns: "Manejar columnas"
-        }}
-
-        />
-      </Box>
-    </div>
-    ) : (
-      <Navigate to="/tasks" />
-    )}
-  </>
-);
+      ) : (
+        <Navigate to="/tasks" />
+      )}
+    </>
+  );
 }

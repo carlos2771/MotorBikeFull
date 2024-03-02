@@ -6,7 +6,11 @@ import { useClientes } from "../../context/ClientContext";
 import { useForm } from "react-hook-form";
 import { useCartCliente } from "../../context/CartClienteContext";
 import { Link, useNavigate } from "react-router-dom";
-import { ClienteRequired, NombreRequired, NumeroRequired } from "../../utils/validations"
+import {
+  ClienteRequired,
+  NombreRequired,
+  NumeroRequired,
+} from "../../utils/validations";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -20,8 +24,8 @@ const Cart = () => {
     setValue,
     formState: { errors },
   } = useForm();
-  const { createCartCliente, errors:Errors } = useCartCliente();
-  
+  const { createCartCliente, errors: Errors } = useCartCliente();
+
   useEffect(() => {
     try {
       getClientes();
@@ -33,42 +37,47 @@ const Cart = () => {
   /* Traemos del context los productos del carrito */
   const { cartItems, cleartCart } = useContext(CartContext);
 
-  console.log("items",cartItems);
+  console.log("items", cartItems);
   const [totalCart, setTotalCart] = useState(0);
   const [descuento, setDescuento] = useState(); // Estado para el descuento
-  const [unidades, setUnidades] = useState([])
+  const [unidades, setUnidades] = useState([]);
 
-  const handleUpdateUnit = ({name,unit}) => {
-    const exist = unidades.find((unidad)=> unidad.name === name)
-    if(exist){
-      const saveUnit = unidades.map((unidad)=> unidad.name === name ? {...unidad, unit} : unidad)
-      setUnidades(saveUnit)
-    }else {
-      setUnidades([...unidades, {name, unit}])
+  const handleUpdateUnit = ({ name, unit }) => {
+    const exist = unidades.find((unidad) => unidad.name === name);
+    if (exist) {
+      const saveUnit = unidades.map((unidad) =>
+        unidad.name === name ? { ...unidad, unit } : unidad
+      );
+      setUnidades(saveUnit);
+    } else {
+      setUnidades([...unidades, { name, unit }]);
     }
-  }
-  console.log("perro",unidades);
+  };
+  console.log("perro", unidades);
 
   /* Cada vez que se modifica el carrito, actualizamos la cantidad de productos */
   useEffect(() => {
     setProductsLength(
       cartItems?.reduce((previous, current) => previous + current.amount, 0) // reduce para reducir el array a un solo valor
     );
-    setUnidades(cartItems.map((cart)=> ({name:cart.name, unit:1})))
+    setUnidades(cartItems.map((cart) => ({ name: cart.name, unit: 1 })));
   }, [cartItems]);
 
-  /* Obtenemos el precio total */ 
+  /* Obtenemos el precio total */
+  /* Obtenemos el precio total */
   useEffect(() => {
     const total = cartItems?.reduce(
       (previous, current) => previous + current.amount * current.price,
       0
     );
-    // Restar el descuento del total
-    const validateDescuento = isNaN(descuento)? 0:descuento
-    console.log("validate", validateDescuento);
-    const totalConDescuento = total - validateDescuento;
+
+    // Calculamos el descuento como un porcentaje del total
+    const discountAmount = total * (descuento / 100) || 0;
+
+    // Restamos el descuento del total
+    const totalConDescuento = total - discountAmount;
+
     setTotalCart(totalConDescuento > 0 ? totalConDescuento : 0); // Asegurarse de que el total no sea negativo
-    console.log("totaldes",totalConDescuento);
   }, [cartItems, descuento]);
 
   const updateTotal = (itemId, newAmount) => {
@@ -81,63 +90,61 @@ const Cart = () => {
     setTotalCart(updatedTotal);
   };
 
-
- 
   const onSubmit = async (data) => {
     try {
-      
-         // aqui no se devuelva mas
-  
-        const { cliente,descuento, ...restData } = data;
-        const result = cartItems.map((item) => {
-          // Create a copy of each item
-          const newItem = { ...item };
-          
-          // Resize the image before saving
-          const image = new Image();
-          image.src = newItem.image; // Assuming the image property is present in your item object
-  
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
-  
-          // Set the desired dimensions for the resized image
-          const newWidth = 100; // Adjust this value according to your requirements
-          const newHeight = (newWidth / image.width) * image.height;
-  
-          canvas.width = newWidth;
-          canvas.height = newHeight;
-  
-          // Draw the image on the canvas with the new dimensions
-          ctx.drawImage(image, 0, 0, newWidth, newHeight);
-  
-          // Convert the canvas content to a data URL
-          const resizedImage = canvas.toDataURL("image/jpeg");
-  
-          // Update the item's image property with the resized image
-          newItem.image = resizedImage;
-          const newAmount = unidades.find((unidad)=> unidad.name === newItem.name )
-          console.log("new", newAmount);
-          return {...newItem, amount:newAmount.unit};
-        });
-        const descuentoNumber = parseInt(descuento);
-        const datosCartCliente = {
-          ...restData,
-          cart: result,
-          cliente,
-          descuento:descuentoNumber,
-        };
-  
-        const res = await createCartCliente(datosCartCliente);
-        console.log("Datos antes de enviar:", datosCartCliente);
-        console.log("cartcliente", res);
+      // aqui no se devuelva mas
 
-        if(res && !res.error){
-          navigate("/home-page");
-          cleartCart();
-        }else{
-          console.log("huvo un error");
-        }
-      
+      const { cliente, descuento, ...restData } = data;
+      const result = cartItems.map((item) => {
+        // Create a copy of each item
+        const newItem = { ...item };
+
+        // Resize the image before saving
+        const image = new Image();
+        image.src = newItem.image; // Assuming the image property is present in your item object
+
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Set the desired dimensions for the resized image
+        const newWidth = 100; // Adjust this value according to your requirements
+        const newHeight = (newWidth / image.width) * image.height;
+
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        // Draw the image on the canvas with the new dimensions
+        ctx.drawImage(image, 0, 0, newWidth, newHeight);
+
+        // Convert the canvas content to a data URL
+        const resizedImage = canvas.toDataURL("image/jpeg");
+
+        // Update the item's image property with the resized image
+        newItem.image = resizedImage;
+        const newAmount = unidades.find(
+          (unidad) => unidad.name === newItem.name
+        );
+        console.log("new", newAmount);
+        return { ...newItem, amount: newAmount.unit };
+      });
+      const descuentoNumber = parseInt(descuento);
+      const datosCartCliente = {
+        ...restData,
+        cart: result,
+        cliente,
+        descuento: descuentoNumber,
+      };
+
+      const res = await createCartCliente(datosCartCliente);
+      console.log("Datos antes de enviar:", datosCartCliente);
+      console.log("cartcliente", res);
+
+      if (res && !res.error) {
+        navigate("/home-page");
+        cleartCart();
+      } else {
+        console.log("huvo un error");
+      }
     } catch (error) {
       console.error("Error al enviar el carrito y cliente:", error);
     }
@@ -145,7 +152,6 @@ const Cart = () => {
 
   return (
     <div className={styles.cartContainer}>
-
       <div
         onClick={() => setCartOpen(!cartOpen)}
         className={styles.buttonCartContainer}
@@ -199,17 +205,22 @@ const Cart = () => {
         <div className={styles.cart}>
           <h2>Tu carrito</h2>
           {Errors.map((error, i) => (
-          <div className="bg-red-500 p-2 text-white" key={i}>
-            {error}
-          </div>
-        ))}
+            <div className="bg-red-500 p-2 text-white" key={i}>
+              {error}
+            </div>
+          ))}
 
           {cartItems.length === 0 ? (
             <p className="ml-36 font-font-semibold">Tu carrito esta vacio</p>
           ) : (
             <div className={styles.productsContainer}>
               {cartItems.map((item, i) => (
-                <ItemCart key={i} item={item} updateTotal={updateTotal} handleUpadateUnit={handleUpdateUnit}/>
+                <ItemCart
+                  key={i}
+                  item={item}
+                  updateTotal={updateTotal}
+                  handleUpadateUnit={handleUpdateUnit}
+                />
               ))}
               <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
                 <div>
@@ -225,19 +236,27 @@ const Cart = () => {
                       </option>
                     ))}
                   </select>
-                  {errors.cliente && <p className="text-red-500">{errors.cliente.message}</p>}
+                  {errors.cliente && (
+                    <p className="text-red-500">{errors.cliente.message}</p>
+                  )}
                   <input
-                  type="num"
-                  {...register("descuento",NumeroRequired)}
-                  thousandSeparator={true}
-                  prefix={'$'}
-                  placeholder="Descuento"
-                  onChange={(e) => setDescuento(parseInt(e.target.value))}
-                  className="w-full bg-slate-700 border-0 border-b-2 border-blue-700 text-white px-4 py-2 my-2"
-                />
-                {errors.descuento && <p className="text-red-500">{errors.descuento.message}</p>}
+                    type="number"
+                    {...register("descuento", NumeroRequired)}
+                    placeholder="Descuento (%)"
+                    onChange={(e) => setDescuento(parseFloat(e.target.value))}
+                    className="w-full bg-slate-700 border-0 border-b-2 border-blue-700 text-white px-4 py-2 my-2"
+                  />
+
+                  {errors.descuento && (
+                    <p className="text-red-500">{errors.descuento.message}</p>
+                  )}
                 </div>
-                <button className="px-5 py-1 mb-4 text-sm text-withe font-semibold rounded-full border  border-blue-600 hover:text-white hover:bg-blue-600 hover:border-transparent shadow-lg shadow-zinc-300/30 d ml-40 " type="submit">Enviar</button>
+                <button
+                  className="px-5 py-1 mb-4 text-sm text-withe font-semibold rounded-full border  border-blue-600 hover:text-white hover:bg-blue-600 hover:border-transparent shadow-lg shadow-zinc-300/30 d ml-40 "
+                  type="submit"
+                >
+                  Enviar
+                </button>
               </form>
             </div>
           )}
