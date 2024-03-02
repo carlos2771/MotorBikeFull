@@ -14,7 +14,16 @@ export const getRoles  = async(req, res) =>{
 
 // Crear un nuevo rol
 export const createRol  = async(req, res) =>{
-  const role = new Rol({
+  try{
+
+    const { name, permissions, status } = req.body
+
+    const rolFound = await Rol.findOne({name})
+
+    if(rolFound) return res.status(400).json({message:["El rol ya existe"]});
+  
+  
+    const role = new Rol({
     name: req.body.name,
     permissions: req.body.permissions,
     status: req.body.status
@@ -26,6 +35,9 @@ export const createRol  = async(req, res) =>{
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
+}catch (error) {
+  res.status(500).json({ message: error.message });
+}
 };
 
 // Obtener un rol por ID

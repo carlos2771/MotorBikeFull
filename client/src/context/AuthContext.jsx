@@ -11,6 +11,20 @@ export const AuthProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
   
+  useEffect(() => {
+    const checkLocalStorage = () => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setLoading(false);
+    };
+
+    checkLocalStorage();
+  }, []);
 
   // const signup = async (user) => {
   //   try {
@@ -46,6 +60,7 @@ export const AuthProvider = ({ children }) => {
       // setUser(response.data); si tiene algun error en el login, pruebe esto
       setIsAuthenticated(true);
       setLoading(false)
+      localStorage.setItem('user', JSON.stringify(response));
       console.log("data",response);
     } catch (error) {
       console.log(error);
@@ -57,7 +72,7 @@ export const AuthProvider = ({ children }) => {
     Cookies.remove("token");
     setUser(null)
     setIsAuthenticated(false);
-    
+    localStorage.removeItem("user");
   };
 
   // const enviarToken = async (email) => {

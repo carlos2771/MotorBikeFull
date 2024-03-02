@@ -31,7 +31,7 @@ export default function Detalle({ id, metodo, children }) {
         aria-describedby="modal-modal-description"
 
       >
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2/4 h-3/4 bg-slate-700 shadow-lg shadow-blue-600/40 p-6 rounded-lg overflow-y-auto flex flex-col justify-center items-center">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 sm:4/4 md:w-4/4 lg:w-4/4 xl:w-2/4 sm:w-4/4 md:h-4/4 sm:h-4/4 bg-slate-700 shadow-lg shadow-blue-600/40 p-6 rounded-lg overflow-y-auto flex flex-col justify-center items-center ">
           {children}
 
           <div className="flex justify-end">

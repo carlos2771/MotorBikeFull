@@ -35,32 +35,31 @@ export default function FormRoles() {
     })();
   }, [params.id]);
 
-  const onSubmit = handleSubmit(async (data) => {
-    const camelCaseData = {
-      name: toCamelCase(data.name),
-      status: data.status,
-      permissions: selectedPermissions, // Agregar permisos seleccionados
-    };
+//   const onSubmit = handleSubmit(async (data) => {
+//     const lowercaseData = {
+//       name: data.name.toLowerCase(),
+//       status: data.status,
+//       permissions: selectedPermissions,
+//     };
 
-    if (params.id) {
-      const res = await updateRol(params.id, camelCaseData);
-      handleApiResponse(res, "Actualizado correctamente");
-    } else {
-      const res = await createRol(camelCaseData);
-      handleApiResponse(res, "Agregado correctamente");
-    }
-  });
+// })
 
-  // Función para convertir texto de lowerCamelCase a camelCase
-  function toCamelCase(text) {
-    return text.replace(
-      /^([A-Z])|[\s-_]+(\w)/g,
-      function (match, p1, p2, offset) {
-        if (p2) return p2.toUpperCase();
-        return p1.toLowerCase();
-      }
-    );
+const onSubmit = handleSubmit(async (data) => {
+  const lowercaseData = {
+    ...data,
+    name: data.name.toLowerCase(),
+    status: data.status,
+    permissions: selectedPermissions,
+  };
+
+  if (params.id) {
+    const res = await updateRol(params.id, lowercaseData);
+    handleApiResponse(res, "Actualizado correctamente");
+  } else {
+    const res = await createRol(lowercaseData);
+    handleApiResponse(res, "Agregado correctamente");
   }
+});
 
   const handlePermissionChange = (event) => {
     const { value, checked } = event.target;
@@ -77,7 +76,7 @@ export default function FormRoles() {
 
   // Check if there are no permissions selected, then set default to "usuario"
   if (selectedPermissions.length === 0) {
-    setSelectedPermissions(["Tasks"]);
+    setSelectedPermissions(["Tareas"]);
   }
 
   const handleApiResponse = (res, successMessage) => {
@@ -102,7 +101,7 @@ export default function FormRoles() {
     } else {
       // Toast.fire({
       //   icon: "error",
-      //   title: "La marca ya existe . Verifica los errores.",
+      //   title: "El rol ya existe . Verifica los errores.",
       // });
       console.log("no se agrego, el rol ya existe");
     }
@@ -114,7 +113,7 @@ export default function FormRoles() {
     <>
       {permissions.includes("Roles") ? (
         <div className="flex items-center justify-center pt-20">
-          <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
+          <div className="bg-slate-700 max-w-lg w-full p-10 shadow-lg shadow-blue-600/40">
             {rolesErrors.map((error, i) => (
               <div className="bg-red-500 p-2 text-white" key={i}>
                 {error}
@@ -148,17 +147,26 @@ export default function FormRoles() {
                   "Compras",
                   "Ventas Servicio",
                   "Venta Repuesto",
-                  "Tareas",
                 ].map((permiso) => (
-                  <div key={permiso} className="flex items-center mr-4 mb-2">
+                  <div key={permiso} className="flex items-center m-2">
                     <input
                       type="checkbox"
                       value={permiso}
                       checked={selectedPermissions.includes(permiso)}
                       onChange={handlePermissionChange}
-                      className="mr-2"
+                      className="hidden"
+                      id={permiso} // Añadimos un id al input
                     />
-                    <label>{permiso}</label>
+                    <label
+                      htmlFor={permiso}
+                      className={`px-4 py-2 rounded-full cursor-pointer ${
+                        selectedPermissions.includes(permiso)
+                          ? "bg-blue-600/40 shadow-sky-300/40 text-white shadow-md"
+                          : "border border-blue-600/40 hover:bg-blue-600/40 text-white hover:shadow-md hover:shadow-sky-300/40"
+                      }`}
+                    >
+                      {permiso}
+                    </label>
                   </div>
                 ))}
               </div>
