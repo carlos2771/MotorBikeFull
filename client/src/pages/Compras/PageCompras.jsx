@@ -433,11 +433,11 @@ export default function PageCompras() {
                     className="miTablaPersonalizada"
                     title={"Detalle Compras"}
                     data={params.row.repuestos.map(repuesto => ({
-                      nombre: repuesto.repuesto.name, // Ajusta según la estructura de tu objeto repuesto
-                      marca: repuesto.marca_repuesto,   // Ajusta según la estructura de tu objeto repuesto
-                      cantidad: repuesto.cantidad_repuesto, // Ajusta según la estructura de tu objeto repuesto
-                      precioUnitario: formatCurrency2(repuesto.precio_unitario), // Ajusta según la estructura de tu objeto repuesto
-                      precioTotal: formatCurrency(repuesto.precio_total)  // Ajusta según la estructura de tu objeto repuesto
+                      nombre: repuesto.repuesto.name, 
+                      marca: repuesto.marca_repuesto,   
+                      cantidad: repuesto.cantidad_repuesto, 
+                      precioUnitario: formatCurrency2(repuesto.precio_unitario), 
+                      precioTotal: formatCurrency(repuesto.precio_total)  
                     }))}
                     columns={[
                       { name: "nombre", label: "Nombre", options: { filter: true, sort: true } },
