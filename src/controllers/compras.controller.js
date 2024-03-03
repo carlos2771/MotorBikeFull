@@ -28,13 +28,16 @@ export const getCompra = async (req, res) => {
 
 export const createCompras = async (req, res) => {
   try {
-    const { repuestos, fecha, estado, proveedor, codigo} = req.body;
+    let { repuestos, fecha, estado, proveedor, codigo } = req.body;
 
     // Verifica si hay repuestos proporcionados en la solicitud
     if (!repuestos || repuestos.length === 0) {
-      console.log("dsoifnosdi");
-      return res.status(400).json({ message: ["Debe proporcionar al menos un repuesto" ]});
+      return res.status(400).json({ message: ["Debe proporcionar al menos un repuesto"] });
     }
+
+    // Capitalizar la primera letra del proveedor
+    proveedor = proveedor.charAt(0).toUpperCase() + proveedor.slice(1);
+    codigo = codigo.charAt(0).toUpperCase() + codigo.slice(1);
 
     // Verifica la existencia de cada repuesto y actualiza la cantidad en la base de datos
     for (const repuestoInfo of repuestos) {
@@ -54,8 +57,8 @@ export const createCompras = async (req, res) => {
     const nuevaCompra = new Compras({
       repuestos,
       fecha,
-      estado, 
-      proveedor, 
+      estado,
+      proveedor,
       codigo,
     });
 
@@ -66,6 +69,7 @@ export const createCompras = async (req, res) => {
     return res.status(500).json({ message: ["Error al crear la compra"], error });
   }
 };
+
 
 export const updateCompras = async (req, res) => {
   try {

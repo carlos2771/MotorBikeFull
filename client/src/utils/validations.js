@@ -35,7 +35,8 @@ export const NombreRepuestoRequired = {
     if (!value.trim()) {
       return "Este campo no puede estar vacío";
     }
-    return /^[A-Za-z0-9\s.,()_\-¡!@#$%^&*;:'"+=\/\\<>?[\]{}|`~]{4,50}$/.test(value) || "Solo se permiten letras, números y algunos caracteres especiales";
+    return /^[A-Za-z0-9\s.,()_\-¡!@#$%^&*;:'"+=\/\\<>?[\]{}|`~áéíóúÁÉÍÓÚ]{4,50}$/
+      .test(value) || "Solo se permiten letras, números y algunos caracteres especiales";
   },
   maxLength: { value: 50, message: "Máximo 50 caracteres" },
   minLength: { value: 4, message: "Mínimo 4 caracteres" }
@@ -49,7 +50,8 @@ export const NombreProveedor = {
     if (!value.trim()) {
       return "Valor incorrecto";
     }
-    return /^[A-Za-z0-9\s.,()_-]{4,50}$/.test(value) || "Valor incorrecto";
+    return /^[A-Za-z0-9\s.,()_\-áéíóúüÁÉÍÓÚÜ]{4,50}$/
+    .test(value) || "Valor incorrecto";
   },
   maxLength: { value: 50, message: "Máximo 50 " },
   minLength: { value: 4, message: "Mínimo 4" }
@@ -60,7 +62,7 @@ export const NegativeRequired = {
   required: "Requerido",
   validate: (value) => /^[1-9]\d*$/.test(value) || "Valor incorrecto",
   maxLength: { value: 50, message: "Máximo 50" },
-  minLength: { value: 1, message: "Mínimo 4"}
+  minLength: { value: 1, message: "Mínimo 4" }
 };
 
 //Validación para el precio del repuesto
@@ -68,14 +70,14 @@ export const precioRepuesto = {
   required: "Requerido",
   validate: (value) => /^[1-9]\d*$/.test(value) || "Valor incorrecto",
   maxLength: { value: 30, message: "Máximo 30" },
-  minLength: { value: 4, message: "Mínimo 4"}
+  minLength: { value: 4, message: "Mínimo 4" }
 };
 
 // export const PasswordRequire = {
 //   required: "Campo requerido",
 //   minLength: { value: 8, message: "La contraseña debe tener al menos 8 caracteres" },
 //   maxLength: { value: 15, message: "La contraseña no puede tener más de 15 caracteres" },
-  
+
 // };
 
 export const PasswordRequire = {
