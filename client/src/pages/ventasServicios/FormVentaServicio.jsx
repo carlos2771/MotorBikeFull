@@ -8,7 +8,7 @@ import {
   NegativeRequired,
   ClienteRequired,
   MecanicoRequired,
-  NombreRequired,
+  descripcionValidators,
   placaValidators,
 } from "../../utils/validations";
 import Swal from "sweetalert2";
@@ -212,7 +212,7 @@ export default function FormVentaServicio() {
               </label>
               <textarea
                 placeholder="Ingresa una descripción"
-                {...register("descripcion", NombreRequired)}
+                {...register("descripcion", descripcionValidators)}
                 className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2"
               />
               {errors.descripcion && (

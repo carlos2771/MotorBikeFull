@@ -34,7 +34,7 @@ const LineChart = () => {
       }
       
       const formattedStartDate = formatDate(startDate);
-      const formattedEndDate = formatDate(endDate);  // Usar la fecha de fin tal como está
+      const formattedEndDate = formatDate(endDate);
       
       const purchasesUrl = `http://localhost:3000/api/compras?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
       const salesUrl = `http://localhost:3000/api/Cart-cliente?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
@@ -44,7 +44,6 @@ const LineChart = () => {
         axios.get(salesUrl, { withCredentials: true })
       ]);
 
-
       const purchasesData = purchasesResponse.data.filter(compra => !compra.anulado);
       const salesData = salesResponse.data;
 
@@ -53,20 +52,19 @@ const LineChart = () => {
 
       const datesInRange = getDatesInRange(startDate, endDate);
 
-
       const chartData = {
         labels: datesInRange.map(date => format(date, 'yyyy-MM-dd')),
         datasets: [
           {
             label: 'Total de compras realizadas',
-            data: datesInRange.map(date => purchasesByDate[startOfDay(date).getTime()] || 0),
+            data: datesInRange.map(date => purchasesByDate[startOfDay(date).getTime()] ? purchasesByDate[startOfDay(date).getTime()].totalPurchaseAmount : 0),
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
           },
           {
             label: 'Total de ventas realizadas',
-            data: datesInRange.map(date => salesByDate[startOfDay(date).getTime()] || 0),
+            data: datesInRange.map(date => salesByDate[startOfDay(date).getTime()] ? salesByDate[startOfDay(date).getTime()].totalSaleAmount : 0),
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1,
@@ -112,7 +110,22 @@ const LineChart = () => {
     data.forEach(item => {
       const dateKey = startOfDay(new Date(item.createdAt)).getTime();
       if (dateKey >= startTimestamp && dateKey <= endTimestamp) {
-        processedData[dateKey] = (processedData[dateKey] || 0) + 1;
+        if (!processedData[dateKey]) {
+          processedData[dateKey] = {
+            numPurchases: 0,
+            totalPurchaseAmount: 0,
+            numSales: 0,
+            totalSaleAmount: 0,
+          };
+        }
+
+        if (item.cart) { // Si es una venta
+          processedData[dateKey].numSales += 1;
+          processedData[dateKey].totalSaleAmount += item.total;
+        } else { // Si es una compra
+          processedData[dateKey].numPurchases += 1;
+          processedData[dateKey].totalPurchaseAmount += item.repuestos.reduce((total, repuesto) => total + repuesto.precio_total, 0);
+        }
       }
     });
 

@@ -191,6 +191,14 @@ export const placaValidators = {
   }
 };
 
+export const descripcionValidators = {
+  required: "Descripción requerida",
+  minLength: {
+    value: 8,
+    message: "La descripción debe tener al menos 8 letras"
+  }
+};
+
 
 
 
