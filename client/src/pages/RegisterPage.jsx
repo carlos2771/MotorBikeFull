@@ -22,10 +22,9 @@ export default function registerPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signup, isAuthenticated, errors: registerErrors } = useAuth(); // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
+  const { signup, isAuthenticated, errors: registerErrors, userFound  } = useAuth(); // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  
 
   // console.log("authh", isAuthenticated);
   // useEffect(() => {
@@ -36,31 +35,41 @@ export default function registerPage() {
   // }, [isAuthenticated]);
 
   const onSubmit = handleSubmit(async (values) => {
-    try {
-      await signup(values);
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
-        color: "white",
-        timer: 4000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
+    if (!userFound) {
+      const res = await signup(values);
+      handleApiResponse(res, "Registrado correctamente");
+    } else {
+      handleApiResponse(res, "Error al registrar");
+    }
+  });
+
+  const handleApiResponse = (res, successMessage) => {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+  
+    if (res && !res.error) {
       Toast.fire({
         icon: "success",
-        title: "¡Registro Exitoso!",
+        title: successMessage,
       });
       navigate("/login");
-    } catch (error) {
-      console.error("Error durante el registro:", error);
+    } else {
+      Toast.fire({
+        icon: "error",
+        title: "Error al crear el usuario",
+      });
+      console.log("Error en la solicitud:", res.error);
     }
-    console.log("jaja", values);
-  });
+  };
 
   const formAnimation = useSpring({
     from: { opacity: 0, transform: "translateY(-50px)" },

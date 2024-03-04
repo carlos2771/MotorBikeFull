@@ -6,37 +6,39 @@ import nodemailer from "nodemailer";
 
 // Controlador para crear un nuevo usuario
 export const createUsuario = async (req, res) => {
-    const { email, password, username , estado, rol} = req.body;
-    console.log({email, password, username,  estado, rol})
+  const { email, password, username , estado, rol} = req.body;
+ 
+  try {
+    
+    const userFound = await User.findOne({ email });
+    if (userFound) {
+      return res.status(400).json({ message:["El correo electrónico ya está registrado"] });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    // Si hay errores de validación, responder con un código 400 y los mensajes de error
+    if (!email || !password || !username) {
+      return res.status(400).json({ message: ["Datos incompletos"] });
+    }
+
+    const newUser = new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: passwordHash,
+      estado: req.body.estado, 
+      rol: req.body.rol
+    });
+    
     try {
-      const userFound = await User.findOne({ email });
-      if (userFound) {
-        return res.status(400).json({ message:["El correo electrónico ya está registrado"] });
-      }
-  
-      // Si hay errores de validación, responder con un código 400 y los mensajes de error
-      if (!email || !password || !username) {
-        return res.status(400).json({ message: ["Datos incompletos"] });
-      }
-  
-      const passwordHash = await bcrypt.hash(password, 10);
-  
-      const newUser = new User({
-        username,
-        email,
-        password: passwordHash,
-        estado, // Agregar el estado si es necesario
-        rol
-      });
-      
-  
       const userSaved = await newUser.save();
-      // Enviar un correo electrónico con el codigo
+
+      // Aquí puedes manejar el envío del correo electrónico
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
           user: process.env.EMAIL_USER || 'saritalop789@gmail.com',
-        pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
+          pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
         },
       });
   
@@ -196,32 +198,23 @@ export const createUsuario = async (req, res) => {
       };
   
       transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error(error);
-          return res.status(500).json({ message: ['Error al enviar el correo electrónico'] });
-        }
-        console.log('Correo electrónico enviado:', info.response);
-        res.status(200).json({ message: 'Correo electrónico enviado con éxito' });
-      });
-  
-      res.json({
-        id: userSaved._id,
-        username: userSaved.username,
-        email: userSaved.email,
-        estado: userSaved.estado,
-        rol: userSaved.rol,
-        createdAt: userSaved.createdAt,
-        updateAt: userSaved.updatedAt,
-      });
+          if (error) {
+            console.error(error);
+            return res.status(500).json({ message: ['Error al enviar el correo electrónico'] });
+          }
+          console.log('Correo electrónico enviado:', info.response);
+          // Envía una respuesta al cliente después de enviar el correo electrónico
+          res.status(201).json(userSaved);
+        });
 
-      console.log("aca paso",newUser.rol)
-
+      } catch (error) {
+        res.status(400).json({ message: error.message });
+      }
     } catch (error) {
       console.log("error en backend");
-      return res.status(500).json({ message: 'Error al crear la CartCliente', error: error.message });
+      res.status(500).json({ message: error.message });
     }
-    
-  };
+};
 
 
 

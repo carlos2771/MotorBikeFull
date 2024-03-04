@@ -211,9 +211,12 @@ export default function PageRoles() {
         headerClassName: "font-custom text-lg",
         renderCell: (params) => {
           const status = params.row.status;
+          const roleName = params.row.name.toLowerCase();
+          const isAdministrator = roleName === "administrador";
           console.log("estadin", status);
           return (
             <div>
+              {!isAdministrator && (
               <button className={status === "Activo" ? "" : "hidden"} title="Editar">
                 <Link
                   className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
@@ -221,13 +224,14 @@ export default function PageRoles() {
                 >
                   <FontAwesomeIcon icon={faPencil} />
                 </Link>
-              </button>
+              </button>)}
             {/* <button
               className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
               onClick={() => mostrarAlerta(params.row._id)}
             >
               Eliminar
             </button> */}
+            {!isAdministrator && (
              <button title="Activar/Inactivar"
                 className={
                     status === "Activo"
@@ -237,8 +241,8 @@ export default function PageRoles() {
                 onClick={() => mostrarAlerta(params.row._id, status)}
               >
                 {status === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
-              </button>
-              <button className={status === "Activo" ? "" : "hidden"} title="Ver detalle">
+              </button>)}
+              <button  title="Ver detalle">
               <Detalle
                 metodo={() => getRoles(params.row._id)}
                 id={params.row._id}

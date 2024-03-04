@@ -18,7 +18,6 @@ export const useRoles = () => {
 
 export function RolesProvider({ children }) {
   const [roles, setRoles] = useState([]);
-  // const [cliente, setCliente] = useState(null)
   const [errors, setErrors] = useState([]);
 
   const getRoles = async () => {

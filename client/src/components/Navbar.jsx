@@ -29,7 +29,6 @@ export default function Navbar() {
   const [usersOpen, setUsersOpen] = useState(false); // Estado para controlar la apertura del acordeón de usuarios
   const [ventasOpen, setVentasOpen] = useState(false);
 
-  console.log(user);
 
   const toggleNavbar = () => {
     setOpen(!open);

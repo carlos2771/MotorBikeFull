@@ -5,8 +5,9 @@ import { useUsuario } from "../../context/usuariosContext";
 import { Link, Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMotorcycle, faDownload, faPlus, faPencil , faBan,  faCheck, faUser} from "@fortawesome/free-solid-svg-icons";
-
+import { faMotorcycle, faDownload, faPlus, faPencil , faBan,  faCheck, faUser, faInfoCircle, faAddressCard} from "@fortawesome/free-solid-svg-icons";
+import Detalle from "../../components/Detalle";
+import {Tabla, Titulo} from "../../components/Tabla";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function PageUsuarios() {
@@ -152,38 +153,118 @@ export default function PageUsuarios() {
       headerClassName: "font-custom text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
-        console.log("estadin", estado);
+        const rol = params.row.rol?.name;
+        const isAdmin = rol === "administrador";
+
         return (
           <div>
-            <button className={estado === "Activo" ? "" : "hidden"} title="Editar">
-              <Link
-                className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
-                to={`/usuarios/${params.row._id}`}
-              >
-                <FontAwesomeIcon icon={faPencil} />
-              </Link>
-            </button>
-          {/* <button
-            className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
-            onClick={() => mostrarAlerta(params.row._id)}
-          >
-            Eliminar
-          </button> */}
-           <button title="Activar/Inactivar"
+            <button
+              title="Activar/Inactivar"
               className={
                 estado === "Activo"
                   ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
                   : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
               }
-              onClick={() => mostrarAlerta(params.row._id, estado)}
+              onClick={() => {
+                if (!isAdmin) {
+                  mostrarAlerta(params.row._id, estado);
+                } else {
+                  Swal.fire({
+                    icon: "error",
+                    title: "No se puede desactivar",
+                    text: "Este usuario es un administrador y no se puede desactivar.",
+                    background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+                    color: "white",
+                    buttonsStyling: false,
+                    customClass: {
+                      confirmButton:
+                        "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+                    },
+                  });
+                }
+              }}
             >
-              {estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
+              {estado === "Activo" ? (
+                <FontAwesomeIcon icon={faBan} />
+              ) : (
+                <FontAwesomeIcon icon={faCheck} />
+              )}
             </button>
-        </div>
+            <button title="Ver detalle">
+              <Detalle
+                metodo={() => getUsuarios(params.row._id)}
+                id={params.row._id}
+              >
+                <table className="min-w-full">
+                  <tbody className="">
+                    <Titulo>
+                      <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                      Detalles del Usuario
+                    </Titulo>
+                    <tr>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                        Nombre de Usuario
+                      </Tabla>
+                      <Tabla>
+                        {users.find((user) => user._id === params.row._id)
+                          ?.username}
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                        Correo Electrónico
+                      </Tabla>
+                      <Tabla>
+                        {users.find((user) => user._id === params.row._id)
+                          ?.email}
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                        Estado
+                      </Tabla>
+                      <Tabla>
+                        {users.find((user) => user._id === params.row._id)
+                          ?.estado}
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                        Rol
+                      </Tabla>
+                      <Tabla>
+                        {users.find((user) => user.rol.name === params.row.rol.name)
+                          ?.rol.name}
+                      </Tabla>
+                    </tr>
+                    <tr>
+                      <Tabla>
+                        <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                        Fecha de creación
+                      </Tabla>
+                      <Tabla>
+                        {users.find((user) => user._id === params.row._id)?.createdAt
+                          ? new Date(
+                              users.find((user) => user._id === params.row._id)
+                                ?.createdAt
+                            ).toLocaleDateString()
+                          : ""}
+                      </Tabla>
+                    </tr>
+                  </tbody>
+                </table>
+              </Detalle>
+            </button>
+          </div>
         );
       },
     },
   ];
+
 
   const permissions = user?.rol?.permissions || [];
 

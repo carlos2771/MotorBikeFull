@@ -14,7 +14,7 @@ export const useUsuario = () => {
 
 
 export const UsuarioProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState([]);
   const [errors, setErrors] = useState([]);
   
   
@@ -25,9 +25,19 @@ export const UsuarioProvider = ({ children }) => {
       console.log(res);
     } catch (error) {
       console.error("error get,",error);
-      
     }
   };
+
+  const createUsuario = async (usuario) => {
+    try {
+      const response = await createUsuarioRequest(usuario);
+      setUser(response);
+      return response
+    } catch (error) {
+      setErrors(error.response.data.message);
+    }
+  };
+
   const getUsuario = async (id) => {
     try {
       const res = await getUsuarioRequest(id);
@@ -37,23 +47,13 @@ export const UsuarioProvider = ({ children }) => {
     }
   };
 
-  const createUsuario = async (usuario) => {
-    try {
-      return await createUsuarioRequest(usuario);
-       console.log("usuarios",usuario);
-    } catch (error) {
-      console.error(error);
-      setErrors(error.message.data.message);
-    }
-  };
-
   const updateUsuario = async (id, usuario) => {
     try {
       return await updateUsuarioRequest(id, usuario);
      
     } catch (error) {
       console.error(error);
-      setErrors([error.message]);
+      setErrors(error.response.data.message);
     }
   };
   useEffect(() => {

@@ -41,14 +41,12 @@ export const AuthProvider = ({ children }) => {
   // };
   const signup = async (user) => { // Registrarse
     try {
-      // Realizar la solicitud de registro y obtener los datos del usuario
       const response = await registerRequest(user);
-      console.log(response);
-      setUser(response); // Actualizar el usuario con los datos recibidos
+      setUser(response);
+      setIsAuthenticated(false) 
       setLoading(false)
-       // Establecer la autenticacións a true
+      return response
     } catch (error) {
-      console.log(error.response.data);
       setErrors(error.response.data.message); 
     } 
   };

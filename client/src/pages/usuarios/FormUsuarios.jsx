@@ -3,7 +3,7 @@ import { useUsuario } from "../../context/usuariosContext";
 import { useRoles } from "../../context/RolsContext";
 import { Link, useNavigate, useParams, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { NombreMaRequired } from "../../utils/validations";
+import {EmailRequired, EstadoRequired, NombreRequired, PasswordRequire, NombreMaRequired,} from "../../utils/validations";
 import Swal from "sweetalert2";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -53,50 +53,43 @@ export default function FormUsuarios() {
   }, []);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log("antes", data);
+  
     if (params.id) {
-      updateUsuario(params.id, data);
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
-        color: "white",
-        timer: 4000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
+      const res = await updateUsuario(params.id, data);
+      handleApiResponse(res, "Actualizado correctamente");
+    } else {
+      const res = await createUsuario(data);
+      handleApiResponse(res, "Agregado correctamente");
+    }
+  });
+  
+  const handleApiResponse = (res, successMessage) => {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+  
+    if (res && !res.error) {
       Toast.fire({
         icon: "success",
-        title: "Actualizado correctamente",
+        title: successMessage,
       });
       navigate("/usuarios");
     } else {
-      const res = await createUsuario(data);
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
-        color: "white",
-        timer: 4000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
       Toast.fire({
-        icon: "success",
-        title: "Agregado correctamente",
+        icon: "error",
+        title: "Error al crear el usuario",
       });
-      navigate("/usuarios");
+      console.log("Error en la solicitud:", res.error);
     }
-    console.log("despues", data);
-  });
+  };
 
   const permissions = user?.rol?.permissions || [];
 
@@ -118,20 +111,20 @@ export default function FormUsuarios() {
               <input
                 type="text"
                 placeholder="Nombre de usuario"
-                {...register("username")}
+                {...register("username", NombreMaRequired)}
                 className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
                 autoFocus
               />
-              {errors.username && (
+              {errors.username && errors.username.message && (
                 <p className="text-red-500">{errors.username.message}</p>
               )}
               <label>
-                email<span className="text-red-500">*</span>
+                Correo Electrónico<span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 placeholder="email"
-                {...register("email")}
+                {...register("email", EmailRequired)}
                 className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
               />
               {errors.email && (
@@ -145,7 +138,7 @@ export default function FormUsuarios() {
                   <input
                     type="password"
                     placeholder="password"
-                    {...register("password")}
+                    {...register("password", PasswordRequire)}
                     className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
                   />
                   {errors.password && (
@@ -163,7 +156,7 @@ export default function FormUsuarios() {
               </select>
               <label>Rol</label>
               <select
-                {...register("rol")}
+                {...register("rol", NombreRequired)}
                 onChange={(e) => setSelectedRol(e.target.value)}
                 className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
               >
@@ -174,6 +167,9 @@ export default function FormUsuarios() {
                   </option>
                 ))}
               </select>
+              {errors.rol && (
+                    <p className="text-red-500">{errors.rol.message}</p>
+                  )}
 
               <button
                 className="px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
