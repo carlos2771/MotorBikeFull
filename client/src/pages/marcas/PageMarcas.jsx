@@ -49,6 +49,23 @@ export default function PageMarcas() {
     }).then((result) => {
       if (result.isConfirmed) {
         cambiarEstado(id, estado);
+      }else{
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+          color: "white",
+          timer: 4000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });Toast.fire({
+          icon: "error",
+          title: "No se ha Inhabilitado",
+        });
       }
     });
   };
