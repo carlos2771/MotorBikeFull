@@ -439,7 +439,7 @@ export default function PageCompras() {
                       precioUnitario: formatCurrency2(repuesto.precio_unitario), 
                       precioTotal: formatCurrency(repuesto.precio_total)  
                     }))}
-                    columns={[
+                    columns={[ 
                       { name: "nombre", label: "Nombre", options: { filter: true, sort: true } },
                       { name: "marca", label: "Marca", options: { filter: true, sort: true } },
                       { name: "cantidad", label: "Cantidad", options: { filter: true, sort: false } },
