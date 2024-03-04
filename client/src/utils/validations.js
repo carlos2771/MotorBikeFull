@@ -116,11 +116,11 @@ export const TelefonoRequired = {
   },
   minLength: {
     value: 7,
-    message: "El telefono debe tener entre 7 y 10 digitos"
+    message: "El teléfono debe tener entre 7 y 10 digitos"
   },
   pattern: {
     value: numberPattern,
-    message: "Telefono solo contiene numeros",
+    message: "Teléfono solo contiene numeros",
   },
 };
 export const CedulaRequired = {
@@ -226,7 +226,7 @@ export const EstadoRequired = {
 };
 
 export const MecanicoRequired = {
-  required: "El mecanico es requerido",
+  required: "El mecánico es requerido",
 };
 
 // Estas validaciones fueron hechas por Sara
