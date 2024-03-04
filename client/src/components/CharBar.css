@@ -1,17 +1,15 @@
-
-
 .chart-bar-container {
   background-color: #1a202c;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 0.375rem;
-  padding: 1.5rem; 
+  padding: 1.5rem;
   margin-top: 4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  height: 95%; 
-  width: 200%; 
+  height: auto; /* Cambiado a auto para que se ajuste al contenido */
+  width: 100%; /* Cambiado a 100% para que ocupe el ancho completo */
   box-shadow: 0 0 20px rgba(44, 146, 248, 0.5);
 }
 
@@ -24,26 +22,33 @@
 
 .chart-bar-date-input-container {
   display: flex;
+  flex-wrap: wrap; /* Añadido para que los elementos se envuelvan en pantallas pequeñas */
   justify-content: space-between;
-  align-items: center; 
+  align-items: center;
   width: 100%;
   margin-top: 0.5rem;
-  padding-bottom: 40px;  
+  padding-bottom: 40px;
 }
 
-.chart-bar-date-input-container label{
-font-weight: bolder;
+.chart-bar-date-input-container label {
+  font-weight: bolder;
 }
 
 .chart-bar-date-input {
-  width: 75%; 
+  width: 48%; /* Reducido el ancho para permitir que haya espacio entre los elementos en pantallas pequeñas */
+  max-width: 200px; /* Establecido un ancho máximo para evitar que los elementos se estiren demasiado en pantallas grandes */
   color: white;
   background-color: rgba(0, 0, 0, 0.1);
-  margin-right: 4%;
-  margin-top: 5px; 
+  margin-top: 5px;
   border: 2px solid rgba(44, 146, 248, 0.5);
   font-size: small;
   text-align: center;
-  
 }
 
+@media (max-width: 768px) {
+  .chart-bar-date-input {
+    width: 100%; /* Cambiado a 100% en pantallas pequeñas para ocupar todo el ancho disponible */
+    margin-right: 0; /* Eliminado el margen derecho en pantallas pequeñas para evitar desbordamiento */
+    margin-top: 10px; /* Aumentado el margen superior para separar los elementos */
+  }
+}

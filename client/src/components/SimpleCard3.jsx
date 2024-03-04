@@ -30,7 +30,7 @@ const SimpleCard3 = () => {
 
   // Renderizar la tarjeta con el total de ventas formateado
   return (
-    <div className="bg-slate-700 shadow-lg shadow-blue-600/40 max-w-sm w-full p-5 rounded-md mt-9">
+    <div className="bg-slate-700 shadow-lg shadow-blue-600/40 max-w-sm w-full p-5 rounded-md mt-9 md:max-w-md md:mx-auto lg:max-w-lg lg:mx-auto xl:max-w-xl xl:mx-auto">
       <h1 className="text-white text-2xl font-bold mb-2">Ventas:</h1>
       <p className="text-blue-300 text-4xl font-bold">{formattedTotalVentas}</p>
     </div>
