@@ -367,7 +367,7 @@ export default function PageCartClient() {
                 >
                   <MUIDataTable
                     className="miTablaPersonalizada"
-                    title={"Detalle Compras"}
+                    title={"Detalle Venta"}
                     data={
                       cartClientes
                         .find((cart) => cart._id === params.row._id)
