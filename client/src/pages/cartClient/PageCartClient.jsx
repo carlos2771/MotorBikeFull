@@ -117,7 +117,7 @@ export default function PageCartClient() {
     XLSX.utils.book_append_sheet(wb, ws, "Ventas");
 
     // Guarda el libro de trabajo de Excel como un archivo
-    XLSX.writeFile(wb, "ventas.xlsx");
+    XLSX.writeFile(wb, "Ventas_Repuestos.xlsx");
   };
 
   const mostrarAlerta = (id, anulado) => {
