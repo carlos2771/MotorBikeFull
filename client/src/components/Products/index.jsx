@@ -12,6 +12,7 @@ const Products = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMarca, setSelectedMarca] = useState(""); // Estado para el ID de la marca seleccionada
   const [selectedSortOption, setSelectedSortOption] = useState(""); // Estado para la opción de ordenamiento seleccionada
+  const [noProductsMessage, setNoProductsMessage] = useState(false); // Estado para el mensaje de no productos
 
   const { user } = useAuth();
 
@@ -79,6 +80,10 @@ const Products = () => {
             <option value="asc">Precio ascendente</option>
             <option value="desc">Precio descendente</option>
           </select>
+
+          {sortedProducts().length === 0 && (
+            <p className="text-center text-red-500">No hay productos disponibles con esta marca</p>
+          )}
 
           <div className=" w-full grid gap-y-20 gap-x-75 justify-items-center pt-20 mr-96 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 max-2xl:grid-cols-1 lg:grid-cols-3 gap-1">
             {sortedProducts().map((product, i) => (

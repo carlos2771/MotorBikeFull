@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState} from "react";
+import React, { useEffect, useContext } from "react";
 import { useCartCliente } from "../../context/CartClienteContext";
 import { useClientes } from "../../context/ClientContext";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
@@ -9,9 +9,6 @@ import { Tabla, Titulo } from "../../components/Tabla";
 import Detalle from "../../components/Detalle";
 import Swal from "sweetalert2";
 import MUIDataTable from "mui-datatables";
-import * as XLSX from "xlsx";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
-
 
 import { useAuth } from "../../hooks/useAuth";
 
@@ -31,61 +28,7 @@ export default function PageCartClient() {
   const { getCartClient, cartClientes, getCartCliente, updateCartCliente } =
     useCartCliente();
 
-    const { user } = useAuth();
-    const [dataForExcel, setDataForExcel] = useState([]);
-
-    useEffect(() => {
-      // Transforma los datos en el formato adecuado para el archivo Excel
-      const newDataForExcel = cartClientes.map((venta) => ({
-        Codigo: venta.codigo,
-        Cliente: venta.cliente.nombre_cliente,
-        Descuento: venta.descuento,
-        "Total Venta": venta.total,
-        Repuestos: venta.cart.map((repuesto) => ({
-          Nombre: repuesto.name,
-          Cantidad: repuesto.amount,
-        })),
-      }));
-      setDataForExcel(newDataForExcel);
-    }, [cartClientes]);
-  
-    const exportarAExcel = () => {
-      // Define una función para combinar los repuestos de cada venta en una cadena de texto
-      const obtenerRepuestos = (repuestos) => {
-        return repuestos.map((r) => `Repuesto: ${r.Nombre} - Cantidad: ${r.Cantidad}`).join("\n");
-      };
-  
-      // Calcula el total de todas las ventas
-      const totalVentas = dataForExcel.reduce((total, venta) => total + venta["Total Venta"], 0);
-  
-      // Transforma los datos en un formato adecuado para el archivo Excel
-      const data = dataForExcel.map((venta) => ({
-        Codigo: venta.Codigo,
-        Cliente: venta.Cliente,
-        Descuento: venta.Descuento,
-        "Total Venta": venta["Total Venta"],
-        Repuestos: obtenerRepuestos(venta.Repuestos),
-      }));
-  
-      // Agrega una fila con el total de ventas al final del array de datos
-      data.push({
-        Codigo: "",
-        Cliente: "",
-        Descuento: "",
-        "Total Venta": totalVentas,
-        Repuestos: "Total de todas las ventas",
-      });
-  
-      // Crea una hoja de cálculo en formato de libro de trabajo de Excel
-      const ws = XLSX.utils.json_to_sheet(data);
-  
-      // Crea un nuevo libro de trabajo de Excel y agrega la hoja de cálculo
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Ventas");
-  
-      // Guarda el libro de trabajo de Excel como un archivo
-      XLSX.writeFile(wb, "ventas.xlsx");
-    };
+  const { user } = useAuth();
 
   function formatCurrency(value) {
     // Verificar si value es null o undefined
@@ -104,7 +47,7 @@ export default function PageCartClient() {
     try {
       getCartClient();
     } catch (error) {
-      console.error("Error al obtener ventas:", error);
+      console.error("Error al obtener compras:", error);
     }
   }, []);
   useEffect(() => {
@@ -313,7 +256,7 @@ export default function PageCartClient() {
                       </Tabla>
                       <Tabla>
                         <FontAwesomeIcon icon={faIdCard} className="mr-2" />
-                        Cliente
+                        Nombre
                       </Tabla>
                       <Tabla>
                         <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
@@ -525,13 +468,6 @@ export default function PageCartClient() {
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
               </Link>
-              <button
-                  onClick={exportarAExcel}
-                  className="px-4 py-2 ml-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent max-w-full max-h-10"
-                  title="Descargar excel"
-                >
-                  <FontAwesomeIcon icon={faDownload} />
-                </button>
             </div>
           </div>
 
