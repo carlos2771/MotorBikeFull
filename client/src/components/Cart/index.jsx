@@ -11,11 +11,14 @@ import {
   NombreRequired,
   NumeroRequired,
 } from "../../utils/validations";
+import { css } from "@emotion/react";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Cart = () => {
   const navigate = useNavigate();
   const [cartOpen, setCartOpen] = useState(false);
   const [productsLength, setProductsLength] = useState(0);
+  const [buttonHidden, setButtonHidden] = useState(false);
   const { getClientes, clientes } = useClientes();
   const {
     register,
@@ -127,6 +130,7 @@ const Cart = () => {
         console.log("new", newAmount);
         return { ...newItem, amount: newAmount.unit };
       });
+      setButtonHidden(true);
       const descuentoNumber = parseInt(descuento);
       const datosCartCliente = {
         ...restData,
@@ -136,6 +140,9 @@ const Cart = () => {
       };
 
       const res = await createCartCliente(datosCartCliente);
+      
+      
+
       console.log("Datos antes de enviar:", datosCartCliente);
       console.log("cartcliente", res);
 
@@ -146,9 +153,20 @@ const Cart = () => {
         console.log("huvo un error");
       }
     } catch (error) {
+      
       console.error("Error al enviar el carrito y cliente:", error);
     }
   };
+  useEffect(() => {
+    if (buttonHidden) {
+      const timeoutId = setTimeout(() => {
+        setButtonHidden(false);
+      }, 4000);
+  
+      // Limpia el temporizador al desmontar el componente
+      return () => clearTimeout(timeoutId);
+    }
+  }, [buttonHidden]);
 
   return (
     <div className={styles.cartContainer}>
@@ -251,12 +269,28 @@ const Cart = () => {
                     <p className="text-red-500">{errors.descuento.message}</p>
                   )}
                 </div>
-                <button
-                  className="px-5 py-1 mb-4 text-sm text-withe font-semibold rounded-full border  border-blue-600 hover:text-white hover:bg-blue-600 hover:border-transparent shadow-lg shadow-zinc-300/30 d ml-40 "
-                  type="submit"
-                >
-                  Enviar
-                </button>
+                {buttonHidden ? (
+                  <div className="flex justify-center items-center">
+                    <ClipLoader
+                      css={css`
+                        display: block;
+                        margin: 0 auto;
+                        border-color: red;
+                      `}
+                      size={35}
+                      color={"#123abc"}
+                      loading={buttonHidden}
+                    />
+                    <p className="ml-2 text-white">Enviando...</p>
+                  </div>
+                ) : (
+                  <button
+                    className="px-5 py-1 mb-4 text-sm text-withe font-semibold rounded-full border  border-blue-600 hover:text-white hover:bg-blue-600 hover:border-transparent shadow-lg shadow-zinc-300/30 d ml-40 "
+                    type="submit"
+                  >
+                    Enviar
+                  </button>
+                )}
               </form>
             </div>
           )}
