@@ -158,6 +158,33 @@ export default function PageUsuarios() {
 
         return (
           <div>
+            {(() => {
+                    const roleName = rol.toLowerCase();
+                    return (
+                      <>
+                        {!isAdmin && (
+                          <Link
+                            to={`/usuarios/${params.row._id}`}
+                            className={estado === "Activo" ? "" : "hidden"}
+                            title="Editar"
+                          >
+                            <button className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500">
+                              <FontAwesomeIcon icon={faPencil} />
+                            </button>
+                          </Link>
+                        )}
+                        
+                      </>
+                    );
+                  })()}
+             {/* <button className={estado === "Activo" ? "" : "hidden"} title="Editar">
+              <Link
+                className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                to={`/usuarios/${params.row._id}`}
+              >
+                <FontAwesomeIcon icon={faPencil} />
+              </Link>
+            </button> */}
             <button
               title="Activar/Inactivar"
               className={

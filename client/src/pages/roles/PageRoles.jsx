@@ -158,7 +158,19 @@ export default function PageRoles() {
                 <h2 className="text-xl font-semibold mb-2 text-center">
                   {role.name}
                 </h2>
-                <p className="mb-4">{role.permissions.join(", ")}</p>
+                <div className="mb-2 text-center">
+                  {permissions.length > 0 && (
+                    <div className="grid lg:grid-cols-3 sm:grid-cols-2 gap-2 justify-center">
+                      {role.permissions
+                        .sort() // Ordenar permisos alfabéticamente
+                        .map((permission) => (
+                          <p key={permission} className="">
+                            {permission}
+                          </p>
+                        ))}
+                    </div>
+                  )}
+                </div>
                 <div className="flex justify-center">
                   {(() => {
                     const status = role.status;
@@ -167,6 +179,7 @@ export default function PageRoles() {
 
                     return (
                       <>
+                      <div>
                         {!isAdministrator && (
                           <Link
                             to={`/rol/${role._id}`}
@@ -179,66 +192,26 @@ export default function PageRoles() {
                           </Link>
                         )}
                         {!isAdministrator && (
-                        <button
-                          title="Activar/Inactivar"
-                          className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${
-                            role.status === "Activo"
-                              ? "border-red-500 hover:text-white hover:bg-red-500"
-                              : "border-indigo-500 hover:text-white hover:bg-indigo-500"
-                          }`}
-                          onClick={() => mostrarAlerta(role._id, role.status)}
-                        >
-                          {role.status === "Activo" ? (
-                            <FontAwesomeIcon icon={faBan} />
-                          ) : (
-                            <FontAwesomeIcon icon={faCheck} />
-                          )}
-                        </button>
+                          <button
+                            title="Activar/Inactivar"
+                            className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${
+                              role.status === "Activo"
+                                ? "border-red-500 hover:text-white hover:bg-red-500"
+                                : "border-indigo-500 hover:text-white hover:bg-indigo-500"
+                            }`}
+                            onClick={() => mostrarAlerta(role._id, role.status)}
+                          >
+                            {role.status === "Activo" ? (
+                              <FontAwesomeIcon icon={faBan} />
+                            ) : (
+                              <FontAwesomeIcon icon={faCheck} />
+                            )}
+                          </button>
                         )}
+                        </div>
                       </>
                     );
                   })()}
-                  <button title="Ver detalle">
-                    <Detalle metodo={() => getRoles(role._id)} id={role._id}>
-                      <table className="min-w-full">
-                        <tbody className="">
-                          <Titulo>
-                            <FontAwesomeIcon
-                              icon={faInfoCircle}
-                              className="mr-2"
-                            />
-                            Detalles del Rol
-                          </Titulo>
-                          <tr>
-                            <Tabla>
-                              <FontAwesomeIcon
-                                icon={faAddressCard}
-                                className="mr-2"
-                              />
-                              Nombre de rol
-                            </Tabla>
-                            <Tabla>
-                              {roles.find((rol) => rol._id === role._id)?.name}
-                            </Tabla>
-                          </tr>
-                          <tr>
-                            <Tabla>
-                              <FontAwesomeIcon
-                                icon={faAddressCard}
-                                className="mr-2"
-                              />
-                              Permisos
-                            </Tabla>
-                            <Tabla>
-                              {roles
-                                .find((rol) => rol._id === role._id)
-                                ?.permissions.join(", ")}
-                            </Tabla>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </Detalle>
-                  </button>
                 </div>
               </div>
             ))}
