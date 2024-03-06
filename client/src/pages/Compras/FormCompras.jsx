@@ -111,8 +111,6 @@ export default function FormCompra() {
   }, [repuestos]);
 
   const onSubmit = handleSubmit(async (data) => {
-
-
     setProveedorCompra(data.proveedorCompra);
     setCodigo(data.codigo);
     setFechaCompra(data.fecha);
