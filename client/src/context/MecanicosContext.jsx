@@ -24,7 +24,6 @@ export function MecanicoProvider({ children }) {
   const getMecanicos = async () => {
     try {
       const res = await getMecanicosRequest();
-      console.log(res);
       setMecanicos(res)
     } catch (error) {
       console.error(error);
@@ -35,9 +34,7 @@ export function MecanicoProvider({ children }) {
       try {
         return await createMecanicosRequest(mecanico);
         // return response
-        console.log("mecanico:",response)
       } catch (error) {
-        console.log(error);
         setErrors(error.response.data.message);
       }
     
@@ -64,7 +61,6 @@ export function MecanicoProvider({ children }) {
   const deleteMecanico = async (id) => {
     try {
       const res = await deleteMecanicosRequest(id);
-      console.log(res);
       if (res.status === 204) setMecanicos(mecanicos.filter((mecanico) => mecanico._id !== id));
     } catch (error) {
       console.error(error);

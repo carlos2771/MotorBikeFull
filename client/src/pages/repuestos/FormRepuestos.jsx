@@ -125,10 +125,6 @@ export default function FormRepuesto() {
 
   const onSubmit = handleSubmit(async (data) => {
     data.img = imageBase64;
-
-    console.log("datos aness", data);
-    console.log("img", data.img);
-
     if (params.id) {
       const res = await updateRepuesto(params.id, data);
       const Toast = Swal.mixin({
@@ -169,7 +165,6 @@ export default function FormRepuesto() {
         });
       }
     } else {
-      console.log("como se ven los datos", data);
       const res = await createRepuesto(data);
       const Toast = Swal.mixin({
         toast: true,
@@ -210,8 +205,6 @@ export default function FormRepuesto() {
       }
     }
   });
-
-  console.log(repuestosErrors);
 
   const permissions = user?.rol?.permissions || [];
 

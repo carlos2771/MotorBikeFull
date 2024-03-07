@@ -24,7 +24,6 @@ export function MarcaProvider({ children }) {
   const getMarcas = async () => {
     try {
       const res = await getMarcasRequest();
-      console.log(res);
       setMarcas(res)
     } catch (error) {
       console.error(error);
@@ -35,9 +34,7 @@ export function MarcaProvider({ children }) {
       try {
         return await createMarcasRequest(marca);
         // return response
-        console.log("marcas:",response)
       } catch (error) {
-        console.log(error);
         setErrors(error.response.data.message);
       }
     
@@ -64,7 +61,6 @@ export function MarcaProvider({ children }) {
   const deleteMarca = async (id) => {
     try {
       const res = await deleteMarcasRequest(id);
-      console.log(res);
       if (res.status === 204) setClientes(marcas.filter((marca) => marca._id !== id));
     } catch (error) {
       console.error(error);

@@ -557,9 +557,6 @@ export default function FormCompra() {
                   let precioUnitarioNumber = parseFloat(repuesto.precio_unitario);
                   let CantidadNumber = parseFloat(repuesto.cantidad_repuesto);
 
-                  // Agregar un console.log para ver el tipo de dato
-                  console.log("Tipo de dato de precioUnitario:", typeof precioUnitarioNumber);
-
                   return {
                     repuesto: repuesto.repuesto.name,
                     marca: repuesto.repuesto.nombre_marca,

@@ -44,7 +44,6 @@ export default function ActualizarPassword () {
     }
 
     try {
-      console.log("Código:", params.code); 
       await actualizarPassword(params.code, values.password, values.confirmPassword);
       const Toast = Swal.mixin({
         toast: true,
@@ -66,7 +65,6 @@ export default function ActualizarPassword () {
       navigate(`/login`);
     } catch (error) {
       console.error(error);
-      console.log("Algo salió mal");
       navigate(`/login`)
     }
   };

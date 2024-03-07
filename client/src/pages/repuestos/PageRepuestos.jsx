@@ -233,7 +233,6 @@ export default function PageRepuestos() {
       headerClassName: "custom-header",
       renderCell: (params) => {
         const estado = params.row.estado;
-        console.log("estado", estado);
         return (
           <div>
             <button

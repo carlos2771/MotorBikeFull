@@ -40,8 +40,6 @@ export function CharBar() {
       if (startDate && endDate) {
         const formattedStartDate = startDate.toISOString().split("T")[0];
         const formattedEndDate = endDate.toISOString().split("T")[0];
-        console.log("Fecha de inicio formateada:", formattedStartDate);
-        console.log("Fecha de fin formateada:", formattedEndDate);
         url += `?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
       }
   

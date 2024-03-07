@@ -241,7 +241,6 @@ export default function PageClientes() {
       headerClassName: "font-custom text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
-        console.log("estado", estado);
         return (
           <div>
             <button className={estado === "Activo" ? "" : "hidden"}>

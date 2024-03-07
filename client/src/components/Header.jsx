@@ -28,22 +28,8 @@ export default function Header() {
   
     const currentPath = location.pathname;
     setActiveLink(currentPath);
-    console.log("link", location);
   }, [location]);
   
-
-  // useEffect(() => {
-  //   if(location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/register" && location.pathname !== "/reestablecer" ) {                 
-  //     navigate("/login");
-  //   }
-    
-  //   const currentPath = location.pathname;
-  //   setActiveLink(currentPath);
-  //   console.log("link",location);
-  // }, [location]);
-  
-  
-
   return (
     <Disclosure as="nav" className="bg-slate-700 fixed top-0 left-0 right-0 shadow-md z-30" >
       {({ open }) => (

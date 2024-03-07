@@ -19,7 +19,6 @@ export default function TaskFormPage() {
     async function loadTask (){
       if(params.id){ // lo que capture de params de tasks lo va traer a este formulario
         const task = await getTask(params.id) // para ver los datos de una tarea especifica desde todas las tareas
-        console.log(task);
         setValue("title",task.title)
         setValue("description",task.description)
         

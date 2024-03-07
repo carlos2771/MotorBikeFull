@@ -26,14 +26,6 @@ export default function registerPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  // console.log("authh", isAuthenticated);
-  // useEffect(() => {
-  //   // para acuatilizar el estado del componente
-  //   if (isAuthenticated) navigate("/tasks"); // si esta authenticado que lo envie a   las tareas
-
-  //   console.log("entro");
-  // }, [isAuthenticated]);
-
   const onSubmit = handleSubmit(async (values) => {
     if (!userFound) {
       const res = await signup(values);
@@ -67,7 +59,6 @@ export default function registerPage() {
         icon: "error",
         title: "Error al crear el usuario",
       });
-      console.log("Error en la solicitud:", res.error);
     }
   };
 

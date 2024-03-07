@@ -56,7 +56,6 @@ export function VentasServicioProvider({ children }) {
       return await createVentasServiciosRequest(venta);
     } catch (error) {
       setErrors(error.response.data.message);
-      console.log(error);
     }
   };
 

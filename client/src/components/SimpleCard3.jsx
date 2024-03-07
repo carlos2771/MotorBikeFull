@@ -14,10 +14,6 @@ const SimpleCard3 = () => {
   // Filtrar solo las ventas activas que no están anuladas
   const ventasActivas = cartClientes.filter((venta) => !venta.anulado);
 
-
-
-  console.log("Ventas Activas:", ventasActivas);
-
   // Calcular el total general sumando los totales de las ventas activas
   const totalVentas = ventasActivas.reduce((total, venta) => total + venta.total, 0);
 

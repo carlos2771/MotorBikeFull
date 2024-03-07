@@ -25,7 +25,6 @@ export function RepuestoProvider({ children }) {
   const getRepuestos = async () => {
     try {
       const res = await getRepuestosRequest();
-      console.log(res);
       setRepuestos(res);
     } catch (error) {
       console.error(error);
@@ -35,10 +34,8 @@ export function RepuestoProvider({ children }) {
   const createRepuesto = async (repuesto) => {
     try {
       return await createRepuestosRequest(repuesto);
-      // console.log("ventas:", response);
     } catch (error) {
       setErrors(error.response.data.message);
-      console.log(error);
     }
   };
 
@@ -63,7 +60,6 @@ export function RepuestoProvider({ children }) {
   const deleteRepuesto = async (id) => {
     try {
       const res = await deleteRepuestosRequest(id);
-      console.log(res);
       if (res.status === 204) {
         setRepuestos(repuestos.filter((repuesto) => repuesto._id !== id));
       }

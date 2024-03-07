@@ -3,7 +3,13 @@ import { useUsuario } from "../../context/usuariosContext";
 import { useRoles } from "../../context/RolsContext";
 import { Link, useNavigate, useParams, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import {EmailRequired, EstadoRequired, NombreRequired, PasswordRequire, NombreMaRequired,} from "../../utils/validations";
+import {
+  EmailRequired,
+  EstadoRequired,
+  NombreRequired,
+  PasswordRequire,
+  NombreMaRequired,
+} from "../../utils/validations";
 import Swal from "sweetalert2";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -53,7 +59,6 @@ export default function FormUsuarios() {
   }, []);
 
   const onSubmit = handleSubmit(async (data) => {
-  
     if (params.id) {
       const res = await updateUsuario(params.id, data);
       handleApiResponse(res, "Actualizado correctamente");
@@ -62,7 +67,7 @@ export default function FormUsuarios() {
       handleApiResponse(res, "Agregado correctamente");
     }
   });
-  
+
   const handleApiResponse = (res, successMessage) => {
     const Toast = Swal.mixin({
       toast: true,
@@ -75,7 +80,7 @@ export default function FormUsuarios() {
         toast.onmouseleave = Swal.resumeTimer;
       },
     });
-  
+
     if (res && !res.error) {
       Toast.fire({
         icon: "success",
@@ -87,7 +92,6 @@ export default function FormUsuarios() {
         icon: "error",
         title: "Error al crear el usuario",
       });
-      console.log("Error en la solicitud:", res.error);
     }
   };
 
@@ -157,19 +161,23 @@ export default function FormUsuarios() {
               <label>Rol</label>
               <select
                 {...register("rol", NombreRequired)}
-                onChange={(e) => setSelectedRol(e.target.value)}
                 className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
               >
                 <option value="">Seleccionar rol</option>
-                {roles.map((rol) => (
-                  <option key={rol._id} value={rol._id}>
-                    {rol.name}
-                  </option>
-                ))}
+                {roles.map((rol) => {
+                  if (rol.name !== "administrador") {
+                    return (
+                      <option key={rol._id} value={rol._id}>
+                        {rol.name}
+                      </option>
+                    );
+                  }
+                  return null; // Si es Administrador, retornamos null para no renderizar nada
+                })}
               </select>
               {errors.rol && (
-                    <p className="text-red-500">{errors.rol.message}</p>
-                  )}
+                <p className="text-red-500">{errors.rol.message}</p>
+              )}
 
               <button
                 className="px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "

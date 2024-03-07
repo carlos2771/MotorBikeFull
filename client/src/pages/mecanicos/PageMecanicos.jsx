@@ -256,7 +256,6 @@ export default function PageMecanico() {
       headerClassName: "font-bold text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
-        // console.log("Estado", estado);
         return (
           <div>
             <button

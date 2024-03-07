@@ -99,11 +99,10 @@ const onSubmit = handleSubmit(async (data) => {
       });
       navigate("/rol");
     } else {
-      // Toast.fire({
-      //   icon: "error",
-      //   title: "El rol ya existe . Verifica los errores.",
-      // });
-      console.log("no se agrego, el rol ya existe");
+      Toast.fire({
+        icon: "error",
+        title: "Ese rol ya existe",
+      });
     }
   };
 

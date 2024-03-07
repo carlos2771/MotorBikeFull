@@ -304,7 +304,6 @@ export default function PageCartClient() {
             <button>
               <Detalle
                 metodo={() => {
-                  console.log("params.row._id:", params.row._id);
                   getCartCliente(params.row._id);
                 }}
                 id={params.row._id}

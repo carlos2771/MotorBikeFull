@@ -127,9 +127,7 @@ export default function FormVentaServicio() {
       }
     }
   });
-
-  console.log(ventasServiciosErrors);
-
+  
   const permissions = user?.rol?.permissions || [];
 
   return (

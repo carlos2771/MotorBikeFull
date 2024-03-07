@@ -19,8 +19,6 @@ export default function DetalleMecanico() {
         try {
           // Llama a la función `getMecanico` del contexto para obtener datos del mecánico
           const mecanicoData = await getMecanico(params.id);
-          console.log("Mecánico por params", mecanicoData);
-
            // Establece los datos del mecánico en el estado local
           setMecanico(mecanicoData);
         } catch (error) {

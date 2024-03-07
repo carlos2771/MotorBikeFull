@@ -22,7 +22,6 @@ export const UsuarioProvider = ({ children }) => {
     try {
       const res = await getUsuariosRequest();
       setUser(res);
-      console.log(res);
     } catch (error) {
       console.error("error get,",error);
     }

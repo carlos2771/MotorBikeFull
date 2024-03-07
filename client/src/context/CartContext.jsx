@@ -24,10 +24,8 @@ export function CartProvider({ children }) {
   const getProducts = async () => {
     try {
        const res = await getProductsRequest()
-       console.log("los productos mani", res);
        setProducts(res)
     } catch (error) {
-      console.log(error, "hay error");
     }
   };
 
@@ -73,7 +71,6 @@ export function CartProvider({ children }) {
     try {
       const response = await axiosClient.post("products-cart/delete");
       setCartItems(response);
-      console.log("datos eliminados", response);
     } catch (error) {
       console.error("Error al eliminar productos:", error);
     }
@@ -92,11 +89,9 @@ export function CartProvider({ children }) {
 
   const deleteProduct = async (id) =>{
     try {
-      console.log("entro");
       const res = await deleteProductRequest(id);
       getProducts();
       getProductsCart();
-      console.log(res);
     } catch (error) {
       console.error(error);
     }
