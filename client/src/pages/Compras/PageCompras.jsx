@@ -433,7 +433,7 @@ export default function PageCompras() {
                     className="miTablaPersonalizada"
                     title={"Detalle Compras"}
                     data={params.row.repuestos.map(repuesto => ({
-                      nombre: repuesto.name, 
+                      nombre: repuesto.repuesto.name, 
                       marca: repuesto.marca_repuesto,   
                       cantidad: repuesto.cantidad_repuesto, 
                       precioUnitario: formatCurrency2(repuesto.precio_unitario), 
