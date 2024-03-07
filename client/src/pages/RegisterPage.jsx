@@ -7,7 +7,7 @@ import {
   EmailRequired,
   EstadoRequired,
   PasswordRequire,
-  NombreMaRequired,
+  NombreMaRequired
 } from "../utils/validations";
 import { useSpring, animated } from "react-spring";
 import Swal from "sweetalert2";
@@ -129,6 +129,15 @@ export default function registerPage() {
               </div>
               {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>
+              )}
+              <input
+                type={showPassword ? "text" : "password"}
+                {...register("confirmPassword", PasswordRequire)}
+                className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-950 border-0 border-b-2 border-sky-500 text-white px-4 py-2 rounded2 my-2"
+                placeholder="Confirmar Contraseña"
+              />
+              {errors.confirmPassword && (
+                <p className="text-red-500">{errors.confirmPassword.message}</p>
               )}
               <select
                 {...register("estado")}
