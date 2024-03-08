@@ -97,14 +97,14 @@
       {
         field: "username",
         headerName: "Nombre Usuario",
-        minWidth: 300,
+        minWidth: 200,
         headerClassName: "font-custom text-lg",
         flex: 1
       },
       {
         field: "estado",
         headerName: "Estado",
-        minWidth: 200,
+        minWidth: 150,
         flex: 1,
         headerClassName: "font-custom text-lg",
         valueGetter: (params) => {
@@ -122,7 +122,7 @@
       {
         field: "name",
         headerName: "Rol",
-        minWidth: 200,
+        minWidth: 150,
         flex: 1,
         headerClassName: "font-custom text-lg",
         valueGetter: (params) => params.row.rol.name,
