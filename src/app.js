@@ -25,7 +25,7 @@ const __dirname = dirname(__filename);
 const app = express();
 
 app.use(cors({
-    origin: "http://motorbikefull.onrender.com", // Reemplaza esto con la URL de tu aplicación React
+    origin: origin, // Reemplaza esto con la URL de tu aplicación React
     credentials: true,
 }));
 
