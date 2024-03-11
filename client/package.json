@@ -25,6 +25,7 @@
     "@remix-run/react": "^2.2.0",
     "axios": "^1.5.1",
     "chart.js": "^4.4.0",
+    "date-fns": "^3.4.0",
     "dayjs": "^1.11.10",
     "framer-motion": "^10.16.4",
     "html2pdf.js": "^0.10.1",
