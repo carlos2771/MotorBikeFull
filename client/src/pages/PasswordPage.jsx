@@ -11,11 +11,9 @@ import backgroundImage from './images/yamaha.jpg'; // Importa la imagen de fondo
 
 export default function PasswordPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { enviarToken, isAuthenticated, errors: signinErrors } = useAuth();
-  const navigate = useNavigate();
-  const params = useParams();
-  const [shouldNavigate, setShouldNavigate] = useState(false);
-  const [emailValue, setEmailValue] = useState('');
+  const { enviarToken } = useAuth();
+  const [setShouldNavigate] = useState(false);
+  const [setEmailValue] = useState('');
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -71,13 +69,7 @@ export default function PasswordPage() {
       console.error(error);
     }
   });
-
-  // useEffect(() => {
-  //   if (shouldNavigate) {
-  //     navigate(`/restablecer-password/${emailValue}`);
-  //   }
-  // }, [shouldNavigate, emailValue]);
-
+  
   const [error, setError] = useState('');
 
   // Define a spring animation for the form
