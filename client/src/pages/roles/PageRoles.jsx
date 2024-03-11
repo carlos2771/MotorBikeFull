@@ -176,11 +176,11 @@ export default function PageRoles() {
                     const status = role.status;
                     const roleName = role.name.toLowerCase();
                     const isAdministrator = roleName === "administrador";
-
+                    const isAdminOrUser = roleName === "administrador" || roleName === "usuario";
                     return (
                       <>
                       <div>
-                        {!isAdministrator && (
+                        {!isAdminOrUser && (
                           <Link
                             to={`/rol/${role._id}`}
                             className={role.status === "Activo" ? "" : "hidden"}
