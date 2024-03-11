@@ -366,8 +366,8 @@ export const enviarToken = async (req, res) => {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: process.env.EMAIL_USER || 'saritalop789@gmail.com',
-        pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
+          user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
         },
       });
       const code = randomToken
