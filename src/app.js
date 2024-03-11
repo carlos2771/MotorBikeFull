@@ -15,6 +15,7 @@ import cartRoutes from "./routes/cart.routes.js";
 import cartClienteRoutes from "./routes/cart_cliente.routes.js";
 import usuariosRoutes from "./routes/user.routes.js"
 import cors from 'cors';
+import bodyParser from "body-parser";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { origin } from "./config.js";
