@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { useAuth } from '../hooks/useAuth';
 import { EmailRequired } from '../utils/validations';
-import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert } from "@material-tailwind/react";
 import { useSpring, animated } from 'react-spring';
 import Swal from "sweetalert2";
@@ -13,8 +12,21 @@ import ClipLoader from "react-spinners/ClipLoader";
 export default function PasswordPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { enviarToken } = useAuth();
-  const [setShouldNavigate] = useState(false);
-  const [setEmailValue] = useState('');
+  const [shouldNavigate , setShouldNavigate] = useState(false);
+  const [emailValue, setEmailValue] = useState('');
+  const [buttonHidden, setButtonHidden] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (buttonHidden) {
+      const timeoutId = setTimeout(() => {
+        setButtonHidden(false);
+      }, 4000);
+  
+      // Limpia el temporizador al desmontar el componente
+      return () => clearTimeout(timeoutId);
+    }
+  }, [buttonHidden]);
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -73,7 +85,7 @@ export default function PasswordPage() {
     }
   });
   
-  const [error, setError] = useState('');
+  
 
   // Define a spring animation for the form
   const formAnimation = useSpring({
@@ -128,4 +140,3 @@ export default function PasswordPage() {
     </div>
   );
 }
-

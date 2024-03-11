@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { login, logout, profile, register, verifyToken, enviarToken, validarToken, actualizarPassword } from "../controllers/auth.controller.js";
+import { login, logout, profile, register, verifyToken, enviarToken, actualizarPassword } from "../controllers/auth.controller.js";
 import { authRequired } from "../middlewares/validateToken.js";
 import {validateSchema} from "../middlewares/validator.middleware.js"
 import { registerSchema, loginSchema } from "../schemas/auth.schema.js";
@@ -15,7 +15,7 @@ router.get("/profile", authRequired, profile) // para las rutas protegidas, dond
 router.get("/verify", verifyToken)
 //Recuperar password
 router.post("/reestablecer", enviarToken)
-router.post("/restablecer-password/:code", validarToken)
+// router.post("/restablecer-password/:code", validarToken)
 router.post("/reestablecer-password/:code", actualizarPassword)
 
 export default router
