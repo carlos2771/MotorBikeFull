@@ -13,6 +13,7 @@ import {
 } from "../../utils/validations";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
+import Swal from "sweetalert2";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -140,18 +141,54 @@ const Cart = () => {
       };
 
       const res = await createCartCliente(datosCartCliente);
-      
-      
-
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+          color: "white",
+          timer: 4000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Venta Agregada correctamente",
+        });
+        if (res) {
+          navigate("/home-page");
+        } else {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+            color: "white",
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "error",
+            title: "No se ha agregado",
+          });
+        }
+        
       console.log("Datos antes de enviar:", datosCartCliente);
       console.log("cartcliente", res);
 
-      if (res && !res.error) {
-        navigate("/home-page");
-        cleartCart();
-      } else {
-        console.log("huvo un error");
-      }
+      // if (res && !res.error) {
+      //   navigate("/home-page");
+      //   cleartCart();
+      // } else {
+      //   console.log("huvo un error");
+      // }
     } catch (error) {
       
       console.error("Error al enviar el carrito y cliente:", error);
