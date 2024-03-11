@@ -27,7 +27,10 @@ export default function PageMarcas() {
 
   const mostrarAlerta = (id, nombreMarca, estado) => {
     const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
-    const text = estado === "Activo" ? `¿Estás seguro de inhabilitar la marca ${nombreMarca}?` : `¿Estás seguro de habilitar la marca ${nombreMarca}?`;
+    const text =
+      estado === "Activo"
+        ? `¿Estás seguro de inhabilitar la marca ${nombreMarca}?`
+        : `¿Estás seguro de habilitar la marca ${nombreMarca}?`;
 
     Swal.fire({
       title: title,
@@ -49,7 +52,7 @@ export default function PageMarcas() {
     }).then((result) => {
       if (result.isConfirmed) {
         cambiarEstado(id, estado);
-      }else{
+      } else {
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -62,7 +65,8 @@ export default function PageMarcas() {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
           },
-        });Toast.fire({
+        });
+        Toast.fire({
           icon: "error",
           title: "No se ha Inhabilitado",
         });
@@ -72,15 +76,19 @@ export default function PageMarcas() {
 
   const cambiarEstado = (id, estado) => {
     const nuevoEstado = estado === "Activo" ? "Inactivo" : "Activo";
-  
+
     updateMarca(id, { estado: nuevoEstado })
       .then((marca) => {
         if (!marca) {
           // Si la marca no se encuentra, muestra un mensaje de error
-          throw new Error("La marca no se puede inhabilitar, por que esta asociada a un repuesto");
+          throw new Error(
+            "La marca no se puede inhabilitar, por que esta asociada a un repuesto"
+          );
         }
         // Muestra un mensaje de éxito según el estado de la marca
-        const successMessage = `La marca se ha ${nuevoEstado === "Activo" ? "habilitado" : "inhabilitado"} correctamente`;
+        const successMessage = `La marca se ha ${
+          nuevoEstado === "Activo" ? "habilitado" : "inhabilitado"
+        } correctamente`;
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -93,7 +101,8 @@ export default function PageMarcas() {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
           },
-        });Toast.fire({
+        });
+        Toast.fire({
           icon: "success",
           title: successMessage,
         });
@@ -101,7 +110,6 @@ export default function PageMarcas() {
         getMarcas();
       })
       .catch((error) => {
-       
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -114,13 +122,14 @@ export default function PageMarcas() {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
           },
-        });Toast.fire({
+        });
+        Toast.fire({
           icon: "error",
-          title: error.message || "Hubo un error al cambiar el estado de la marca",
+          title:
+            error.message || "Hubo un error al cambiar el estado de la marca",
         });
       });
   };
-  
 
   const exportarAExcel = () => {
     const datos = marcas.map((marca) => ({
@@ -131,11 +140,7 @@ export default function PageMarcas() {
 
     const ws = XLSX.utils.json_to_sheet(datos);
 
-    ws["!cols"] = [
-      { wch: 25 },
-      { wch: 20 },
-      { wch: 30 },
-    ];
+    ws["!cols"] = [{ wch: 25 }, { wch: 20 }, { wch: 30 }];
     ws["!rows"] = [{ hpx: 20, outlineLevel: 0, hidden: false }];
 
     for (let i = 0; i < 3; i++) {
@@ -167,55 +172,6 @@ export default function PageMarcas() {
     XLSX.writeFile(wb, "marcas.xlsx");
   };
 
-  const columns = [
-    {
-      field: "nombre_marca",
-      headerName: "Nombre  Marca",
-      width: 450,
-      headerClassName: "font-custom text-lg",
-    },
-    {
-      field: "estado",
-      headerName: "Estado",
-      width: 200,
-      headerClassName: "font-custom text-lg"
-    },
-    {
-      field: "acciones",
-      headerName: "Acciones",
-      width: 200,
-      headerClassName: "font-custom text-lg",
-      renderCell: (params) => {
-        const estado = params.row.estado;
-        return (
-          <div>
-            <button
-              className={estado === "Activo" ? "" : "hidden"}
-              title="Editar"
-            >
-              <Link
-                className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
-                to={`/marca/${params.row._id}`}
-              >
-                <FontAwesomeIcon icon={faPencil} />
-              </Link>
-            </button>
-            <button title={estado === "Activo" ? "Inhabilitar" : "Habilitar"}
-              className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${estado === "Activo" ? "border-red-500 hover:bg-red-500" : "border-indigo-500 hover:bg-indigo-500"}`}
-              onClick={() => mostrarAlerta(params.row._id, params.row.nombre_marca, estado)}
-            >
-              {estado === "Activo" ? (
-                <FontAwesomeIcon icon={faBan} />
-              ) : (
-                <FontAwesomeIcon icon={faCheck} />
-              )}
-            </button>
-          </div>
-        );
-      },
-    },
-  ];
-
   const permissions = user?.rol?.permissions || [];
 
   return (
@@ -237,87 +193,60 @@ export default function PageMarcas() {
                     <FontAwesomeIcon icon={faPlus} />
                   </button>
                 </Link>
-                <button
+                {/* <button
                   onClick={exportarAExcel}
                   className="px-4 py-2 ml-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent max-w-full max-h-10"
                   title="Descargar excel"
                 >
                   <FontAwesomeIcon icon={faDownload} />
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
 
-          <Box sx={{ width: "100%" }}>
-            <DataGrid
-              className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
-              rows={marcas}
-              columns={columns}
-              getRowId={(row) => row._id}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 5,
-                  },
-                },
-              }}
-              pageSizeOptions={[5]}
-              disableRowSelectionOnClick
-              sx={{
-                background:
-                  "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
-                color: "white",
-                "& .MuiDataGrid-cell": {
-                  fontSize: "15px",
-                },
-              }}
-              slots={{ toolbar: GridToolbar }}
-              slotProps={{
-                toolbar: {
-                  printOptions: { disableToolbarButton: true },
-                  csvOptions: { disableToolbarButton: true },
-                },
-              }}
-              //Traducir a español
-              localeText={{
-                noRowsLabel: "No se ha encontrado datos.",
-                noResultsOverlayLabel: "No se ha encontrado ningún resultado",
-                toolbarColumns: "Columnas",
-                toolbarColumnsLabel: "Seleccionar columnas",
-                toolbarFilters: "Filtros",
-                toolbarFiltersLabel: "Ver filtros",
-                toolbarFiltersTooltipHide: "Quitar filtros",
-                toolbarFiltersTooltipShow: "Ver filtros",
-                toolbarDensity: "Densidad",
-                toolbarDensityCompact: "Compacta",
-                toolbarDensityStandard: "Estandar",
-                toolbarDensityComfortable: "Confortable",
-                toolbarExport: "Exportar",
-                toolbarExportCSV: "Descargar CSV",
-                toolbarExportPrint: "Imprimir",
-                columnsPanelTextFieldLabel: "Buscar",
-                columnsPanelHideAllButton: "Ocultar todo",
-                columnsPanelShowAllButton: "Mostrar todo",
-                filterPanelColumns: "Columna",
-                filterPanelOperator: "Operador",
-                filterOperatorContains: "Contiene",
-                filterOperatorEquals: "Es igual",
-                filterOperatorStartsWith: "Comienza con",
-                filterOperatorEndsWith: "Termina con",
-                filterOperatorIsEmpty: "Esta vacía",
-                filterOperatorIsNotEmpty: "No esta vacía",
-                filterOperatorIsAnyOf: "Es alguna de",
-                filterPanelInputLabel: "Valor",
-                filterPanelInputPlaceholder: "Filtrar valor",
-                columnMenuSortAsc: "Ordenar en ASC",
-                columnMenuSortDesc: "Ordenar en DESC",
-                columnMenuUnsort: "Desordenar",
-                columnMenuFilter: "Filtrar",
-                columnMenuHideColumn: "Ocultar columna",
-                columnMenuManageColumns: "Manejar columnas",
-              }}
-            />
-          </Box>
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mx-4 md:mx-16">
+            {marcas.map((marca) => (
+              <div
+                key={marca._id}
+                className={`col ${
+                  marca.estado === "Activo"
+                    ? "shadow-lg shadow-blue-600/40"
+                    : "shadow-lg shadow-red-800/40"
+                } bg-slate-700 w-full p-4 rounded-md mb-2`}
+              >
+                <h3 className="text-xl font-semibold mb-2 text-center">
+                  {marca.nombre_marca}
+                </h3>
+
+                <div className="mb-2 text-center">
+                  {marca.estado === "Activo" && (
+                    <Link
+                      to={`/marca/${marca._id}`}
+                      className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                    >
+                      <FontAwesomeIcon icon={faPencil} />
+                    </Link>
+                  )}
+                  <button
+                    onClick={() =>
+                      mostrarAlerta(marca._id, marca.nombre_marca, marca.estado)
+                    }
+                    className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${
+                      marca.estado === "Activo"
+                        ? "border-red-500 hover:bg-red-500"
+                        : "border-indigo-500 hover:bg-indigo-500"
+                    }`}
+                  >
+                    {marca.estado === "Activo" ? (
+                      <FontAwesomeIcon icon={faBan} />
+                    ) : (
+                      <FontAwesomeIcon icon={faCheck} />
+                    )}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         <Navigate to="/tasks" />

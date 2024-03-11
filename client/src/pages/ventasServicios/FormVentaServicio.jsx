@@ -227,8 +227,8 @@ export default function FormVentaServicio() {
               >
                 Guardar
               </button>
-              <button className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  ">
-                <Link to="/ventas-servicios">Cancelar</Link>
+              <button>
+                <Link to="/ventas-servicios" className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  ">Cancelar</Link>
               </button>
             </form>
           </div>
