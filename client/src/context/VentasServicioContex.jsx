@@ -25,19 +25,37 @@ export function VentasServicioProvider({ children }) {
   const getVentasServicios = async () => {
     try {
       const res = await getVentasServiciosRequest();
-      console.log(res);
       setVentasServicios(res);
     } catch (error) {
       console.error(error);
     }
   };
+  
+
+  const getTotalServiciosActivosDelDia = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Filtra las ventas activas del día
+    const ventasActivasDelDia = ventasServicios.filter((venta) => {
+      const ventaDate = new Date(venta.createdAt);
+      ventaDate.setHours(0, 0, 0, 0);
+      return ventaDate.getTime() === today.getTime() && venta.estado === 'Finalizada';
+    });
+
+    // Calcula el total en dinero de los servicios activos del día
+    const totalDelDia = ventasActivasDelDia.reduce((total, venta) => {
+      return total + venta.precio_servicio;
+    }, 0);
+
+    return totalDelDia;
+  };
 
   const createVentaServicio = async (venta) => {
     try {
-      return  await createVentasServiciosRequest(venta);
+      return await createVentasServiciosRequest(venta);
     } catch (error) {
       setErrors(error.response.data.message);
-      console.log(error);
     }
   };
 
@@ -47,7 +65,6 @@ export function VentasServicioProvider({ children }) {
       return res;
     } catch (error) {
       console.error(error);
-      
     }
   };
 
@@ -59,17 +76,35 @@ export function VentasServicioProvider({ children }) {
       setErrors(error.response.data.message);
     }
   };
-  
+
   const deleteVentaServicio = async (id) => {
     try {
       const res = await deleteVentasServiciosRequest(id);
-      console.log(res);
       if (res.status === 204) {
-        setVentasServicios(ventasServicios.filter((venta) => venta._id !== id));
+        setVentasServicios((prevVentas) =>
+          prevVentas.map((venta) =>
+            venta._id === id ? { ...venta, estado: 'Inactivo' } : venta
+          )
+        );
       }
     } catch (error) {
       console.error(error);
     }
+  };
+
+ 
+  const getVentasServiciosDelDia = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+  
+    // Filtra las ventas activas del día
+    const ventasActivasDelDia = ventasServicios.filter((venta) => {
+      const ventaDate = new Date(venta.createdAt);
+      ventaDate.setHours(0, 0, 0, 0);
+      return ventaDate.getTime() === today.getTime() && venta.estado === 'Finalizada';
+    });
+  
+    return ventasActivasDelDia.length;
   };
 
   useEffect(() => {
@@ -90,7 +125,9 @@ export function VentasServicioProvider({ children }) {
         createVentaServicio,
         getVentaServicio,
         updateVentaServicio,
-        deleteVentaServicio
+        deleteVentaServicio,
+        getVentasServiciosDelDia,
+        getTotalServiciosActivosDelDia
       }}
     >
       {children}

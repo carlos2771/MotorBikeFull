@@ -6,9 +6,8 @@ import { Navigate, Outlet } from 'react-router-dom'
 // como el Protected esta dentro del Autprovider en el app.jsx el puede tener acceso al contexto 
 export default function ProtectedRoute() {
     const {isAuthenticated, loading} = useAuth()
-    console.log(loading,isAuthenticated);
     if(loading) return <h1>Cargando..</h1>
-    if(!isAuthenticated && !loading) return <Navigate to="/login" replace /> // si el usuario no esta autenticado lo redirecciona a login
+    if(!isAuthenticated && !loading) return <Navigate to="/" replace /> // si el usuario no esta autenticado lo redirecciona a login
   return (
    <Outlet/> // si esta authenticado continue con el componente que esta adentro 
   )

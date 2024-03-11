@@ -2,40 +2,38 @@ import mongoose from "mongoose";
 
 const ventas_repuestosSchema = new mongoose.Schema(
   {
-    repuesto: {
-      type: mongoose.Schema.Types.ObjectId, // para traer el _id
-      ref: "repuestos",
-      required: true,
-    },
-    cantidad_repuesto: {
-      type: Number,
-      required: true,
-    },
-    precio_unitario: {
-      type: Number,
-      required: true, // Corregido de "require" a "required"
-    },
+    repuestos: [
+      {
+        repuesto: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "repuestos",
+          required: true,
+        },
+        cantidad_vender: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
     precio_total: {
       type: Number,
-      required: true, // Corregido de "require" a "required"
+      required: true
     },
+   
+    type: Number,
     cliente: {
       type: mongoose.Schema.Types.ObjectId, // para traer el _id
       ref: "clientes",
       required: true,
     },
     // estado: {
-    //   type: String,
+    //   type: Boolean,
     //   required: true
     // },
     anulado: {
       type: Boolean,
       default: false,
     },
-    // date: {
-    //   type: Date,
-    //   default: Date.now,
-    // },
   },
   {
     timestamps: true,

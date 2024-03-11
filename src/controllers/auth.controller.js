@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import Rols from "../models/rols.model.js"
 import bcrypt from "bcryptjs";
 import createAccessToken from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
@@ -7,6 +8,7 @@ import { getTemplate, sendEmail } from "./mail.controller.js";
 import { secretKey } from "../config.js";
 import nodemailer from "nodemailer";
 import base64String from "../img/base64Image.js";
+
 
 // Función para generar una cadena aleatoria de una longitud específica
 function generateRandomToken(length) {
@@ -22,20 +24,30 @@ function generateRandomToken(length) {
 }
 
 export const register = async (req, res) => {
-  const { email, password, username } = req.body;
+  const { email, password, confirmPassword,username, estado, rol } = req.body;
 
   try {
     const userFound = await User.findOne({ email }); // para validar en el frontend si el usuario ya existe
     if (userFound) {
-      return res.status(400).json({message:["el correo ya existe"]});
+      return res.status(400).json({message:["Este correo ya esta en uso"]});
     }
     const passwordHash = await bcrypt.hash(password, 10);
+
+    if (!email || !password || !username|| !confirmPassword) {
+      return res.status(400).json({ message: ["Datos incompletos"] });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: ["Las contraseñas no coinciden"] });
+    }
 
     const newUser = new User({
       // esto es una instancia que viene del schema User es como se le coloco al schema
       username,
       email,
       password: passwordHash,
+      estado, // Agregar el estado si es necesario
+      rol
     });
 
     const userSaved = await newUser.save();
@@ -48,66 +60,242 @@ export const register = async (req, res) => {
       sameSite: "none",
     });
 
-    const template = getTemplate(username, email)
-    await sendEmail(email, "Registro de MotorBike exitoso!!👽👍", template)
+    // const template = getTemplate(username, email)
+    // await sendEmail(email, "Registro de MotorBike exitoso!!👽👍", template)
+
+    // Enviar un correo electrónico con el codigo
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER || 'saritalop789@gmail.com',
+      pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
+      },
+    });
+
+    let mensajeHTML3 = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    
+        <style>
+            /* fuentes de sitios */
+            p, a, h1, h2, h3, h3, h5, h6 {font-family: "Roboto", sans-serif;}
+    
+            h1 {font-size: 30px ! important;}
+            h2 {font-size: 25px ! important;}
+            h3 {font-size: 18px ! important;}
+            h4 {font-size: 16px ! important;}
+    
+            p, a {font-size: 15px ! important;}
+    
+            .claseBoton{
+                width: 30%;
+                background: linear-gradient(to right, #0f172a, #082f49, #0f172a);
+                border: 2px solid rgb(255, 255, 255);
+                color: white !important;
+                padding: 16px 32px;
+                text-align: center;
+                text-decoration: none;
+                font-weight: bold;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                transition-duration: 0.4s;
+                cursor: pointer;
+            }
+    
+            .claseBoton:hover{
+                background: white;
+                border: 2px solid rgb(14, 13, 13);
+                color: rgb(0, 0, 0) !important;
+            }
+    
+            .imag{
+                width: 30px;
+                height: 30px;
+            }
+    
+            .contA{
+                margin: 0px 5px 0px 5px;
+            }
+            .afooter{
+                color: white !important;
+                text-decoration: none;
+                font-size: 13px !important;
+            }
+        </style>
+    
+    </head>
+    <body>
+        
+        <div style="width: 100%; background-color: white;">
+            <div style="padding: 20px 10px 20px 10px; ">
+                <!-- Imagen inicial -->
+                <div style="background: linear-gradient(to right, #0f172a, #082f49, #0f172a); padding: 10px 0px 10px 0px; width: 100%; text-align: center;">
+                    <img src="cid:motorbike" alt="" style="width: 150px; height: 150px;">
+                </div>
+                <!-- Imagen inicial -->
+    
+                <!-- Contenido principal -->
+                <div style="background-color: white; padding: 20px 0px 5px 0px; width: 100%; text-align: center;">
+                    <h1 style="color: black !important;">
+                        <!-- Titulo principal -->
+                        ¡Bienvenido a MotorBike! Tu registro ha sido exitoso 🎉
+                    </h1>
+                    <h3 style="color: black !important;">
+                        <strong>Detalles de tu cuenta:</strong>
+                    </h3>
+                    <p>
+                        <strong>Nombre de usuario: </strong>${username}<br> 
+                        <strong>Correo electrónico: </strong>${email} 
+                    </p>
+
+                    <!-- Mensaje de gracias -->
+                    <p style="color: black !important;">¡Gracias por unirte a nosotros. Estamos emocionados de tenerte en MotorBike.!</p>
+                    <p style="color: black !important;"> ¡Prepárate para explorar y disfrutar!</p>
+                    <p style="margin-bottom: 50px; color: black !important;"><i>Atentamente:</i> <br>Soporte Técnico</p>
+    
+                    <!-- Boton -->
+                    
+                    <p style="color: black !important;">Para comenzar, puedes iniciar sesión haciendo clic en el siguiente enlace:</p>
+                    <a class="claseBoton" href="http://localhost:5173/login">Inicia sesion Aqui!</a>
+                </div>
+                <!-- Contenido principal -->
+    
+    
+                <!-- Footer -->
+                <div style="background: linear-gradient(to right, #0f172a, #082f49, #0f172a); color: white; padding: 5px 0px 0px 0px; width: 100%; text-align: center;">
+    
+                    <!-- Redes sociales -->
+                    <br>
+                    <a href="https://wa.me/573004020129" class="contA"><img src="cid:whatsapp" class="imag"></a>
+                    <a href="https://www.facebook.com/" class="contA"><img src="cid:facebook" class="imag"></a>
+                    <a href="https://www.instagram.com
+                    " class="contA"><img src="cid:instagram" class="imag"></a>
+                    <a href="https://mail.google.com/" class="contA"><img src="cid:email" class="imag"></a>
+    
+                    <!-- Redes sociales -->
+    
+                    <h3><i>Soporte</i></h3>
+                    <p style="font-size: 13px; padding: 0px 20px 0px 20px;">
+                        Comunicate con nostros por los siguientes medios: <br>
+                        Correo: <a href="mailto:saritalop789@gmail.com" class="afooter">Motorbike@moto.com</a><br>
+                        Whatsapp: <a href="https://wa.me/573004020129" class="afooter">+57 - 3004020129</a>
+                    </p>
+                    <p style="background-color: black; padding: 10px 0px 10px 0px; font-size: 12px;">© 2023 Motorbike, Todos los derechos reservados</p>
+    
+    
+                </div>
+            </div>
+        </div>
+    
+    </body>
+    </html>`
+    const mailOptions = {
+      to: email,
+      subject: 'Bienvenido a Motorbike',
+      html: mensajeHTML3,
+      attachments: [
+        {
+          filename: 'motorbike.png',
+          path : 'src/public/images/motorbike.png',
+          cid: 'motorbike' 
+        },
+        {
+          filename: 'facebook.png',
+          path : 'src/public/images/facebook.png',
+          cid: 'facebook' 
+        },
+        {
+          filename: 'instagram.png',
+          path : 'src/public/images/instagram.png',
+          cid: 'instagram' 
+        },
+        {
+          filename: 'whatsapp.png',
+          path : 'src/public/images/whatsapp.png',
+          cid: 'whatsapp' 
+        },
+        {
+          filename: 'email.png',
+          path : 'src/public/images/email.png',
+          cid: 'email' 
+        },
+
+      ]
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
+      }
+      res.status(200).json({ message: 'Correo electrónico enviado con éxito' });
+    });
 
     res.json({
       // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use
       id: userSaved._id,
       username: userSaved.username,
       email: userSaved.email,
+      estado: userSaved.estado,
+      rol: userSaved.rol,
       createdAt: userSaved.createdAt,
       updateAt: userSaved.updatedAt,
-    });
-
-    console.log(newUser);
+    });   
   } catch (error) {
+
     res.status(500).json({ message: error.message });
   }
 };
-
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const userFound = await User.findOne({ email });
-    if (!userFound)return res.status(400).json({ message: ["Usuario no encontrado"] });
+    const { email, password, rol } = req.body;
+    const userFound = await User.findOne({ email }).populate('rol');
 
-    const isMatch = await bcrypt.compare(password, userFound.password); // comparemelo con la contraseña que acaba de ingresar el usuario con la otra que esta guardada en la base de datos
+    if (!userFound) return res.status(400).json({ message: ["Usuario/Contraseña incorrecto"] });
+    if (userFound.estado === "Inactivo")
+      return res.status(400).json({ message: ["El usuario está inactivo"] });
+    if(userFound.rol.status === 'Inactivo')
+      return res.status(400).json({ message: ["El rol está inactivo"] });
+    const isMatch = await bcrypt.compare(password, userFound.password);
     if (!isMatch)
       return res.status(400).json({ message: ["Usuario/Contraseña incorrecto"] });
 
     const token = await createAccessToken({
       id: userFound._id,
       username: userFound.username,
-    }); // del usuario encontrado creeme un token con el id del usuario encontrado
+      rol: {
+        name: userFound.rol.name,
+        permissions: userFound.rol.permissions
+      },
+    });
 
-<<<<<<< HEAD
-    // tokent frontend y backend
-    // res.cookie("token", token, {
-    //   httpOnly: process.env.NODE_ENV !== "development",
-    //   secure: true,
-    //   sameSite: "none",
-    // });
-=======
-    //tokent frontend y backend
     res.cookie("token", token, {
       httpOnly: process.env.NODE_ENV !== "development",
       secure: true,
       sameSite: "none",
     });
->>>>>>> 60306eb967723c91bfbcf96a43887b3680169091
     res.cookie("token", token)
+
+    // Ahora, además de devolver el rol, devolvemos los permisos asociados a ese rol
     res.json({
-      // respuesta en json para el thunder, solo quiero mostrar los siguientes datos y para que el frontend lo use
       username: userFound.username,
       email: userFound.email,
+      rol: {
+        name: userFound.rol.name,
+        permissions: userFound.rol.permissions,
+        status: userFound.rol.status
+      },
       createdAt: userFound.createdAt,
-      updateAt: userFound.updatedAt,
+      updatedAt: userFound.updatedAt,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 export const logout = (req, res) => {
   res.cookie("token", "", {
@@ -128,8 +316,6 @@ export const profile = async (req, res) => {
     createdAt: userFound.createdAt,
     updateAt: userFound.updatedAt,
   });
-  // console.log(req.user); // para ver el token del usuario, que se trae de validateToken
-  // res.send("profile");
 };
 
 export const verifyToken = async (req, res) => {
@@ -150,6 +336,7 @@ export const verifyToken = async (req, res) => {
   });
 };
 
+
 export const enviarToken = async (req, res) => {
 
   try {
@@ -165,7 +352,6 @@ export const enviarToken = async (req, res) => {
       const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
       
       const randomToken = generateRandomToken(5);
-      console.log(randomToken);
 
       // Almacenar el token en el usuario en la base de datos
       user.resetToken = token;
@@ -185,28 +371,166 @@ export const enviarToken = async (req, res) => {
         },
       });
       const code = randomToken
+      let mensajeHTML = `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Document</title>
+      
+          <style>
+              /* fuentes de sitios */
+              p, a, h1, h2, h3, h3, h5, h6 {font-family: "Roboto", sans-serif;}
+      
+              h1 {font-size: 30px ! important;}
+              h2 {font-size: 25px ! important;}
+              h3 {font-size: 18px ! important;}
+              h4 {font-size: 16px ! important;}
+      
+              p, a {font-size: 15px ! important;}
+      
+              .claseBoton{
+                  width: 30%;
+                  background: linear-gradient(to right, #0f172a, #082f49, #0f172a);
+                  border: 2px solid rgb(255, 255, 255);
+                  color: white !important;
+                  padding: 16px 32px;
+                  text-align: center;
+                  text-decoration: none;
+                  font-weight: bold;
+                  display: inline-block;
+                  font-size: 16px;
+                  margin: 4px 2px;
+                  transition-duration: 0.4s;
+                  cursor: pointer;
+              }
+      
+              .claseBoton:hover{
+                  background: white;
+                  border: 2px solid rgb(14, 13, 13);
+                  color: rgb(0, 0, 0) !important;
+              }
+      
+              .imag{
+                  width: 30px;
+                  height: 30px;
+              }
+      
+              .contA{
+                  margin: 0px 5px 0px 5px;
+              }
+              .afooter{
+                  color: white !important;
+                  text-decoration: none;
+                  font-size: 13px !important;
+              }
+          </style>
+      
+      </head>
+      <body>
+          
+          <div style="width: 100%; background-color: white;">
+              <div style="padding: 20px 10px 20px 10px; ">
+                  <!-- Imagen inicial -->
+                  <div style="background: linear-gradient(to right, #0f172a, #082f49, #0f172a); padding: 10px 0px 10px 0px; width: 100%; text-align: center;">
+                      <img src="cid:motorbike" alt="" style="width: 150px; height: 150px;">
+                  </div>
+                  <!-- Imagen inicial -->
+      
+                  <!-- Contenido principal -->
+                  <div style="background-color: white; padding: 20px 0px 5px 0px; width: 100%; text-align: center;">
+                      <h1 style="color: black !important;">
+                          <!-- Titulo principal -->
+                          Recuperación de Contraseña
+                      </h1>
+                      <p style="color: black !important;">
+                          Hemos recibido tu petición sobre el reestablecimiento de tu contraseña
+                      </p>
+                      <p>
+                      Su código de recuperación es: <strong>${code}</strong>
+                      </p>
+      
+                      <!-- Mensaje de gracias -->
+                      <p style="color: black !important;">¡gracias por su tiempo!</p>
+                      <p style="margin-bottom: 50px; color: black !important;"><i>Atentamente:</i> <br>Soporte Técnico</p>
+      
+                      <!-- Boton -->
+      
+                      <a class="claseBoton" href="http://localhost:5173/reestablecer-password/${code}">Recuperar</a>
+                  </div>
+                  <!-- Contenido principal -->
+      
+      
+                  <!-- Footer -->
+                  <div style="background: linear-gradient(to right, #0f172a, #082f49, #0f172a); color: white; padding: 5px 0px 0px 0px; width: 100%; text-align: center;">
+      
+                      <!-- Redes sociales -->
+                      <br>
+                      <a href="https://wa.me/573004020129" class="contA"><img src="cid:whatsapp" class="imag"></a>
+                      <a href="https://www.facebook.com/" class="contA"><img src="cid:facebook" class="imag"></a>
+                      <a href="https://www.instagram.com
+                      " class="contA"><img src="cid:instagram" class="imag"></a>
+                      <a href="https://mail.google.com/" class="contA"><img src="cid:email" class="imag"></a>
+      
+                      <!-- Redes sociales -->
+      
+                      <h3><i>Soporte</i></h3>
+                      <p style="font-size: 13px; padding: 0px 20px 0px 20px;">
+                          Comunicate con nostros por los siguientes medios: <br>
+                          Correo: <a href="mailto:saritalop789@gmail.com" class="afooter">Motorbike@moto.com</a><br>
+                          Whatsapp: <a href="https://wa.me/573004020129" class="afooter">+57 - 3004020129</a>
+                      </p>
+                      <p style="background-color: black; padding: 10px 0px 10px 0px; font-size: 12px;">© 2023 Motorbike, Todos los derechos reservados</p>
+      
+      
+                  </div>
+              </div>
+          </div>
+      
+      </body>
+      </html>`
       const mailOptions = {
         to: email,
         subject: 'Recuperación de contraseña',
-        html: `
-        <div style="font-family: 'Arial', sans-serif;">
-          <h2 style="color: #1477e4; font-size: 24px;">Recuperación de contraseña</h2>
-          <p style="font-size: 18px;">Su código de recuperación es: <strong>${code}</strong></p>
-          <p style="font-size: 18px;">¡Gracias!</p>
-        </div> `
+        html: mensajeHTML,
+        attachments: [
+          {
+            filename: 'motorbike.png',
+            path : 'src/public/images/motorbike.png',
+            cid: 'motorbike' 
+          },
+          {
+            filename: 'facebook.png',
+            path : 'src/public/images/facebook.png',
+            cid: 'facebook' 
+          },
+          {
+            filename: 'instagram.png',
+            path : 'src/public/images/instagram.png',
+            cid: 'instagram' 
+          },
+          {
+            filename: 'whatsapp.png',
+            path : 'src/public/images/whatsapp.png',
+            cid: 'whatsapp' 
+          },
+          {
+            filename: 'email.png',
+            path : 'src/public/images/email.png',
+            cid: 'email' 
+          },
+
+        ]
       };
 
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-          console.error(error);
           return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
         }
-        console.log('Correo electrónico enviado:', info.response);
         res.status(200).json({ message: 'Correo electrónico enviado con éxito' });
       });
  
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 
@@ -214,7 +538,6 @@ export const enviarToken = async (req, res) => {
 
 export const validarToken = async (req, res) => {
   const code = req.params.code;
-  console.log('Código recibido:', code);
   try {
     const usuario = await User.findOne({ code: code });
 
@@ -231,7 +554,6 @@ export const validarToken = async (req, res) => {
       resetTokenExpires: usuario.resetTokenExpires
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ message: "Error interno del servidor" });
   }
 };
@@ -240,17 +562,13 @@ export const actualizarPassword = async (req, res) => {
 
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
-  console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
-  console.log("Cuerpo de la solicitud:", req.body);
   try {
-      console.log("Código recibido:", req.params.code); 
     // Verificar el token según la fecha de expiración
     const usuario = await User.findOne({
       code: req.params.code,
       // resetToken: req.params.token,
       resetTokenExpires: { $gt: Date.now() },
     });
-    console.log(usuario);
 
     // Verificar que el usuario exista
     if (!usuario) {
@@ -258,9 +576,7 @@ export const actualizarPassword = async (req, res) => {
     }
 
     // Verificar que se proporciona una nueva contraseña y que coincide con la confirmación
-    console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
     if (!password || !confirmPassword || password !== confirmPassword) {
-      console.error("Las contraseñas no coinciden");
       return res.status(400).json({
         message: ["Las contraseñas no coinciden"]
       });
@@ -285,31 +601,166 @@ export const actualizarPassword = async (req, res) => {
         pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
         },
       });
+
+      let messageHTML2 = `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Document</title>
+      
+          <style>
+              /* fuentes de sitios */
+              p, a, h1, h2, h3, h3, h5, h6 {font-family: "Roboto", sans-serif;}
+      
+              h1 {font-size: 30px ! important;}
+              h2 {font-size: 25px ! important;}
+              h3 {font-size: 18px ! important;}
+              h4 {font-size: 16px ! important;}
+      
+              p, a {font-size: 15px ! important;}
+      
+              .claseBoton{
+                  width: 30%;
+                  background: linear-gradient(to right, #0f172a, #082f49, #0f172a);
+                  border: 2px solid rgb(255, 255, 255);
+                  color: white !important;
+                  padding: 16px 32px;
+                  text-align: center;
+                  text-decoration: none;
+                  font-weight: bold;
+                  display: inline-block;
+                  font-size: 16px;
+                  margin: 4px 2px;
+                  transition-duration: 0.4s;
+                  cursor: pointer;
+              }
+      
+              .claseBoton:hover{
+                  background: white;
+                  border: 2px solid rgb(14, 13, 13);
+                  color: rgb(0, 0, 0) !important;
+              }
+      
+              .imag{
+                  width: 30px;
+                  height: 30px;
+              }
+      
+              .contA{
+                  margin: 0px 5px 0px 5px;
+              }
+              .afooter{
+                  color: white !important;
+                  text-decoration: none;
+                  font-size: 13px !important;
+              }
+          </style>
+      
+      </head>
+      <body>
+          
+          <div style="width: 100%; background-color: white;">
+              <div style="padding: 20px 10px 20px 10px; ">
+                  <!-- Imagen inicial -->
+                  <div style="background: linear-gradient(to right, #0f172a, #082f49, #0f172a); padding: 10px 0px 10px 0px; width: 100%; text-align: center;">
+                      <img src="cid:motorbike" alt="" style="width: 150px; height: 150px;">
+                  </div>
+                  <!-- Imagen inicial -->
+      
+                  <!-- Contenido principal -->
+                  <div style="background-color: white; padding: 20px 0px 5px 0px; width: 100%; text-align: center;">
+                      <h1 style="color: black !important;">
+                          <!-- Titulo principal -->
+                          Recuperación de Contraseña Exitosa!!
+                      </h1>
+                      <p style="color: black !important;">
+                          Hemos reestablecido su contraseña correctamente
+                      </p>
+
+                      <!-- Mensaje de gracias -->
+                      <p style="color: black !important;">¡gracias por su tiempo!</p>
+                      <p style="margin-bottom: 50px; color: black !important;"><i>Atentamente:</i> <br>Soporte Técnico</p>
+      
+                      <!-- Boton -->
+      
+                      <a class="claseBoton" href="http://localhost:5173/login">Iniciar sesion</a>
+                  </div>
+                  <!-- Contenido principal -->
+      
+      
+                  <!-- Footer -->
+                  <div style="background: linear-gradient(to right, #0f172a, #082f49, #0f172a); color: white; padding: 5px 0px 0px 0px; width: 100%; text-align: center;">
+      
+                      <!-- Redes sociales -->
+                      <br>
+                      <a href="https://wa.me/573004020129" class="contA"><img src="cid:whatsapp" class="imag"></a>
+                      <a href="https://www.facebook.com/" class="contA"><img src="cid:facebook" class="imag"></a>
+                      <a href="https://www.instagram.com
+                      " class="contA"><img src="cid:instagram" class="imag"></a>
+                      <a href="https://mail.google.com/" class="contA"><img src="cid:email" class="imag"></a>
+      
+                      <!-- Redes sociales -->
+      
+                      <h3><i>Soporte</i></h3>
+                      <p style="font-size: 13px; padding: 0px 20px 0px 20px;">
+                          Comunicate con nostros por los siguientes medios: <br>
+                          Correo: <a href="mailto:saritalop789@gmail.com" class="afooter">Motorbike@moto.com</a><br>
+                          Whatsapp: <a href="https://wa.me/573004020129" class="afooter">+57 - 3004020129</a>
+                      </p>
+                      <p style="background-color: black; padding: 10px 0px 10px 0px; font-size: 12px;">© 2023 Motorbike, Todos los derechos reservados</p>
+      
+      
+                  </div>
+              </div>
+          </div>
+      
+      </body>
+      </html>`
       
       const mailOptions = {
         to: usuario.email,
         subject: 'Recuperación de contraseña',
-        html: `
-        <div style="font-family: 'Arial', sans-serif;">
-          <h2 style="color: #1477e4; font-size: 24px;">Se ha reestablecido su contraseña con exito!!</h2>
-          <p style="font-size: 18px;">Para mas informacion, comunicate: <strong>3004020129</strong></p>
-          <p style="font-size: 18px;">¡Gracias!</p>
-        </div> `
+        html: messageHTML2,
+        attachments: [
+          {
+            filename: 'motorbike.png',
+            path : 'src/public/images/motorbike.png',
+            cid: 'motorbike' 
+          },
+          {
+            filename: 'facebook.png',
+            path : 'src/public/images/facebook.png',
+            cid: 'facebook' 
+          },
+          {
+            filename: 'instagram.png',
+            path : 'src/public/images/instagram.png',
+            cid: 'instagram' 
+          },
+          {
+            filename: 'whatsapp.png',
+            path : 'src/public/images/whatsapp.png',
+            cid: 'whatsapp' 
+          },
+          {
+            filename: 'email.png',
+            path : 'src/public/images/email.png',
+            cid: 'email' 
+          },
+
+        ]
       };
 
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-          console.error(error);
           return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
         }
-        console.log('Correo electrónico enviado:', info.response);
         res.status(200).json({ message: 'Correo electrónico enviado con éxito' });
 
     return res.status(200).json({ message: "Contraseña actualizada con éxito" });
     });
   } catch (error) {
-    console.error(error);
-    console.error("Error en la solicitud de actualizar contraseña:", error);
     return res.status(500).json({ message:[ "Error interno del servidor"] });
   }
 };

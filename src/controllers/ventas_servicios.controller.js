@@ -4,7 +4,20 @@ import  Cliente from "../models/cliente.model.js"
 
 export const getVentas_Servicios = async (req, res) => {
     try {
-      const ventas_servicios = await Ventas_Servicios.find().populate({ path: 'cliente', select: 'nombre_cliente' }).populate({ path: 'mecanico', select: 'nombre_mecanico' });
+
+      //const ventas_servicios = await Ventas_Servicios.find().populate({ path: 'cliente', select: 'nombre_cliente' }).populate({ path: 'mecanico', select: 'nombre_mecanico' }).sort({ createdAt: 'desc' }); codigo viejo
+      const ventasEnProceso = await Ventas_Servicios.find({ estado: "En proceso" })
+  .populate({ path: 'cliente', select: 'nombre_cliente' })
+  .populate({ path: 'mecanico', select: 'nombre_mecanico' })
+  .sort({ createdAt: 'desc' });
+
+const otrasVentas = await Ventas_Servicios.find({ estado: { $ne: "En proceso" } })
+  .populate({ path: 'cliente', select: 'nombre_cliente' })
+  .populate({ path: 'mecanico', select: 'nombre_mecanico' })
+  .sort({ createdAt: 'desc' });
+
+const ventas_servicios = ventasEnProceso.concat(otrasVentas);
+
       if (!ventas_servicios) {
         return res.status(404).json({ message: "Venta_servicios no encontrados" });
       }
@@ -33,7 +46,8 @@ export const createVentas_Servicios = async (req, res) => {
             cliente: clienteId,
             precio_servicio,
             descripcion,
-            estado
+            estado,
+            placa
         } = req.body;
 
         // Verifica si el cliente existe
@@ -54,7 +68,8 @@ export const createVentas_Servicios = async (req, res) => {
         cliente: clienteId,
         precio_servicio,
         descripcion,
-        estado
+        estado,
+        placa
         });
 
         // Guarda la venta de servicio en la base de datos

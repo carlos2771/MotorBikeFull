@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { registerRequest, loginRequest, verifyTokenRequest , enviarTokenRequest, validarTokenRequest, actualizarPasswordRequest, } from "../api/auth"; // Corregí "verifyTokentRequet" a "verifyTokenRequest".
 import Cookies from "js-cookie";
+import { Navigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
@@ -9,29 +10,37 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const checkLocalStorage = () => {
+      const storedUser = localStorage.getItem('user');
+      const token = Cookies.get('token');
 
-  // const signup = async (user) => {
-  //   try {
-  //     const res = await registerRequest(user);
-  //     if (res.status === 200) {
-  //       setUser(res.data);
-  //       setIsAuthenticated(true);
-  //       console.log("authh.res",isAuthenticated);
-  //     }
-  //   } catch (error) {
-  //     console.log(error.response.data);
-  //     setErrors(error.response.data.message);
-  //   }
-  // };
+      if(!token && storedUser){
+        localStorage.removeItem("user");
+        setIsAuthenticated(false)
+      }
+
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setLoading(false);
+    };
+
+    checkLocalStorage();
+  }, []);
+
   const signup = async (user) => { // Registrarse
     try {
-      // Realizar la solicitud de registro y obtener los datos del usuario
       const response = await registerRequest(user);
-      console.log(response);
-      setUser(response); // Actualizar el usuario con los datos recibidos
-       // Establecer la autenticacións a true
+      setUser(response);
+      setIsAuthenticated(false) 
+      setLoading(false)
+      return response
     } catch (error) {
-      console.log(error.response.data);
       setErrors(error.response.data.message); 
     } 
   };
@@ -42,48 +51,60 @@ export const AuthProvider = ({ children }) => {
       setUser(response);
       // setUser(response.data); si tiene algun error en el login, pruebe esto
       setIsAuthenticated(true);
-      console.log("data",response);
+      setLoading(false)
+      localStorage.setItem('user', JSON.stringify(response));
     } catch (error) {
-      console.log(error);
       setErrors(error.response.data.message);
     }
   };
 
   const logout = () => {
     Cookies.remove("token");
-    setUser(null);
+    setUser(null)
     setIsAuthenticated(false);
+    localStorage.removeItem("user");
   };
 
+  // AuthContext.jsx
   const enviarToken = async (email) => {
     try {
-      const response = await enviarTokenRequest(email);
-      console.log(response);
-      console.log("se creo correctamente el token")
-      console.log("se envio correctamente el email")
+      // Lógica para verificar si el correo electrónico está registrado (debería implementarse según tus necesidades)
+        const isEmailRegistered = await enviarTokenRequest(email);
+
+        if (isEmailRegistered) {
+            return true;  // El correo electrónico está registrado
+        } else {
+            return false;  // El correo electrónico no está registrado
+        }
     } catch (error) {
-      console.log(error.response.data);
-      setErrors(error.response.data.message);
+        return false;  // Manejo de errores, el correo electrónico no está registrado
     }
   };
+
   const validarToken = async (code) => {
     try {
+      // Hacer la solicitud para validar el token
       const response = await validarTokenRequest(code);
-      console.log(response);
-      console.log();
+      // setUser(response)
+  
+      // Verificar si la respuesta indica que el código es válido
+      // const isValidCode = response && response.status === 200 && response.data && response.data.valid;
+  
+      if (response) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
-      console.log(error.response.data);
-      setErrors(error.response.data.message);
+      setErrors(error.response?.data?.message || 'Error al validar el código.');
+      return false;
     }
   };
+  
   const actualizarPassword = async (code,  password, confirmPassword ) => {
     try {
-      console.log("Código:", code);
-      console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
       const response = await actualizarPasswordRequest(code,  password, confirmPassword);
-      console.log(response);
     } catch (error) {
-      console.log(error.response.data);
       setErrors(error.response.data.message);
     }
   };
@@ -100,34 +121,34 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkLogin = async () => {
-      console.log('entro');
       const cookies = Cookies.get();
 
-      if (!cookies.token) {
-        setIsAuthenticated(false);
+      if (cookies.token) {
         setLoading(false);
+        setIsAuthenticated(true);
         return;
       }
       try {
         const res = await verifyTokenRequest(cookies.token); 
-        if (!res.data) return setIsAuthenticated(false);
-        setIsAuthenticated(true);
-        setUser(res.data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
+        if (res.data) return setIsAuthenticated(true);
         setIsAuthenticated(false);
-        setLoading(false);
+        setUser(res.data);
+        setLoading(false)
+      } catch (error) {
+        setIsAuthenticated(false);
+        setLoading(true);
       }
     };
 
     checkLogin();
   }, []);
 
+
+
   return (
     <AuthContext.Provider value={{ signup, signin, logout, enviarToken,
       validarToken, actualizarPassword, loading, user, isAuthenticated, errors }}>
-      {children}
+      {children}  
     </AuthContext.Provider>
   );
 };

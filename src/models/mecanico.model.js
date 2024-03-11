@@ -13,7 +13,7 @@ const mecanicoSchema = new mongoose.Schema({
         type: String, //Tipo String
         required: true,//Es requerido
         trim: true, // limpiar espacios de los inputs
-        unique: true //Unico
+    
     },
     telefono_mecanico: {
         type: String,  //Tipo String
@@ -22,6 +22,7 @@ const mecanicoSchema = new mongoose.Schema({
     direccion_mecanico:{
         type: String,  //Tipo String
         required: true, //Es requerido
+        trim: true,
         
     },
     estado:{

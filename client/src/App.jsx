@@ -22,15 +22,6 @@ import PermisosPage from "./pages/Permisos/PermisosPage";
 import { PermisoProvider } from "./context/PermisosContext";
 import FormPermisos from "./pages/Permisos/FormPermiso";
 
-<<<<<<< HEAD
-import { MecanicoProvider } from "./context/MecanicosContext";
-import MecanicosPage from "./pages/mecanicos/PageMecanicos";
-import FormMecanico from "./pages/mecanicos/FormMecanico";
-
-import { MarcasProvider } from "./context/MarcasContext";
-import PageMarcas  from "./pages/marcas/PageMarcas";
-import FormMarca from "./pages/marcas/FormMarca";
-=======
 import PageVentaServicios from "./pages/ventasServicios/PageVentaServicios";
 import { VentasServicioProvider } from "./context/VentasServicioContex";
 import FormVentaServicio from "./pages/ventasServicios/FormVentaServicio";
@@ -57,7 +48,22 @@ import Graficos from "./pages/graficos/Index";
 import PasswordPage from "./pages/PasswordPage";
 import ActualizarPassword from "./pages/ActualizarPassword";
 import ValidarCodePage from "./pages/ValidarCodePage";
->>>>>>> 60306eb967723c91bfbcf96a43887b3680169091
+
+import Home from "./components/Home"
+import { CartProvider } from "./context/CartContext";
+
+import { CartClienteProvider } from "./context/CartClienteContext";
+import PageCartClient from "./pages/cartClient/PageCartClient";
+
+
+import PageUsuarios from "./pages/usuarios/PageUsuarios";
+import FormUsuarios from "./pages/usuarios/FormUsuarios";
+
+import { RolesProvider } from "./context/RolsContext";
+import PageRoles from "./pages/roles/PageRoles";
+import FormRoles from "./pages/roles/FormRoles";
+
+import { UsuarioProvider } from "./context/usuariosContext";
 
 export default function App() {
 
@@ -66,12 +72,12 @@ export default function App() {
       <AuthProvider>
         {/* Para validar las rutas de las tareas */}
 
+      
         <TaskProvider>
           <ClienteProvider>
             <VentasRepuestoProvider>
               <RepuestoProvider>
                 <PermisoProvider>
-<<<<<<< HEAD
                   <MecanicoProvider>
                     <MarcasProvider> 
                       {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
@@ -113,15 +119,20 @@ export default function App() {
                       </BrowserRouter>
                     </MarcasProvider>  
                   </MecanicoProvider>
-=======
                   <VentasServicioProvider>
                     <RepuestoProvider>
                       <MecanicoProvider>
                         <MarcaProvider>
                           <CompraProvider>
+                            <CartProvider>
+                              <CartClienteProvider>
+                                <RolesProvider>
+                                  <UsuarioProvider>
+
+                              
                            {/* // para que los componentes se compartan las props entre si, sin necesidad de hacerlo manualmente (context) */}
                             <BrowserRouter>
-                              <main className='min-h-screen bg-gradient-to-tr from-[#1E293B] via-[#0f172a] to-[#1E293B] px-8 md:px-14 lg:px-36 pb-10 pt-7'>  
+                              <main className='min-h-screen bg-gradient-to-tr from-[#1E293B] via-[#0f172a] to-[#1E293B] px-8 md:px-14 lg:px-26 pb-10 pt-7 '>  
                                 <Navbar/>
                                 <Routes>
                                   <Route path="/" element={<HomePage />} />
@@ -136,64 +147,68 @@ export default function App() {
                                     <Route path="/tasks" element={<TaskPaje />} />
                                     <Route path="/add-task" element={<TaskFormPage />} />
                                     <Route path="/tasks/:id" element={<TaskFormPage />} />
+                                    <Route path="/home" element={<Home/>} />
+                                    <Route path="/home-page" element={<PageCartClient/>} />
                                     
+                                   
                                     <Route path="/profile" element={<ProfilePage />} />
                                     <Route path="/clientes" element={<PageClientes />} />
                                     <Route path="/add-cliente" element={<FormCliente />} />
                                     <Route path="/cliente/:id" element={<FormCliente />} />
 
-                                    <Route path="/profile" element={<ProfilePage />} />
-                                    <Route path="/clientes" element={<PageClientes />} />
-                                    <Route path="/add-cliente" element={<FormCliente />} />
-                                    <Route path="/cliente/:id" element={<FormCliente />} />
+                                            <Route path="/ventas-servicios" element={<PageVentaServicios />} />
+                                            <Route path="/add-venta-servicio" element={<FormVentaServicio />} />
+                                            <Route path="/ventas-servicios/:id" element={<FormVentaServicio />} />
 
-                                    <Route path="/permisos" element={<PermisosPage />} />
-                                    <Route path="/add-permiso" element={<FormPermisos />} />
-                                    <Route path="/permiso/:id" element={<FormPermisos />} />
+                                            <Route path="/repuestos" element={<PageRepuestos />} />
+                                            <Route path="/add-repuesto" element={<FormRepuesto />} />
+                                            <Route path="/repuestos/:id" element={<FormRepuesto />} />
 
-                                    <Route path="/ventas-repuestos" element={<PageVentaRepuestos />} />
-                                    <Route path="/add-venta-repuesto" element={<FormVentaRepuesto />} />
-                                    <Route path="/venta-repuesto/:id" element={<FormVentaRepuesto />} />
+                                            <Route path="/mecanicos" element={<PageMecanico />} />
+                                            <Route path="/add-mecanico" element={<FormMecanico />} />
+                                            <Route path="/mecanico/:id" element={<FormMecanico />} />
 
-                                    <Route path="/ventas-servicios" element={<PageVentaServicios />} />
-                                    <Route path="/add-venta-servicio" element={<FormVentaServicio />} />
-                                    <Route path="/ventas-servicios/:id" element={<FormVentaServicio />} />
+                                            <Route path="/marcas" element={<PageMarcas />} />
+                                            <Route path="/add-marca" element={<FormMarca />} />
+                                            <Route path="/marca/:id" element={<FormMarca />} />
 
-                                    <Route path="/repuestos" element={<PageRepuestos />} />
-                                    <Route path="/add-repuesto" element={<FormRepuesto />} />
-                                    <Route path="/repuestos/:id" element={<FormRepuesto />} />
+                                            <Route path="/mecanicos/:id" element={<VerMecanico />} /> {/* ¿Que hace este Route? */}
 
-                                    <Route path="/mecanicos" element={<PageMecanico />} />
-                                    <Route path="/add-mecanico" element={<FormMecanico />} />
-                                    <Route path="/mecanico/:id" element={<FormMecanico />} />
+                                            <Route path="/compras" element={<PageCompras />} />
+                                            <Route path="/add-compra" element={<FormCompras />} />
+                                            <Route path="/compras/:id" element={<FormCompras />} />
 
-                                    <Route path="/marcas" element={<PageMarcas />} />
-                                    <Route path="/add-marca" element={<FormMarca />} />
-                                    <Route path="/marca/:id" element={<FormMarca />} />
+                                            <Route path="/graficos" element={<Graficos />} />
 
-                                    <Route path="/mecanicos/:id" element={<VerMecanico />} />
+                                            <Route path="/usuarios" element={<PageUsuarios />} />
+                                            <Route path="/add-usuario" element={<FormUsuarios />} />
+                                            <Route path="/usuarios/:id" element={<FormUsuarios />} />
+                                            
 
-                                    <Route path="/compras" element={<PageCompras />} />
-                                    <Route path="/add-compra" element={<FormCompras />} />
-                                    <Route path="/compras/:id" element={<FormCompras />} />
+                                            <Route path="/rol" element={<PageRoles />} />
+                                            <Route path="/add-roles" element={<FormRoles />} />
+                                            <Route path="/rol/:id" element={<FormRoles />} />
 
-                                    <Route path="/graficos" element={<Graficos />} />
 
-                                  </Route>
-                                </Routes>
-                              </main>
-                            </BrowserRouter>
+                                          </Route>
+                                        </Routes>
+                                      </main>
+                                    </BrowserRouter>
+                                  </UsuarioProvider>
+                                </RolesProvider>
+                              </CartClienteProvider>
+                            </CartProvider>
                           </CompraProvider>
                         </MarcaProvider>
                       </MecanicoProvider>
                     </RepuestoProvider>
                   </VentasServicioProvider>
->>>>>>> 60306eb967723c91bfbcf96a43887b3680169091
                 </PermisoProvider>
               </RepuestoProvider>
             </VentasRepuestoProvider>
           </ClienteProvider>
         </TaskProvider>
+  
       </AuthProvider>
     </div>
   );

@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import utc from "dayjs/plugin/utc"
 import dayjs from 'dayjs'
 import { NombreRequired } from '../utils/validations'
+import Swal from "sweetalert2";
 dayjs.extend(utc)
 //dayjs es para modificar la fecha a tipo string
 
@@ -18,7 +19,6 @@ export default function TaskFormPage() {
     async function loadTask (){
       if(params.id){ // lo que capture de params de tasks lo va traer a este formulario
         const task = await getTask(params.id) // para ver los datos de una tarea especifica desde todas las tareas
-        console.log(task);
         setValue("title",task.title)
         setValue("description",task.description)
         
@@ -36,8 +36,42 @@ export default function TaskFormPage() {
     } 
     if(params.id){
       updateTask(params.id, dateValid)
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+        color: "white",
+        timer: 4000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Actualizado correctamente",
+      });
     }else{
       createTask(dateValid);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+        color: "white",
+        timer: 4000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Agregado correctamente",
+      });
     }
     navigate("/tasks")
   })
@@ -46,33 +80,33 @@ export default function TaskFormPage() {
     <div className='bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40'>
     <h1 className="text-2xl flex justify-center mb-5">Agregar tarea </h1>
       <form onSubmit={onSubmit}>
-        <label htmlFor="title">Titulo</label>
+        <label htmlFor="title">Título</label>
         <input 
         type="text" 
-        placeholder='Titulo' 
+        placeholder='Título' 
         {...register("title", NombreRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         autoFocus
         />
         {errors.title && <p className="text-red-500">{errors.title.message}</p>}
-        <label htmlFor="description">Descripcion</label>
+        <label htmlFor="description">Descripción</label>
         <textarea 
         rows="3" 
-        placeholder='Descripcion'
+        placeholder='Descripción'
         {...register("description", NombreRequired)}
         className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2'
         ></textarea>
         {errors.description && <p className="text-red-500">{errors.description.message}</p>}
 
         
-        <label htmlFor="date">Date</label>
+        <label htmlFor="date">Fecha</label>
         <input className='w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2' type="date"{...register("date")} />
         <div className='justify-end flex mt-6'>
           <button className='px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 d'>
           Guardar
         </button>
-        <button className='px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-3  '>
-          <Link to="/tasks">Cancelar</Link>
+        <button className=''>
+          <Link to="/tasks" className='px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-3 '>Cancelar</Link>
         </button>
         </div>
       </form>

@@ -25,7 +25,6 @@ export function VentasRepuestoProvider({ children }) {
   const getVentasRepuestos = async () => {
     try {
       const res = await getVentasRepuestosRequest();
-      console.log(res);
       setVentasRepuestos(res);
     } catch (error) {
       console.error(error);
@@ -35,10 +34,8 @@ export function VentasRepuestoProvider({ children }) {
   const createVentaRepuesto = async (venta) => {
     try {
       return  await createVentasRepuestosRequest(venta);
-      // console.log("ventas:", response);
     } catch (error) {
       setErrors(error.response.data.message);
-      console.log(error);
     }
   };
 
@@ -63,7 +60,6 @@ export function VentasRepuestoProvider({ children }) {
   const deleteVentaRepuesto = async (id) => {
     try {
       const res = await deleteVentasRepuestosRequest(id);
-      console.log(res);
       if (res.status === 204) {
         setVentasRepuestos(ventasRepuestos.filter((venta) => venta._id !== id));
       }

@@ -24,7 +24,6 @@ export function ClienteProvider({ children }) {
   const getClientes = async () => {
     try {
       const res = await getClientesRequest();
-      console.log(res);
       setClientes(res)
     } catch (error) {
       console.error(error);
@@ -35,9 +34,8 @@ export function ClienteProvider({ children }) {
       try {
         return await createClientesRequest(cliente);
         // return response
-        console.log("clientes:",response)
       } catch (error) {
-        console.log(error);
+
         setErrors(error.response.data.message);
       }
     
@@ -64,7 +62,6 @@ export function ClienteProvider({ children }) {
   const deleteCliente = async (id) => {
     try {
       const res = await deleteClientesRequest(id);
-      console.log(res);
       if (res.status === 204) setClientes(clientes.filter((cliente) => cliente._id !== id));
     } catch (error) {
       console.error(error);

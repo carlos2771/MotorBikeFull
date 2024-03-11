@@ -25,7 +25,6 @@ export function PermisoProvider({ children }) {
   const getPermisos = async () => {
     try {
       const res = await getPermisosRequest();
-      console.log(res);
       setPermisos(res);
     } catch (error) {
       console.error(error);
@@ -35,10 +34,8 @@ export function PermisoProvider({ children }) {
   const createPermiso = async (permisos) => {
     try {
       return await createPermisosRequest(permisos);
-      console.log("permisos:", response);
     } catch (error) {
       setErrors(error.response.data.message);
-      console.log(error);
     }
   };
 
@@ -63,7 +60,6 @@ export function PermisoProvider({ children }) {
   const deletePermiso = async (id) => {
     try {
       const res = await deletePermisosRequest(id);
-      console.log(res);
       if (res.status === 204) {
         setPermisos(permisos.filter((permisos) => permisos._id !== id));
       }

@@ -26,5 +26,8 @@ export const ventas_serviciosSchema = z.object({
     descripcion: z.string()
         .refine(value => !/^\d+$/.test(value), {
             message: "La descripción no puede contener solo números enteros"
+        }),
+    placa: z.string().refine(value => value.trim() !== "", {
+            message: "La placa no puede estar vacío"
         })
 });
