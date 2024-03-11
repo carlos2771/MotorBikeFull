@@ -186,7 +186,7 @@ export default function PageRepuestos() {
     {
       field: "name",
       headerName: "Repuesto",
-      width: 160,
+      width: 250,
       headerClassName: "custom-header",
     },
     {
@@ -195,6 +195,12 @@ export default function PageRepuestos() {
       width: 170,
       headerClassName: "custom-header",
       valueGetter: (params) => params.row.marca.nombre_marca,
+    },
+    {
+      field: "amount",
+      headerName: "Cantidad",
+      width: 150,
+      headerClassName: "custom-header",
     },
 
     {
