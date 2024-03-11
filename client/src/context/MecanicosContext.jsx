@@ -29,19 +29,17 @@ export function MecanicoProvider({ children }) {
       console.error(error);
     }
   };
+
   const createMecanico = async (mecanico) => {
       try {
         return await createMecanicosRequest(mecanico);
         // return response
-
-        console.log("mecanicos:",response)
-
-        console.log("mecanico:",response)
       } catch (error) {
         setErrors(error.response.data.message);
       }
     
   }
+
   const getMecanico = async (id) => {
     try {
       const res = await getMecanicoRequest(id);

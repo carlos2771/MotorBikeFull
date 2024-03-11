@@ -8,7 +8,6 @@ import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function FormMecanico() {
-
   const {
     register,
     handleSubmit,
@@ -31,12 +30,13 @@ export default function FormMecanico() {
       if (params.id) {
         setFormTitle("Editar marca");
         const marca = await getMarca(params.id);
-
         setValue("nombre_marca", marca.nombre_marca);
+        setValue("estado", marca.estado);
+      } else {
+        setValue("estado", "Activo");
       }
     })();
   }, []);
-  
 
   const onSubmit = handleSubmit(async (data) => {
     const lowercaseData = {
