@@ -24,7 +24,7 @@ function generateRandomToken(length) {
 }
 
 export const register = async (req, res) => {
-  const { email, password, username, estado, rol } = req.body;
+  const { email, password, confirmPassword,username, estado, rol } = req.body;
 
   try {
     const userFound = await User.findOne({ email }); // para validar en el frontend si el usuario ya existe
@@ -33,8 +33,12 @@ export const register = async (req, res) => {
     }
     const passwordHash = await bcrypt.hash(password, 10);
 
-    if (!email || !password || !username) {
+    if (!email || !password || !username|| !confirmPassword) {
       return res.status(400).json({ message: ["Datos incompletos"] });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: ["Las contraseñas no coinciden"] });
     }
 
     const newUser = new User({
@@ -249,7 +253,6 @@ export const login = async (req, res) => {
   try {
     const { email, password, rol } = req.body;
     const userFound = await User.findOne({ email }).populate('rol');
-    
 
     if (!userFound) return res.status(400).json({ message: ["Usuario/Contraseña incorrecto"] });
     if (userFound.estado === "Inactivo")

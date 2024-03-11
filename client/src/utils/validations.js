@@ -83,7 +83,7 @@ export const precioRepuesto = {
 export const PasswordRequire = {
   required: "Campo requerido",
   minLength: { value: 8, message: "La contraseña debe tener al menos 8 caracteres" },
-  maxLength: { value: 20, message: "La contraseña no puede tener más de 15 caracteres" },
+  maxLength: { value: 20, message: "La contraseña no puede tener más de 20 caracteres" },
   validate: (value) => {
     if (!value.trim()) {
       return "La contraseña no puede estar vacía ni contener solo espacios.";
@@ -94,7 +94,6 @@ export const PasswordRequire = {
     return true;
   }
 };
-
 
 export const PasswordRequired = {
   required: "Campo requerido",

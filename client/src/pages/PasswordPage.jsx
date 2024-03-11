@@ -7,7 +7,8 @@ import { Alert } from "@material-tailwind/react";
 import { useSpring, animated } from 'react-spring';
 import Swal from "sweetalert2";
 import backgroundImage from './images/yamaha.jpg'; // Importa la imagen de fondo
-
+import { css } from "@emotion/react";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function PasswordPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -20,6 +21,7 @@ export default function PasswordPage() {
       const isEmailRegistered = await enviarToken(values.email);
 
       if (isEmailRegistered) {
+        setButtonHidden(true)
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -37,6 +39,7 @@ export default function PasswordPage() {
           icon: "success",
           title: "Correo enviado correctamente Revisa tu correo electrónico"
         });
+        
         setShouldNavigate(true);
         setEmailValue(values.email);
         
@@ -100,9 +103,23 @@ export default function PasswordPage() {
               <p className="text-red-500">{errors.email.message}</p>
             )}
             <div className='flex justify-center'>
-              <button
+              {!buttonHidden ?(<button
                 className="px-5 py-1 m-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
-                type="submit">Siguiente</button>
+                type="submit">Siguiente</button>): (
+                  <div className="flex justify-center items-center">
+                    <ClipLoader
+                      css={css`
+                        display: block;
+                        margin: 0 auto;
+                        border-color: red;
+                      `}
+                      size={35}
+                      color={"#123abc"}
+                      loading={buttonHidden}
+                    />
+                    <p className="ml-2 text-white">Enviando...</p>
+                  </div>
+                ) }
             </div>
           </form>
         </div>
