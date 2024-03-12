@@ -67,7 +67,7 @@ export default function FormRepuesto() {
     (async () => {
       if (params.id) {
         setFormTitle("Editar repuesto");
-        const repuesto = await geteRepuesto(params.id);
+        const repuesto = await getRepuesto(params.id);
         // Resto del código...
         if (repuesto.img) {
           setImageBase64(repuesto.img);
@@ -89,7 +89,7 @@ export default function FormRepuesto() {
         setValue("nombre_marca", repuesto.nombre_marca);
         setValue("price", repuesto.price);
         setValue("img", repuesto.img)
-
+ 
         // Setear el nombre de la imagen si existe
         if (repuesto.img) {
           setImageBase64(repuesto.img);
@@ -292,6 +292,7 @@ export default function FormRepuesto() {
               </label>
               <input
                 id="imagen"
+                {...register("img")} // Aquí agregamos el register para el campo de imagen
                 type="file"
                 onChange={handleImageChange}
                 className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
