@@ -14,9 +14,9 @@ export const ItemCart = ({ item, updateTotal, handleUpadateUnit }) => {
 
   const handleInputChange = (event) => {
     let newValue = Number(event.target.value);
-    // Verificar si el nuevo valor es 0, si es así, establecerlo en 1 en su lugar
+    // Verificar si el nuevo valor es 0 o NaN, si es así, establecerlo en 1 en su lugar
     if (isNaN(newValue) || newValue <= 0 ) {
-      newValue = "" 
+      newValue = 1;
     }
     setNum(newValue);
     updateTotal(item._id, newValue);
@@ -32,10 +32,9 @@ export const ItemCart = ({ item, updateTotal, handleUpadateUnit }) => {
           <p>{item.name}</p>
           <div className={styles.buttons}>
             <input
-            type="number"
+              type="number"
               value={num}
               onChange={handleInputChange}
-          
               className="w-12  border-0 bg-slate-700  border-b-2 border-blue-600 text-white  "
             />
             <button className="max-sm:text-xs px-3 py-1 ml-3 text-xs text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30" onClick={async() => await deleteProduct(item._id)}><FontAwesomeIcon icon={faBan} /></button>
