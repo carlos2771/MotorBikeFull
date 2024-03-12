@@ -35,7 +35,7 @@ export function CharBar() {
         return;
       }
   
-      let url = "http://localhost:3000/api/ventas_servicios";
+      let url = "https://backend-motorbikefull.onrender.com/api/ventas_servicios";
   
       if (startDate && endDate) {
         const formattedStartDate = startDate.toISOString().split("T")[0];
