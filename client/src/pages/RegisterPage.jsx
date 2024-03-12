@@ -7,7 +7,7 @@ import {
   EmailRequired,
   EstadoRequired,
   PasswordRequire,
-  NombreMaRequired
+  NombreUsuarioRequired
 } from "../utils/validations";
 import { useSpring, animated } from "react-spring";
 import Swal from "sweetalert2";
@@ -92,7 +92,7 @@ export default function registerPage() {
             <form onSubmit={onSubmit}>
               <input
                 type="text"
-                {...register("username", NombreMaRequired)}
+                {...register("username", NombreUsuarioRequired)}
                 className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white px-4 py-2 rounded2 my-2 border-0 border-b-2 border-sky-500   "
                 placeholder="Nombre de usuario"
               />
