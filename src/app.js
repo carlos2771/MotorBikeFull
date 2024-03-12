@@ -35,7 +35,7 @@ app.use(morgan("dev"));
 // app.use(bodyParser.json({ limit: '10mb' }));
 app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
-app.use("/api", authRoutes);
+app.use("/", authRoutes);
 app.use("/api", taskRoutes);
 app.use("/api", clientesRoutes);
 app.use("/api", mecanicosRoutes);
