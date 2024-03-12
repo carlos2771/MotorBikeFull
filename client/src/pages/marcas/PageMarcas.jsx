@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import { Link, Navigate } from "react-router-dom";
@@ -20,6 +20,7 @@ import { useAuth } from "../../hooks/useAuth";
 export default function PageMarcas() {
   const { marcas, getMarcas, updateMarca } = useMarcas();
   const { user } = useAuth();
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     getMarcas();
@@ -86,9 +87,8 @@ export default function PageMarcas() {
           );
         }
         // Muestra un mensaje de éxito según el estado de la marca
-        const successMessage = `La marca se ha ${
-          nuevoEstado === "Activo" ? "habilitado" : "inhabilitado"
-        } correctamente`;
+        const successMessage = `La marca se ha ${nuevoEstado === "Activo" ? "habilitado" : "inhabilitado"
+          } correctamente`;
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -172,47 +172,62 @@ export default function PageMarcas() {
     XLSX.writeFile(wb, "marcas.xlsx");
   };
 
+
+
+  const handleSearchTermChange = (event) => {
+    setSearchTerm(event.target.value); // 2. Manejar cambios en el término de búsqueda
+  };
+
+  const filteredMarcas = marcas.filter((marca) =>
+    marca.nombre_marca.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+
   const permissions = user?.rol?.permissions || [];
 
   return (
     <>
       {permissions.includes("Marcas") ? (
         <div className="mt-16">
-          <div className="flex flex-col sm:flex-row justify-between items-center mx-16">
-            <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
-              <FontAwesomeIcon icon={faMotorcycle} className="mr-2" />
+           <h1 className="text-2xl text-start sm:text-center md:text-center lg:text-start ml-4 sm:ml-0 mb-4 sm:mb-0">
+              <FontAwesomeIcon icon={faMotorcycle} className="ml-4 mr-2 sm:ml-4 md:ml-16" />
               Gestión de marcas
             </h1>
+          <div className="flex flex-col sm:flex-row justify-between items-center mx-16 sm:mx-4 md:mx-16 mt-2">
+          <div className="">
+                  <input
+                    type="text"
+                    placeholder="Buscar..."
+                    value={searchTerm}
+                    onChange={handleSearchTermChange}
+                    className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 text-black"
+                  />
+                </div>
             <div className="mx-4 sm:mx-0 justify-end flex">
               <div className="flex">
+
                 <Link to="/add-marca">
                   <button
-                    className="px-4 py-2 text-sm text-white font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
+                    className="px-4 py-2 mt-2 sm:mt-0 text-sm text-white font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
                     title="Agregar"
                   >
                     <FontAwesomeIcon icon={faPlus} />
                   </button>
                 </Link>
-                {/* <button
-                  onClick={exportarAExcel}
-                  className="px-4 py-2 ml-2 text-sm text-white font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent max-w-full max-h-10"
-                  title="Descargar excel"
-                >
-                  <FontAwesomeIcon icon={faDownload} />
-                </button> */}
               </div>
             </div>
           </div>
 
+          
+
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mx-4 md:mx-16">
-            {marcas.map((marca) => (
+            {filteredMarcas.map((marca) => (
               <div
                 key={marca._id}
-                className={`col ${
-                  marca.estado === "Activo"
+                className={`col ${marca.estado === "Activo"
                     ? "shadow-lg shadow-blue-600/40"
                     : "shadow-lg shadow-red-800/40"
-                } bg-slate-700 w-full p-4 rounded-md mb-2`}
+                  } bg-slate-700 w-full p-4 rounded-md mb-2`}
               >
                 <h3 className="text-xl font-semibold mb-2 text-center">
                   {marca.nombre_marca}
@@ -231,11 +246,10 @@ export default function PageMarcas() {
                     onClick={() =>
                       mostrarAlerta(marca._id, marca.nombre_marca, marca.estado)
                     }
-                    className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${
-                      marca.estado === "Activo"
+                    className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${marca.estado === "Activo"
                         ? "border-red-500 hover:bg-red-500"
                         : "border-indigo-500 hover:bg-indigo-500"
-                    }`}
+                      }`}
                   >
                     {marca.estado === "Activo" ? (
                       <FontAwesomeIcon icon={faBan} />
