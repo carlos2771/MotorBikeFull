@@ -23,7 +23,6 @@ export function RolesProvider({ children }) {
   const getRoles = async () => {
     try {
       const res = await getRolesRequest();
-      console.log(res);
       setRoles(res)
     } catch (error) {
       console.error(error);
@@ -34,9 +33,7 @@ export function RolesProvider({ children }) {
       try {
         return await createRolRequest(roles);
         // return response
-        console.log("roles:",response)
       } catch (error) {
-        console.log(error);
         setErrors(error.response.data.message);
       }
     
@@ -63,7 +60,6 @@ export function RolesProvider({ children }) {
   const deleteRol = async (id) => {
     try {
       const res = await deleteRolRequest(id);
-      console.log(res);
       if (res.status === 204) setClientes(roles.filter((roles) => roles._id !== id));
     } catch (error) {
       console.error(error);

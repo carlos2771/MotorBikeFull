@@ -47,7 +47,16 @@ CartClienteSchema.pre("save", function (next) {
     (acc, cartItem) => acc + cartItem.amount * cartItem.price,
     0
   );
-  this.total = cartTotal - (this.descuento || 0);
+  
+  // Calcula el descuento en porcentaje
+  const discountPercentage = this.descuento / 100;
+
+  // Calcula el descuento aplicado al total
+  const discountAmount = cartTotal * discountPercentage;
+
+  // Resta el descuento al total
+  this.total = cartTotal - discountAmount;
+
   const randomCode = generateRandomCode(4);
   this.codigo = randomCode;
 
@@ -56,6 +65,7 @@ CartClienteSchema.pre("save", function (next) {
 
   next();
 });
+
 
 CartClienteSchema.methods.anular = async function () {
   if (this.anulado) {

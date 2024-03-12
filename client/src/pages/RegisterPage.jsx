@@ -7,7 +7,7 @@ import {
   EmailRequired,
   EstadoRequired,
   PasswordRequire,
-  NombreMaRequired,
+  NombreMaRequired
 } from "../utils/validations";
 import { useSpring, animated } from "react-spring";
 import Swal from "sweetalert2";
@@ -25,14 +25,6 @@ export default function registerPage() {
   const { signup, isAuthenticated, errors: registerErrors, userFound  } = useAuth(); // todo hace parte del contexto y el errors es para que en el response data de la consola me muestre el error que tira desde el backend
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-
-  // console.log("authh", isAuthenticated);
-  // useEffect(() => {
-  //   // para acuatilizar el estado del componente
-  //   if (isAuthenticated) navigate("/tasks"); // si esta authenticado que lo envie a   las tareas
-
-  //   console.log("entro");
-  // }, [isAuthenticated]);
 
   const onSubmit = handleSubmit(async (values) => {
     if (!userFound) {
@@ -67,7 +59,6 @@ export default function registerPage() {
         icon: "error",
         title: "Error al crear el usuario",
       });
-      console.log("Error en la solicitud:", res.error);
     }
   };
 
@@ -138,6 +129,15 @@ export default function registerPage() {
               </div>
               {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>
+              )}
+              <input
+                type={showPassword ? "text" : "password"}
+                {...register("confirmPassword", PasswordRequire)}
+                className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-950 border-0 border-b-2 border-sky-500 text-white px-4 py-2 rounded2 my-2"
+                placeholder="Confirmar Contraseña"
+              />
+              {errors.confirmPassword && (
+                <p className="text-red-500">{errors.confirmPassword.message}</p>
               )}
               <select
                 {...register("estado")}

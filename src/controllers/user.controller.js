@@ -199,10 +199,8 @@ export const createUsuario = async (req, res) => {
   
       transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-            console.error(error);
             return res.status(500).json({ message: ['Error al enviar el correo electrónico'] });
           }
-          console.log('Correo electrónico enviado:', info.response);
           // Envía una respuesta al cliente después de enviar el correo electrónico
           res.status(201).json(userSaved);
         });
@@ -211,7 +209,6 @@ export const createUsuario = async (req, res) => {
         res.status(400).json({ message: error.message });
       }
     } catch (error) {
-      console.log("error en backend");
       res.status(500).json({ message: error.message });
     }
 };
@@ -223,12 +220,10 @@ export const getUsuarios = async (req, res) => {
     try {
       const users = await User.find().populate({ path: 'rol', select: 'name' });
     if(!users){
-      console.log("usuarios no encontrados ")
       return res.status(404).json({message: ["user no enconreados"]})
     }
       res.json(users);
     } catch (error) {
-      console.log("el error",error);
       res.status(500).json({ message: error.message });
     }
   };
@@ -244,7 +239,6 @@ export const getUsuarios = async (req, res) => {
       }
       res.json(user);
     } catch (error) {
-      console.log("el error",error);
       res.status(500).json({ message: error.message });
     }
   };
@@ -255,7 +249,6 @@ export const getUsuarios = async (req, res) => {
       const updatedUser = await User.findByIdAndUpdate(req.params.id,req.body, { new: true });
       res.json(updatedUser);
     } catch (error) {
-      console.log("no se pudo actualizar")
       res.status(500).json({ message: error.message });
     }
   };

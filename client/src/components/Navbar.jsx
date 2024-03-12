@@ -22,6 +22,8 @@ import {
   faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 import logo from "../pages/images/motorbike.png";
+import imgLogo from "../images/motorbike (3).png"
+
 
 export default function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
@@ -89,12 +91,13 @@ export default function Navbar() {
                 style={{ maxHeight: "calc(100vh - 50px)", overflowY: "auto" }}
               >
                 <button
-                  className="bg-slate-700 text-white px-14 pt-2 sticky top-0 "
+                  className="bg-gradient-to-tr from-[#1E293B] via-[#0f172a] to-[#1E293B] text-white px-14 pt-2 sticky top-0 items-center"
                   onClick={() => setOpen(false)}
                 >
-                  <h1 className=" flex p-2 text-xl font-bold text-white ">
-                    <FontAwesomeIcon icon={faGears} className="mr-2" /> Motor{" "}
-                    <span className="text-blue-300">Bike</span>
+                  <h1 className=" flex p-2 text-xl font-bold text-white items-center">
+                    {/* <FontAwesomeIcon icon={faGears} className="mr-2" /> Motor
+                    <span className="text-blue-300">Bike</span> */}
+                    <img src={imgLogo} className="max-w-20 max-h-32"></img>
                   </h1>
                 </button>
                 <div onClick={() => setOpen(false)}>

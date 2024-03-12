@@ -28,7 +28,6 @@ export function CartClienteProvider({ children }) {
   const getCartClient = async () => {
     try {
       const res = await getCartClientesRequest();
-      console.log("ress1", res);
       setCartClientes(res);
      
     } catch (error) {
@@ -40,7 +39,6 @@ export function CartClienteProvider({ children }) {
     // Agregamos el parámetro id
     try {
       const res = await getCartClienteRequest(id);
-      console.log("ress1", res);
       setCartClientes(res);
     } catch (error) {
       console.error("cont", error);
@@ -51,9 +49,7 @@ export function CartClienteProvider({ children }) {
     try {
       return await createCartClienteRequest(data);
       // return response
-      console.log("clientes:", response);
     } catch (error) {
-      console.log(error);
       setErrors(error.response.data.message);
     }
   };

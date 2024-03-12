@@ -39,7 +39,6 @@ export default function FormCliente() {
       if (params.id) {
         setFormTitle("Editar cliente");
         const cliente = await getCliente(params.id);
-        console.log("cliente por params", cliente);
         setValue("nombre_cliente", cliente.nombre_cliente);
         setValue("tipo", cliente.tipo);
         setValue("email_cliente", cliente.email_cliente);

@@ -107,9 +107,6 @@ export default function FormVentaRepuesto() {
     } catch (error) {
       console.error("Error al crear la venta:", error);
     }
-
-    console.log("formmm", finalData);
-
     // Perform your submission logic here
   });
 
@@ -139,7 +136,6 @@ export default function FormVentaRepuesto() {
     setValue("precio_unitario", "");
     setValue("precio_total", "");
   };
-  console.log(ventasRepuestosErrors);
 
   const permissions = user?.rol?.permissions || [];
 

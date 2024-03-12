@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useVentasServicios } from "../../context/VentasServicioContex";
 import { Link, useNavigate, useParams, Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -31,12 +31,14 @@ export default function FormVentaServicio() {
   const { mecanicos, getMecanicos } = useMecanicos();
   const navigate = useNavigate();
   const params = useParams();
+  const [formTitle, setFormTitle] = useState("Agregar Venta Servicio");
 
   const { user } = useAuth();
 
   useEffect(() => {
     (async () => {
       if (params.id) {
+        setFormTitle("Editar Venta Servicio");
         const ventaServicio = await getVentaServicio(params.id);
         setValue("mecanico", ventaServicio.mecanico);
         setValue("cliente", ventaServicio.cliente);
@@ -57,7 +59,9 @@ export default function FormVentaServicio() {
   }, []);
 
   const onSubmit = handleSubmit(async (data) => {
+
     if (params.id) {
+      
       const res = updateVentaServicio(params.id, data);
       const Toast = Swal.mixin({
         toast: true,
@@ -123,9 +127,7 @@ export default function FormVentaServicio() {
       }
     }
   });
-
-  console.log(ventasServiciosErrors);
-
+  
   const permissions = user?.rol?.permissions || [];
 
   return (
@@ -139,7 +141,7 @@ export default function FormVentaServicio() {
               </div>
             ))}
             <h1 className="text-2xl flex justify-center ">
-              Agregar Venta servicio{" "}
+            {formTitle}{" "}
             </h1>
             <form className="mt-10" onSubmit={onSubmit}>
               <label>
@@ -225,8 +227,8 @@ export default function FormVentaServicio() {
               >
                 Guardar
               </button>
-              <button className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  ">
-                <Link to="/ventas-servicios">Cancelar</Link>
+              <button>
+                <Link to="/ventas-servicios" className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  ">Cancelar</Link>
               </button>
             </form>
           </div>

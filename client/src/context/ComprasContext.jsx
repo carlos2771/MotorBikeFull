@@ -85,7 +85,7 @@ export function CompraProvider({ children }) {
         const proveedoresData = await getProveedores();
         setProveedores(proveedoresData);
       } catch (error) {
-        console.error(error);
+        
       }
     };
 

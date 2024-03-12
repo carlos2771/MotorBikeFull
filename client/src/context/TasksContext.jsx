@@ -20,7 +20,6 @@ export function TaskProvider({ children }) {
   const getTasks = async () => {
     try {
       const res = await getTasksRequest();
-      console.log("tareas:", res);
       setTasks(res);
     } catch (error) {
       console.error("error de ob", error);
@@ -28,7 +27,6 @@ export function TaskProvider({ children }) {
   };
   const createTask = async (task) => {
     const res = await createTasksRequest(task);
-    console.log(res);
   };
 
   const getTask = async (id) => {
@@ -51,10 +49,8 @@ export function TaskProvider({ children }) {
   const deleteTask = async (id) => {
     try {
       const res = await deleteTasksRequest(id);
-      console.log(res);
       if (res.status === 204) setTasks(tasks.filter((task) => task._id !== id));
     } catch (error) {
-      console.log(error);
     }
   };
 

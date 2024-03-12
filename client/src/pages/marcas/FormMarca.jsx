@@ -75,11 +75,10 @@ export default function FormMecanico() {
       });
       navigate("/marcas");
     } else {
-      // Toast.fire({
-      //   icon: "error",
-      //   title: "La marca ya existe . Verifica los errores.",
-      // });
-      console.log("no se agrego, la marca ya existe");
+      Toast.fire({
+        icon: "error",
+        title: "La marca ya existe.",
+      });
     }
   };
 

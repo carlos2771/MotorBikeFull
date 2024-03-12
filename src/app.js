@@ -18,13 +18,14 @@ import cors from 'cors';
 import bodyParser from "body-parser";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { origin } from "./config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const app = express();
 
 app.use(cors({
-    origin: "http://localhost:5173", // Reemplaza esto con la URL de tu aplicación React
+    origin: origin, // Reemplaza esto con la URL de tu aplicación React
     credentials: true,
 }));
 
@@ -34,7 +35,7 @@ app.use(morgan("dev"));
 // app.use(bodyParser.json({ limit: '10mb' }));
 app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
-app.use("/api", authRoutes);
+app.use("/", authRoutes);
 app.use("/api", taskRoutes);
 app.use("/api", clientesRoutes);
 app.use("/api", mecanicosRoutes);

@@ -94,7 +94,7 @@ export default function PageVentaServicios() {
           });
           Toast.fire({
             icon: "success",
-            title: "Se ha modificado el servicio",
+            title: "Se ha modificado la venta servicio",
           });
         } else {
           const Toast = Swal.mixin({
@@ -112,7 +112,7 @@ export default function PageVentaServicios() {
           });
           Toast.fire({
             icon: "error",
-            title: "No se ha modificado el servicio",
+            title: "No se ha modificado la venta servicio",
           });
         }
       });
@@ -310,7 +310,6 @@ export default function PageVentaServicios() {
       // headerAlign: "left",
       renderCell: (params) => {
         const estado = params.row.estado;
-        console.log("estado", estado);
 
         return (
           <div>

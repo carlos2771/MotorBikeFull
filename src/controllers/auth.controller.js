@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import Rols from "../models/rols.model.js"
 import bcrypt from "bcryptjs";
 import createAccessToken from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
@@ -23,7 +24,7 @@ function generateRandomToken(length) {
 }
 
 export const register = async (req, res) => {
-  const { email, password, username, estado, rol } = req.body;
+  const { email, password, confirmPassword,username, estado, rol } = req.body;
 
   try {
     const userFound = await User.findOne({ email }); // para validar en el frontend si el usuario ya existe
@@ -32,8 +33,12 @@ export const register = async (req, res) => {
     }
     const passwordHash = await bcrypt.hash(password, 10);
 
-    if (!email || !password || !username) {
+    if (!email || !password || !username|| !confirmPassword) {
       return res.status(400).json({ message: ["Datos incompletos"] });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: ["Las contraseñas no coinciden"] });
     }
 
     const newUser = new User({
@@ -224,10 +229,8 @@ export const register = async (req, res) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error(error);
         return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
       }
-      console.log('Correo electrónico enviado:', info.response);
       res.status(200).json({ message: 'Correo electrónico enviado con éxito' });
     });
 
@@ -240,14 +243,9 @@ export const register = async (req, res) => {
       rol: userSaved.rol,
       createdAt: userSaved.createdAt,
       updateAt: userSaved.updatedAt,
-    });
-
-    console.log(newUser);
-    console.log("Este es el new user",newUser.rol)
-
-    
+    });   
   } catch (error) {
-    console.log("errir",error)
+
     res.status(500).json({ message: error.message });
   }
 };
@@ -255,10 +253,12 @@ export const login = async (req, res) => {
   try {
     const { email, password, rol } = req.body;
     const userFound = await User.findOne({ email }).populate('rol');
+
     if (!userFound) return res.status(400).json({ message: ["Usuario/Contraseña incorrecto"] });
     if (userFound.estado === "Inactivo")
       return res.status(400).json({ message: ["El usuario está inactivo"] });
-
+    if(userFound.rol.status === 'Inactivo')
+      return res.status(400).json({ message: ["El rol está inactivo"] });
     const isMatch = await bcrypt.compare(password, userFound.password);
     if (!isMatch)
       return res.status(400).json({ message: ["Usuario/Contraseña incorrecto"] });
@@ -285,12 +285,12 @@ export const login = async (req, res) => {
       email: userFound.email,
       rol: {
         name: userFound.rol.name,
-        permissions: userFound.rol.permissions
+        permissions: userFound.rol.permissions,
+        status: userFound.rol.status
       },
       createdAt: userFound.createdAt,
       updatedAt: userFound.updatedAt,
     });
-    console.log("el roll", rol);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -316,8 +316,6 @@ export const profile = async (req, res) => {
     createdAt: userFound.createdAt,
     updateAt: userFound.updatedAt,
   });
-  // console.log(req.user); // para ver el token del usuario, que se trae de validateToken
-  // res.send("profile");
 };
 
 export const verifyToken = async (req, res) => {
@@ -354,7 +352,6 @@ export const enviarToken = async (req, res) => {
       const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
       
       const randomToken = generateRandomToken(5);
-      console.log(randomToken);
 
       // Almacenar el token en el usuario en la base de datos
       user.resetToken = token;
@@ -369,8 +366,8 @@ export const enviarToken = async (req, res) => {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: process.env.EMAIL_USER || 'saritalop789@gmail.com',
-        pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
+          user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
         },
       });
       const code = randomToken
@@ -528,15 +525,12 @@ export const enviarToken = async (req, res) => {
 
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-          console.error(error);
           return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
         }
-        console.log('Correo electrónico enviado:', info.response);
         res.status(200).json({ message: 'Correo electrónico enviado con éxito' });
       });
  
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 
@@ -544,7 +538,6 @@ export const enviarToken = async (req, res) => {
 
 export const validarToken = async (req, res) => {
   const code = req.params.code;
-  console.log('Código recibido:', code);
   try {
     const usuario = await User.findOne({ code: code });
 
@@ -561,7 +554,6 @@ export const validarToken = async (req, res) => {
       resetTokenExpires: usuario.resetTokenExpires
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ message: "Error interno del servidor" });
   }
 };
@@ -570,17 +562,13 @@ export const actualizarPassword = async (req, res) => {
 
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
-  console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
-  console.log("Cuerpo de la solicitud:", req.body);
   try {
-      console.log("Código recibido:", req.params.code); 
     // Verificar el token según la fecha de expiración
     const usuario = await User.findOne({
       code: req.params.code,
       // resetToken: req.params.token,
       resetTokenExpires: { $gt: Date.now() },
     });
-    console.log(usuario);
 
     // Verificar que el usuario exista
     if (!usuario) {
@@ -588,9 +576,7 @@ export const actualizarPassword = async (req, res) => {
     }
 
     // Verificar que se proporciona una nueva contraseña y que coincide con la confirmación
-    console.log("Contraseña:", password, "Confirmar contraseña:", confirmPassword);
     if (!password || !confirmPassword || password !== confirmPassword) {
-      console.error("Las contraseñas no coinciden");
       return res.status(400).json({
         message: ["Las contraseñas no coinciden"]
       });
@@ -768,17 +754,13 @@ export const actualizarPassword = async (req, res) => {
 
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-          console.error(error);
           return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
         }
-        console.log('Correo electrónico enviado:', info.response);
         res.status(200).json({ message: 'Correo electrónico enviado con éxito' });
 
     return res.status(200).json({ message: "Contraseña actualizada con éxito" });
     });
   } catch (error) {
-    console.error(error);
-    console.error("Error en la solicitud de actualizar contraseña:", error);
     return res.status(500).json({ message:[ "Error interno del servidor"] });
   }
 };

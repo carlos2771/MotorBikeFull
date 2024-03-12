@@ -90,7 +90,7 @@ export default function PageMecanico() {
         });
         Toast.fire({
           icon: "success",
-          title: "Se ha modificado",
+          title: "Se ha inhabilitado",
         });
       } else {
         const Toast = Swal.mixin({
@@ -108,7 +108,7 @@ export default function PageMecanico() {
         });
         Toast.fire({
           icon: "error",
-          title: "No se ha modificado",
+          title: "No se ha inhabilitado",
         });
       }
     });
@@ -256,7 +256,6 @@ export default function PageMecanico() {
       headerClassName: "font-bold text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
-        // console.log("Estado", estado);
         return (
           <div>
             <button
