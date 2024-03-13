@@ -57,7 +57,7 @@ export const register = async (req, res) => {
     res.cookie("token", token, { 
       httpOnly: true,
       secure: true,
-      sameSite: "None",
+      sameSite: "none",
     });
 
     // const template = getTemplate(username, email)
@@ -273,11 +273,11 @@ export const login = async (req, res) => {
     });
 
     res.cookie("token", token, {
-      httpOnly: process.env.NODE_ENV !== "development",
+      httpOnly: true,
       secure: true,
-      sameSite: "none",
+      sameSite: "None",
     });
-    res.cookie("token", token)
+    // res.cookie("token", token)
 
     // Ahora, además de devolver el rol, devolvemos los permisos asociados a ese rol
     res.json({
