@@ -62,7 +62,7 @@ export default function PageMecanico() {
   useEffect(() => {
     try {
       getMecanicos();
-      getMecanico(id);
+      // getMecanico(id);
     } catch (error) {
       console.error("Error al obtener mecanicos:", error);
     }

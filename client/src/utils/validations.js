@@ -238,7 +238,7 @@ export const DireccionRequired = {
 
 export const NombreMeRequired = {
   required: "Campo requerido",
-  validate: (value) => /^[A-Za-z\s]+$/.test(value.trim()) || "Ingresa un nombre valido",
+  validate: (value) => /^(?! +$)[A-Za-z0-9\sÑñ]+$/.test(value.trim()) || "Ingresa un nombre válido",
   maxLength: { value: 35, message: "El maximo de caracteres es de 35" },
   minLength: { value: 6, message: "Ingresa el nombre completo, minimo 6 caracteres" }
 };

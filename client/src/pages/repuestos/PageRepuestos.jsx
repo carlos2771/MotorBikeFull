@@ -58,7 +58,7 @@ export default function PageRepuestos() {
   useEffect(() => {
     try {
       getRepuestos();
-      getRepuesto(id)
+      // getRepuesto(id)
     } catch (error) {
       console.error("Error al obtener los repuestos:", error);
     }
