@@ -416,7 +416,8 @@ export default function PageClientes() {
     (cliente) =>
       cliente.nombre_cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
       cliente.email_cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cliente.telefono_cliente.toLowerCase().includes(searchTerm.toLowerCase())
+      cliente.telefono_cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      cliente.sexo.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const permissions = user?.rol?.permissions || [];

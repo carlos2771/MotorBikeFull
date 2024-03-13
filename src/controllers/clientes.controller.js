@@ -64,7 +64,7 @@ export const createCliente = async(req, res) =>{
 export const updateCliente = async (req, res) => {
   try {
       // Extrae los datos a actualizar del cuerpo de la solicitud
-      const { nombre_cliente, cedula, telefono_cliente, direccion_cliente, estado, tipo } = req.body;
+      const { nombre_cliente, cedula, telefono_cliente, direccion_cliente, estado, tipo, sexo, email_cliente } = req.body;
 
       // Busca el cliente por su ID
       const cliente = await Cliente.findById(req.params.id);
@@ -87,7 +87,9 @@ export const updateCliente = async (req, res) => {
           telefono_cliente,
           direccion_cliente,
           estado,
-          tipo
+          tipo,
+          sexo,
+          email_cliente
       }, {
           new: true // Devuelve el documento actualizado
       });

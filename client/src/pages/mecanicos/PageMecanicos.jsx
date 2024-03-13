@@ -524,6 +524,7 @@ export default function PageMecanico() {
                     toolbarExport: "Exportar",
                     toolbarExportCSV: "Descargar CSV",
                     toolbarExportPrint: "Imprimir",
+                    columnsPanelTextFieldPlaceholder: "Nombre de la columna",
                     columnsPanelTextFieldLabel: "Buscar",
                     columnsPanelHideAllButton: "Ocultar todo",
                     columnsPanelShowAllButton: "Mostrar todo",
