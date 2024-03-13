@@ -26,16 +26,13 @@ export default function PageRoles() {
   const { roles, getRoles, deleteRol, updateRol } = useRoles();
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
-  const [loaded, setLoaded] = useState(false); // Estado para indicar si se ha cargado el localstorage o las cookies
+  const [userLoaded, setUserLoaded] = useState(false);
 
   useEffect(() => {
-    try {
-      // Intenta obtener los roles y establece loaded en true después
-      getRoles().then(() => setLoaded(true));
-    } catch (error) {
-      console.error("Error al obtener roles:", error);
+    if (user) {
+      setUserLoaded(true);
     }
-  }, []);
+  }, [user]);
 
 
   useEffect(() => {
@@ -146,10 +143,9 @@ export default function PageRoles() {
     role.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (!loaded) {
-    return <div className="mt-16">Cargando...</div>;
+  if (!userLoaded) {
+    return <div>Cargando usuario...</div>;
   }
-
 
   return (
     <>
@@ -252,6 +248,7 @@ export default function PageRoles() {
           </div>
         </>
       ) : (
+        
         <Navigate to="/tasks" />
       )}
     </>
