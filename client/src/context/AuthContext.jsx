@@ -12,25 +12,31 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    const checkLocalStorage = () => {
-      const storedUser = localStorage.getItem('user');
+    const checkLogin = async () => {
       const token = Cookies.get('token');
-
-      if(!token && storedUser){
-        localStorage.removeItem("user");
-        setIsAuthenticated(false)
-      }
-
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-        setIsAuthenticated(true);
-      } else {
+  
+      if (!token) {
+        setLoading(false);
         setIsAuthenticated(false);
+        return;
       }
-      setLoading(false);
+  
+      try {
+        const res = await verifyTokenRequest(token);
+        if (res.data) {
+          setUser(res.data);
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+        setLoading(false);
+      } catch (error) {
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
     };
-
-    checkLocalStorage();
+  
+    checkLogin();
   }, []);
 
   const signup = async (user) => { // Registrarse
@@ -48,21 +54,22 @@ export const AuthProvider = ({ children }) => {
   const signin = async (user) => {
     try {
       const response = await loginRequest(user);
-      setUser(response);
-      // setUser(response.data); si tiene algun error en el login, pruebe esto
+      Cookies.set('token', response.token); // Guardar el token en las cookies
+      localStorage.setItem('user', JSON.stringify(response.user)); // Guardar el usuario en localStorage
+      setUser(response.user);
       setIsAuthenticated(true);
-      setLoading(false)
-      localStorage.setItem('user', JSON.stringify(response));
+      setLoading(false);
+      return response;
     } catch (error) {
       setErrors(error.response.data.message);
     }
   };
 
   const logout = () => {
-    Cookies.remove("token");
-    setUser(null)
+    Cookies.remove('token'); // Eliminar el token de las cookies
+    localStorage.removeItem('user'); // Eliminar el usuario de localStorage
+    setUser(null);
     setIsAuthenticated(false);
-    localStorage.removeItem("user");
   };
 
   // AuthContext.jsx
