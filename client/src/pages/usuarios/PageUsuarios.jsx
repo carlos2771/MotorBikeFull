@@ -14,6 +14,9 @@ export default function PageUsuarios() {
   const { user: users, getUsuarios, updateUsuario, getUsuario } = useUsuario()
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 6;
+
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
 
@@ -290,6 +293,7 @@ export default function PageUsuarios() {
 
   const handleSearchTermChange = (event) => {
     setSearchTerm(event.target.value);
+    setPage(1);
   };
 
   const filteredUsers = users.filter((user) =>
@@ -300,7 +304,14 @@ export default function PageUsuarios() {
 
   const permissions = user?.rol?.permissions || [];
 
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, filteredUsers.length);
+  const usersToShow = filteredUsers.slice(startIndex, endIndex);
 
+  const handlePageChange = (pageNumber) => {
+    setPage(pageNumber);
+  };
   return (
     <>
       {permissions.includes("Usuarios") ? (
@@ -389,133 +400,157 @@ export default function PageUsuarios() {
               </Box>
             </div>) : (
             <>
-              <div className="mt-16">
-                <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
-                  <FontAwesomeIcon icon={faUser} className="mr-2" />Gestión de usuarios
-                </h1>
+            <div className="mt-16">
+              <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
+                <FontAwesomeIcon icon={faUser} className="mr-2" />Gestión de usuarios
+              </h1>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-between items-center mx-16 sm:mx-4 md:mx-16 mt-2">
+              <div className="">
+                <input
+                  type="text"
+                  placeholder="Buscar..."
+                  value={searchTerm}
+                  onChange={handleSearchTermChange}
+                  className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 text-black"
+                />
               </div>
-              <div className="flex flex-col sm:flex-row justify-between items-center mx-16 sm:mx-4 md:mx-16 mt-2">
-                <div className="">
-                  <input
-                    type="text"
-                    placeholder="Buscar..."
-                    value={searchTerm}
-                    onChange={handleSearchTermChange}
-                    className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 text-black"
-                  />
-                </div>
-                <div className="mx-4 sm:mx-0 justify-end flex mt-2">
-                  <Link to="/add-usuario">
-                    <FontAwesomeIcon icon={faPlus} className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" />
-                  </Link>
-                </div>
+              <div className="mx-4 sm:mx-0 justify-end flex mt-2">
+                <Link to="/add-usuario">
+                  <FontAwesomeIcon icon={faPlus} className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" />
+                </Link>
               </div>
-
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mx-4 md:mx-16">
-                {filteredUsers.map((user) => {
-                  const isAdmin = user.rol.name === "administrador";
-
-                  return (
-                    <div
-                      key={user._id}
-                      className={`col ${user.estado === "Activo"
-                        ? "shadow-blue-600"
-                        : "shadow-red-500"
-                        } rounded-lg p-4 shadow-md bg-slate-600`}
-                    >
-                      <h2 className="text-lg font-bold mb-2">{user.username}</h2>
-                      <p>Correo Electrónico: {user.email}</p>
-                      <p>Rol: {user.rol.name}</p>
-                      <div className="flex justify-center mt-4">
-                        {!isAdmin && (
-                          <Link
-                            to={`/usuarios/${user._id}`}
-                            className={`${user.estado === "Activo" ? "mr-2" : "hidden"
-                              } text-white`}
-                            title="Editar"
-                          >
-                            <FontAwesomeIcon icon={faPencil} className="border border-indigo-500 w-10 p-2 rounded-full" />
-                          </Link>
-                        )}
-                        {!isAdmin && (
-                          <button
-                            title="Activar/Inactivar"
-                            className={``}
-                            onClick={() => mostrarAlerta(user._id, user.estado)}
-                          >
-                            {user.estado === "Activo" ? (
-                              <FontAwesomeIcon icon={faBan} className="border border-red-500 rounded-full p-2 w-10 text-white" />
-                            ) : (
-                              <FontAwesomeIcon icon={faCheck} className="border border-indigo-500 rounded-full p-2 w-10 text-white" />
-                            )}
-                          </button>
-                        )}
-                        <div title="Ver detalle" className="ml-2" >
-                          <Detalle
-                            metodo={() => getUsuario(user._id)}
-                            id={user._id}
-                          >
-                            <table className="min-w-full">
-                              <tbody className="">
-                                <Titulo>
-                                    <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
-                                    Detalles del Usuario
-                                </Titulo>
-                                <tr>
-                                  <Tabla>
-                                    <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
-                                    Nombre de Usuario
-                                  </Tabla>
-                                  <Tabla>
-                                    {user.username}
-                                  </Tabla>
-                                </tr>
-                                <tr>
-                                  <Tabla>
-                                    <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
-                                    Correo Electrónico
-                                  </Tabla>
-                                  <Tabla>
-                                    {user.email}
-                                  </Tabla>
-                                </tr>
-                                <tr>
-                                  <Tabla>
-                                    <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
-                                    Estado
-                                  </Tabla>
-                                  <Tabla>
-                                    {user.estado}
-                                  </Tabla>
-                                </tr>
-                                <tr>
-                                  <Tabla>
-                                    <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
-                                    Rol
-                                  </Tabla>
-                                  <Tabla>
-                                    {user.rol.name}
-                                  </Tabla>
-                                </tr>
-                                <tr>
-                                  <Tabla>
-                                    <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
-                                    Fecha de creación
-                                  </Tabla>
-                                  <Tabla>
-                                    {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : ""}
-                                  </Tabla>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </Detalle>
-                        </div>
+            </div>
+          
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mx-4 md:mx-16">
+              {usersToShow.map((user) => {
+                const isAdmin = user.rol.name === "administrador";
+          
+                return (
+                  <div
+                    key={user._id}
+                    className={`col ${user.estado === "Activo" ? "shadow-blue-600" : "shadow-red-500"} rounded-lg p-4 shadow-md bg-slate-600`}
+                  >
+                    <h2 className="text-lg font-bold mb-2">{user.username}</h2>
+                    <p>Correo Electrónico: {user.email}</p>
+                    <p>Rol: {user.rol.name}</p>
+                    <div className="flex justify-center mt-4">
+                      {!isAdmin && (
+                        <Link
+                          to={`/usuarios/${user._id}`}
+                          className={`${user.estado === "Activo" ? "mr-2" : "hidden"} text-white`}
+                          title="Editar"
+                        >
+                          <FontAwesomeIcon icon={faPencil} className="border border-indigo-500 w-10 p-2 rounded-full" />
+                        </Link>
+                      )}
+                      {!isAdmin && (
+                        <button
+                          title="Activar/Inactivar"
+                          className={``}
+                          onClick={() => mostrarAlerta(user._id, user.estado)}
+                        >
+                          {user.estado === "Activo" ? (
+                            <FontAwesomeIcon icon={faBan} className="border border-red-500 rounded-full p-2 w-10 text-white" />
+                          ) : (
+                            <FontAwesomeIcon icon={faCheck} className="border border-indigo-500 rounded-full p-2 w-10 text-white" />
+                          )}
+                        </button>
+                      )}
+                      <div title="Ver detalle" className="ml-2" >
+                        <Detalle
+                          metodo={() => getUsuario(user._id)}
+                          id={user._id}
+                        >
+                          <table className="min-w-full">
+                            <tbody className="">
+                              <Titulo>
+                                  <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                                  Detalles del Usuario
+                              </Titulo>
+                              <tr>
+                                <Tabla>
+                                  <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                                  Nombre de Usuario
+                                </Tabla>
+                                <Tabla>
+                                  {user.username}
+                                </Tabla>
+                              </tr>
+                              <tr>
+                                <Tabla>
+                                  <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                                  Correo Electrónico
+                                </Tabla>
+                                <Tabla>
+                                  {user.email}
+                                </Tabla>
+                              </tr>
+                              <tr>
+                                <Tabla>
+                                  <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                                  Estado
+                                </Tabla>
+                                <Tabla>
+                                  {user.estado}
+                                </Tabla>
+                              </tr>
+                              <tr>
+                                <Tabla>
+                                  <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                                  Rol
+                                </Tabla>
+                                <Tabla>
+                                  {user.rol.name}
+                                </Tabla>
+                              </tr>
+                              <tr>
+                                <Tabla>
+                                  <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                                  Fecha de creación
+                                </Tabla>
+                                <Tabla>
+                                  {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : ""}
+                                </Tabla>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </Detalle>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            </>
+                  </div>
+                );
+              })}
+            </div>
+          
+            <div className="flex items-center justify-center mt-4 mx-auto">
+              <nav className="relative z-0 inline-flex rounded-md shadow-sm shadow-sky-100 -space-x-px" aria-label="Pagination">
+                <button
+                  onClick={() => handlePageChange(page - 1)}
+                  className={`relative inline-flex items-center px-4 py-2 rounded-l-lg text-white ${page === 1 ? "cursor-not-allowed opacity-50 bg-slate-800 text-white" : "bg-blue-500"}`}
+                  disabled={page === 1}
+                >
+                  Previous
+                </button>
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index + 1}
+                    onClick={() => handlePageChange(index + 1)}
+                    className={`relative inline-flex items-center px-4 py-2 border border-gray-300 ${index + 1 === page ? "z-10 font-bold bg-blue-600" : "text-gray-500"}`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <button
+                  onClick={() => handlePageChange(page + 1)}
+                  className={`relative inline-flex items-center px-4 py-2 rounded-r-lg shadow   ${page === totalPages ? "cursor-not-allowed opacity-50 bg-slate-800" : "bg-blue-500"}`}
+                  disabled={page === totalPages}
+                >
+                  Next
+                </button>
+              </nav>
+            </div>
+          </>
           )}
         </>
 
