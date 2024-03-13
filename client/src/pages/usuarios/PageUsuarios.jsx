@@ -5,7 +5,7 @@ import { useUsuario } from "../../context/usuariosContext";
 import { Link, Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMotorcycle, faDownload, faPlus, faPencil, faBan, faCheck, faUser, faInfoCircle, faAddressCard } from "@fortawesome/free-solid-svg-icons";
+import { faMotorcycle, faDownload, faPlus, faPencil, faBan, faCheck, faUser, faInfoCircle, faAddressCard, faEnvelope} from "@fortawesome/free-solid-svg-icons";
 import Detalle from "../../components/Detalle";
 import { Tabla, Titulo } from "../../components/Tabla";
 import { useAuth } from "../../hooks/useAuth";
@@ -229,7 +229,7 @@ export default function PageUsuarios() {
                     </Titulo>
                     <tr>
                       <Tabla>
-                        <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                        <FontAwesomeIcon icon={faUser} className="mr-2" />
                         Nombre de Usuario
                       </Tabla>
                       <Tabla>
@@ -239,22 +239,12 @@ export default function PageUsuarios() {
                     </tr>
                     <tr>
                       <Tabla>
-                        <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                        <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
                         Correo Electrónico
                       </Tabla>
                       <Tabla>
                         {users.find((user) => user._id === params.row._id)
                           ?.email}
-                      </Tabla>
-                    </tr>
-                    <tr>
-                      <Tabla>
-                        <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
-                        Estado
-                      </Tabla>
-                      <Tabla>
-                        {users.find((user) => user._id === params.row._id)
-                          ?.estado}
                       </Tabla>
                     </tr>
                     <tr>
@@ -470,7 +460,7 @@ export default function PageUsuarios() {
                               </Titulo>
                               <tr>
                                 <Tabla>
-                                  <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                                  <FontAwesomeIcon icon={faUser} className="mr-2" />
                                   Nombre de Usuario
                                 </Tabla>
                                 <Tabla>
@@ -479,20 +469,11 @@ export default function PageUsuarios() {
                               </tr>
                               <tr>
                                 <Tabla>
-                                  <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
+                                  <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
                                   Correo Electrónico
                                 </Tabla>
                                 <Tabla>
                                   {user.email}
-                                </Tabla>
-                              </tr>
-                              <tr>
-                                <Tabla>
-                                  <FontAwesomeIcon icon={faAddressCard} className="mr-2" />
-                                  Estado
-                                </Tabla>
-                                <Tabla>
-                                  {user.estado}
                                 </Tabla>
                               </tr>
                               <tr>
