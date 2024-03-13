@@ -12,36 +12,27 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    const checkLocalStorage = async () => {
-      // Simular un tiempo de espera antes de realizar la verificación
-      setTimeout(() => {
-        try{
-          const storedUser = localStorage.getItem('user');
-          const token = Cookies.get('token');
-        setTimeout(() => {
-          if (!token && storedUser) {
-            localStorage.removeItem("user");
-            setIsAuthenticated(false);
-          }
-        }, 2000);
-        
-          if (storedUser) {
-            setUser(JSON.parse(storedUser));
-            setIsAuthenticated(true);
-          } else {
-            setIsAuthenticated(false);
-          }
-    
-        }catch (error){
-          console.error(error)
-        }
-        
-        setLoading(false);
-      }, 2000); // Cambia el valor de 1000 a la cantidad de milisegundos que desees
+    const checkLocalStorage = () => {
+      const storedUser = localStorage.getItem('user');
+      const token = Cookies.get('token');
+
+      if(!token && storedUser){
+        localStorage.removeItem("user");
+        setIsAuthenticated(false)
+      }
+
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setLoading(false);
     };
-  
+
     checkLocalStorage();
   }, []);
+
   const signup = async (user) => { // Registrarse
     try {
       const response = await registerRequest(user);
