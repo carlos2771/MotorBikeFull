@@ -11,33 +11,27 @@ export const AuthProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  useEffect(() => {
-    const checkLogin = async () => {
-      const token = Cookies.get('token');
-  
-      if (!token) {
-        setLoading(false);
-        setIsAuthenticated(false);
-        return;
-      }
-  
-      try {
-        const res = await verifyTokenRequest(token);
-        if (res.data) {
-          setUser(res.data);
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-        }
-        setLoading(false);
-      } catch (error) {
-        setIsAuthenticated(false);
-        setLoading(false);
-      }
-    };
-  
-    checkLogin();
-  }, []);
+  // useEffect(() => {
+  //   const checkLocalStorage = () => {
+  //     const storedUser = localStorage.getItem('user');
+  //     const token = Cookies.get('token');
+
+  //     if(!token && storedUser){
+  //       localStorage.removeItem("user");
+  //       setIsAuthenticated(false)
+  //     }
+
+  //     if (storedUser) {
+  //       setUser(JSON.parse(storedUser));
+  //       setIsAuthenticated(true);
+  //     } else {
+  //       setIsAuthenticated(false);
+  //     }
+  //     setLoading(false);
+  //   };
+
+  //   checkLocalStorage();
+  // }, []);
 
   const signup = async (user) => { // Registrarse
     try {
@@ -54,22 +48,21 @@ export const AuthProvider = ({ children }) => {
   const signin = async (user) => {
     try {
       const response = await loginRequest(user);
-      Cookies.set('token', response.token); // Guardar el token en las cookies
-      localStorage.setItem('user', JSON.stringify(response.user)); // Guardar el usuario en localStorage
-      setUser(response.user);
+      setUser(response);
+      // setUser(response.data); si tiene algun error en el login, pruebe esto
       setIsAuthenticated(true);
-      setLoading(false);
-      return response;
+      setLoading(false)
+      // localStorage.setItem('user', JSON.stringify(response));
     } catch (error) {
       setErrors(error.response.data.message);
     }
   };
 
   const logout = () => {
-    Cookies.remove('token'); // Eliminar el token de las cookies
-    localStorage.removeItem('user'); // Eliminar el usuario de localStorage
-    setUser(null);
+    Cookies.remove("token");
+    setUser(null)
     setIsAuthenticated(false);
+    // localStorage.removeItem("user");
   };
 
   // AuthContext.jsx
