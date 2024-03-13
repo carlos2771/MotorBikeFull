@@ -297,3 +297,8 @@ export const NombreRolRequired = {
   maxLength: { value: 35, message: "El maximo de caracteres es de 35" },
   minLength: { value: 6, message: "Ingresa el nombre completo, minimo 6 caracteres" }
 };
+
+export const discountValidations = {
+  min: {value: 0, message: "El descuento tiene que ser mayor a 0"},
+  max: {value: 99, message: "El descuento es máximo de 99%"}
+}
