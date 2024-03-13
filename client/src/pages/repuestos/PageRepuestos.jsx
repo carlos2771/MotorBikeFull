@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react"
 import { useRepuestos } from "../../context/RepuestosContext";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
@@ -22,6 +22,7 @@ import {
   faRegistered,
   faDollarSign,
   faHashtag,
+  faChevronRight, faChevronLeft
 } from "@fortawesome/free-solid-svg-icons";
 
 import Detalle from "../../components/Detalle";
@@ -45,17 +46,37 @@ function formatCurrency2(value) {
 }
 
 export default function PageRepuestos() {
-  const { repuestos, getRepuestos, deleteRepuesto, updateRepuesto } =
+  const { repuestos, getRepuestos, getRepuesto, deleteRepuesto, updateRepuesto } =
     useRepuestos();
   const { user } = useAuth();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 6;
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
 
   useEffect(() => {
     try {
       getRepuestos();
+      getRepuesto(id)
     } catch (error) {
       console.error("Error al obtener los repuestos:", error);
     }
   }, []);
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 862);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const mostrarAlerta = (id, estado) => {
     const title = estado === "Activo" ? "Inhabilitar" : "Habilitar";
     const text =
@@ -234,18 +255,20 @@ export default function PageRepuestos() {
       renderCell: (params) => {
         const estado = params.row.estado;
         return (
-          <div>
-            <button
-              className={estado === "Activo" ? "" : "hidden"}
+          <div className="flex">
+            <div
+              className={estado === "Activo" ? "mt-1" : "hidden"}
               title="Editar"
             >
               <Link
-                className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
                 to={`/repuestos/${params.row._id}`}
               >
-                <FontAwesomeIcon icon={faPencil} />
+                <button className="m-1">
+                  <FontAwesomeIcon icon={faPencil} className="border border-indigo-500 w-10 p-2 rounded-full hover:text-white hover:bg-indigo-500" />
+                </button>
               </Link>
-            </button>
+
+            </div>
 
             {/* <button
             className="px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover-bg-red-500"
@@ -257,19 +280,19 @@ export default function PageRepuestos() {
               title="Activar/Inactivar"
               className={
                 estado === "Activo"
-                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
-                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                  ? "mt-1"
+                  : ""
               }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
               {estado === "Activo" ? (
-                <FontAwesomeIcon icon={faBan} />
+                <FontAwesomeIcon icon={faBan} className={`border border-red-500 rounded-full p-2 w-10 text-white ${estado === "Activo" ? "border-red-500 hover:bg-red-500" : "border-indigo-500 hover:bg-indigo-500"}`} />
               ) : (
-                <FontAwesomeIcon icon={faCheck} />
+                <FontAwesomeIcon icon={faCheck} className={`border border-indigo-500 rounded-full p-2 w-10 text-white ${estado === "Activo" ? "border-red-500 hover:bg-red-500" : "border-indigo-500 hover:bg-indigo-500"}`} />
               )}
             </button>
-            <button
-              className={estado === "Activo" ? "" : "hidden"}
+            <div
+              className={estado === "Activo" ? "ml-1 mt-2" : "hidden"}
               title="Ver detalle"
             >
               <Detalle
@@ -347,11 +370,11 @@ export default function PageRepuestos() {
                         Cantidad
                       </Tabla>
                       <Tabla>
-                        
-                          {parseInt(repuestos.find(
-                            (repuesto) => repuesto._id === params.row._id
-                          )?.amount, 10).toLocaleString()} {/* Convertir a número y aplicar separadores de miles */}
-                        
+
+                        {parseInt(repuestos.find(
+                          (repuesto) => repuesto._id === params.row._id
+                        )?.amount, 10).toLocaleString()} {/* Convertir a número y aplicar separadores de miles */}
+
 
                       </Tabla>
                     </tr>
@@ -371,44 +394,68 @@ export default function PageRepuestos() {
                   </tbody>
                 </table>
               </Detalle>
-            </button>
+            </div>
           </div>
         );
       },
     },
   ];
 
+  const handleSearchTermChange = (event) => {
+    setSearchTerm(event.target.value);
+    setPage(1);
+  };
+
+  const filteredRepuestos = repuestos.filter(
+    (repuesto) =>
+      repuesto.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      repuesto.marca.nombre_marca.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      repuesto.amount.toString().includes(searchTerm) ||
+      repuesto.price.toString().includes(searchTerm)
+  );
+
+  const totalPages = Math.ceil(filteredRepuestos.length / itemsPerPage);
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, filteredRepuestos.length);
+  const repuestosToShow = filteredRepuestos.slice(startIndex, endIndex);
+
+  const handlePageChange = (pageNumber) => {
+    setPage(pageNumber);
+  };
+
   const permissions = user?.rol?.permissions || [];
 
   return (
     <>
       {permissions.includes("Repuestos") ? (
-        <div className="mt-16 ">
-          <div className="flex flex-col sm:flex-row justify-between items-center mx-16">
-            <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
-              <FontAwesomeIcon icon={faTools} className="mr-2" />
-              Gestión de repuestos
-            </h1>
-            <div className="mx-4 sm:mx-0 justify-end flex">
-              <Link to="/add-repuesto">
-                <button
-                  className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
-                  title="Agregar"
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                </button>
-              </Link>
-              <button
-                onClick={exportarAExcel}
-                className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
-                title="Descargar excel"
-              >
-                <FontAwesomeIcon icon={faDownload} />
-              </button>
-            </div>
-          </div>
+        <>
+          {!isMobile ? (
+            <div className="mt-16 ">
+              <div className="flex flex-col sm:flex-row justify-between items-center mx-16">
+                <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
+                  <FontAwesomeIcon icon={faTools} className="mr-2" />
+                  Gestión de repuestos
+                </h1>
+                <div className="mx-4 sm:mx-0 justify-end flex">
+                  <Link to="/add-repuesto">
+                    <button
+                      className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
+                      title="Agregar"
+                    >
+                      <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                  </Link>
+                  <button
+                    onClick={exportarAExcel}
+                    className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
+                    title="Descargar excel"
+                  >
+                    <FontAwesomeIcon icon={faDownload} />
+                  </button>
+                </div>
+              </div>
 
-          {/* <div className="flex justify-between">
+              {/* <div className="flex justify-between">
       <h1 className="text-2xl text-start ml-16"><FontAwesomeIcon icon={faBuilding} className="mr-2" />Gestión de Marcas</h1>
       <div className="mx-10 justify-end">
         <Link to="/add-marca">
@@ -419,77 +466,268 @@ export default function PageRepuestos() {
       </div>
       </div> */}
 
-          <Box sx={{ width: "100%" }}>
-            <DataGrid
-              className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
-              rows={repuestos}
-              columns={columns}
-              getRowId={(row) => row._id}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 5,
-                  },
-                },
-              }}
-              pageSizeOptions={[5]}
-              disableRowSelectionOnClick
-              sx={{
-                background:
-                  "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
-                color: "white",
-                "& .MuiDataGrid-cell": {
-                  fontSize: "15px",
-                },
-              }}
-              slots={{ toolbar: GridToolbar }}
-              slotProps={{
-                toolbar: {
-                  printOptions: { disableToolbarButton: true },
-                  csvOptions: { disableToolbarButton: true },
-                },
-              }}
-              //Traducir a español
-              localeText={{
-                noRowsLabel: "No se ha encontrado datos.",
-                noResultsOverlayLabel: "No se ha encontrado ningún resultado",
-                toolbarColumns: "Columnas",
-                toolbarColumnsLabel: "Seleccionar columnas",
-                toolbarFilters: "Filtros",
-                toolbarFiltersLabel: "Ver filtros",
-                toolbarFiltersTooltipHide: "Quitar filtros",
-                toolbarFiltersTooltipShow: "Ver filtros",
-                toolbarDensity: "Densidad",
-                toolbarDensityCompact: "Compacta",
-                toolbarDensityStandard: "Estandar",
-                toolbarDensityComfortable: "Confortable",
-                toolbarExport: "Exportar",
-                toolbarExportCSV: "Descargar CSV",
-                toolbarExportPrint: "Imprimir",
-                columnsPanelTextFieldLabel: "Buscar",
-                columnsPanelHideAllButton: "Ocultar todo",
-                columnsPanelShowAllButton: "Mostrar todo",
-                filterPanelColumns: "Columna",
-                filterPanelOperator: "Operador",
-                filterOperatorContains: "Contiene",
-                filterOperatorEquals: "Es igual",
-                filterOperatorStartsWith: "Comienza con",
-                filterOperatorEndsWith: "Termina con",
-                filterOperatorIsEmpty: "Esta vacía",
-                filterOperatorIsNotEmpty: "No esta vacía",
-                filterOperatorIsAnyOf: "Es alguna de",
-                filterPanelInputLabel: "Valor",
-                filterPanelInputPlaceholder: "Filtrar valor",
-                columnMenuSortAsc: "Ordenar en ASC",
-                columnMenuSortDesc: "Ordenar en DESC",
-                columnMenuUnsort: "Desordenar",
-                columnMenuFilter: "Filtrar",
-                columnMenuHideColumn: "Ocultar columna",
-                columnMenuManageColumns: "Manejar columnas",
-              }}
-            />
-          </Box>
-        </div>
+              <Box sx={{ width: "100%" }}>
+                <DataGrid
+                  className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
+                  rows={repuestos}
+                  columns={columns}
+                  getRowId={(row) => row._id}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 5,
+                      },
+                    },
+                  }}
+                  pageSizeOptions={[5]}
+                  disableRowSelectionOnClick
+                  sx={{
+                    background:
+                      "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+                    color: "white",
+                    "& .MuiDataGrid-cell": {
+                      fontSize: "15px",
+                    },
+                  }}
+                  slots={{ toolbar: GridToolbar }}
+                  slotProps={{
+                    toolbar: {
+                      printOptions: { disableToolbarButton: true },
+                      csvOptions: { disableToolbarButton: true },
+                    },
+                  }}
+                  //Traducir a español
+                  localeText={{
+                    noRowsLabel: "No se ha encontrado datos.",
+                    noResultsOverlayLabel: "No se ha encontrado ningún resultado",
+                    toolbarColumns: "Columnas",
+                    toolbarColumnsLabel: "Seleccionar columnas",
+                    toolbarFilters: "Filtros",
+                    toolbarFiltersLabel: "Ver filtros",
+                    toolbarFiltersTooltipHide: "Quitar filtros",
+                    toolbarFiltersTooltipShow: "Ver filtros",
+                    toolbarDensity: "Densidad",
+                    toolbarDensityCompact: "Compacta",
+                    toolbarDensityStandard: "Estandar",
+                    toolbarDensityComfortable: "Confortable",
+                    toolbarExport: "Exportar",
+                    toolbarExportCSV: "Descargar CSV",
+                    toolbarExportPrint: "Imprimir",
+                    columnsPanelTextFieldLabel: "Buscar",
+                    columnsPanelHideAllButton: "Ocultar todo",
+                    columnsPanelShowAllButton: "Mostrar todo",
+                    filterPanelColumns: "Columna",
+                    filterPanelOperator: "Operador",
+                    filterOperatorContains: "Contiene",
+                    filterOperatorEquals: "Es igual",
+                    filterOperatorStartsWith: "Comienza con",
+                    filterOperatorEndsWith: "Termina con",
+                    filterOperatorIsEmpty: "Esta vacía",
+                    filterOperatorIsNotEmpty: "No esta vacía",
+                    filterOperatorIsAnyOf: "Es alguna de",
+                    filterPanelInputLabel: "Valor",
+                    filterPanelInputPlaceholder: "Filtrar valor",
+                    columnMenuSortAsc: "Ordenar en ASC",
+                    columnMenuSortDesc: "Ordenar en DESC",
+                    columnMenuUnsort: "Desordenar",
+                    columnMenuFilter: "Filtrar",
+                    columnMenuHideColumn: "Ocultar columna",
+                    columnMenuManageColumns: "Manejar columnas",
+                  }}
+                />
+              </Box>
+            </div>
+          ) : (
+            <>
+              <div className="mt-16 ">
+                <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
+                  <FontAwesomeIcon icon={faTools} className="mr-2" />
+                  Gestión de repuestos
+                </h1>
+              </div>
+
+              <div className="flex flex-col sm:flex-row justify-between items-center mx-16">
+                <div className="">
+                  <input
+                    type="text"
+                    placeholder="Buscar..."
+                    value={searchTerm}
+                    onChange={handleSearchTermChange}
+                    className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 text-black"
+                  />
+                </div>
+
+                <div className="mx-4 sm:mx-0 justify-end flex mt-2">
+                  <Link to="/add-repuesto" title="Agregar">
+                    <FontAwesomeIcon icon={faPlus} className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" />
+                  </Link>
+                  <button
+                    onClick={exportarAExcel}
+                    title="Descargar excel"
+                  >
+                    <FontAwesomeIcon icon={faDownload} className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mx-4 md:mx-16">
+                {repuestosToShow.map((repuesto) => (
+                  <div
+                    key={repuesto._id}
+                    className={`col ${repuesto.estado === "Activo"
+                        ? "shadow-blue-600"
+                        : "shadow-red-500"
+                      } rounded-lg p-4 shadow-md bg-slate-700`}
+                  >
+                    <h2 className="text-lg font-bold mb-2">
+                      {repuesto.name}
+                    </h2>
+                    <p>Cantidad: {repuesto.amount}</p>
+                    <p>Precio: {repuesto.price}</p>
+                    <div className="flex justify-center mt-4">
+
+                      <Link
+                        className={`${repuesto.estado === "Activo" ? "mr-2" : "hidden"} text-white`}
+                        title="Editar"
+                        to={`/repuestos/${repuesto._id}`}
+                      >
+                        <FontAwesomeIcon icon={faPencil} className="border border-indigo-500 w-10 p-2 rounded-full" />
+                      </Link>
+
+                      <button
+                        className={``}
+                        onClick={() =>
+                          mostrarAlerta(repuesto._id, repuesto.estado)
+                        }
+                        title="Activar/Inactivar"
+                      >
+                        {repuesto.estado === "Activo" ? (
+                          <FontAwesomeIcon
+                            icon={faBan}
+                            className="border border-red-500 rounded-full p-2 w-10 text-white"
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            icon={faCheck}
+                            className="border border-indigo-500 rounded-full p-2 w-10 text-white"
+                          />
+                        )}
+                      </button>
+                      <div title="Ver detalle" className="ml-2">
+                        <Detalle
+                          metodo={() => getRepuesto(repuesto._id)}
+                          id={repuesto._id}
+                        >
+                          <table className="min-w-full">
+                            <tbody>
+                              <tr>
+                                <td
+                                  colSpan="3"
+                                  style={{
+                                    border: "1px solid #2e4f91",
+                                    padding: "10px",
+                                    backgroundColor: "#2e4f91",
+                                    fontSize: "25px",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                                  Detalles del Repuesto
+                                </td>
+                              </tr>
+                              <tr>
+                                <Tabla>
+                                  <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                                  Nombre
+                                </Tabla>
+                                <Tabla>
+                                  {repuesto.name}
+                                </Tabla>
+                                
+                              </tr>
+                              <tr>
+                                <Tabla>
+                                  <FontAwesomeIcon icon={faRegistered} className="mr-2" />
+                                  Marca
+                                </Tabla>
+                                <Tabla>
+                                  {repuesto.marca.nombre_marca}
+                                </Tabla>
+                              </tr>
+                              <tr>
+                                <Tabla>
+                                  <FontAwesomeIcon icon={faHashtag} className="mr-2" />
+                                  Cantidad
+                                </Tabla>
+                                <Tabla>
+
+                                  {parseInt(repuesto.amount, 10).toLocaleString()} {/* Convertir a número y aplicar separadores de miles */}
+
+
+                                </Tabla>
+                              </tr>
+                              <tr>
+                                <Tabla>
+                                  <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
+                                  Precio
+                                </Tabla>
+                                <Tabla>
+                                  {formatCurrency(
+                                    repuesto.price
+                                  )}
+                                </Tabla>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </Detalle>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-center mt-4 mx-auto">
+                <nav
+                  className="relative z-0 inline-flex rounded-md shadow-sm shadow-sky-100 -space-x-px"
+                  aria-label="Pagination"
+                >
+                  <button
+                    onClick={() => handlePageChange(page - 1)}
+                    className={`relative inline-flex items-center px-4 py-2 rounded-l-lg text-white ${page === 1
+                        ? "cursor-not-allowed opacity-50 bg-slate-800 text-white"
+                        : "bg-blue-500"
+                      }`}
+                    disabled={page === 1}
+                  >
+                    <FontAwesomeIcon icon={faChevronLeft} />
+                  </button>
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                      key={index + 1}
+                      onClick={() => handlePageChange(index + 1)}
+                      className={`relative inline-flex items-center px-4 py-2 border border-gray-300 ${index + 1 === page
+                          ? "z-10 font-bold bg-blue-600"
+                          : "text-gray-500"
+                        }`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => handlePageChange(page + 1)}
+                    className={`relative inline-flex items-center px-4 py-2 rounded-r-lg shadow   ${page === totalPages
+                        ? "cursor-not-allowed opacity-50 bg-slate-800"
+                        : "bg-blue-500"
+                      }`}
+                    disabled={page === totalPages}
+                  >
+                    <FontAwesomeIcon icon={faChevronRight} />
+                  </button>
+                </nav>
+              </div>
+            </>
+          )}
+        </>
       ) : (
         <Navigate to="/tasks" />
       )}

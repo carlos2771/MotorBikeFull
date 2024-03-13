@@ -5,7 +5,7 @@ import { useUsuario } from "../../context/usuariosContext";
 import { Link, Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMotorcycle, faDownload, faPlus, faPencil, faBan, faCheck, faUser, faInfoCircle, faAddressCard, faEnvelope} from "@fortawesome/free-solid-svg-icons";
+import { faMotorcycle, faDownload, faPlus, faPencil, faBan, faCheck, faUser, faInfoCircle, faAddressCard, faEnvelope, faChevronRight, faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import Detalle from "../../components/Detalle";
 import { Tabla, Titulo } from "../../components/Tabla";
 import { useAuth } from "../../hooks/useAuth";
@@ -15,7 +15,7 @@ export default function PageUsuarios() {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 5;
 
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
@@ -419,7 +419,7 @@ export default function PageUsuarios() {
                 return (
                   <div
                     key={user._id}
-                    className={`col ${user.estado === "Activo" ? "shadow-blue-600" : "shadow-red-500"} rounded-lg p-4 shadow-md bg-slate-600`}
+                    className={`col ${user.estado === "Activo" ? "shadow-blue-600" : "shadow-red-500"} rounded-lg p-4 shadow-md bg-slate-700`}
                   >
                     <h2 className="text-lg font-bold mb-2">{user.username}</h2>
                     <p>Correo Electrónico: {user.email}</p>
@@ -511,7 +511,7 @@ export default function PageUsuarios() {
                   className={`relative inline-flex items-center px-4 py-2 rounded-l-lg text-white ${page === 1 ? "cursor-not-allowed opacity-50 bg-slate-800 text-white" : "bg-blue-500"}`}
                   disabled={page === 1}
                 >
-                  Previous
+                  <FontAwesomeIcon icon={faChevronLeft} />
                 </button>
                 {Array.from({ length: totalPages }, (_, index) => (
                   <button
@@ -527,7 +527,7 @@ export default function PageUsuarios() {
                   className={`relative inline-flex items-center px-4 py-2 rounded-r-lg shadow   ${page === totalPages ? "cursor-not-allowed opacity-50 bg-slate-800" : "bg-blue-500"}`}
                   disabled={page === totalPages}
                 >
-                  Next
+                  <FontAwesomeIcon icon={faChevronRight} />
                 </button>
               </nav>
             </div>
