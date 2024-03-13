@@ -18,12 +18,13 @@ export const AuthProvider = ({ children }) => {
         try{
           const storedUser = localStorage.getItem('user');
           const token = Cookies.get('token');
-    
+        setTimeout(() => {
           if (!token && storedUser) {
             localStorage.removeItem("user");
             setIsAuthenticated(false);
           }
-    
+        }, 2000);
+        
           if (storedUser) {
             setUser(JSON.parse(storedUser));
             setIsAuthenticated(true);
