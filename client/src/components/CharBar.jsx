@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Chart as ChartJS, BarElement, Tooltip, Legend, CategoryScale, LinearScale } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { format, startOfDay, endOfDay } from 'date-fns';  
+import { startOfMonth, endOfMonth } from 'date-fns';  
 import "./CharBar.css";
 import Swal from 'sweetalert2';
 import 'chart.js/auto';
