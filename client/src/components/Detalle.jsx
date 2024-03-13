@@ -22,8 +22,8 @@ export default function Detalle({ id, metodo, children }) {
   const handleClose = () => setOpen(false);
 
   return (
-    <div className='rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500'>
-      <Button onClick={handleOpen} style={{ color: 'white'}}> <FontAwesomeIcon icon={faCircleInfo} /></Button>
+    <div>
+      <div onClick={handleOpen}> <FontAwesomeIcon icon={faCircleInfo} className='rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 p-2 w-10'/></div>
       <Modal
         open={open}
         onClose={handleClose}

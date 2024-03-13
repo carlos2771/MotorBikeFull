@@ -26,6 +26,13 @@ export default function PageRoles() {
   const { roles, getRoles, deleteRol, updateRol } = useRoles();
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
+  const [userLoaded, setUserLoaded] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setUserLoaded(true);
+    }
+  }, [user]);
 
 
   useEffect(() => {
@@ -136,6 +143,9 @@ export default function PageRoles() {
     role.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  if (!userLoaded) {
+    return <div>Cargando usuario...</div>;
+  }
 
   return (
     <>
@@ -238,6 +248,7 @@ export default function PageRoles() {
           </div>
         </>
       ) : (
+        
         <Navigate to="/tasks" />
       )}
     </>

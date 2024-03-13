@@ -250,6 +250,14 @@ export const NombreMaRequired = {
   minLength: { value: 2, message: "Minimo 2 caracter" }
 };
 
+export const NombreUsuarioRequired = {
+  required: "Campo requerido",
+  validate: (value) => /^(?! +$)[A-Za-z0-9\sÑñ]+$/.test(value.trim()) || "Ingresa un nombre válido",
+  maxLength: { value: 50, message: "Maximo 50 caracteres" },
+  minLength: { value: 2, message: "Minimo 2 caracter" }
+};
+
+
 // export const PasaporteRequired = {
 //   required: "Campo requerido",
 //   validate: (value) => /^(?=(.*[A-Za-z]){4})(?=(.*\d){4})[A-Za-z0-9\s]+$/.test(value.trim()) || "Debe contener al menos 4 letras y 4 números",
@@ -297,3 +305,8 @@ export const NombreRolRequired = {
   maxLength: { value: 35, message: "El maximo de caracteres es de 35" },
   minLength: { value: 6, message: "Ingresa el nombre completo, minimo 6 caracteres" }
 };
+
+export const discountValidations = {
+  min: {value: 0, message: "El descuento tiene que ser mayor a 0"},
+  max: {value: 99, message: "El descuento es máximo de 99%"}
+}

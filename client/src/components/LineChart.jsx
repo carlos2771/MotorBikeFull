@@ -4,13 +4,13 @@ import axios from 'axios';
 import 'chart.js/auto';
 import "./LineChar.css";
 import Swal from 'sweetalert2';
-import { format, startOfDay, endOfDay } from 'date-fns';
+import { format, startOfDay, endOfDay, startOfWeek, endOfWeek } from 'date-fns';
 
 
 const LineChart = () => {
   const [data, setData] = useState({});
-  const [startDate, setStartDate] = useState(startOfDay(new Date()));
-  const [endDate, setEndDate] = useState(endOfDay(new Date()));
+  const [startDate, setStartDate] = useState(startOfWeek(new Date()));
+  const [endDate, setEndDate] = useState(endOfWeek(new Date()));
 
   useEffect(() => {
     fetchData();
@@ -36,8 +36,11 @@ const LineChart = () => {
       const formattedStartDate = formatDate(startDate);
       const formattedEndDate = formatDate(endDate);
       
-      const purchasesUrl = `http://localhost:3000/api/compras?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
-      const salesUrl = `http://localhost:3000/api/Cart-cliente?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+      const purchasesUrl = `https://backend-motorbikefull.onrender.com/api/compras?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+      const salesUrl = `https://backend-motorbikefull.onrender.com/api/Cart-cliente?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+
+      // const purchasesUrl = `http://localhost:3000/api/compras?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+      // const salesUrl = `http://localhost:3000/api/Cart-cliente?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
 
       const [purchasesResponse, salesResponse] = await Promise.all([
         axios.get(purchasesUrl, { withCredentials: true }),
@@ -145,6 +148,7 @@ const LineChart = () => {
             <input
               className="chart-line-date-input"
               type="date"
+              value={formatDate(startDate)}
               onChange={(e) => setStartDate(new Date(e.target.value))}
             />
           </div>
@@ -153,6 +157,7 @@ const LineChart = () => {
             <input
               className="chart-line-date-input"
               type="date"
+              value={formatDate(endDate)}
               onChange={(e) => setEndDate(new Date(e.target.value))}
             />
           </div>
