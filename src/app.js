@@ -29,6 +29,18 @@ app.use(cors({
     credentials: true,
 }));
 
+// Middleware para configurar las cabeceras de respuesta
+app.use((req, res, next) => {
+    // Permitir solicitudes desde cualquier origen
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    // Permitir los métodos GET, POST y OPTIONS
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    // Permitir los encabezados especificados en la solicitud
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    // Continuar con el siguiente middleware
+    next();
+  });
+
 app.use(morgan("dev"));
 // app.use(express.json({ limit: '10mb' })); // Ajusta el límite según tus necesidades
 // app.use(express.json());
