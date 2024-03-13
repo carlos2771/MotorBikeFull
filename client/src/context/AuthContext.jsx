@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
       // setUser(response.data); si tiene algun error en el login, pruebe esto
       setIsAuthenticated(true);
       setLoading(false)
-      // localStorage.setItem('user', JSON.stringify(response));
+      localStorage.setItem('user', JSON.stringify(response));
     } catch (error) {
       setErrors(error.response.data.message);
     }
@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
     Cookies.remove("token");
     setUser(null)
     setIsAuthenticated(false);
-    // localStorage.removeItem("user");
+    localStorage.removeItem("user");
   };
 
   // AuthContext.jsx
