@@ -11,27 +11,27 @@ export const AuthProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // useEffect(() => {
-  //   const checkLocalStorage = () => {
-  //     const storedUser = localStorage.getItem('user');
-  //     const token = Cookies.get('token');
+  useEffect(() => {
+    const checkLocalStorage = () => {
+      const storedUser = localStorage.getItem('user');
+      const token = Cookies.get('token');
 
-  //     if(!token && storedUser){
-  //       localStorage.removeItem("user");
-  //       setIsAuthenticated(false)
-  //     }
+      // if(!token && storedUser){
+      //   localStorage.removeItem("user");
+      //   setIsAuthenticated(false)
+      // }
 
-  //     if (storedUser) {
-  //       setUser(JSON.parse(storedUser));
-  //       setIsAuthenticated(true);
-  //     } else {
-  //       setIsAuthenticated(false);
-  //     }
-  //     setLoading(false);
-  //   };
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setLoading(false);
+    };
 
-  //   checkLocalStorage();
-  // }, []);
+    checkLocalStorage();
+  }, []);
 
   const signup = async (user) => { // Registrarse
     try {
