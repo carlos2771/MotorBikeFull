@@ -10,9 +10,8 @@ ChartJS.register(BarElement, Tooltip, Legend, CategoryScale, LinearScale);
 
 export function CharBar() {
   const [ventasServicios, setVentasServicios] = useState([]);
-  const [startDate, setStartDate] = useState(startOfDay(new Date()));  // Iniciar con el comienzo del día actual
-  const [endDate, setEndDate] = useState(endOfDay(new Date()));  
- 
+  const [startDate, setStartDate] = useState(startOfMonth(new Date()));  // Iniciar con el comienzo del día actual
+  const [endDate, setEndDate] = useState(endOfMonth(new Date()));
 
   useEffect(() => {
     fetchData();
@@ -184,11 +183,15 @@ export function CharBar() {
           <input 
           className="chart-bar-date-input" 
           type="date"
-           onChange={(e) => setStartDate(new Date(e.target.value))} />
+          value={startDate.toISOString().split('T')[0]}
+          onChange={(e) => setStartDate(startOfMonth(new Date(e.target.value)))} />
         </div>
         <div>
           <label>Fecha final: </label>
-          <input className="chart-bar-date-input" type="date" onChange={(e) => setEndDate(new Date(e.target.value))} />
+          <input className="chart-bar-date-input" 
+          type="date" 
+          value={endDate.toISOString().split('T')[0]}
+          onChange={(e) => setEndDate(endOfMonth(new Date(e.target.value)))} />
         </div>
       </div>
       {Object.keys(sumasPorMecanico).length === 0 ? (
