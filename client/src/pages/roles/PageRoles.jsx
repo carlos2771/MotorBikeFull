@@ -26,6 +26,16 @@ export default function PageRoles() {
   const { roles, getRoles, deleteRol, updateRol } = useRoles();
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
+  const [loaded, setLoaded] = useState(false); // Estado para indicar si se ha cargado el localstorage o las cookies
+
+  useEffect(() => {
+    try {
+      // Intenta obtener los roles y establece loaded en true después
+      getRoles().then(() => setLoaded(true));
+    } catch (error) {
+      console.error("Error al obtener roles:", error);
+    }
+  }, []);
 
 
   useEffect(() => {
@@ -135,6 +145,10 @@ export default function PageRoles() {
   const filteredRoles = roles.filter((role) =>
     role.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (!loaded) {
+    return <div className="mt-16">Cargando...</div>;
+  }
 
 
   return (
