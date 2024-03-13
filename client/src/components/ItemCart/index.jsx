@@ -6,20 +6,25 @@ import {
   faBan,
 } from "@fortawesome/free-solid-svg-icons";
 
-export const ItemCart = ({ item, updateTotal, handleUpadateUnit }) => {
+export const ItemCart = ({ item,  handleUpadateUnit, handleAmountChange  }) => {
   
   const { amount, price, img, name } = item;
-  const [num, setNum] = useState(amount);
+  // const [num, setNum] = useState(amount);
   const { deleteProduct } = useContext(CartContext);
 
   const handleInputChange = (event) => {
-    let newValue = Number(event.target.value);
+    let newValue = event.target.value;
     // Verificar si el nuevo valor es 0 o NaN, si es así, establecerlo en 1 en su lugar
-    if (isNaN(newValue) || newValue <= 0 ) {
-      newValue = 1;
+    // if (isNaN(newValue) || newValue <= 0 ) {
+    //   newValue = 1;
+    // }
+    const newValueItem = {
+      ...item,
+      amount: newValue
     }
-    setNum(newValue);
-    updateTotal(item._id, newValue);
+
+    handleAmountChange(newValueItem)
+    // setNum(newValue);
     handleUpadateUnit({ name, unit: newValue });
   };
   
@@ -33,7 +38,7 @@ export const ItemCart = ({ item, updateTotal, handleUpadateUnit }) => {
           <div className={styles.buttons}>
             <input
               type="number"
-              value={num}
+              value={amount}
               onChange={handleInputChange}
               className="w-12  border-0 bg-slate-700  border-b-2 border-blue-600 text-white  "
             />
@@ -41,8 +46,8 @@ export const ItemCart = ({ item, updateTotal, handleUpadateUnit }) => {
           </div>
         </div>
         <div className={styles.right}>
-          <div>{num.toLocaleString()}</div> {/* Aquí aplicamos el separador de miles */}
-          <p>Total: ${(num * price).toLocaleString()}</p> {/* Aplicamos el separador de miles al total también */}
+          <div>{amount.toLocaleString()}</div> {/* Aquí aplicamos el separador de miles */}
+          <p>Total: ${(amount * price).toLocaleString()}</p> {/* Aplicamos el separador de miles al total también */}
         </div>
       </div>
     </div>
