@@ -257,18 +257,19 @@ export default function PageMecanico() {
       renderCell: (params) => {
         const estado = params.row.estado;
         return (
-          <div>
-            <button
-              className={estado === "Activo" ? "" : "hidden"}
+          <div className="flex">
+            <div
+              className={estado === "Activo" ? "mt-1" : "hidden"}
               title="Editar"
             >
               <Link
-                className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
                 to={`/mecanico/${params.row._id}`}
               >
-                <FontAwesomeIcon icon={faPencil} />
+                <button className="m-1">
+                  <FontAwesomeIcon icon={faPencil} className="border border-indigo-500 w-10 p-2 rounded-full hover:text-white hover:bg-indigo-500"/>
+                </button>
               </Link>
-            </button>
+            </div>
             {/* <button
               className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-3"
               onClick={() => handleDownloadPDF(params.row)}
@@ -286,19 +287,19 @@ export default function PageMecanico() {
               title="Activar/Inactivar"
               className={
                 estado === "Activo"
-                  ? "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500"
-                  : "px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                  ? "mt-1"
+                  : ""
               }
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
               {estado === "Activo" ? (
-                <FontAwesomeIcon icon={faBan} />
+                <FontAwesomeIcon icon={faBan} className={`border border-red-500 rounded-full p-2 w-10 text-white ${estado === "Activo" ? "border-red-500 hover:bg-red-500" : "border-indigo-500 hover:bg-indigo-500"}`} />
               ) : (
-                <FontAwesomeIcon icon={faCheck} />
+                <FontAwesomeIcon icon={faCheck} className={`border border-indigo-500 rounded-full p-2 w-10 text-white ${estado === "Activo" ? "border-red-500 hover:bg-red-500" : "border-indigo-500 hover:bg-indigo-500"}`} />
               )}
             </button>
-            <button
-              className={estado === "Activo" ? "" : "hidden"}
+            <div
+              className={estado === "Activo" ? "ml-1 mt-2" : "hidden"}
               title="Ver detalle"
             >
               <Detalle
@@ -393,7 +394,7 @@ export default function PageMecanico() {
                   </tbody>
                 </table>
               </Detalle>
-            </button>
+            </div>
           </div>
         );
       },

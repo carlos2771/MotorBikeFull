@@ -39,7 +39,7 @@ export default function PageClientes() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 640);
+      setIsMobile(window.innerWidth <= 862);
     };
 
     window.addEventListener("resize", handleResize);
@@ -196,22 +196,25 @@ export default function PageClientes() {
   }, [clientes]);
 
   const columns = [
-    {
-      field: "tipo",
-      headerName: "Tipo Documento",
-      width: 200,
-      headerClassName: "font-custom text-lg",
-    },
+    // {
+    //   field: "tipo",
+    //   headerName: "Tipo Documento",
+    //   minwidth: 200,
+    //   flex:1,
+    //   headerClassName: "font-custom text-lg",
+    // },
     {
       field: "cedula",
       headerName: "Documento",
-      width: 180,
+      minwidth: 180,
+      flex:1,
       headerClassName: "font-custom text-lg",
     },
     {
       field: "nombre_cliente",
       headerName: "Nombre Completo",
-      width: 200,
+      minwidth: 200,
+      flex:1,
       headerClassName: "font-custom text-lg",
     },
     // {
@@ -228,12 +231,14 @@ export default function PageClientes() {
       field: "telefono_cliente",
       headerName: "Teléfono",
       width: 150,
+      flex:1,
       headerClassName: "font-custom text-lg",
     },
     {
       field: "estado",
       headerName: "Estado",
       width: 120,
+      flex:1,
       headerClassName: "font-custom text-lg",
     },
     // {
@@ -553,7 +558,7 @@ export default function PageClientes() {
                   </Link>
                 </div>
               </div>
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mx-4 md:mx-16">
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mx-4 md:mx-16">
                 {clienteToShow.map((cliente) => (
                   <div
                     key={cliente._id}
