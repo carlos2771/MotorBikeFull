@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react"
+import React, { useEffect, useCallback, useState } from "react";
 import { useRepuestos } from "../../context/RepuestosContext";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
@@ -22,7 +22,8 @@ import {
   faRegistered,
   faDollarSign,
   faHashtag,
-  faChevronRight, faChevronLeft
+  faChevronRight,
+  faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Detalle from "../../components/Detalle";
@@ -46,8 +47,13 @@ function formatCurrency2(value) {
 }
 
 export default function PageRepuestos() {
-  const { repuestos, getRepuestos, getRepuesto, deleteRepuesto, updateRepuesto } =
-    useRepuestos();
+  const {
+    repuestos,
+    getRepuestos,
+    getRepuesto,
+    deleteRepuesto,
+    updateRepuesto,
+  } = useRepuestos();
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
@@ -63,7 +69,6 @@ export default function PageRepuestos() {
       console.error("Error al obtener los repuestos:", error);
     }
   }, []);
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -260,14 +265,14 @@ export default function PageRepuestos() {
               className={estado === "Activo" ? "mt-1" : "hidden"}
               title="Editar"
             >
-              <Link
-                to={`/repuestos/${params.row._id}`}
-              >
+              <Link to={`/repuestos/${params.row._id}`}>
                 <button className="m-1">
-                  <FontAwesomeIcon icon={faPencil} className="border border-indigo-500 w-10 p-2 rounded-full hover:text-white hover:bg-indigo-500" />
+                  <FontAwesomeIcon
+                    icon={faPencil}
+                    className="border border-indigo-500 w-10 p-2 rounded-full hover:text-white hover:bg-indigo-500"
+                  />
                 </button>
               </Link>
-
             </div>
 
             {/* <button
@@ -278,17 +283,27 @@ export default function PageRepuestos() {
           </button> */}
             <button
               title="Activar/Inactivar"
-              className={
-                estado === "Activo"
-                  ? "mt-1"
-                  : ""
-              }
+              className={estado === "Activo" ? "mt-1" : ""}
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
               {estado === "Activo" ? (
-                <FontAwesomeIcon icon={faBan} className={`border border-red-500 rounded-full p-2 w-10 text-white ${estado === "Activo" ? "border-red-500 hover:bg-red-500" : "border-indigo-500 hover:bg-indigo-500"}`} />
+                <FontAwesomeIcon
+                  icon={faBan}
+                  className={`border border-red-500 rounded-full p-2 w-10 text-white ${
+                    estado === "Activo"
+                      ? "border-red-500 hover:bg-red-500"
+                      : "border-indigo-500 hover:bg-indigo-500"
+                  }`}
+                />
               ) : (
-                <FontAwesomeIcon icon={faCheck} className={`border border-indigo-500 rounded-full p-2 w-10 text-white ${estado === "Activo" ? "border-red-500 hover:bg-red-500" : "border-indigo-500 hover:bg-indigo-500"}`} />
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  className={`border border-indigo-500 rounded-full p-2 w-10 text-white ${
+                    estado === "Activo"
+                      ? "border-red-500 hover:bg-red-500"
+                      : "border-indigo-500 hover:bg-indigo-500"
+                  }`}
+                />
               )}
             </button>
             <div
@@ -346,7 +361,6 @@ export default function PageRepuestos() {
                               )?.img
                             }
                             alt="Imagen de repuesto"
-
                           />
                         </div>
                       </td>
@@ -370,12 +384,13 @@ export default function PageRepuestos() {
                         Cantidad
                       </Tabla>
                       <Tabla>
-
-                        {parseInt(repuestos.find(
-                          (repuesto) => repuesto._id === params.row._id
-                        )?.amount, 10).toLocaleString()} {/* Convertir a número y aplicar separadores de miles */}
-
-
+                        {parseInt(
+                          repuestos.find(
+                            (repuesto) => repuesto._id === params.row._id
+                          )?.amount,
+                          10
+                        ).toLocaleString()}{" "}
+                        {/* Convertir a número y aplicar separadores de miles */}
                       </Tabla>
                     </tr>
                     <tr>
@@ -409,14 +424,19 @@ export default function PageRepuestos() {
   const filteredRepuestos = repuestos.filter(
     (repuesto) =>
       repuesto.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      repuesto.marca.nombre_marca.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      repuesto.marca.nombre_marca
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
       repuesto.amount.toString().includes(searchTerm) ||
       repuesto.price.toString().includes(searchTerm)
   );
 
   const totalPages = Math.ceil(filteredRepuestos.length / itemsPerPage);
   const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, filteredRepuestos.length);
+  const endIndex = Math.min(
+    startIndex + itemsPerPage,
+    filteredRepuestos.length
+  );
   const repuestosToShow = filteredRepuestos.slice(startIndex, endIndex);
 
   const handlePageChange = (pageNumber) => {
@@ -499,7 +519,8 @@ export default function PageRepuestos() {
                   //Traducir a español
                   localeText={{
                     noRowsLabel: "No se ha encontrado datos.",
-                    noResultsOverlayLabel: "No se ha encontrado ningún resultado",
+                    noResultsOverlayLabel:
+                      "No se ha encontrado ningún resultado",
                     toolbarColumns: "Columnas",
                     toolbarColumnsLabel: "Seleccionar columnas",
                     toolbarFilters: "Filtros",
@@ -559,13 +580,16 @@ export default function PageRepuestos() {
 
                 <div className="mx-4 sm:mx-0 justify-end flex mt-2">
                   <Link to="/add-repuesto" title="Agregar">
-                    <FontAwesomeIcon icon={faPlus} className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent" />
+                    <FontAwesomeIcon
+                      icon={faPlus}
+                      className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
+                    />
                   </Link>
-                  <button
-                    onClick={exportarAExcel}
-                    title="Descargar excel"
-                  >
-                    <FontAwesomeIcon icon={faDownload} className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent" />
+                  <button onClick={exportarAExcel} title="Descargar excel">
+                    <FontAwesomeIcon
+                      icon={faDownload}
+                      className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"
+                    />
                   </button>
                 </div>
               </div>
@@ -574,24 +598,27 @@ export default function PageRepuestos() {
                 {repuestosToShow.map((repuesto) => (
                   <div
                     key={repuesto._id}
-                    className={`col ${repuesto.estado === "Activo"
+                    className={`col ${
+                      repuesto.estado === "Activo"
                         ? "shadow-blue-600"
                         : "shadow-red-500"
-                      } rounded-lg p-4 shadow-md bg-slate-700`}
+                    } rounded-lg p-4 shadow-md bg-slate-700`}
                   >
-                    <h2 className="text-lg font-bold mb-2">
-                      {repuesto.name}
-                    </h2>
+                    <h2 className="text-lg font-bold mb-2">{repuesto.name}</h2>
                     <p>Cantidad: {repuesto.amount}</p>
                     <p>Precio: {repuesto.price}</p>
                     <div className="flex justify-center mt-4">
-
                       <Link
-                        className={`${repuesto.estado === "Activo" ? "mr-2" : "hidden"} text-white`}
+                        className={`${
+                          repuesto.estado === "Activo" ? "mr-2" : "hidden"
+                        } text-white`}
                         title="Editar"
                         to={`/repuestos/${repuesto._id}`}
                       >
-                        <FontAwesomeIcon icon={faPencil} className="border border-indigo-500 w-10 p-2 rounded-full" />
+                        <FontAwesomeIcon
+                          icon={faPencil}
+                          className="border border-indigo-500 w-10 p-2 rounded-full"
+                        />
                       </Link>
 
                       <button
@@ -631,54 +658,68 @@ export default function PageRepuestos() {
                                     textAlign: "center",
                                   }}
                                 >
-                                  <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                                  <FontAwesomeIcon
+                                    icon={faInfoCircle}
+                                    className="mr-2"
+                                  />
                                   Detalles del Repuesto
                                 </td>
                               </tr>
                               <tr>
                                 <Tabla>
-                                  <FontAwesomeIcon icon={faIdCard} className="mr-2" />
+                                  <FontAwesomeIcon
+                                    icon={faIdCard}
+                                    className="mr-2"
+                                  />
                                   Nombre
                                 </Tabla>
-                                <Tabla>
-                                  {repuesto.name}
-                                </Tabla>
-                                
+                                <Tabla>{repuesto.name}</Tabla>
                               </tr>
                               <tr>
                                 <Tabla>
-                                  <FontAwesomeIcon icon={faRegistered} className="mr-2" />
+                                  <FontAwesomeIcon
+                                    icon={faRegistered}
+                                    className="mr-2"
+                                  />
                                   Marca
                                 </Tabla>
-                                <Tabla>
-                                  {repuesto.marca.nombre_marca}
-                                </Tabla>
+                                <Tabla>{repuesto.marca.nombre_marca}</Tabla>
                               </tr>
                               <tr>
                                 <Tabla>
-                                  <FontAwesomeIcon icon={faHashtag} className="mr-2" />
+                                  <FontAwesomeIcon
+                                    icon={faHashtag}
+                                    className="mr-2"
+                                  />
                                   Cantidad
                                 </Tabla>
                                 <Tabla>
-
-                                  {parseInt(repuesto.amount, 10).toLocaleString()} {/* Convertir a número y aplicar separadores de miles */}
-
-
+                                  {parseInt(
+                                    repuesto.amount,
+                                    10
+                                  ).toLocaleString()}{" "}
+                                  {/* Convertir a número y aplicar separadores de miles */}
                                 </Tabla>
                               </tr>
                               <tr>
                                 <Tabla>
-                                  <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
+                                  <FontAwesomeIcon
+                                    icon={faDollarSign}
+                                    className="mr-2"
+                                  />
                                   Precio
                                 </Tabla>
-                                <Tabla>
-                                  {formatCurrency(
-                                    repuesto.price
-                                  )}
-                                </Tabla>
-                              </tr>
+                                <Tabla>{formatCurrency(repuesto.price)}</Tabla>
+                              </tr> 
                             </tbody>
                           </table>
+                          <div className="flex justify-center items-center p-2 border  border-blue-600 min-w-full">
+                                  <img
+                                    className="min-h-20 max-h-40"
+                                    src={repuesto.img}
+                                    alt="Imagen de repuesto"
+                                  />
+                                </div>
                         </Detalle>
                       </div>
                     </div>
@@ -693,10 +734,11 @@ export default function PageRepuestos() {
                 >
                   <button
                     onClick={() => handlePageChange(page - 1)}
-                    className={`relative inline-flex items-center px-4 py-2 rounded-l-lg text-white ${page === 1
+                    className={`relative inline-flex items-center px-4 py-2 rounded-l-lg text-white ${
+                      page === 1
                         ? "cursor-not-allowed opacity-50 bg-slate-800 text-white"
                         : "bg-blue-500"
-                      }`}
+                    }`}
                     disabled={page === 1}
                   >
                     <FontAwesomeIcon icon={faChevronLeft} />
@@ -705,20 +747,22 @@ export default function PageRepuestos() {
                     <button
                       key={index + 1}
                       onClick={() => handlePageChange(index + 1)}
-                      className={`relative inline-flex items-center px-4 py-2 border border-gray-300 ${index + 1 === page
+                      className={`relative inline-flex items-center px-4 py-2 border border-gray-300 ${
+                        index + 1 === page
                           ? "z-10 font-bold bg-blue-600"
                           : "text-gray-500"
-                        }`}
+                      }`}
                     >
                       {index + 1}
                     </button>
                   ))}
                   <button
                     onClick={() => handlePageChange(page + 1)}
-                    className={`relative inline-flex items-center px-4 py-2 rounded-r-lg shadow   ${page === totalPages
+                    className={`relative inline-flex items-center px-4 py-2 rounded-r-lg shadow   ${
+                      page === totalPages
                         ? "cursor-not-allowed opacity-50 bg-slate-800"
                         : "bg-blue-500"
-                      }`}
+                    }`}
                     disabled={page === totalPages}
                   >
                     <FontAwesomeIcon icon={faChevronRight} />
