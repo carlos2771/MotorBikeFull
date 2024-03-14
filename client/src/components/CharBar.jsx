@@ -34,7 +34,7 @@ export function CharBar() {
         return;
       }
   
-      let url = "https://backend-motorbikefull.onrender.com/api/ventas_servicios";
+      let url = "https://backend-motorbike.up.railway.app/api/ventas_servicios";
   
       if (startDate && endDate) {
         const formattedStartDate = startDate.toISOString().split("T")[0];

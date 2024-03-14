@@ -36,8 +36,8 @@ const LineChart = () => {
       const formattedStartDate = formatDate(startDate);
       const formattedEndDate = formatDate(endDate);
       
-      const purchasesUrl = `https://backend-motorbikefull.onrender.com/api/compras?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
-      const salesUrl = `https://backend-motorbikefull.onrender.com/api/Cart-cliente?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+      const purchasesUrl = `https://backend-motorbike.up.railway.app/api/compras?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+      const salesUrl = `https://backend-motorbike.up.railway.app/api/Cart-cliente?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
 
       // const purchasesUrl = `http://localhost:3000/api/compras?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
       // const salesUrl = `http://localhost:3000/api/Cart-cliente?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
