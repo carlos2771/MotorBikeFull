@@ -6,7 +6,7 @@ import {
   faBan,
 } from "@fortawesome/free-solid-svg-icons";
 
-export const ItemCart = ({ item,  handleUpadateUnit, handleAmountChange  }) => {
+export const ItemCart = ({ item,   handleAmountChange  }) => {
   
   const { amount, price, img, name } = item;
   // const [num, setNum] = useState(amount);
@@ -24,8 +24,6 @@ export const ItemCart = ({ item,  handleUpadateUnit, handleAmountChange  }) => {
     }
 
     handleAmountChange(newValueItem)
-    // setNum(newValue);
-    handleUpadateUnit({ name, unit: newValue });
   };
   
 
