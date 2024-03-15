@@ -67,8 +67,8 @@ export const register = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER || 'saritalop789@gmail.com',
-      pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
+        user: process.env.EMAIL_USER || 'soportemotorbike@gmail.com',
+      pass: process.env.EMAIL_PASSWORD || 'v q j l e w l z v t s o u p e x',
       },
     });
 
@@ -160,7 +160,7 @@ export const register = async (req, res) => {
                     <!-- Boton -->
                     
                     <p style="color: black !important;">Para comenzar, puedes iniciar sesión haciendo clic en el siguiente enlace:</p>
-                    <a class="claseBoton" href="http://localhost:5173/login">Inicia sesion Aqui!</a>
+                    <a class="claseBoton" href="https://motorbikefull.onrender.com/login">Inicia sesion Aqui!</a>
                 </div>
                 <!-- Contenido principal -->
     
@@ -371,8 +371,8 @@ export const enviarEmail = async (email, code) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER || 'saritalop789@gmail.com',
-        pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
+        user: process.env.EMAIL_USER || 'soportemotorbike@gmail.com',
+        pass: process.env.EMAIL_PASSWORD || 'v q j l e w l z v t s o u p e x',
       },
     });
 
@@ -482,7 +482,7 @@ export const generateEmailHTML = (code) => {
   
                   <!-- Boton -->
   
-                  <a class="claseBoton" href="http://localhost:5173/reestablecer-password/${code}">Recuperar</a>
+                  <a class="claseBoton" href="https://motorbikefull.onrender.com/reestablecer-password/${code}">Recuperar</a>
               </div>
               <!-- Contenido principal -->
   
@@ -565,8 +565,8 @@ const enviarEmail2 = async (email, code) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER || 'saritalop789@gmail.com',
-        pass: process.env.EMAIL_PASSWORD || 'wklw ynoh rtnc baej',
+        user: process.env.EMAIL_USER || 'soportemotorbike@gmail.com',
+        pass: process.env.EMAIL_PASSWORD || 'v q j l e w l z v t s o u p e x',
       },
     });
 
@@ -674,7 +674,7 @@ export const generateEmailHTML2 = (code) => {
   
                   <!-- Boton -->
   
-                  <a class="claseBoton" href="http://localhost:5173/login">Iniciar sesion</a>
+                  <a class="claseBoton" href="https://motorbikefull.onrender.com/login">Iniciar sesion</a>
               </div>
               <!-- Contenido principal -->
   

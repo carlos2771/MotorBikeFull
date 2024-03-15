@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../hooks/useAuth';
-import { PasswordRequire } from '../utils/validations';
+import { PasswordRequire, PasswordRequired } from '../utils/validations';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert } from '@material-tailwind/react';
 import { useSpring, animated } from 'react-spring';
 import Swal from "sweetalert2";
 import backgroundImage from './images/yamaha.jpg'; // Importa la imagen de fondo
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function ActualizarPassword () {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
@@ -14,10 +16,13 @@ export default function ActualizarPassword () {
   const navigate = useNavigate();
   const params = useParams();
   const [passwordError, setPasswordError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     
   }, []);
+
+  
 
   const onSubmit = async (values) => {
     // Validar que las contraseñas coincidan
@@ -75,6 +80,10 @@ export default function ActualizarPassword () {
     to: { opacity: 1, transform: 'translateY(0)' },
   });
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div>
       <img src={backgroundImage} alt="Background" className="absolute inset-0 object-cover w-full h-full z-0" />
@@ -92,18 +101,31 @@ export default function ActualizarPassword () {
           <h1 className='text-3xl font-bold my-2 text-center'>Recuperar Contraseña</h1>
           <p className="text-white text-center mb-4">Ingresa tu nueva contraseña</p>
           <form onSubmit={handleSubmit(onSubmit)} method="POST"> {/* Agrega method="POST" aquí */}
-            <input
-              type="password"
-              {...register("password", PasswordRequire)}
-              className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-950 border-0 border-b-2 border-sky-500 text-white px-4 py-2 rounded2 my-2"
-              placeholder="Nueva contraseña"
-            />
+          <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  {...register("password", PasswordRequired)}
+                  className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-950 border-0 border-b-2 border-sky-500 text-white px-4 py-2 rounded2 my-2"
+                  placeholder="Contraseña"
+                />
+                <button
+                  type="button"
+                  className="absolute right-4 top-4"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <FontAwesomeIcon icon={faEyeSlash} title="Ocultar"/>
+                  ) : (
+                    <FontAwesomeIcon icon={faEye} title="Mostrar"/>
+                  )}
+                </button>
+              </div>
             {errors.password && (
               <p className="text-red-500">{errors.password.message}</p>
             )}
 
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               {...register('confirmPassword', PasswordRequire)}
               className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-950 border-0 border-b-2 border-sky-500 text-white px-4 py-2 rounded2 my-2"
               placeholder="Confirmar Contraseña"

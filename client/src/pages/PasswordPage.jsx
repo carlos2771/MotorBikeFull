@@ -8,11 +8,13 @@ import Swal from "sweetalert2";
 import backgroundImage from './images/yamaha.jpg'; // Importa la imagen de fondo
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function PasswordPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { enviarToken } = useAuth();
   const [shouldNavigate , setShouldNavigate] = useState(false);
+  const navigate = useNavigate();
   const [emailValue, setEmailValue] = useState('');
   const [buttonHidden, setButtonHidden] = useState(false);
   const [error, setError] = useState('');
@@ -22,7 +24,9 @@ export default function PasswordPage() {
     if (buttonHidden) {
       const timeoutId = setTimeout(() => {
         setButtonHidden(false);
+        navigate(`/login`);
       }, 4000);
+      
   
       // Limpia el temporizador al desmontar el componente
       return () => clearTimeout(timeoutId);
@@ -52,10 +56,10 @@ export default function PasswordPage() {
           icon: "success",
           title: "Correo enviado correctamente Revisa tu correo electrónico"
         });
-        
+
         setShouldNavigate(true);
         setEmailValue(values.email);
-        
+           
       } else {
         const Toast = Swal.mixin({
           toast: true,
