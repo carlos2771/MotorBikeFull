@@ -31,8 +31,6 @@ export const validarTokenRequest = async(code) => {
 }
 
 export const actualizarPasswordRequest = async(code, password,confirmPassword) => {
-    console.log("Código en la petición:", code); 
-    console.log("Contraseña en la petición:", password, "Confirmar contraseña en la petición:", confirmPassword);
     const res = await axiosClient.post(`/reestablecer-password/${code}`, {password, confirmPassword});
     return res.data
 }
