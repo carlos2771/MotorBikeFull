@@ -55,7 +55,7 @@ export const createCartCliente = async (req, res) => {
 
       // Validar si el descuento es mayor al total
       if (descuento > cartTotal) {
-          return res.status(400).json({ message: ['El descuento no puede ser mayor que el total'] });
+          return res.status(400).json({ message: ['Solo numeros positivos'] });
       }
       const nuevaCartCliente = new CartCliente({
         cliente: clienteId,

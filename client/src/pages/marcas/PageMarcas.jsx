@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMotorcycle, faPlus, faPencil, faBan, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faMotorcycle, faPlus, faPencil, faBan, faCheck, faChevronRight, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import { Link, Navigate } from "react-router-dom";
 import * as XLSX from "xlsx";
@@ -201,7 +201,7 @@ export default function PageMarcas() {
                 }`}
                 disabled={currentPage === 1}
               >
-                Anterior
+                <FontAwesomeIcon icon={faChevronLeft} />
               </button>
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
@@ -221,7 +221,7 @@ export default function PageMarcas() {
                 }`}
                 disabled={currentPage === totalPages}
               >
-                Siguiente
+                <FontAwesomeIcon icon={faChevronRight} />
               </button>
             </nav>
           </div>

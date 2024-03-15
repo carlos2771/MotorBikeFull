@@ -21,6 +21,7 @@ import {
   faAddressCard,
   faCircleInfo,
   faDownload,
+  faChevronRight, faChevronLeft
 } from "@fortawesome/free-solid-svg-icons";
 import { Tabla, Titulo } from "../../components/Tabla";
 import * as XLSX from "xlsx";
@@ -52,18 +53,19 @@ export default function PageClientes() {
   useEffect(() => {
     try {
       getClientes();
+      getCliente(id)
     } catch (error) {
       console.error("Error al obtener clientes:", error);
     }
   }, []);
 
-  useEffect(() => {
-    try {
-      getCliente(id);
-    } catch (error) {
-      console.error("Error al obtener clientes:", error);
-    }
-  }, []);
+  // useEffect(() => {
+  //   try {
+  //     getCliente(id);
+  //   } catch (error) {
+  //     console.error("Error al obtener clientes:", error);
+  //   }
+  // }, []);
 
   const mostrarAlerta = (id, estado) => {
     const titulo = estado === "Activo" ? "Inhabilitar" : "Habilitar";
@@ -414,7 +416,8 @@ export default function PageClientes() {
     (cliente) =>
       cliente.nombre_cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
       cliente.email_cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cliente.telefono_cliente.toLowerCase().includes(searchTerm.toLowerCase())
+      cliente.telefono_cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      cliente.sexo.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const permissions = user?.rol?.permissions || [];
@@ -556,6 +559,12 @@ export default function PageClientes() {
                       className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
                     />
                   </Link>
+                  <button
+                    onClick={exportarAExcel}
+                    title="Descargar excel"
+                  >
+                    <FontAwesomeIcon icon={faDownload} className="px-4 py-2 mx-2 text-sm text-withe font-semibold rounded-full border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent"/>
+                  </button>
                 </div>
               </div>
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mx-4 md:mx-16">
@@ -566,7 +575,7 @@ export default function PageClientes() {
                       cliente.estado === "Activo"
                         ? "shadow-blue-600"
                         : "shadow-red-500"
-                    } rounded-lg p-4 shadow-md bg-slate-600`}
+                    } rounded-lg p-4 shadow-md bg-slate-700`}
                   >
                     <h2 className="text-lg font-bold mb-2">
                       {cliente.nombre_cliente}
@@ -709,7 +718,7 @@ export default function PageClientes() {
                     }`}
                     disabled={page === 1}
                   >
-                    Previous
+                    <FontAwesomeIcon icon={faChevronLeft} />
                   </button>
                   {Array.from({ length: totalPages }, (_, index) => (
                     <button
@@ -733,7 +742,7 @@ export default function PageClientes() {
                     }`}
                     disabled={page === totalPages}
                   >
-                    Next
+                    <FontAwesomeIcon icon={faChevronRight} />
                   </button>
                 </nav>
               </div>

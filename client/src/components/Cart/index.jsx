@@ -33,8 +33,6 @@ const Cart = () => {
   }});
   const { createCartCliente, errors: Errors } = useCartCliente();
 
-  console.log(errors, 'errors')
-
   useEffect(() => {
     try {
       getClientes();
@@ -46,7 +44,6 @@ const Cart = () => {
   /* Traemos del context los productos del carrito */
   const { cartItems, cleartCart, handleChangeCartItems } = useContext(CartContext);
   const descuento = watch('descuento')
-  const [unidades, setUnidades] = useState([]);
 
   const totalCartTest = useMemo(() => {
     const total = cartItems?.reduce(
@@ -67,33 +64,22 @@ const Cart = () => {
     return totalConDescuento
   }, [cartItems, descuento])
 
+ 
+
   const handleAmountChange = (newValue) => {
     const newCart = cartItems.map((cart) => cart.name === newValue.name ? newValue: cart)
     console.log(newCart)
     handleChangeCartItems(newCart)
   }
 
-  console.log(totalCartTest, 'test')
-
-  const handleUpdateUnit = ({ name, unit }) => {
-    const exist = unidades.find((unidad) => unidad.name === name);
-    if (exist) {
-      const saveUnit = unidades.map((unidad) =>
-        unidad.name === name ? { ...unidad, unit } : unidad
-      );
-      setUnidades(saveUnit);
-    } else {
-      setUnidades([...unidades, { name, unit }]);
-    }
-  };
-
   /* Cada vez que se modifica el carrito, actualizamos la cantidad de productos */
   useEffect(() => {
-    setProductsLength(
-      cartItems?.reduce((previous, current) => previous + current.amount, 0) // reduce para reducir el array a un solo valor
-    );
-    setUnidades(cartItems.map((cart) => ({ name: cart.name, unit: 1 })));
+    const quantityProducts = cartItems?.reduce((previous, current) => Number(previous) + Number(current.amount), 0) // reduce para reducir el array a un solo valor
+    
+    setProductsLength(quantityProducts);
   }, [cartItems]);
+
+  console.log(productsLength)
 
   /* Obtenemos el precio total */
   /* Obtenemos el precio total */
@@ -145,11 +131,8 @@ const Cart = () => {
 
         // Update the item's image property with the resized image
         newItem.image = resizedImage;
-        const newAmount = unidades.find(
-          (unidad) => unidad.name === newItem.name
-        );
-        console.log("new", newAmount);
-        return { ...newItem, amount: newAmount.unit };
+        
+        return { ...newItem };
       });
       setButtonHidden(true);
       const descuentoNumber = parseInt(descuento);
@@ -293,8 +276,7 @@ const Cart = () => {
                 <ItemCart
                   key={i}
                   item={item}
-                  handleUpadateUnit={handleUpdateUnit}
-                  handleAmountChange={handleAmountChange}
+                  handleAmountChange={handleAmountChange} 
                 />
               ))}
               <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>

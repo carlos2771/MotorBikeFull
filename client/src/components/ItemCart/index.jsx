@@ -6,7 +6,7 @@ import {
   faBan,
 } from "@fortawesome/free-solid-svg-icons";
 
-export const ItemCart = ({ item,  handleUpadateUnit, handleAmountChange  }) => {
+export const ItemCart = ({ item,   handleAmountChange  }) => {
   
   const { amount, price, img, name } = item;
   // const [num, setNum] = useState(amount);
@@ -14,18 +14,14 @@ export const ItemCart = ({ item,  handleUpadateUnit, handleAmountChange  }) => {
 
   const handleInputChange = (event) => {
     let newValue = event.target.value;
-    // Verificar si el nuevo valor es 0 o NaN, si es así, establecerlo en 1 en su lugar
-    // if (isNaN(newValue) || newValue <= 0 ) {
-    //   newValue = 1;
-    // }
-    const newValueItem = {
-      ...item,
-      amount: newValue
+    const regex = /^[0-9]+$/;
+    if (regex.test(newValue) || newValue === "") {
+      const newValueItem = {
+        ...item,
+        amount: newValue === "" ? "" : parseInt(newValue)
+      };
+      handleAmountChange(newValueItem);
     }
-
-    handleAmountChange(newValueItem)
-    // setNum(newValue);
-    handleUpadateUnit({ name, unit: newValue });
   };
   
 

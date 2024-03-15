@@ -255,13 +255,13 @@ export const login = async (req, res) => {
     const userFound = await User.findOne({ email }).populate('rol');
 
     if (!userFound) return res.status(400).json({ message: ["Usuario/Contraseña incorrecto"] });
-    if (userFound.estado === "Inactivo")
-      return res.status(400).json({ message: ["El usuario está inactivo"] });
-    if(userFound.rol.status === 'Inactivo')
-      return res.status(400).json({ message: ["El rol está inactivo"] });
     const isMatch = await bcrypt.compare(password, userFound.password);
     if (!isMatch)
       return res.status(400).json({ message: ["Usuario/Contraseña incorrecto"] });
+    if (isMatch && userFound.estado === "Inactivo")
+      return res.status(400).json({ message: ["Este usuario ha sido deshabilitado"] });
+    if(isMatch && userFound.rol.status === 'Inactivo')
+      return res.status(400).json({ message: ["Este usuario ha sido deshabilitado"] });
 
     const token = await createAccessToken({
       id: userFound._id,

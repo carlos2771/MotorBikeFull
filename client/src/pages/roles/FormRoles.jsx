@@ -177,9 +177,9 @@ const onSubmit = handleSubmit(async (data) => {
                 <option value={"Activo"}>Activo</option>
                 <option value={"Inactivo"}>Inactivo</option>
               </select>
-
+              <div className="flex items-center justify-center mt-2">
               <button
-                className="px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
+                className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
                 type="submit"
               >
                 Guardar
@@ -192,6 +192,7 @@ const onSubmit = handleSubmit(async (data) => {
                   Cancelar
                 </Link>
               </button>
+              </div>
             </form>
           </div>
         </div>
