@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useMemo} from "react";
 import { ItemCart } from "../ItemCart";
 import CartContext from "../../context/CartContext";
 import styles from "./styles.module.scss";
@@ -9,10 +9,11 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   ClienteRequired,
   NombreRequired,
-  NumeroRequired,
+  discountValidations,
 } from "../../utils/validations";
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
+import Swal from "sweetalert2";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -26,7 +27,10 @@ const Cart = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm();
+    watch
+  } = useForm({mode: 'onChange', defaultValues: {
+    descuento: 0    
+  }});
   const { createCartCliente, errors: Errors } = useCartCliente();
 
   useEffect(() => {
@@ -38,60 +42,63 @@ const Cart = () => {
   }, []);
 
   /* Traemos del context los productos del carrito */
-  const { cartItems, cleartCart } = useContext(CartContext);
+  const { cartItems, cleartCart, handleChangeCartItems } = useContext(CartContext);
+  const descuento = watch('descuento')
 
-  console.log("items", cartItems);
-  const [totalCart, setTotalCart] = useState(0);
-  const [descuento, setDescuento] = useState(); // Estado para el descuento
-  const [unidades, setUnidades] = useState([]);
-
-  const handleUpdateUnit = ({ name, unit }) => {
-    const exist = unidades.find((unidad) => unidad.name === name);
-    if (exist) {
-      const saveUnit = unidades.map((unidad) =>
-        unidad.name === name ? { ...unidad, unit } : unidad
-      );
-      setUnidades(saveUnit);
-    } else {
-      setUnidades([...unidades, { name, unit }]);
-    }
-  };
-  console.log("perro", unidades);
-
-  /* Cada vez que se modifica el carrito, actualizamos la cantidad de productos */
-  useEffect(() => {
-    setProductsLength(
-      cartItems?.reduce((previous, current) => previous + current.amount, 0) // reduce para reducir el array a un solo valor
-    );
-    setUnidades(cartItems.map((cart) => ({ name: cart.name, unit: 1 })));
-  }, [cartItems]);
-
-  /* Obtenemos el precio total */
-  /* Obtenemos el precio total */
-  useEffect(() => {
+  const totalCartTest = useMemo(() => {
     const total = cartItems?.reduce(
       (previous, current) => previous + current.amount * current.price,
       0
     );
 
     // Calculamos el descuento como un porcentaje del total
+     if(descuento < 1) {
+
+       return total
+     }
+
     const discountAmount = total * (descuento / 100) || 0;
 
     // Restamos el descuento del total
     const totalConDescuento = total - discountAmount;
+    return totalConDescuento
+  }, [cartItems, descuento])
 
-    setTotalCart(totalConDescuento > 0 ? totalConDescuento : 0); // Asegurarse de que el total no sea negativo
-  }, [cartItems, descuento]);
+ 
 
-  const updateTotal = (itemId, newAmount) => {
-    const updatedTotal = cartItems.reduce((acc, item) => {
-      if (item._id === itemId) {
-        return acc + newAmount * item.price;
-      }
-      return acc + item.amount * item.price;
-    }, 0);
-    setTotalCart(updatedTotal);
-  };
+  const handleAmountChange = (newValue) => {
+    const newCart = cartItems.map((cart) => cart.name === newValue.name ? newValue: cart)
+    console.log(newCart)
+    handleChangeCartItems(newCart)
+  }
+
+  /* Cada vez que se modifica el carrito, actualizamos la cantidad de productos */
+  useEffect(() => {
+    const quantityProducts = cartItems?.reduce((previous, current) => Number(previous) + Number(current.amount), 0) // reduce para reducir el array a un solo valor
+    
+    setProductsLength(quantityProducts);
+  }, [cartItems]);
+
+  console.log(productsLength)
+
+  /* Obtenemos el precio total */
+  /* Obtenemos el precio total */
+  // useEffect(() => {
+  //   const total = cartItems?.reduce(
+  //     (previous, current) => previous + current.amount * current.price,
+  //     0
+  //   );
+
+    // Calculamos el descuento como un porcentaje del total
+    // const discountAmount = total * (descuento / 100) || 0;
+
+    // Restamos el descuento del total
+  //   const totalConDescuento = total - discountAmount;
+
+  //   setTotalCart(totalConDescuento > 0 ? totalConDescuento : 0); // Asegurarse de que el total no sea negativo
+  // }, [cartItems, descuento]);
+
+ 
 
   const onSubmit = async (data) => {
     try {
@@ -124,11 +131,8 @@ const Cart = () => {
 
         // Update the item's image property with the resized image
         newItem.image = resizedImage;
-        const newAmount = unidades.find(
-          (unidad) => unidad.name === newItem.name
-        );
-        console.log("new", newAmount);
-        return { ...newItem, amount: newAmount.unit };
+        
+        return { ...newItem };
       });
       setButtonHidden(true);
       const descuentoNumber = parseInt(descuento);
@@ -140,18 +144,54 @@ const Cart = () => {
       };
 
       const res = await createCartCliente(datosCartCliente);
-      
-      
-
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+          color: "white",
+          timer: 4000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Venta Agregada correctamente",
+        });
+        if (res) {
+          navigate("/home-page");
+        } else {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+            color: "white",
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "error",
+            title: "No se ha agregado",
+          });
+        }
+        
       console.log("Datos antes de enviar:", datosCartCliente);
       console.log("cartcliente", res);
 
-      if (res && !res.error) {
-        navigate("/home-page");
-        cleartCart();
-      } else {
-        console.log("huvo un error");
-      }
+      // if (res && !res.error) {
+      //   navigate("/home-page");
+      //   cleartCart();
+      // } else {
+      //   console.log("huvo un error");
+      // }
     } catch (error) {
       
       console.error("Error al enviar el carrito y cliente:", error);
@@ -236,8 +276,7 @@ const Cart = () => {
                 <ItemCart
                   key={i}
                   item={item}
-                  updateTotal={updateTotal}
-                  handleUpadateUnit={handleUpdateUnit}
+                  handleAmountChange={handleAmountChange} 
                 />
               ))}
               <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
@@ -259,9 +298,8 @@ const Cart = () => {
                   )}
                   <input
                     type="number"
-                    {...register("descuento", NumeroRequired)}
+                    {...register("descuento", discountValidations)}
                     placeholder="Descuento (%)"
-                    onChange={(e) => setDescuento(parseFloat(e.target.value))}
                     className="w-full bg-slate-700 border-0 border-b-2 border-blue-700 text-white px-4 py-2 my-2"
                   />
 
@@ -295,7 +333,7 @@ const Cart = () => {
             </div>
           )}
 
-          <h2 className={styles.total}>Total: ${totalCart.toLocaleString()}</h2>
+          <h2 className={styles.total}>Total: ${totalCartTest.toLocaleString()}</h2>
         </div>
       )}
     </div>

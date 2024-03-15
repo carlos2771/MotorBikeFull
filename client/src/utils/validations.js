@@ -238,7 +238,7 @@ export const DireccionRequired = {
 
 export const NombreMeRequired = {
   required: "Campo requerido",
-  validate: (value) => /^[A-Za-z\s]+$/.test(value.trim()) || "Ingresa un nombre valido",
+  validate: (value) => /^(?! +$)[A-Za-z0-9\sÑñ]+$/.test(value.trim()) || "Ingresa un nombre válido",
   maxLength: { value: 35, message: "El maximo de caracteres es de 35" },
   minLength: { value: 6, message: "Ingresa el nombre completo, minimo 6 caracteres" }
 };
@@ -249,6 +249,14 @@ export const NombreMaRequired = {
   maxLength: { value: 50, message: "Maximo 50 caracteres" },
   minLength: { value: 2, message: "Minimo 2 caracter" }
 };
+
+export const NombreUsuarioRequired = {
+  required: "Campo requerido",
+  validate: (value) => /^(?! +$)[A-Za-z0-9\sÑñ]+$/.test(value.trim()) || "Ingresa un nombre válido",
+  maxLength: { value: 50, message: "Maximo 50 caracteres" },
+  minLength: { value: 2, message: "Minimo 2 caracter" }
+};
+
 
 // export const PasaporteRequired = {
 //   required: "Campo requerido",
@@ -297,3 +305,8 @@ export const NombreRolRequired = {
   maxLength: { value: 35, message: "El maximo de caracteres es de 35" },
   minLength: { value: 6, message: "Ingresa el nombre completo, minimo 6 caracteres" }
 };
+
+export const discountValidations = {
+  min: {value: 0, message: "El descuento tiene que ser mayor a 0"},
+  max: {value: 99, message: "El descuento es máximo de 99%"}
+}

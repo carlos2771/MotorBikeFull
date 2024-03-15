@@ -8,7 +8,7 @@ import {
   EstadoRequired,
   NombreRequired,
   PasswordRequire,
-  NombreMaRequired,
+  NombreUsuarioRequired,
 } from "../../utils/validations";
 import Swal from "sweetalert2";
 import { useAuth } from "../../hooks/useAuth";
@@ -115,7 +115,7 @@ export default function FormUsuarios() {
               <input
                 type="text"
                 placeholder="Nombre de usuario"
-                {...register("username", NombreMaRequired)}
+                {...register("username", NombreUsuarioRequired)}
                 className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
                 autoFocus
               />
@@ -178,9 +178,9 @@ export default function FormUsuarios() {
               {errors.rol && (
                 <p className="text-red-500">{errors.rol.message}</p>
               )}
-
+              <div className="flex items-center justify-center mt-2">
               <button
-                className="px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
+                className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
                 type="submit"
               >
                 Guardar
@@ -193,6 +193,7 @@ export default function FormUsuarios() {
                   Cancelar
                 </Link>
               </button>
+              </div>
             </form>
           </div>
         </div>

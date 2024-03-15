@@ -21,6 +21,8 @@ export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
 
+  const handleChangeCartItems = (newValues) => setCartItems(newValues)
+
   const getProducts = async () => {
     try {
        const res = await getProductsRequest()
@@ -107,7 +109,8 @@ export function CartProvider({ children }) {
         getProducts,
         addItemToCart,
         editItemToCart,
-        cleartCart
+        cleartCart,
+        handleChangeCartItems
       }}
     >
       {children}

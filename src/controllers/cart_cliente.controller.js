@@ -47,15 +47,15 @@ export const createCartCliente = async (req, res) => {
         (acc, cartItem) => acc + cartItem.amount * cartItem.price,
         0
     );
-    if(descuento<0 || descuento===0){
-      return res.status(400).json({ message: [`El descuento no puede ser menor o igual a 0`], });
-    }
+    // if(descuento<0 || descuento===0){
+    //   return res.status(400).json({ message: [`El descuento no puede ser menor o igual a 0`], });
+    // }
     
       const total = cartTotal - (descuento || 0);
 
       // Validar si el descuento es mayor al total
       if (descuento > cartTotal) {
-          return res.status(400).json({ message: ['El descuento no puede ser mayor que el total'] });
+          return res.status(400).json({ message: ['Solo numeros positivos'] });
       }
       const nuevaCartCliente = new CartCliente({
         cliente: clienteId,

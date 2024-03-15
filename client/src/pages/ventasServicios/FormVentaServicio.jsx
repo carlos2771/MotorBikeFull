@@ -220,16 +220,17 @@ export default function FormVentaServicio() {
               {errors.descripcion && (
                 <p className="text-red-500">{errors.descripcion.message}</p>
               )}
-
+            <div className="flex items-center justify-center mt-2">
               <button
                 className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
                 type="submit"
               >
                 Guardar
               </button>
-              <button className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5  ">
-                <Link to="/ventas-servicios">Cancelar</Link>
+              <button>
+                <Link to="/ventas-servicios" className="px-5 py-1 ml-2 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30">Cancelar</Link>
               </button>
+              </div>
             </form>
           </div>
         </div>
