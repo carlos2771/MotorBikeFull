@@ -17,6 +17,7 @@ export default function PasswordPage() {
   const [buttonHidden, setButtonHidden] = useState(false);
   const [error, setError] = useState('');
 
+
   useEffect(() => {
     if (buttonHidden) {
       const timeoutId = setTimeout(() => {
