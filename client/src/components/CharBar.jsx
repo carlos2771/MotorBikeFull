@@ -129,7 +129,6 @@ export function CharBar() {
     datasets: [
       {
         label: "Precio del servicio",
-        fill: false,
         data: Object.values(sumasPorMecanico),
         
         backgroundColor: [
@@ -149,10 +148,7 @@ export function CharBar() {
           "rgba(255, 159, 64, 1)",
         ],
         borderWidth: 1,
-        barThickness: 30,
-        maxBarThickness: 30,
-        minBarLength: 5,
-        
+        barThickness: 30, 
       },
     ],
   };
@@ -176,7 +172,7 @@ export function CharBar() {
         },
       },
     },
-    indexAxis: 'y',
+    indexAxis: 'x',
     maintainAspectRatio: false,
   };
 
