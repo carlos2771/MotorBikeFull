@@ -160,7 +160,7 @@ const LineChart = () => {
 
   return (
     <div className="chart-line-container chart-position">
-      <h2 className="chart-line-title">Ventas y compras por día</h2>
+      <h2 className="chart-line-title">Ventas y compras</h2>
       <div className="chart-line-chart-container">
         <div className="chart-line-date-input-container">
           <div>
