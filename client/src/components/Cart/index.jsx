@@ -68,7 +68,6 @@ const Cart = () => {
 
   const handleAmountChange = (newValue) => {
     const newCart = cartItems.map((cart) => cart.name === newValue.name ? newValue: cart)
-    console.log(newCart)
     handleChangeCartItems(newCart)
   }
 
@@ -78,8 +77,6 @@ const Cart = () => {
     
     setProductsLength(quantityProducts);
   }, [cartItems]);
-
-  console.log(productsLength)
 
   /* Obtenemos el precio total */
   /* Obtenemos el precio total */
@@ -182,9 +179,6 @@ const Cart = () => {
             title: "No se ha agregado",
           });
         }
-        
-      console.log("Datos antes de enviar:", datosCartCliente);
-      console.log("cartcliente", res);
 
       // if (res && !res.error) {
       //   navigate("/home-page");

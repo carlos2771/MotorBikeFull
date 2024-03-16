@@ -42,8 +42,6 @@ export const createCliente = async(req, res) =>{
      const clientFound = await Cliente.findOne({email_cliente})
      if(clientFound) return res.status(400).json({message:["El correo electrónico del cliente ya existe"]});
       
-     // para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
-     console.log(req.user) 
  
      // Crea una nueva instancia del modelo 'Cliente' con los datos del cliente
      const newCliente = new Cliente({

@@ -53,7 +53,6 @@ export default function PageClientes() {
   useEffect(() => {
     try {
       getClientes();
-      getCliente(id)
     } catch (error) {
       console.error("Error al obtener clientes:", error);
     }

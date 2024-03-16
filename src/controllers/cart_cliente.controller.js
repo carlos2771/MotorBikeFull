@@ -29,14 +29,11 @@ export const createCartCliente = async (req, res) => {
 
         const cantidadActualRepuesto = respuestoEncontrado.amount
         const cantidadVender = cartData.amount
-        console.log("cantidad que se supone que se va vender",cartData.amount);
-        console.log("cantidad existente",respuestoEncontrado.amount);
         if (cantidadVender === 0 || cantidadVender === "") {
           return res.status(400).json({ message: [`El repuesto: ${cartData.name} no puede ser 0 o vacio`], });
         }
 
         if(cantidadActualRepuesto< cantidadVender){
-          console.log("Cantidad insuficiente del repuesto", cartData.name);
           return res.status(400).json({ message: [`Cantidad insuficiente del repuesto: ${cartData.name} stock: ${cantidadActualRepuesto}`], });
         }
         const cantidadRestanteRepuesto = cantidadActualRepuesto - cantidadVender;
@@ -64,7 +61,6 @@ export const createCartCliente = async (req, res) => {
   
   
       const cartClienteSave = await nuevaCartCliente.save();
-      console.log(cartClienteSave);
   
       res.status(201).json({ message: 'Carritos de cliente creados correctamente' });
   

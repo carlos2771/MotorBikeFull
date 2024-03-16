@@ -29,7 +29,6 @@ export const getVenta_Repuesto = async (req, res) => {
 export const createVentas_Repuestos = async (req, res) => {
   try {
     const { repuestos, cliente: clienteId, precio_total } = req.body;
-    console.log("Request Body (backend):", req.body);
     // Verifica si el cliente existe
     const clienteEncontrado = await Cliente.findById(clienteId);
     if (!clienteEncontrado) {
@@ -45,7 +44,6 @@ export const createVentas_Repuestos = async (req, res) => {
       return res.status(400).json({ message: [mensajeError] });
     }
 
-    console.log("precio_total:", precio_total);
     // Realiza las validaciones y actualizaciones para cada repuesto en la lista
     for (const repuestoData of repuestos) {
       const repuestoEncontrado = await Repuesto.findById(repuestoData.repuesto);

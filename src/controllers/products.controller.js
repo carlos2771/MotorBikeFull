@@ -154,7 +154,6 @@ export const deleteProduct = async (req, res) => {
   
       // Verificar si el nuevo monto es un número válido
       if (!isNaN(newAmount)) {
-        console.log("cantidad debe ser un numero valido");
         return res.status(400).json({ message: "La cantidad debe ser un número válido" });
       }
   

@@ -15,7 +15,7 @@ export default function Detalle({ id, metodo, children }) {
 
       setOpen(true);
     } catch (error) {
-      console.log(error);
+
     }
   };
 

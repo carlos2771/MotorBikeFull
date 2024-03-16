@@ -37,7 +37,6 @@ export function CompraProvider({ children }) {
       return await createComprasRequest(compra);
     } catch (error) {
       setErrors(error.response.data.message);
-      console.log(error);
     }
   };
 

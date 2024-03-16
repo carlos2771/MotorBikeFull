@@ -43,7 +43,6 @@ export const createMarca = async(req, res) =>{
         const marcaFound = await Marca.findOne({nombre_marca})
         if(marcaFound) return res.status(400).json({message:["La marca ya existe"]});
         // Para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
-        console.log(req.user) 
 
         // Crea una nueva instancia del modelo 'Marca' con el nombre de la marca
         const newMarca = new Marca({
@@ -69,16 +68,13 @@ export const updateMarca= async(req, res) =>{
         // Verificar si la marca está asociada a algún repuesto
         const repuestosAsociados = await Repuesto.find({ marca: req.params.id });
         if (repuestosAsociados.length > 0 && estado === "Inactivo") {
-            console.log("la marca esta asociada")
             return res.status(400).json({ message: "No se puede inhabilitar la marca porque está asociada a un repuesto" });
         }
 
-        console.log("no esta asociada")
 
         const marcaFound = await Marca.findOne({nombre_marca})
         if(marcaFound) return res.status(400).json({message:["La marca ya existe, no se puede actualizar"]});
         // Para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
-        console.log(req.user) 
 
         // Busca la marca por su ID y actualíza con los datos proporcionados en el cuerpo de la solicitud
         const marca = await Marca.findByIdAndUpdate(req.params.id, req.body,{ 
