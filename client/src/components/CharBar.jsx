@@ -34,7 +34,8 @@ export function CharBar() {
         return;
       }
   
-      let url = "https://backend-motorbike.up.railway.app/api/ventas_servicios";
+      // let url = "https://backend-motorbike.up.railway.app/api/ventas_servicios";
+      let url = "http://localhost:3000/api/ventas_servicios"
   
       if (startDate && endDate) {
         const formattedStartDate = startDate.toISOString().split("T")[0];
@@ -127,8 +128,10 @@ export function CharBar() {
     labels: Object.keys(sumasPorMecanico),
     datasets: [
       {
-        label: "Precio de los servicios",
+        label: "Precio del servicio",
+        fill: false,
         data: Object.values(sumasPorMecanico),
+        
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",
@@ -147,6 +150,9 @@ export function CharBar() {
         ],
         borderWidth: 1,
         barThickness: 30,
+        maxBarThickness: 30,
+        minBarLength: 5,
+        
       },
     ],
   };
@@ -171,6 +177,7 @@ export function CharBar() {
       },
     },
     indexAxis: 'y',
+    maintainAspectRatio: false,
   };
 
   return (
@@ -194,11 +201,13 @@ export function CharBar() {
           onChange={(e) => setEndDate(endOfMonth(new Date(e.target.value)))} />
         </div>
       </div>
+      <div className="chart-container">
       {Object.keys(sumasPorMecanico).length === 0 ? (
         <p>No hay datos disponibles para mostrar en la gráfica</p>
       ) : (
-        <Bar data={data} options={options} />
+        <Bar data={data} options={options}/>
       )}
+      </div>
     </div>
   );
 }
