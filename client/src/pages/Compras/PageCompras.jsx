@@ -709,7 +709,7 @@ export default function PageCompras() {
                   />
                 </div>
                 <div className="mx-4 sm:mx-0 justify-end flex mt-2">
-                  <Link to="/home">
+                  <Link to="/add-compra">
                     <button
                       className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
                       title="Agregar"
