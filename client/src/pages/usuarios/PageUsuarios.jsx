@@ -453,11 +453,11 @@ export default function PageUsuarios() {
                           id={user._id}
                         >
                           <table className="min-w-full">
-                            <tbody className="">
-                              <Titulo>
+                          <Titulo>
                                   <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
                                   Detalles del Usuario
                               </Titulo>
+                            <tbody className="">
                               <tr>
                                 <Tabla>
                                   <FontAwesomeIcon icon={faUser} className="mr-2" />
