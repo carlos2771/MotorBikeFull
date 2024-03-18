@@ -147,7 +147,7 @@ const onSubmit = handleSubmit(async (data) => {
                   "Ventas Servicio",
                   "Venta Repuesto",
                 ].map((permiso) => (
-                  <div key={permiso} className="flex items-center m-2">
+                  <div key={permiso} className="flex items-center m-2 ">
                     <input
                       type="checkbox"
                       value={permiso}
@@ -160,7 +160,7 @@ const onSubmit = handleSubmit(async (data) => {
                       htmlFor={permiso}
                       className={`px-4 py-2 rounded-full cursor-pointer ${
                         selectedPermissions.includes(permiso)
-                          ? "bg-blue-600/40 shadow-sky-300/40 text-white shadow-md"
+                          ? "bg-blue-600/40 shadow-sky-300/40 text-white shadow-md hover:shadow-md hover:shadow-red-500 hover:bg-red-500"
                           : "border border-blue-600/40 hover:bg-blue-600/40 text-white hover:shadow-md hover:shadow-sky-300/40"
                       }`}
                     >

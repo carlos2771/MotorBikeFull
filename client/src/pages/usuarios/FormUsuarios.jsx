@@ -24,7 +24,7 @@ export default function FormUsuarios() {
     createUsuario,
     getUsuario,
     updateUsuario,
-    errors: usuarioErrors,
+    errors: ErroresUsuarios,
   } = useUsuario();
   const navigate = useNavigate();
   const params = useParams();
@@ -32,6 +32,8 @@ export default function FormUsuarios() {
   const [formTitle, setFormTitle] = useState("Agregar usuario");
   const [isEditing, setIsEditing] = useState(false);
   const { user } = useAuth();
+  const [usuarioErrors, setUsuarioErrors] = useState([]);
+  
 
   useEffect(() => {
     try {
@@ -102,9 +104,9 @@ export default function FormUsuarios() {
       {permissions.includes("Usuarios") ? (
         <div className="flex items-center justify-center pt-20">
           <div className="bg-slate-700 max-w-md w-full p-10 shadow-lg shadow-blue-600/40">
-            {usuarioErrors.map((error, i) => (
+          {Array.isArray(ErroresUsuarios) && ErroresUsuarios.map((error, i) => (
               <div className="bg-red-500 p-2 text-white" key={i}>
-                {error}
+                {ErroresUsuarios}
               </div>
             ))}
             <h1 className="text-2xl flex justify-center">{formTitle} </h1>

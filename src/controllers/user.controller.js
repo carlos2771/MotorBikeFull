@@ -220,7 +220,7 @@ export const getUsuarios = async (req, res) => {
     try {
       const users = await User.find().populate({ path: 'rol', select: 'name' });
     if(!users){
-      return res.status(404).json({message: ["user no enconreados"]})
+      return res.status(404).json({message: ["user no encontrados"]})
     }
       res.json(users);
     } catch (error) {
@@ -242,16 +242,36 @@ export const getUsuarios = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   };
-  
-  // Controlador para actualizar un usuario
-  export const updateUsuario = async (req, res) => {
-    try {
-      const updatedUser = await User.findByIdAndUpdate(req.params.id,req.body, { new: true });
-      res.json(updatedUser);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+ // Controlador para actualizar un usuario
+export const updateUsuario = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Busca el usuario que se está actualizando
+    const userToUpdate = await User.findById(req.params.id);
+
+    // Verifica si el usuario existe
+    if (!userToUpdate) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
-  };
+
+    // Si el correo electrónico se está actualizando
+    if (email !== userToUpdate.email) {
+      // Verifica si el correo electrónico ya está registrado en otro usuario
+      const userFound = await User.findOne({ email });
+      if (userFound) {
+        return res.status(400).json({ message: ["El correo electrónico ya está registrado"] });
+      }
+    }
+
+    // Actualiza el usuario
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
   
   // Controlador para eliminar un usuario
   export const deleteUsuario = async (req, res) => {

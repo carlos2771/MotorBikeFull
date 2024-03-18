@@ -48,12 +48,18 @@ export function RolesProvider({ children }) {
     }
   };
 
-  const updateRol = async (id, roles) => {
+  const updateRol = async (id, updatedRol) => {
     try {
-      return await updateRolRequest(id, roles);
+      const existingRoleNames = roles.map(role => role.name.toLowerCase());
+      if (existingRoleNames.includes(updatedRol.name.toLowerCase())) {
+        throw new Error("Ese rol ya existe");
+      } else {
+        const res = await updateRolRequest(id, updatedRol);
+        return res;
+      }
     } catch (error) {
       console.error(error);
-      setErrors(error.response.data.message)
+      setErrors([error.message]);
     }
   };
 
