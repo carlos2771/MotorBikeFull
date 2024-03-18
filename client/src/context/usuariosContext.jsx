@@ -29,9 +29,7 @@ export const UsuarioProvider = ({ children }) => {
 
   const createUsuario = async (usuario) => {
     try {
-      const response = await createUsuarioRequest(usuario);
-      setUser(response);
-      return response
+      return await createUsuarioRequest(usuario);
     } catch (error) {
       setErrors(error.response.data.message);
     }
