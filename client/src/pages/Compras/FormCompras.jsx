@@ -191,7 +191,7 @@ export default function FormCompra() {
       });
       Toast.fire({
         icon: "error",
-        title: "No h",
+        title: "El código ya fué ingresado en otra compra",
       });
       return;
     }
@@ -251,13 +251,23 @@ export default function FormCompra() {
   // Variable para controlar si la fecha es válida o no
   const [isValidFecha, setIsValidFecha] = useState(true);
 
-  // Lógica para verificar si la fecha es válida
   const validarFecha = (fecha) => {
     const fechaIngresada = new Date(fecha);
     const fechaActual = new Date();
-
-    // Verificar si la fecha ingresada no es futura y está dentro del mes actual
+  
+    // Calcular la fecha límite dentro de 15 días hábiles hacia atrás
+    let fechaLimite = new Date(fechaActual);
+    let diasHabiles = 0;
+    while (diasHabiles < 15) {
+      fechaLimite.setDate(fechaLimite.getDate() - 1);
+      if (fechaLimite.getDay() !== 0 && fechaLimite.getDay() !== 6) {
+        diasHabiles++;
+      }
+    }
+  
+    // Verificar si la fecha ingresada está dentro de los últimos 15 días hábiles
     return (
+      fechaIngresada >= fechaLimite &&
       fechaIngresada <= fechaActual &&
       fechaIngresada.getMonth() === fechaActual.getMonth() &&
       fechaIngresada.getFullYear() === fechaActual.getFullYear()
@@ -850,7 +860,7 @@ transform: scale(0.3);
   
   width: 100%;
   max-width: 2090px;
-  height: 810px;
+  height: 840px;
   margin-top: 2%;
   padding: 20px;
   box-sizing: border-box;
