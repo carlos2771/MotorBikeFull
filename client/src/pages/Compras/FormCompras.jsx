@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCompras } from "../../context/ComprasContext";
-import { Link, useNavigate, Navigate} from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import utc from "dayjs/plugin/utc";
 import dayjs from 'dayjs';
 dayjs.extend(utc);
@@ -171,6 +171,31 @@ export default function FormCompra() {
       })),
     };
 
+    // Verificar si ya existe una compra con el mismo código
+    const existeCompra = compras.some(compra => compra.codigo === codigo);
+
+    if (existeCompra) {
+      // Mostrar mensaje de error
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+        color: "white",
+        timer: 4000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "error",
+        title: "No h",
+      });
+      return;
+    }
+
     try {
       await createCompra(compraData);
       reset();
@@ -272,122 +297,122 @@ export default function FormCompra() {
 
   return (
     <>
-    {permissions.includes("Compras") ? (
-    <div className="contenedorPrincipal shadow-lg shadow-blue-600/40">
-      {comprasErrors.map((error, i) => (
-        <div className="bg-red-500 p-2 text-white" key={i}>
-          {error}
-        </div>
-      ))}
-      <form action="" onSubmit={onSubmit}>
+      {permissions.includes("Compras") ? (
+        <div className="contenedorPrincipal shadow-lg shadow-blue-600/40">
+          {comprasErrors.map((error, i) => (
+            <div className="bg-red-500 p-2 text-white" key={i}>
+              {error}
+            </div>
+          ))}
+          <form action="" onSubmit={onSubmit}>
 
-        <div style={{ alignItems: 'center', marginBottom: '5px' }}>
-          <h1 style={{ textAlign: 'center', marginLeft: '5%', fontSize: '150%', marginBottom: '30px', }}>
-            Agregar Compra
-          </h1>
+            <div style={{ alignItems: 'center', marginBottom: '5px' }}>
+              <h1 style={{ textAlign: 'center', marginLeft: '5%', fontSize: '150%', marginBottom: '30px', }}>
+                Agregar Compra
+              </h1>
 
-          {/* FECHA DE LA COMPRA */}
-          <label htmlFor="" style={{ marginLeft: '5px' }}>Fecha</label><br />
-          <input
-            className="bg-slate-800 b-20 border-blue-600 text-white px-4 py-2 my-2 outline-none"
-            style={{ marginRight: '10px', borderRadius: '10px', border: '1px solid #2563eb' }}
-            type="date"
-            {...register("fecha", { min: `${currentYear}-01-01`, max: `${currentYear}-12-31` })}
-            onChange={handleFechaChange}
-          />
-          <br />
-          {/* Mostrar mensaje de error si la fecha no es válida */}
-          {!isValidFecha && (
-            <p className="text-red-500 mb-2" style={{}}>
-              Ingresa una fecha válida
-            </p>
-          )}
-        </div>
-
-
-        <div>
-          {fields.map((item, index) => (
-            <div className="divGris bg-slate-800 " style={{ borderRadius: '10px', boxShadow: ' 0px 0px 10px rgba(0, 0, 0, 0.5)', padding: '15px' }}>
-              <div className="greenContainer">
-                <div style={{ position: 'relative', width: '45%' }}>
-                  <label htmlFor="">Proveedor <span style={{ color: 'red' }}>*</span></label>
-
-                  <input
-
-                    className="w-full bg-slate-800 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 outline-none"
-                    style={{
-                      width: '100%', padding: '5px'
-                    }}
-                    type="text"
-                    placeholder="Proveedor"
-                    {...register("proveedorCompra", NombreProveedor)}
-                    list="listaProveedores"
-                  />
-
-                  <datalist
-
-                    id="listaProveedores">
-                    {[...new Set(compras.map((compra) => compra.proveedor))].map((proveedor, index) => (
-                      <option style={{ color: 'blue' }} key={index} value={proveedor}>
-                        {proveedor}
-                      </option>
-                    ))}
-                  </datalist>
+              {/* FECHA DE LA COMPRA */}
+              <label htmlFor="" style={{ marginLeft: '5px' }}>Fecha</label><br />
+              <input
+                className="bg-slate-800 b-20 border-blue-600 text-white px-4 py-2 my-2 outline-none"
+                style={{ marginRight: '10px', borderRadius: '10px', border: '1px solid #2563eb' }}
+                type="date"
+                {...register("fecha", { min: `${currentYear}-01-01`, max: `${currentYear}-12-31` })}
+                onChange={handleFechaChange}
+              />
+              <br />
+              {/* Mostrar mensaje de error si la fecha no es válida */}
+              {!isValidFecha && (
+                <p className="text-red-500 mb-2" style={{}}>
+                  Ingresa una fecha válida
+                </p>
+              )}
+            </div>
 
 
-                  {errors.proveedorCompra && (
-                    <p className="text-red-500 mt-2" style={{ position: 'absolute', top: '80%', left: 0 }}>
-                      {errors.proveedorCompra.message}
-                    </p>
-                  )}
-                </div>
-                <div style={{ position: 'relative', width: '45%' }}>
-                  <label htmlFor="">Código <span style={{ color: 'red' }}>*</span></label>
-                  <input
-                    className="w-full bg-slate-800 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 outline-none"
-                    style={{ width: '100%', padding: '5px' }}
-                    type="text"
-                    placeholder="Código"
-                    {...register("codigo", NombreProveedor)}
-                  />
-                  {errors.codigo && (
-                    <p className="text-red-500 mt-2" style={{ position: 'absolute', top: '80%', left: 0 }}>
-                      {errors.codigo.message}
-                    </p>
-                  )}
-                </div>
-              </div>
+            <div>
+              {fields.map((item, index) => (
+                <div className="divGris bg-slate-800 " style={{ borderRadius: '10px', boxShadow: ' 0px 0px 10px rgba(0, 0, 0, 0.5)', padding: '15px' }}>
+                  <div className="greenContainer">
+                    <div style={{ position: 'relative', width: '45%' }}>
+                      <label htmlFor="">Proveedor <span style={{ color: 'red' }}>*</span></label>
+
+                      <input
+
+                        className="w-full bg-slate-800 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 outline-none"
+                        style={{
+                          width: '100%', padding: '5px'
+                        }}
+                        type="text"
+                        placeholder="Proveedor"
+                        {...register("proveedorCompra", NombreProveedor)}
+                        list="listaProveedores"
+                      />
+
+                      <datalist
+
+                        id="listaProveedores">
+                        {[...new Set(compras.map((compra) => compra.proveedor))].map((proveedor, index) => (
+                          <option style={{ color: 'blue' }} key={index} value={proveedor}>
+                            {proveedor}
+                          </option>
+                        ))}
+                      </datalist>
 
 
-              <div className="divRojo" key={item.id} style={{ marginBottom: '130px' }}>
+                      {errors.proveedorCompra && (
+                        <p className="text-red-500 mt-2" style={{ position: 'absolute', top: '80%', left: 0 }}>
+                          {errors.proveedorCompra.message}
+                        </p>
+                      )}
+                    </div>
+                    <div style={{ position: 'relative', width: '45%' }}>
+                      <label htmlFor="">Código <span style={{ color: 'red' }}>*</span></label>
+                      <input
+                        className="w-full bg-slate-800 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 outline-none"
+                        style={{ width: '100%', padding: '5px' }}
+                        type="text"
+                        placeholder="Código"
+                        {...register("codigo", NombreProveedor)}
+                      />
+                      {errors.codigo && (
+                        <p className="text-red-500 mt-2" style={{ position: 'absolute', top: '80%', left: 0 }}>
+                          {errors.codigo.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+
+                  <div className="divRojo" key={item.id} style={{ marginBottom: '130px' }}>
 
 
 
-                {/* SELECT DE LOS REPUESTOS */}
-                <div style={{ position: 'relative', width: '100%', marginTop: '100px' }}>
-
-
+                    {/* SELECT DE LOS REPUESTOS */}
+                    <div style={{ position: 'relative', width: '100%', marginTop: '100px' }}>
 
 
 
 
 
-                  <label style={{ marginLeft: '25px', marginTop: '100px' }}>Selecciona un repuesto <span style={{ color: 'red' }}>*</span></label>
-                  <input
-                    id="search"
-                    value={searchTerm}
-                    onChange={handleSearchTermChange}
-                    className="input-search"
-                    placeholder="Buscar..."
-                  />
+
+
+                      <label style={{ marginLeft: '25px', marginTop: '100px' }}>Selecciona un repuesto <span style={{ color: 'red' }}>*</span></label>
+                      <input
+                        id="search"
+                        value={searchTerm}
+                        onChange={handleSearchTermChange}
+                        className="input-search"
+                        placeholder="Buscar..."
+                      />
 
 
 
 
 
-                  <style>{
+                      <style>{
 
-                    `
+                        `
                     
                     
 
@@ -428,7 +453,7 @@ export default function FormCompra() {
                       }
                     }
                     `
-                  }</style>
+                      }</style>
 
 
 
@@ -436,7 +461,7 @@ export default function FormCompra() {
 
 
 
-                  {/* 
+                      {/* 
                   <input type="text"
                     style={{ color: 'black' }}
                     id="search"
@@ -444,163 +469,163 @@ export default function FormCompra() {
                     onChange={handleSearchTermChange}
                     placeholder="Buscar" /> */}
 
-                  <select
-                    size={5}
-                    className="bg-slate-800 border border-3 border-blue-600"
-                    style={{ marginLeft: '5%', width: '90%', borderRadius: '10px', padding: '15px', cursor: 'pointer', outline: 'none' }}
-                    name=""
-                    id=""
-                    {...register(`repuestos.${index}.repuesto`, RepuestoRequired)}
-                    onChange={(e) => {
-                      setSelectedRepuesto(e.target.value);
-                    }}
-                  >
-                    {filteredRepuestos.length === 0 ? (
-                      <option disabled style={{ marginLeft: '30%', marginTop: '10%' }}>No hay coincidencias</option>
-                    ) : (
-                      filteredRepuestos.map((repuesto) => {
-                        // Filtrar repuestos disponibles para seleccionar
-                        if (!repuestosList.find((item) => item.repuesto._id === repuesto._id)) {
-                          return (
-                            <option key={repuesto._id} value={repuesto._id}>
-                              {repuesto.name} - {repuesto.nombre_marca}
-                            </option>
-                          );
-                        } else {
-                          return null;
+                      <select
+                        size={5}
+                        className="bg-slate-800 border border-3 border-blue-600"
+                        style={{ marginLeft: '5%', width: '90%', borderRadius: '10px', padding: '15px', cursor: 'pointer', outline: 'none' }}
+                        name=""
+                        id=""
+                        {...register(`repuestos.${index}.repuesto`, RepuestoRequired)}
+                        onChange={(e) => {
+                          setSelectedRepuesto(e.target.value);
+                        }}
+                      >
+                        {filteredRepuestos.length === 0 ? (
+                          <option disabled style={{ marginLeft: '30%', marginTop: '10%' }}>No hay coincidencias</option>
+                        ) : (
+                          filteredRepuestos.map((repuesto) => {
+                            // Filtrar repuestos disponibles para seleccionar
+                            if (!repuestosList.find((item) => item.repuesto._id === repuesto._id)) {
+                              return (
+                                <option key={repuesto._id} value={repuesto._id}>
+                                  {repuesto.name} - {repuesto.nombre_marca}
+                                </option>
+                              );
+                            } else {
+                              return null;
+                            }
+                          })
+                        )}
+                      </select>
+
+                      {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].repuesto && errors.repuestos[index].repuesto.message && (
+                        <p style={{ marginTop: '-2px', marginLeft: '7%' }} className="text-red-500">{errors.repuestos[index].repuesto.message}</p>
+                      )}
+                    </div>
+                  </div>
+
+
+                  {/* INPUT DE CANTIDAD */}
+                  <div className="divBlanco" style={{ marginBottom: '40px' }}>
+                    <div style={{ position: 'relative', width: '45%' }}>
+                      <label htmlFor="">Cantidad <span style={{ color: 'red' }}>*</span></label>
+                      <input
+                        className="w-full bg-slate-800 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 outline-none"
+                        style={{ width: '100%', padding: '5px' }}
+                        type="text"
+                        placeholder="Cantidad"
+                        {...register(`repuestos.${index}.cantidad_repuesto`, NegativeRequired)}
+                      />
+                      {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].cantidad_repuesto && (
+                        <p className="text-red-500 mt-2" style={{ position: 'absolute', top: '80%', left: 0 }}>{errors.repuestos[index].cantidad_repuesto.message}</p>
+                      )}
+                    </div>
+
+
+
+
+                    {/* INPUT DE PRECIO UNITARIO */}
+
+                    <div style={{ position: 'relative', width: '45%' }}>
+                      <label htmlFor="">Precio Unitario <span style={{ color: 'red' }}>*</span></label>
+                      <input
+                        className="w-full bg-slate-800 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 outline-none"
+                        style={{ width: '100%', padding: '5px' }}
+                        type="text"
+                        placeholder="Precio Unitario"
+
+                        {...register(`repuestos.${index}.precio_unitario`, NegativeRequired)}
+                      />
+
+                      {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].precio_unitario && (
+                        <p className="text-red-500 mt-2" style={{ position: 'absolute', top: '80%', left: 0 }}>
+                          {errors.repuestos[index].precio_unitario.message}</p>
+                      )}
+
+                    </div>
+                  </div>
+
+                  <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                    <button
+                      type="submit"
+                      className="noselect"
+                      style={{ color: 'black', marginBottom: '10px' }}
+                      disabled={availableRepuestos.length === 0} // Deshabilitar el botón si no hay repuestos disponibles
+                    >
+                      <span className="text">Agregar</span>
+                      <span className="icon">
+                        <FontAwesomeIcon icon={faPlus} style={{ color: "white" }} />
+                      </span>
+                    </button>
+
+                  </div>
+
+                </div>
+              ))}
+
+
+
+
+
+
+
+              <div className="div2" style={{ height: '100px', marginTop: '5px' }}>
+
+                <div className="tabla" style={{ maxWidth: '100%', overflowX: 'auto' }}>
+                  <MUIDataTable
+                    className="miTablaPersonalizada"
+                    title={"Repuestos Agregados"}
+                    data={repuestosList.map((repuesto) => {
+                      // Convertir el precio unitario a número usando parseFloat
+                      let precioUnitarioNumber = parseFloat(repuesto.precio_unitario);
+                      let CantidadNumber = parseFloat(repuesto.cantidad_repuesto);
+
+                      return {
+                        repuesto: repuesto.repuesto.name,
+                        marca: repuesto.repuesto.nombre_marca,
+                        cantidad: formatCurrency2(CantidadNumber),
+                        precioUnitario: formatCurrency(precioUnitarioNumber), // Asignar el número convertido
+                        precioTotal: formatCurrency(repuesto.precio_total),
+
+                      };
+                    })}
+
+                    columns={columnas2}
+                    options={{
+
+                      sort: false,
+                      responsive: 'standard',
+                      rowsPerPage: 2,
+                      rowsPerPageOptions: 3,
+                      selectableRows: false,
+                      print: false,
+                      download: false,
+                      viewColumns: false,
+
+                      textLabels: {
+                        body: {
+                          noMatch: "No hay repuestos aún", // Aquí cambias el mensaje
+                        },
+                        toolbar: {
+                          search: "Buscar",
+                          filterTable: "Filtrar tabla",
+                        },
+                        pagination: {
+                          displayRows: "de", // Cambia "of" por "de"
+                          rowsPerPage: "Filas por página:",
+                        },
+                        filter: {
+                          all: 'Todos',
+                          title: 'Filtros',
+                          reset: 'Reiniciar',
+
                         }
-                      })
-                    )}
-                  </select>
-
-                  {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].repuesto && errors.repuestos[index].repuesto.message && (
-                    <p style={{ marginTop: '-2px', marginLeft: '7%' }} className="text-red-500">{errors.repuestos[index].repuesto.message}</p>
-                  )}
-                </div>
-              </div>
-
-
-              {/* INPUT DE CANTIDAD */}
-              <div className="divBlanco" style={{ marginBottom: '40px' }}>
-                <div style={{ position: 'relative', width: '45%' }}>
-                  <label htmlFor="">Cantidad <span style={{ color: 'red' }}>*</span></label>
-                  <input
-                    className="w-full bg-slate-800 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 outline-none"
-                    style={{ width: '100%', padding: '5px' }}
-                    type="text"
-                    placeholder="Cantidad"
-                    {...register(`repuestos.${index}.cantidad_repuesto`, NegativeRequired)}
-                  />
-                  {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].cantidad_repuesto && (
-                    <p className="text-red-500 mt-2" style={{ position: 'absolute', top: '80%', left: 0 }}>{errors.repuestos[index].cantidad_repuesto.message}</p>
-                  )}
-                </div>
-
-
-
-
-                {/* INPUT DE PRECIO UNITARIO */}
-
-                <div style={{ position: 'relative', width: '45%' }}>
-                  <label htmlFor="">Precio Unitario <span style={{ color: 'red' }}>*</span></label>
-                  <input
-                    className="w-full bg-slate-800 border-0 border-b-2 border-blue-600 text-white px-4 py-2 my-2 outline-none"
-                    style={{ width: '100%', padding: '5px' }}
-                    type="text"
-                    placeholder="Precio Unitario"
-
-                    {...register(`repuestos.${index}.precio_unitario`, NegativeRequired)}
+                      },
+                    }}
                   />
 
-                  {errors.repuestos && errors.repuestos[index] && errors.repuestos[index].precio_unitario && (
-                    <p className="text-red-500 mt-2" style={{ position: 'absolute', top: '80%', left: 0 }}>
-                      {errors.repuestos[index].precio_unitario.message}</p>
-                  )}
-
-                </div>
-              </div>
-
-              <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                <button
-                  type="submit"
-                  className="noselect"
-                  style={{ color: 'black', marginBottom: '10px' }}
-                  disabled={availableRepuestos.length === 0} // Deshabilitar el botón si no hay repuestos disponibles
-                >
-                  <span className="text">Agregar</span>
-                  <span className="icon">
-                    <FontAwesomeIcon icon={faPlus} style={{ color: "white" }} />
-                  </span>
-                </button>
-
-              </div>
-
-            </div>
-          ))}
-
-
-
-
-
-
-
-          <div className="div2" style={{ height: '100px', marginTop: '5px' }}>
-
-            <div className="tabla" style={{ maxWidth: '100%', overflowX: 'auto' }}>
-              <MUIDataTable
-                className="miTablaPersonalizada"
-                title={"Repuestos Agregados"}
-                data={repuestosList.map((repuesto) => {
-                  // Convertir el precio unitario a número usando parseFloat
-                  let precioUnitarioNumber = parseFloat(repuesto.precio_unitario);
-                  let CantidadNumber = parseFloat(repuesto.cantidad_repuesto);
-
-                  return {
-                    repuesto: repuesto.repuesto.name,
-                    marca: repuesto.repuesto.nombre_marca,
-                    cantidad: formatCurrency2(CantidadNumber),
-                    precioUnitario: formatCurrency(precioUnitarioNumber), // Asignar el número convertido
-                    precioTotal: formatCurrency(repuesto.precio_total),
-
-                  };
-                })}
-
-                columns={columnas2}
-                options={{
-
-                  sort: false,
-                  responsive: 'standard',
-                  rowsPerPage: 2,
-                  rowsPerPageOptions: 3,
-                  selectableRows: false,
-                  print: false,
-                  download: false,
-                  viewColumns: false,
-
-                  textLabels: {
-                    body: {
-                      noMatch: "No hay repuestos aún", // Aquí cambias el mensaje
-                    },
-                    toolbar: {
-                      search: "Buscar",
-                      filterTable: "Filtrar tabla",
-                    },
-                    pagination: {
-                      displayRows: "de", // Cambia "of" por "de"
-                      rowsPerPage: "Filas por página:",
-                    },
-                    filter: {
-                      all: 'Todos',
-                      title: 'Filtros',
-                      reset: 'Reiniciar',
-
-                    }
-                  },
-                }}
-              />
-
-              <style>{
-                `
+                  <style>{
+                    `
 
                 // .tss-ynxllk-MUIDataTableFilter-root{
                 //   background-color: #1e293b;
@@ -713,37 +738,37 @@ export default function FormCompra() {
                 `}</style>
 
 
+                </div>
+                <br />
+
+                <div style={{ borderBottomColor: '1px solid white', padding: '5px', backgroundColor: '#12263a', borderRadius: '10px' }}>
+
+                  <h1 style={{ fontWeight: 'bold', textAlign: 'center' }}>Total Compra: <span style={{ color: '#93c5fd' }}>{formatCurrency(precioTotalCompra)}</span></h1>
+                </div>
+
+
+
+              </div>
+
+              <div className="botones" style={{ marginTop: '20px' }}>
+                <button
+                  type="button"
+                  className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30"
+                  onClick={guardarCompra}
+                  disabled={repuestosList.length === 0 || errors.proveedorCompra || errors.codigo}
+                >
+                  Guardar
+                </button>
+                <Link className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5" to="/compras">Cancelar</Link>
+
+              </div>
             </div>
-            <br />
 
-            <div style={{ borderBottomColor: '1px solid white', padding: '5px', backgroundColor: '#12263a', borderRadius: '10px' }}>
-
-              <h1 style={{ fontWeight: 'bold', textAlign: 'center' }}>Total Compra: <span style={{ color: '#93c5fd' }}>{formatCurrency(precioTotalCompra)}</span></h1>
-            </div>
+            {/* ESTILOS DE CSS */}
+            <style>
 
 
-
-          </div>
-
-          <div className="botones" style={{ marginTop: '20px' }}>
-            <button
-              type="button"
-              className="px-5 py-1 mt-4 text-sm text-withe font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30"
-              onClick={guardarCompra}
-              disabled={repuestosList.length === 0 || errors.proveedorCompra || errors.codigo}
-            >
-              Guardar
-            </button>
-            <Link className="px-5 py-1 text-sm text-withe font-semibold rounded-full border border-red-500 hover:text-white hover:bg-red-500 hover:border-transparent shadow-lg shadow-zinc-300/30 ml-5" to="/compras">Cancelar</Link>
-
-          </div>
-        </div>
-
-        {/* ESTILOS DE CSS */}
-        <style>
-
-
-          {`
+              {`
 
 input[type="date"]::-webkit-calendar-picker-indicator {
 background-color: white;
@@ -923,18 +948,18 @@ transform: scale(0.3);
 }
 `}
 
-        </style>
+            </style>
 
-      </form>
-
-
-    </div>
+          </form>
 
 
+        </div>
 
-) : (
-  <Navigate to='/tasks' />
-)}
-</>
-)
+
+
+      ) : (
+        <Navigate to='/tasks' />
+      )}
+    </>
+  )
 }

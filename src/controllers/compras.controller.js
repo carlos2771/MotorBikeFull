@@ -39,6 +39,12 @@ export const createCompras = async (req, res) => {
     proveedor = proveedor.charAt(0).toUpperCase() + proveedor.slice(1);
     codigo = codigo.charAt(0).toUpperCase() + codigo.slice(1);
 
+    // Verificar si ya existe una compra con el mismo código
+    const existingCompra = await Compras.findOne({ codigo });
+    if (existingCompra) {
+      return res.status(400).json({ message: ["Ya existe una compra con el mismo código"] });
+    }
+
     // Verifica la existencia de cada repuesto y actualiza la cantidad en la base de datos
     for (const repuestoInfo of repuestos) {
       const { repuesto: repuestoId, cantidad_repuesto } = repuestoInfo;
@@ -69,6 +75,7 @@ export const createCompras = async (req, res) => {
     return res.status(500).json({ message: ["Error al crear la compra"], error });
   }
 };
+
 
 
 export const updateCompras = async (req, res) => {
