@@ -134,7 +134,8 @@ export const updateRepuestos = async (req, res) => {
 
      // Verificar si ya existe un repuesto con el mismo nombre (ignorando mayúsculas/minúsculas)
      const repuestoExistente = await Repuesto.findOne({
-      name: { $regex: new RegExp('^' + nombreNormalizado + '$', 'i') }
+      name: { $regex: new RegExp('^' + nombreNormalizado + '$', 'i') },
+      marca: marcaId
     });
     
     if (repuestoExistente) {
