@@ -131,6 +131,15 @@ export const updateRepuestos = async (req, res) => {
     // Convertir la cantidad a un número (puedes ajustar esto según tus necesidades)
     const cantidadNumerica = cantidad;
 
+     // Verificar si ya existe un repuesto con el mismo nombre (ignorando mayúsculas/minúsculas)
+     const repuestoExistente = await Repuesto.findOne({
+      name: { $regex: new RegExp('^' + nombreNormalizado + '$', 'i') }
+    });
+    
+    if (repuestoExistente) {
+      return res.status(400).json({ message: "Ya existe un repuesto con el mismo nombre" });
+    }
+
     // Encuentra el repuesto que se va a actualizar
     let repuestoActualizado = await Repuesto.findById(req.params.id);
 
