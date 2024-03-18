@@ -1,11 +1,14 @@
 import React from "react";
 import Carousel from "../components/Carousel";
+import Imagen1 from './images/carouselImg1.jpg'
+import Imagen2 from './images/carouselImg2.jpg'
+import Imagen3 from './images/carouselImg3.jpg'
+import CardImg from "./images/ImgLandingCard.png";
+
 
 export default function HomePage() {
   let slides = [
-    "https://wallpapercave.com/wp/wp9343809.jpg",
-    "https://wallpapercave.com/wp/wp9638466.jpg",
-    "https://wallpapercave.com/wp/wp9638428.jpg",
+      Imagen1,Imagen2,Imagen3,
   ];
   return (
     <div>
@@ -24,7 +27,7 @@ export default function HomePage() {
         <div className="flex justify-center mb-20">
           <div className="h-[500px] w-[750px] p-2 rounded-[20px] bg-gradient-to-b from-blue-500  to-blue-300">
             <img
-              src="https://www.motorrad.com.co/wp-content/uploads/2017/01/mantenimientopreventivo.jpg"
+              src={CardImg}
               className="h-full w-[850px] object-cover rounded-[20px]"
             />
           </div>

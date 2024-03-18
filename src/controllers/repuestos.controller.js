@@ -123,7 +123,7 @@ export const createRepuestos = async (req, res) => {
 
 export const updateRepuestos = async (req, res) => {
   try {
-    const { name, marca: marcaId, cantidad, estado, img } = req.body;
+    const { name, marca: marcaId, cantidad, price, estado, img } = req.body;
 
     // Verificar si name está definido antes de normalizar
     const nombreNormalizado = name ? name.toLowerCase() : '';
@@ -147,6 +147,7 @@ export const updateRepuestos = async (req, res) => {
     repuestoActualizado.name = nombreNormalizado || repuestoActualizado.name;
     repuestoActualizado.marca = marcaId || repuestoActualizado.marca;
     repuestoActualizado.cantidad = cantidadNumerica || repuestoActualizado.cantidad;
+    repuestoActualizado.price = price || repuestoActualizado.price;
     repuestoActualizado.estado = estado || repuestoActualizado.estado;
 
     // Guarda los cambios en la base de datos

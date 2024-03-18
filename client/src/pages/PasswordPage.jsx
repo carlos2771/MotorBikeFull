@@ -2,19 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { useAuth } from '../hooks/useAuth';
 import { EmailRequired } from '../utils/validations';
-import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert } from "@material-tailwind/react";
 import { useSpring, animated } from 'react-spring';
 import Swal from "sweetalert2";
 import backgroundImage from './images/yamaha.jpg'; // Importa la imagen de fondo
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function PasswordPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { enviarToken } = useAuth();
-  const [setShouldNavigate] = useState(false);
-  const [setEmailValue] = useState('');
+  const [shouldNavigate , setShouldNavigate] = useState(false);
+  const navigate = useNavigate();
+  const [emailValue, setEmailValue] = useState('');
+  const [buttonHidden, setButtonHidden] = useState(false);
+  const [error, setError] = useState('');
+
+
+  useEffect(() => {
+    if (buttonHidden) {
+      const timeoutId = setTimeout(() => {
+        setButtonHidden(false);
+        navigate(`/login`);
+      }, 4000);
+      
+  
+      // Limpia el temporizador al desmontar el componente
+      return () => clearTimeout(timeoutId);
+    }
+  }, [buttonHidden]);
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -39,10 +56,10 @@ export default function PasswordPage() {
           icon: "success",
           title: "Correo enviado correctamente Revisa tu correo electrónico"
         });
-        
+
         setShouldNavigate(true);
         setEmailValue(values.email);
-        
+           
       } else {
         const Toast = Swal.mixin({
           toast: true,
@@ -73,7 +90,7 @@ export default function PasswordPage() {
     }
   });
   
-  const [error, setError] = useState('');
+  
 
   // Define a spring animation for the form
   const formAnimation = useSpring({
@@ -128,4 +145,3 @@ export default function PasswordPage() {
     </div>
   );
 }
-

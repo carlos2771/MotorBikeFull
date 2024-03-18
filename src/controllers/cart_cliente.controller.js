@@ -29,14 +29,11 @@ export const createCartCliente = async (req, res) => {
 
         const cantidadActualRepuesto = respuestoEncontrado.amount
         const cantidadVender = cartData.amount
-        console.log("cantidad que se supone que se va vender",cartData.amount);
-        console.log("cantidad existente",respuestoEncontrado.amount);
         if (cantidadVender === 0 || cantidadVender === "") {
           return res.status(400).json({ message: [`El repuesto: ${cartData.name} no puede ser 0 o vacio`], });
         }
 
         if(cantidadActualRepuesto< cantidadVender){
-          console.log("Cantidad insuficiente del repuesto", cartData.name);
           return res.status(400).json({ message: [`Cantidad insuficiente del repuesto: ${cartData.name} stock: ${cantidadActualRepuesto}`], });
         }
         const cantidadRestanteRepuesto = cantidadActualRepuesto - cantidadVender;
@@ -47,15 +44,15 @@ export const createCartCliente = async (req, res) => {
         (acc, cartItem) => acc + cartItem.amount * cartItem.price,
         0
     );
-    if(descuento<0 || descuento===0){
-      return res.status(400).json({ message: [`El descuento no puede ser menor o igual a 0`], });
-    }
+    // if(descuento<0 || descuento===0){
+    //   return res.status(400).json({ message: [`El descuento no puede ser menor o igual a 0`], });
+    // }
     
       const total = cartTotal - (descuento || 0);
 
       // Validar si el descuento es mayor al total
       if (descuento > cartTotal) {
-          return res.status(400).json({ message: ['El descuento no puede ser mayor que el total'] });
+          return res.status(400).json({ message: ['Solo numeros positivos'] });
       }
       const nuevaCartCliente = new CartCliente({
         cliente: clienteId,
@@ -64,7 +61,6 @@ export const createCartCliente = async (req, res) => {
   
   
       const cartClienteSave = await nuevaCartCliente.save();
-      console.log(cartClienteSave);
   
       res.status(201).json({ message: 'Carritos de cliente creados correctamente' });
   

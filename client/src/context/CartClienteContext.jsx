@@ -41,7 +41,7 @@ export function CartClienteProvider({ children }) {
       const res = await getCartClienteRequest(id);
       setCartClientes(res);
     } catch (error) {
-      console.error("cont", error);
+      // console.error("cont", error);
     }
   };
 

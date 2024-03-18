@@ -13,7 +13,6 @@ export const getTasks = async (req, res) => {
 export const createTasks = async (req, res) => {
   try {
     const { title, description, date } = req.body;
-    console.log(req.user); // para saber cual es el usuario que viene de la otra coleccion pero debe estar logueado
     const newTask = new Task({
       title,
       description,

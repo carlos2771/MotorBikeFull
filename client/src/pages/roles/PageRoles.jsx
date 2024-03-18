@@ -1,30 +1,33 @@
-import React, { useEffect, useCallback } from "react";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import Box from "@mui/material/Box";
-import { useRoles } from "../../context/RolsContext";
+import React, { useEffect, useState } from "react";
+import { DataGrid } from "@mui/x-data-grid";
 import { Link, Navigate } from "react-router-dom";
-import Detalle from "../../components/Detalle";
 import Swal from "sweetalert2";
-import * as XLSX from "xlsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Tabla, Titulo } from "../../components/Tabla";
-
 import {
-  faMotorcycle,
-  faDownload,
   faPlus,
   faPencil,
   faBan,
   faCheck,
-  faInfoCircle,
-  faAddressCard,
   faUserGear,
+  faChevronLeft,
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/useAuth";
+import { useRoles } from "../../context/RolsContext";
 
 export default function PageRoles() {
-  const { roles, getRoles, deleteRol, updateRol } = useRoles();
+  const { roles, getRoles, updateRol } = useRoles();
   const { user } = useAuth();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [userLoaded, setUserLoaded] = useState(false);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 6;
+
+  useEffect(() => {
+    if (user) {
+      setUserLoaded(true);
+    }
+  }, []);
 
   useEffect(() => {
     try {
@@ -120,101 +123,185 @@ export default function PageRoles() {
   const cambiarEstado = (id, status) => {
     const nuevoEstado = status === "Activo" ? "Inactivo" : "Activo";
     updateRol(id, { status: nuevoEstado }).then(() => {
-      getRoles(id); // Aquí pasamos el id como argumento
+      getRoles(); // No necesitamos pasar el id aquí
     });
   };
 
   const permissions = user?.rol?.permissions || [];
 
-  
+  const handleSearchTermChange = (event) => {
+    setSearchTerm(event.target.value);
+    setPage(1);
+  };
+
+  const filteredRoles = roles.filter((role) =>
+    role.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredRoles.length / itemsPerPage);
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, filteredRoles.length);
+  const rolesToShow = filteredRoles.slice(startIndex, endIndex);
+
+  const handlePageChange = (pageNumber) => {
+    setPage(pageNumber);
+  };
+
+  if (!userLoaded) {
+    return <div>Cargando usuario...</div>;
+  }
+
   return (
     <>
       {permissions.includes("Roles") ? (
         <>
-          <div className="mt-16">
-            <div className="flex flex-col sm:flex-row justify-between items-center mx-4 md:mx-16">
-              <h1 className="text-2xl text-start sm:text-center ml-4 sm:ml-0 mb-4 sm:mb-0">
-                <FontAwesomeIcon icon={faUserGear} className="mr-2" />
-                Gestión de roles
-              </h1>
-              <div className="mx-4 sm:mx-0 justify-end flex">
-                <Link to="/add-roles">
-                  <button
-                    className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
-                    title="Agregar"
-                  >
-                    <FontAwesomeIcon icon={faPlus} />
-                  </button>
-                </Link>
-              </div>
+          <div className="mt-9">
+            <h1 className="text-2xl text-start sm:text-center md:text-center lg:text-start ml-4 sm:ml-0 mb-4 sm:mb-0">
+              <FontAwesomeIcon
+                icon={faUserGear}
+                className="ml-4 mr-2 sm:ml-4 md:ml-16"
+              />
+              Gestión de roles
+            </h1>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-between items-center mx-16 sm:mx-4 md:mx-16 mt-2">
+            <div className="">
+              <input
+                type="text"
+                placeholder="Buscar..."
+                value={searchTerm}
+                onChange={handleSearchTermChange}
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 text-black"
+              />
+            </div>
+            <div className="mx-4 sm:mx-0 justify-end flex mt-2 md:mt-0 sm:mt-0 ">
+              <Link to="/add-roles">
+                <div
+                  className="px-4 py-2  text-sm text-white font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
+                  title="Agregar"
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                </div>
+              </Link>
             </div>
           </div>
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mx-4 md:mx-16">
-            {roles.map((role) => (
-              <div
-                key={role._id}
-                className={`col ${role.status === "Activo" ? "shadow-lg shadow-blue-600/40" : "shadow-lg shadow-red-800/40"} bg-slate-700 w-full p-4 rounded-md mb-2`}
-              >
-                <h2 className="text-xl font-semibold mb-2 text-center">
-                  {role.name}
-                </h2>
-                <div className="mb-2 text-center">
-                  {permissions.length > 0 && (
-                    <div className="grid lg:grid-cols-3 sm:grid-cols-2 gap-2 justify-center">
-                      {role.permissions
-                        .sort() // Ordenar permisos alfabéticamente
-                        .map((permission) => (
-                          <p key={permission} className="">
-                            {permission}
-                          </p>
-                        ))}
-                    </div>
-                  )}
-                </div>
-                <div className="flex justify-center">
-                  {(() => {
-                    const status = role.status;
-                    const roleName = role.name.toLowerCase();
-                    const isAdministrator = roleName === "administrador";
-                    const isAdminOrUser = roleName === "administrador" || roleName === "usuario";
-                    return (
-                      <>
-                      <div>
-                        {!isAdminOrUser && (
-                          <Link
-                            to={`/rol/${role._id}`}
-                            className={role.status === "Activo" ? "" : "hidden"}
-                            title="Editar"
-                          >
-                            <button className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500">
-                              <FontAwesomeIcon icon={faPencil} />
-                            </button>
-                          </Link>
-                        )}
-                        {!isAdministrator && (
-                          <button
-                            title="Activar/Inactivar"
-                            className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${
-                              role.status === "Activo"
-                                ? "border-red-500 hover:text-white hover:bg-red-500"
-                                : "border-indigo-500 hover:text-white hover:bg-indigo-500"
-                            }`}
-                            onClick={() => mostrarAlerta(role._id, role.status)}
-                          >
-                            {role.status === "Activo" ? (
-                              <FontAwesomeIcon icon={faBan} />
-                            ) : (
-                              <FontAwesomeIcon icon={faCheck} />
-                            )}
-                          </button>
-                        )}
-                        </div>
-                      </>
-                    );
-                  })()}
-                </div>
+
+          <div className="mt-4 mx-4 md:mx-16">
+  {rolesToShow.length === 0 ? (
+    <div className="flex justify-center items-center h-full">
+      <p className="text-center text-red-500">No se encontraron roles</p>
+    </div>
+  ) : (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {rolesToShow.map((role) => (
+        <div
+          key={role._id}
+          className={`col ${
+            role.status === "Activo"
+              ? "shadow-lg shadow-blue-600/40"
+              : "shadow-lg shadow-red-800/40"
+          } bg-slate-700 w-full p-4 rounded-md mb-2`}
+        >
+          <h2 className="text-lg font-bold mb-2 text-center">
+            {role.name}
+          </h2>
+          <div className="mb-1">
+            {permissions.length > 0 && (
+              <div className="grid lg:grid-cols-3 sm:grid-cols-2 gap-1 justify-center text-sm">
+                {role.permissions
+                  .sort()
+                  .map((permission) => (
+                    <p key={permission} className="">
+                      {permission}
+                    </p>
+                  ))}
               </div>
-            ))}
+            )}
+          </div>
+          <div className="flex justify-center">
+            {!(
+              role.name.toLowerCase() === "administrador" ||
+              role.name.toLowerCase() === "usuario"
+            ) && (
+              <Link
+                to={`/rol/${role._id}`}
+                className={role.status === "Activo" ? "" : "hidden"}
+                title="Editar"
+              >
+                <button className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500">
+                  <FontAwesomeIcon icon={faPencil} />
+                </button>
+              </Link>
+            )}
+            {!(
+              role.name.toLowerCase() === "administrador" ||
+              role.name.toLowerCase() === "usuario"
+            ) && (
+              <button
+                title="Activar/Inactivar"
+                className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${
+                  role.status === "Activo"
+                    ? "border-red-500 hover:text-white hover:bg-red-500"
+                    : "border-indigo-500 hover:text-white hover:bg-indigo-500"
+                }`}
+                onClick={() => mostrarAlerta(role._id, role.status)}
+              >
+                {role.status === "Activo" ? (
+                  <FontAwesomeIcon icon={faBan} />
+                ) : (
+                  <FontAwesomeIcon icon={faCheck} />
+                )}
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
+
+          <div className="flex items-center justify-center mt-4 mx-auto">
+            <nav
+              className="relative z-0 inline-flex rounded-md shadow-sm shadow-sky-100 -space-x-px"
+              aria-label="Pagination"
+            >
+              <button
+                onClick={() => handlePageChange(page - 1)}
+                className={`relative inline-flex items-center px-4 py-2 rounded-l-lg text-white ${
+                  page === 1
+                    ? "cursor-not-allowed opacity-50 bg-slate-800 text-white"
+                    : "bg-blue-500"
+                }`}
+                disabled={page === 1}
+              >
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </button>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index + 1}
+                  onClick={() => handlePageChange(index + 1)}
+                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 ${
+                    index + 1 === page
+                      ? "z-10 font-bold bg-blue-600"
+                      : "text-gray-500"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(page + 1)}
+                className={`relative inline-flex items-center px-4 py-2 rounded-r-lg shadow ${
+                  page === totalPages
+                    ? "cursor-not-allowed opacity-50 bg-slate-800"
+                    : "bg-blue-500"
+                }`}
+                disabled={page === totalPages}
+              >
+                <FontAwesomeIcon icon={faChevronRight} />
+              </button>
+            </nav>
           </div>
         </>
       ) : (

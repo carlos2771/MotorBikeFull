@@ -147,7 +147,7 @@ const onSubmit = handleSubmit(async (data) => {
                   "Ventas Servicio",
                   "Venta Repuesto",
                 ].map((permiso) => (
-                  <div key={permiso} className="flex items-center m-2">
+                  <div key={permiso} className="flex items-center m-2 ">
                     <input
                       type="checkbox"
                       value={permiso}
@@ -160,7 +160,7 @@ const onSubmit = handleSubmit(async (data) => {
                       htmlFor={permiso}
                       className={`px-4 py-2 rounded-full cursor-pointer ${
                         selectedPermissions.includes(permiso)
-                          ? "bg-blue-600/40 shadow-sky-300/40 text-white shadow-md"
+                          ? "bg-blue-600/40 shadow-sky-300/40 text-white shadow-md hover:shadow-md hover:shadow-red-500 hover:bg-red-500"
                           : "border border-blue-600/40 hover:bg-blue-600/40 text-white hover:shadow-md hover:shadow-sky-300/40"
                       }`}
                     >
@@ -177,9 +177,9 @@ const onSubmit = handleSubmit(async (data) => {
                 <option value={"Activo"}>Activo</option>
                 <option value={"Inactivo"}>Inactivo</option>
               </select>
-
+              <div className="flex items-center justify-center mt-2">
               <button
-                className="px-5 py-1 mt-4 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
+                className="px-5 py-1 text-sm text-withe font-semibold  rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500 hover:border-transparent shadow-lg shadow-zinc-300/30 "
                 type="submit"
               >
                 Guardar
@@ -192,6 +192,7 @@ const onSubmit = handleSubmit(async (data) => {
                   Cancelar
                 </Link>
               </button>
+              </div>
             </form>
           </div>
         </div>

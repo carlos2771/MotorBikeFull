@@ -29,7 +29,6 @@ export const getCompra = async (req, res) => {
 export const createCompras = async (req, res) => {
   try {
     let { repuestos, fecha, estado, proveedor, codigo } = req.body;
-    console.log("el body", req.body);
 
     // Verifica si hay repuestos proporcionados en la solicitud
     if (!repuestos || repuestos.length === 0) {
