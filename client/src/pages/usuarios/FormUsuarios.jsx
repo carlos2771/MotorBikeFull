@@ -63,39 +63,75 @@ export default function FormUsuarios() {
   const onSubmit = handleSubmit(async (data) => {
     if (params.id) {
       const res = await updateUsuario(params.id, data);
-      handleApiResponse(res, "Actualizado correctamente");
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+        color: "white",
+        timer: 4000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      if (res.error) {
+        Toast.fire({
+          icon: "error",
+          title: "Error al actualizar",
+        });
+      } else {
+        // Si la actualización se realizó con éxito, mostrar un mensaje de éxito
+        Toast.fire({
+          icon: "success",
+          title: "Actualizado correctamente",
+        });
+        navigate("/usuarios");
+      }
     } else {
       const res = await createUsuario(data);
-      handleApiResponse(res, "Agregado correctamente");
-    }
-  });
-
-  const handleApiResponse = (res, successMessage) => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 4000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-    });
-
-    if (res && !res.error) {
+      console.log("entrooo");
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+        color: "white",
+        timer: 4000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
       Toast.fire({
         icon: "success",
-        title: successMessage,
+        title: "Agregado correctamente",
       });
-      navigate("/usuarios");
-    } else {
-      Toast.fire({
-        icon: "error",
-        title: "Error al crear el usuario",
-      });
+      if (res) {
+        navigate("/usuarios");
+      } else {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          background: "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+          color: "white",
+          timer: 4000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "error",
+          title: "No se ha agregado",
+        });
+      }
     }
-  };
+  });
 
   const permissions = user?.rol?.permissions || [];
 
