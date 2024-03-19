@@ -106,7 +106,7 @@ export default function PasswordPage() {
       <div className="absolute inset-0 bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] opacity-30 z-10"></div> {/* Fondo azul semi-transparente */}
       <div className='flex h-[calc(100vh-100px)] items-center justify-center '>
       <animated.div style={formAnimation}  className="relative z-20">
-        <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md  '>
+        <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md shadow-md shadow-blue-500 '>
           {error && <div><Alert className="bg-red-500 p-2 text-white">{error}</Alert></div>}
           <h1 className='text-3xl font-bold my-2 text-center'>Recuperar Contraseña</h1>
           <p className="text-white text-center mb-4">Ingresa tu correo electrónico. Te enviaremos un enlace para que recuperes el acceso a tu cuenta.</p>

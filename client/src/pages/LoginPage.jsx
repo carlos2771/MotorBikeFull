@@ -74,7 +74,7 @@ export default function LoginPage() {
         <animated.div style={formAnimation} className="relative z-20">
           {" "}
           {/* Asegura que el formulario esté por encima de la imagen de fondo */}
-          <div className="bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md  ">
+          <div className="bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md shadow-md shadow-blue-500 ">
             {signinErrors &&
               Array.isArray(signinErrors) &&
               signinErrors.map((error, i) => (

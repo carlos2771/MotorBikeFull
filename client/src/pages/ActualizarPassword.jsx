@@ -94,7 +94,7 @@ export default function ActualizarPassword () {
       <div className="absolute inset-0 bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] opacity-30 z-10"></div> {/* Fondo azul semi-transparente */}
       <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
         <animated.div style={formAnimation} className="relative z-20" >
-        <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md'>
+        <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md shadow-md shadow-blue-500'>
           {/* Mostrar errores de actualización */}
           {updateErrors.map((error, i) => (
             <Alert className="bg-red-500 p-2 text-white" key={i}>
