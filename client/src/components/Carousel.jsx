@@ -19,7 +19,7 @@ export default function Carousel({ slides }) {
 
   return (
     <div className="z-10">
-        <div className="overflow-hidden relative">
+        <div className="overflow-hidden relative rounded-md">
             <div
                 className={`flex transition ease-out duration-1000 `}
                 style={{
