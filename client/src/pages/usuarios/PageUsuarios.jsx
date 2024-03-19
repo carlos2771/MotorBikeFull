@@ -333,6 +333,7 @@ export default function PageUsuarios() {
                       },
                     },
                   }}
+                  autoHeight
                   pageSizeOptions={[5]}
                   disableRowSelectionOnClick
                   sx={{
@@ -341,6 +342,10 @@ export default function PageUsuarios() {
                     '& .MuiDataGrid-cell': {
                       fontSize: '15px',
                     },
+                    '& .MuiDataGrid-overlay': {
+                      background: 'linear-gradient(to right, #0f172a, #082f49, #0f172a)',
+                      fontSize: '20px'
+                    }
                   }}
                   slots={{ toolbar: GridToolbar }}
                   slotProps={{

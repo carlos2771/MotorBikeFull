@@ -525,6 +525,7 @@ export default function PageVentaServicios() {
                   rows={ventasServicios}
                   columns={columns}
                   columnHeader
+                  autoHeight
                   getRowId={(row) => row._id}
                   initialState={{
                     pagination: {
@@ -542,6 +543,11 @@ export default function PageVentaServicios() {
                     "& .MuiDataGrid-cell": {
                       fontSize: "15px", // Cambia el tamaño de fuente aquí
                     },
+                    '& .MuiDataGrid-overlay': {
+                      background: 'linear-gradient(to right, #0f172a, #082f49, #0f172a)',
+                      fontSize: '20px'
+                    }
+
                   }}
                   slots={{ toolbar: GridToolbar }}
                   slotProps={{

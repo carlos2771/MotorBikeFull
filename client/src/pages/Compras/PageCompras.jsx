@@ -623,6 +623,7 @@ export default function PageCompras() {
                   className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4 "
                   rows={compras}
                   columns={columns}
+                  autoHeight
                   getRowId={(row) => row._id}
                   initialState={{
                     pagination: {
@@ -640,6 +641,11 @@ export default function PageCompras() {
                     "& .MuiDataGrid-cell": {
                       fontSize: "15px",
                     },
+                    '& .MuiDataGrid-overlay': {
+                      background: 'linear-gradient(to right, #0f172a, #082f49, #0f172a)',
+                      fontSize: '20px'
+                    }
+
                   }}
                   slots={{ toolbar: GridToolbar }}
                   slotProps={{

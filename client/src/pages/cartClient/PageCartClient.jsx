@@ -602,6 +602,7 @@ export default function PageCartClient() {
                   rows={cartClientes}
                   columns={columns}
                   columnHeader
+                  autoHeight
                   getRowId={(row) => row._id}
                   initialState={{
                     pagination: {
@@ -619,6 +620,10 @@ export default function PageCartClient() {
                     "& .MuiDataGrid-cell": {
                       fontSize: "15px",
                     },
+                    '& .MuiDataGrid-overlay': {
+                      background: 'linear-gradient(to right, #0f172a, #082f49, #0f172a)',
+                      fontSize: '20px'
+                    }
                   }}
                   slots={{ toolbar: GridToolbar }}
                   slotProps={{

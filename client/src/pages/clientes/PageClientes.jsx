@@ -466,6 +466,7 @@ export default function PageClientes() {
                   rows={clientes}
                   columns={columns}
                   columnHeader
+                  autoHeight
                   getRowId={(row) => row._id}
                   initialState={{
                     pagination: {
@@ -483,6 +484,11 @@ export default function PageClientes() {
                     "& .MuiDataGrid-cell": {
                       fontSize: "15px",
                     },
+                    '& .MuiDataGrid-overlay': {
+                      background: 'linear-gradient(to right, #0f172a, #082f49, #0f172a)',
+                      fontSize: '20px'
+                    }
+
                   }}
                   slots={{ toolbar: GridToolbar }}
                   slotProps={{

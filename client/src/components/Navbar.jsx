@@ -22,15 +22,14 @@ import {
   faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 import logo from "../pages/images/motorbike.png";
-import imgLogo from "../images/motorbike (3).png"
-
+import imgLogo from "../images/motorbike (3).png";
+import Swal from "sweetalert2";
 
 export default function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
   const [open, setOpen] = useState(true);
   const [usersOpen, setUsersOpen] = useState(false); // Estado para controlar la apertura del acordeón de usuarios
   const [ventasOpen, setVentasOpen] = useState(false);
-
 
   const toggleNavbar = () => {
     setOpen(!open);
@@ -64,8 +63,31 @@ export default function Navbar() {
               <Render>
                 <Link
                   to="/"
-                  onClick={() => {
-                    logout();
+                  onClick={(e) => {
+                    e.preventDefault(); // Evitar la navegación predeterminada
+                    Swal.fire({
+                      title: "¿Estás seguro?",
+                      text: "¿Deseas cerrar sesión?",
+                      icon: "warning",
+                      iconColor: "#2563eb",
+                      background:
+                        "linear-gradient(to right, #0f172a, #082f49, #0f172a)",
+                      color: "white",
+                      showCancelButton: true,
+                      confirmButtonText: "Sí, cerrar sesión",
+                      cancelButtonText: "Cancelar",
+                      buttonsStyling: false,
+                      customClass: {
+                        confirmButton:
+                          "px-5 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-indigo-500 hover:text-white hover:bg-indigo-500",
+                        cancelButton:
+                          "px-4 py-1 m-1 text-lg text-white font-semibold rounded-full border-2 border-red-500 hover:text-white hover:bg-red-500",
+                      },
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        logout();
+                      }
+                    });
                   }}
                   className="hover:bg-zinc-400 hover:bg-opacity-90 px-3"
                 >
