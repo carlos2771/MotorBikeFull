@@ -6,6 +6,7 @@ import { Alert } from "@material-tailwind/react";
 import { useSpring, animated } from 'react-spring';
 import Swal from "sweetalert2";
 import backgroundImage from './images/yamaha.jpg'; // Importa la imagen de fondo
+import video from './Videos/air_bubbles.mp4'
 import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -76,7 +77,7 @@ export default function PasswordPage() {
         });
         Toast.fire({
           icon: "error",
-          title: "El correo no existe",
+          title: "¡Lo sentimos! Correo no registrado",
         });
         // Manejo del error aquí
         setError(`El correo electrónico ${values.email} no está registrado.`);
@@ -100,14 +101,15 @@ export default function PasswordPage() {
 
   return (
     <div>
-      <img src={backgroundImage} alt="Background" className="absolute inset-0 object-cover w-full h-full z-0" />
+      <video src={video} autoPlay loop muted className="absolute inset-0 object-cover w-full h-full z-0" preload></video>
+      {/* <img src={backgroundImage} alt="Background" className="absolute inset-0 object-cover w-full h-full z-0" /> */}
       <div className="absolute inset-0 bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] opacity-30 z-10"></div> {/* Fondo azul semi-transparente */}
       <div className='flex h-[calc(100vh-100px)] items-center justify-center '>
       <animated.div style={formAnimation}  className="relative z-20">
         <div className='bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] max-w-md w-full p-10 rounded-md  '>
           {error && <div><Alert className="bg-red-500 p-2 text-white">{error}</Alert></div>}
           <h1 className='text-3xl font-bold my-2 text-center'>Recuperar Contraseña</h1>
-          <p className="text-white text-center mb-4">Por razones de seguridad ingresa tu correo electrónico, para verificar que seas tu:</p>
+          <p className="text-white text-center mb-4">Ingresa tu correo electrónico. Te enviaremos un enlace para que recuperes el acceso a tu cuenta.</p>
 
           <form onSubmit={onSubmit}>
             <input
