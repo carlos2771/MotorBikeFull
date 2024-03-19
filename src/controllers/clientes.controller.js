@@ -39,10 +39,6 @@ export const createCliente = async(req, res) =>{
      if (existingCliente) {
          return res.status(400).json({ message: ["Ya existe un cliente con este número de cédula y tipo de documento." ]});
      }
-     const clientFound = await Cliente.findOne({email_cliente})
-     if(clientFound) return res.status(400).json({message:["El correo electrónico del cliente ya existe"]});
-      
- 
      // Crea una nueva instancia del modelo 'Cliente' con los datos del cliente
      const newCliente = new Cliente({
          nombre_cliente, email_cliente, telefono_cliente, cedula, sexo, estado, tipo
