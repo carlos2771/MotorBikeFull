@@ -164,41 +164,48 @@ export default function PageMarcas() {
               </div>
             </div>
           </div>
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mx-4 md:mx-16">
-            {currentItems.map((marca) => (
-              <div
-                key={marca._id}
-                className={`col ${marca.estado === "Activo" ? "shadow-lg shadow-blue-600/40" : "shadow-lg shadow-red-800/40"} bg-slate-700 w-full p-4 rounded-md mb-2`}
-              >
-                <h3 className="text-xl font-semibold mb-2 text-center">{marca.nombre_marca}</h3>
-                <div className="mb-2 text-center">
-                  {marca.estado === "Activo" && (
-                    <Link
-                      to={`/marca/${marca._id}`}
-                      className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
-                    >
-                      <FontAwesomeIcon icon={faPencil} />
-                    </Link>
-                  )}
-                  <button
-                    onClick={() => mostrarAlerta(marca._id, marca.nombre_marca, marca.estado)}
-                    className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${
-                      marca.estado === "Activo" ? "border-red-500 hover:bg-red-500" : "border-indigo-500 hover:bg-indigo-500"
-                    }`}
-                  >
-                    {marca.estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
-                  </button>
-                </div>
+
+          <div>
+            {currentItems.length === 0 ? (
+              <div className="flex justify-center items-center h-full">
+                <p className="text-center text-red-500">No se encontraron resultados</p>
               </div>
-            ))}
+            ) : (
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mx-4 md:mx-16">
+                {currentItems.map((marca) => (
+                  <div
+                    key={marca._id}
+                    className={`col ${marca.estado === "Activo" ? "shadow-lg shadow-blue-600/40" : "shadow-lg shadow-red-800/40"} bg-slate-700 w-full p-4 rounded-md mb-2`}
+                  >
+                    <h3 className="text-xl font-semibold mb-2 text-center">{marca.nombre_marca}</h3>
+                    <div className="mb-2 text-center">
+                      {marca.estado === "Activo" && (
+                        <Link
+                          to={`/marca/${marca._id}`}
+                          className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500"
+                        >
+                          <FontAwesomeIcon icon={faPencil} />
+                        </Link>
+                      )}
+                      <button
+                        onClick={() => mostrarAlerta(marca._id, marca.nombre_marca, marca.estado)}
+                        className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${marca.estado === "Activo" ? "border-red-500 hover:bg-red-500" : "border-indigo-500 hover:bg-indigo-500"
+                          }`}
+                      >
+                        {marca.estado === "Activo" ? <FontAwesomeIcon icon={faBan} /> : <FontAwesomeIcon icon={faCheck} />}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="flex items-center justify-center mt-4 mx-auto">
             <nav className="relative z-0 inline-flex rounded-md shadow-sm shadow-sky-100 -space-x-px" aria-label="Pagination">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
-                className={`relative inline-flex items-center px-4 py-2 rounded-l-lg text-white ${
-                  currentPage === 1 ? "cursor-not-allowed opacity-50 bg-slate-800 text-white" : "bg-blue-500"
-                }`}
+                className={`relative inline-flex items-center px-4 py-2 rounded-l-lg text-white ${currentPage === 1 ? "cursor-not-allowed opacity-50 bg-slate-800 text-white" : "bg-blue-500"
+                  }`}
                 disabled={currentPage === 1}
               >
                 <FontAwesomeIcon icon={faChevronLeft} />
@@ -207,18 +214,16 @@ export default function PageMarcas() {
                 <button
                   key={index + 1}
                   onClick={() => handlePageChange(index + 1)}
-                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 ${
-                    index + 1 === currentPage ? "z-10 font-bold bg-blue-600" : "text-gray-500"
-                  }`}
+                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 ${index + 1 === currentPage ? "z-10 font-bold bg-blue-600" : "text-gray-500"
+                    }`}
                 >
                   {index + 1}
                 </button>
               ))}
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
-                className={`relative inline-flex items-center px-4 py-2 rounded-r-lg shadow ${
-                  currentPage === totalPages ? "cursor-not-allowed opacity-50 bg-slate-800" : "bg-blue-500"
-                }`}
+                className={`relative inline-flex items-center px-4 py-2 rounded-r-lg shadow ${currentPage === totalPages ? "cursor-not-allowed opacity-50 bg-slate-800" : "bg-blue-500"
+                  }`}
                 disabled={currentPage === totalPages}
               >
                 <FontAwesomeIcon icon={faChevronRight} />

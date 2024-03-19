@@ -572,7 +572,14 @@ export default function PageClientes() {
                   </button>
                 </div>
               </div>
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mx-4 md:mx-16">
+
+            <div>
+              {clienteToShow.length === 0 ? (
+                <div className="flex justify-center items-center h-full">
+                <p className="text-center text-red-500">No se encontraron resultados</p>
+              </div>
+              ) : (
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mx-4 md:mx-16">
                 {clienteToShow.map((cliente) => (
                   <div
                     key={cliente._id}
@@ -708,6 +715,9 @@ export default function PageClientes() {
                   </div>
                 ))}
               </div>
+              )}
+            </div>
+              
 
               <div className="flex items-center justify-center mt-4 mx-auto">
                 <nav

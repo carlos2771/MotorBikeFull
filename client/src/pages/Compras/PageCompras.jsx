@@ -732,7 +732,14 @@ export default function PageCompras() {
                   </button>
                 </div>
               </div>
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mx-4 md:mx-16">
+
+              <div>
+                {comprasToShow.length === 0 ? (
+                  <div className="flex justify-center items-center h-full">
+                  <p className="text-center text-red-500 mt-10">No se encontraron resultados</p>
+                </div>
+                ) : (
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mx-4 md:mx-16">
                 {comprasToShow.map((compra) => (
                   <div
                     key={compra._id}
@@ -1007,6 +1014,10 @@ export default function PageCompras() {
                   </div>
                 ))}
               </div>
+                )}
+              </div>
+
+              
               <div className="flex items-center justify-center mt-4 mx-auto">
                 <nav
                   className="relative z-0 inline-flex rounded-md shadow-sm shadow-sky-100 -space-x-px"
