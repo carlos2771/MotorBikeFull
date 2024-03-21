@@ -180,12 +180,12 @@ const Cart = () => {
           });
         }
 
-      // if (res && !res.error) {
-      //   navigate("/home-page");
-      //   cleartCart();
-      // } else {
-      //   console.log("huvo un error");
-      // }
+      if (res && !res.error) {
+        navigate("/home-page");
+        cleartCart();
+      } else {
+        console.log("huvo un error");
+      }
     } catch (error) {
       
       console.error("Error al enviar el carrito y cliente:", error);
