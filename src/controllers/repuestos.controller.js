@@ -84,26 +84,23 @@ export const updateRepuestos = async (req, res) => {
   try {
     const { name, marca: marcaId, cantidad, price, estado, img } = req.body;
 
-    // Verificar si name está definido antes de normalizar
-    const nombreNormalizado = name ? name.toLowerCase() : '';
-
-    // Convertir la cantidad a un número (puedes ajustar esto según tus necesidades)
-    const cantidadNumerica = cantidad;
-
-     // Verificar si ya existe un repuesto con el mismo nombre (ignorando mayúsculas/minúsculas)
-     const repuestoExistente = await Repuesto.findOne({
-      name: { $regex: new RegExp('^' + nombreNormalizado + '$', 'i') }
-    });
-    
-    if (repuestoExistente) {
-      return res.status(400).json({ message: "Ya existe un repuesto con el mismo nombre" });
-    }
-
     // Encuentra el repuesto que se va a actualizar
     let repuestoActualizado = await Repuesto.findById(req.params.id);
 
     if (!repuestoActualizado) {
       return res.status(404).json({ message: "Repuesto no encontrado" });
+    }
+
+    // Verificar si se proporcionó un nuevo nombre y si es diferente al nombre actual
+    if (name && name.toLowerCase() !== repuestoActualizado.name.toLowerCase()) {
+      // Verificar si ya existe un repuesto con el mismo nombre (ignorando mayúsculas/minúsculas)
+      const repuestoExistente = await Repuesto.findOne({
+        name: { $regex: new RegExp('^' + name.toLowerCase() + '$', 'i') }
+      });
+      
+      if (repuestoExistente) {
+        return res.status(400).json({ message: "Ya existe un repuesto con el mismo nombre" });
+      }
     }
 
     // Verificar si se proporcionó una nueva imagen
@@ -112,9 +109,9 @@ export const updateRepuestos = async (req, res) => {
     }
 
     // Actualiza los demás campos del repuesto si se proporcionan
-    repuestoActualizado.name = nombreNormalizado || repuestoActualizado.name;
+    repuestoActualizado.name = name ? name.toLowerCase() : repuestoActualizado.name;
     repuestoActualizado.marca = marcaId || repuestoActualizado.marca;
-    repuestoActualizado.cantidad = cantidadNumerica || repuestoActualizado.cantidad;
+    repuestoActualizado.cantidad = cantidad || repuestoActualizado.cantidad;
     repuestoActualizado.price = price || repuestoActualizado.price;
     repuestoActualizado.estado = estado || repuestoActualizado.estado;
 
@@ -127,6 +124,7 @@ export const updateRepuestos = async (req, res) => {
     return res.status(500).json({ message: "Error al actualizar el repuesto", error });
   }
 };
+
 
 
 
