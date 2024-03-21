@@ -187,78 +187,76 @@ export default function PageRoles() {
           </div>
 
           <div className="mt-4 mx-4 md:mx-16">
-  {rolesToShow.length === 0 ? (
-    <div className="flex justify-center items-center h-full">
-      <p className="text-center text-red-500">No se encontraron roles</p>
-    </div>
-  ) : (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      {rolesToShow.map((role) => (
-        <div
-          key={role._id}
-          className={`col ${
-            role.status === "Activo"
-              ? "shadow-lg shadow-blue-600/40"
-              : "shadow-lg shadow-red-800/40"
-          } bg-slate-700 w-full p-4 rounded-md mb-2`}
-        >
-          <h2 className="text-lg font-bold mb-2 text-center">
-            {role.name}
-          </h2>
-          <div className="mb-1">
-            {permissions.length > 0 && (
-              <div className="grid lg:grid-cols-3 sm:grid-cols-2 gap-1 justify-center text-sm">
-                {role.permissions
-                  .sort()
-                  .map((permission) => (
-                    <p key={permission} className="">
-                      {permission}
-                    </p>
-                  ))}
+            {rolesToShow.length === 0 ? (
+              <div className="flex justify-center items-center h-full">
+                <p className="text-center text-red-500">No se encontraron roles</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {rolesToShow.map((role) => (
+                  <div
+                    key={role._id}
+                    className={`col ${role.status === "Activo"
+                        ? "shadow-lg shadow-blue-600/40"
+                        : "shadow-lg shadow-red-800/40"
+                      } bg-slate-700 w-full p-4 rounded-md mb-2`}
+                  >
+                    <h2 className="text-lg font-bold mb-2 text-center">
+                      {role.name}
+                    </h2>
+                    <div className="mb-1">
+                      {permissions.length > 0 && (
+                        <div className="grid lg:grid-cols-3 sm:grid-cols-2 gap-1 justify-center text-sm">
+                          {role.permissions
+                            .sort()
+                            .map((permission) => (
+                              <p key={permission} className="">
+                                {permission}
+                              </p>
+                            ))}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex justify-center">
+                      {!(
+                        role.name.toLowerCase() === "administrador" ||
+                        role.name.toLowerCase() === "usuario"
+                      ) && (
+                          <Link
+                            to={`/rol/${role._id}`}
+                            className={role.status === "Activo" ? "" : "hidden"}
+                            title="Editar"
+                          >
+                            <button className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500">
+                              <FontAwesomeIcon icon={faPencil} />
+                            </button>
+                          </Link>
+                        )}
+                      {!(
+                        role.name.toLowerCase() === "administrador" ||
+                        role.name.toLowerCase() === "usuario"
+                      ) && (
+                          <button
+                            title="Activar/Inactivar"
+                            className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${role.status === "Activo"
+                                ? "border-red-500 hover:text-white hover:bg-red-500"
+                                : "border-indigo-500 hover:text-white hover:bg-indigo-500"
+                              }`}
+                            onClick={() => mostrarAlerta(role._id, role.status)}
+                          >
+                            {role.status === "Activo" ? (
+                              <FontAwesomeIcon icon={faBan} />
+                            ) : (
+                              <FontAwesomeIcon icon={faCheck} />
+                            )}
+                          </button>
+                        )}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>
-          <div className="flex justify-center">
-            {!(
-              role.name.toLowerCase() === "administrador" ||
-              role.name.toLowerCase() === "usuario"
-            ) && (
-              <Link
-                to={`/rol/${role._id}`}
-                className={role.status === "Activo" ? "" : "hidden"}
-                title="Editar"
-              >
-                <button className="px-4 py-1.5 m-1 text-sm text-white font-semibold rounded-full border border-indigo-500 hover:text-white hover:bg-indigo-500">
-                  <FontAwesomeIcon icon={faPencil} />
-                </button>
-              </Link>
-            )}
-            {!(
-              role.name.toLowerCase() === "administrador" ||
-              role.name.toLowerCase() === "usuario"
-            ) && (
-              <button
-                title="Activar/Inactivar"
-                className={`px-4 py-1 m-1 text-sm text-white font-semibold rounded-full border ${
-                  role.status === "Activo"
-                    ? "border-red-500 hover:text-white hover:bg-red-500"
-                    : "border-indigo-500 hover:text-white hover:bg-indigo-500"
-                }`}
-                onClick={() => mostrarAlerta(role._id, role.status)}
-              >
-                {role.status === "Activo" ? (
-                  <FontAwesomeIcon icon={faBan} />
-                ) : (
-                  <FontAwesomeIcon icon={faCheck} />
-                )}
-              </button>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-  )}
-</div>
 
 
           <div className="flex items-center justify-center mt-4 mx-auto">
@@ -268,11 +266,10 @@ export default function PageRoles() {
             >
               <button
                 onClick={() => handlePageChange(page - 1)}
-                className={`relative inline-flex items-center px-4 py-2 rounded-l-lg text-white ${
-                  page === 1
+                className={`relative inline-flex items-center px-4 py-2 rounded-l-lg text-white ${page === 1
                     ? "cursor-not-allowed opacity-50 bg-slate-800 text-white"
                     : "bg-blue-500"
-                }`}
+                  }`}
                 disabled={page === 1}
               >
                 <FontAwesomeIcon icon={faChevronLeft} />
@@ -281,22 +278,20 @@ export default function PageRoles() {
                 <button
                   key={index + 1}
                   onClick={() => handlePageChange(index + 1)}
-                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 ${
-                    index + 1 === page
+                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 ${index + 1 === page
                       ? "z-10 font-bold bg-blue-600"
                       : "text-gray-500"
-                  }`}
+                    }`}
                 >
                   {index + 1}
                 </button>
               ))}
               <button
                 onClick={() => handlePageChange(page + 1)}
-                className={`relative inline-flex items-center px-4 py-2 rounded-r-lg shadow ${
-                  page === totalPages
+                className={`relative inline-flex items-center px-4 py-2 rounded-r-lg shadow ${page === totalPages
                     ? "cursor-not-allowed opacity-50 bg-slate-800"
                     : "bg-blue-500"
-                }`}
+                  }`}
                 disabled={page === totalPages}
               >
                 <FontAwesomeIcon icon={faChevronRight} />

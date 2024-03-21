@@ -12,6 +12,8 @@ import {
 } from "../../utils/validations";
 import Swal from "sweetalert2";
 import { useAuth } from "../../hooks/useAuth";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function FormUsuarios() {
   const {
@@ -34,6 +36,11 @@ export default function FormUsuarios() {
   const { user } = useAuth();
   const [usuarioErrors, setUsuarioErrors] = useState([]);
   
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   useEffect(() => {
     try {
@@ -174,15 +181,28 @@ export default function FormUsuarios() {
               )}
               {!isEditing && ( // Renderiza el campo de contraseña solo si no estamos editando
                 <>
-                  <label>
+                 <label>
                     Password<span className="text-red-500">*</span>
                   </label>
+                <div className="relative">
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="password"
                     {...register("password", PasswordRequire)}
                     className="w-full bg-slate-700 border-0 border-b-2 border-blue-600 text-white px-4 py-2  my-2"
                   />
+                  <button
+                  type="button"
+                  className="absolute right-4 top-4"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <FontAwesomeIcon icon={faEyeSlash} title="Ocultar"/>
+                  ) : (
+                    <FontAwesomeIcon icon={faEye} title="Mostrar"/>
+                  )}
+                </button>
+                </div>
                   {errors.password && (
                     <p className="text-red-500">{errors.password.message}</p>
                   )}

@@ -1,12 +1,11 @@
 import { useContext, useState, createContext, useEffect } from "react";
 import {
-    getRolesRequest,
-    getRolRequest,
-    createRolRequest,
-    updateRolRequest,
-    deleteRolRequest
+  getRolesRequest,
+  getRolRequest,
+  createRolRequest,
+  updateRolRequest,
+  deleteRolRequest,
 } from "../api/rols";
-
 
 const RolesContext = createContext();
 
@@ -23,21 +22,20 @@ export function RolesProvider({ children }) {
   const getRoles = async () => {
     try {
       const res = await getRolesRequest();
-      setRoles(res)
+      setRoles(res);
     } catch (error) {
       console.error(error);
     }
   };
 
   const createRol = async (roles) => {
-      try {
-        return await createRolRequest(roles);
-        // return response
-      } catch (error) {
-        setErrors(error.response.data.message);
-      }
-    
-  }
+    try {
+      return await createRolRequest(roles);
+      // return response
+    } catch (error) {
+      setErrors(error.response.data.message);
+    }
+  };
 
   const getRol = async (id) => {
     try {
@@ -48,25 +46,21 @@ export function RolesProvider({ children }) {
     }
   };
 
-  const updateRol = async (id, updatedRol) => {
+  const updateRol = async (id, roles) => {
     try {
-      const existingRoleNames = roles.map(role => role.name.toLowerCase());
-      if (existingRoleNames.includes(updatedRol.name.toLowerCase())) {
-        throw new Error("Ese rol ya existe");
-      } else {
-        const res = await updateRolRequest(id, updatedRol);
-        return res;
-      }
+      return await updateRolRequest(id, roles);
     } catch (error) {
       console.error(error);
-      setErrors([error.message]);
+      // setErrors([error.message]);
+      setErrors([error.response.data.message])
     }
   };
 
   const deleteRol = async (id) => {
     try {
       const res = await deleteRolRequest(id);
-      if (res.status === 204) setClientes(roles.filter((roles) => roles._id !== id));
+      if (res.status === 204)
+        setClientes(roles.filter((roles) => roles._id !== id));
     } catch (error) {
       console.error(error);
     }
@@ -81,21 +75,18 @@ export function RolesProvider({ children }) {
     }
   }, [errors]);
 
-
-  
-
   return (
     <RolesContext.Provider
-        value={{
-            roles,
-            // cliente,
-            errors,
-            getRoles,
-            createRol,
-            updateRol,
-            deleteRol,
-            getRol,
-        }}
+      value={{
+        roles,
+        // cliente,
+        errors,
+        getRoles,
+        createRol,
+        updateRol,
+        deleteRol,
+        getRol,
+      }}
     >
       {children}
     </RolesContext.Provider>

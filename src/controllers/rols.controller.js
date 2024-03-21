@@ -53,22 +53,33 @@ export const getRol = async (req, res) => {
   }
 };
 
-// Actualizar un rol
-export const updateRol= async(req, res) =>{
+export const updateRol = async (req, res) => {
   try {
-    const role = await Rol.findById(req.params.id);
-    if (role == null) {
+    const roleId = req.params.id;
+    const { name, permissions, status } = req.body;
+
+    const role = await Rol.findById(roleId);
+    if (!role) {
       return res.status(404).json({ message: 'Rol no encontrado' });
     }
-    if (req.body.name != null) {
-      role.name = req.body.name;
+
+    if (name) {
+      // Verificar si el nuevo nombre ya existe en otro rol
+      const existingRole = await Rol.findOne({ name });
+      if (existingRole && existingRole._id.toString() !== roleId) {
+        return res.status(400).json({ message: 'Ya existe un rol con este nombre' });
+      }
+      role.name = name;
     }
-    if (req.body.permissions != null) {
-      role.permissions = req.body.permissions;
+
+    if (permissions != null) {
+      role.permissions = permissions;
     }
-    if (req.body.status != null) {
-      role.status = req.body.status;
+
+    if (status != null) {
+      role.status = status;
     }
+
     const updatedRole = await role.save();
     res.json(updatedRole);
   } catch (error) {

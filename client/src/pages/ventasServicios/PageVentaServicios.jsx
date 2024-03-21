@@ -342,11 +342,10 @@ export default function PageVentaServicios() {
             >
               <FontAwesomeIcon
                 icon={faCheck}
-                className={`w-10 p-2 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500 ${
-                  estado !== "Finalizada" && estado !== "Inactivo"
+                className={`w-10 p-2 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500 ${estado !== "Finalizada" && estado !== "Inactivo"
                     ? ""
                     : "hidden"
-                }`}
+                  }`}
               />
             </button>
 
@@ -361,11 +360,10 @@ export default function PageVentaServicios() {
 
             <button
               title="Inactivar"
-              className={`px-5 py-1.5 m-1 text-sm text-white font-semibold rounded-full border ${
-                estado === "En proceso"
+              className={`px-5 py-1.5 m-1 text-sm text-white font-semibold rounded-full border ${estado === "En proceso"
                   ? "border-red-500 hover:text-white hover:bg-red-500"
                   : "border-indigo-500 hover:text-white hover:bg-indigo-500"
-              } ${estado !== "Finalizada" ? "" : "hidden"}`}
+                } ${estado !== "Finalizada" ? "" : "hidden"}`}
               onClick={() => mostrarAlerta(params.row._id, estado)}
             >
               {estado === "En proceso" ? (
@@ -525,6 +523,7 @@ export default function PageVentaServicios() {
                   rows={ventasServicios}
                   columns={columns}
                   columnHeader
+                  autoHeight
                   getRowId={(row) => row._id}
                   initialState={{
                     pagination: {
@@ -542,6 +541,11 @@ export default function PageVentaServicios() {
                     "& .MuiDataGrid-cell": {
                       fontSize: "15px", // Cambia el tamaño de fuente aquí
                     },
+                    '& .MuiDataGrid-overlay': {
+                      background: 'linear-gradient(to right, #0f172a, #082f49, #0f172a)',
+                      fontSize: '20px'
+                    }
+
                   }}
                   slots={{ toolbar: GridToolbar }}
                   slotProps={{
@@ -611,7 +615,7 @@ export default function PageVentaServicios() {
                   />
                 </div>
                 <div className="mx-4 sm:mx-0 justify-end flex mt-2">
-                <Link to="/add-venta-servicio">
+                  <Link to="/add-venta-servicio">
                     <button
                       className="px-4 py-2 text-sm text-withe font-semibold rounded-full border border-sky-500 hover:text-white hover:bg-sky-500 hover:border-transparent"
                       title="Agregar"
@@ -628,169 +632,177 @@ export default function PageVentaServicios() {
                   </button>
                 </div>
               </div>
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mx-4 md:mx-16">
-                {ventasServiciosToShow.map((venta) => (
-                  <div
-                    key={venta._id}
-                    className={`col ${
-                      venta.estado === "Finalizada"
-                        ? "shadow-blue-600"
-                        : venta.estado === "Inactivo"
-                        ? "shadow-red-500"
-                        : "shadow-green-800"
-                    } rounded-lg p-4 shadow-md bg-slate-700`}
-                  >
-                    <h2 className="text-lg font-bold mb-2">
-                      {venta.mecanico.nombre_mecanico}
-                    </h2>
-                    <p>Placa: {venta.placa}</p>
-                    <p>Descripcion: {venta.descripcion}</p>
-                    <div className="flex flex-wrap justify-center items-center mt-4">
-                      {/* Botón para finalizar venta */}
-                      {venta.estado !== "Finalizada" &&
-                        venta.estado !== "Inactivo" && (
-                          <button
-                            title="Finalizar venta"
-                            onClick={() =>
-                              mostrarAlertaCambiarEstado(
-                                venta._id,
-                                venta.estado
-                              )
-                            }
-                            className="button-margin"
+
+              <div>
+                {ventasServiciosToShow.length === 0 ? (
+                  <div className="flex justify-center items-center h-full">
+                    <p className="text-center text-red-500 mt-10">No se encontraron resultados</p>
+                  </div>
+                ) : (
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mx-4 md:mx-16">
+                    {ventasServiciosToShow.map((venta) => (
+                      <div
+                        key={venta._id}
+                        className={`col ${venta.estado === "Finalizada"
+                            ? "shadow-blue-600"
+                            : venta.estado === "Inactivo"
+                              ? "shadow-red-500"
+                              : "shadow-green-800"
+                          } rounded-lg p-4 shadow-md bg-slate-700`}
+                      >
+                        <h2 className="text-lg font-bold mb-2">
+                          {venta.mecanico.nombre_mecanico}
+                        </h2>
+                        <p>Placa: {venta.placa}</p>
+                        <p>Descripcion: {venta.descripcion}</p>
+                        <div className="flex flex-wrap justify-center items-center mt-4">
+                          {/* Botón para finalizar venta */}
+                          {venta.estado !== "Finalizada" &&
+                            venta.estado !== "Inactivo" && (
+                              <button
+                                title="Finalizar venta"
+                                onClick={() =>
+                                  mostrarAlertaCambiarEstado(
+                                    venta._id,
+                                    venta.estado
+                                  )
+                                }
+                                className="button-margin"
+                              >
+                                <FontAwesomeIcon
+                                  icon={faCheck}
+                                  className="w-10 p-2 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500"
+                                />
+                              </button>
+                            )}
+
+                          {/* Botón para editar */}
+                          <Link
+                            className={`${venta.estado === "En proceso" ? "mr-1" : "hidden"
+                              } text-white button-margin`}
+                            title="Editar"
+                            to={`/ventas-servicios/${venta._id}`}
                           >
                             <FontAwesomeIcon
-                              icon={faCheck}
-                              className="w-10 p-2 m-1 text-sm text-white font-semibold rounded-full border border-green-500 hover:text-white hover:bg-green-500"
+                              icon={faPencil}
+                              className="border border-indigo-500 w-10 p-2 rounded-full"
                             />
-                          </button>
-                        )}
+                          </Link>
 
-                      {/* Botón para editar */}
-                      <Link
-                        className={`${
-                          venta.estado === "En proceso" ? "mr-1" : "hidden"
-                        } text-white button-margin`}
-                        title="Editar"
-                        to={`/ventas-servicios/${venta._id}`}
-                      >
-                        <FontAwesomeIcon
-                          icon={faPencil}
-                          className="border border-indigo-500 w-10 p-2 rounded-full"
-                        />
-                      </Link>
-
-                      {/* Botón para inactivar */}
-                      {venta.estado !== "Finalizada" && (
-                        <button
-                          title="Inactivar"
-                          className={`${
-                            venta.estado === "En proceso"
-                              ? ""
-                              : ""
-                          } button-margin`}
-                          onClick={() => mostrarAlerta(venta._id, venta.estado)}
-                        >
-                          {venta.estado === "En proceso" ? (
-                            <FontAwesomeIcon icon={faBan} className="border border-red-500 rounded-full p-2 w-10 text-white"/>
-                          ) : (
-                            <FontAwesomeIcon icon={faLock} className="border border-indigo-500 rounded-full p-2 w-10 text-white"/>
+                          {/* Botón para inactivar */}
+                          {venta.estado !== "Finalizada" && (
+                            <button
+                              title="Inactivar"
+                              className={`${venta.estado === "En proceso"
+                                  ? ""
+                                  : ""
+                                } button-margin`}
+                              onClick={() => mostrarAlerta(venta._id, venta.estado)}
+                            >
+                              {venta.estado === "En proceso" ? (
+                                <FontAwesomeIcon icon={faBan} className="border border-red-500 rounded-full p-2 w-10 text-white" />
+                              ) : (
+                                <FontAwesomeIcon icon={faLock} className="border border-indigo-500 rounded-full p-2 w-10 text-white" />
+                              )}
+                            </button>
                           )}
-                        </button>
-                      )}
-                      <div title="Ver detalle" className="ml-2">
-                        <Detalle
-                          metodo={() => getVentasServicios(venta._id)}
-                          id={venta._id}
-                        >
-                          <table className="min-w-full">
-                            <tbody>
-                              <Titulo>
-                                <FontAwesomeIcon
-                                  icon={faInfoCircle}
-                                  className="mr-2"
-                                />
-                                Detalles de la venta
-                              </Titulo>
-                              <tr>
-                                <Tabla>
-                                  <FontAwesomeIcon
-                                    icon={faUser}
-                                    className="mr-2"
-                                  />
-                                  Mecánico
-                                </Tabla>
-                                <Tabla>{venta.mecanico.nombre_mecanico}</Tabla>
-                              </tr>
-                              <tr>
-                                <Tabla>
-                                  <FontAwesomeIcon
-                                    icon={faUser}
-                                    className="mr-2"
-                                  />
-                                  Cliente
-                                </Tabla>
-                                <Tabla>{venta.cliente.nombre_cliente}</Tabla>
-                              </tr>
-                              <tr>
-                                <Tabla>
-                                  <FontAwesomeIcon
-                                    icon={faPen}
-                                    className="mr-2"
-                                  />
-                                  Placa
-                                </Tabla>
-                                <Tabla>{venta.placa.toUpperCase()}</Tabla>
-                              </tr>
-                              <tr>
-                                <Tabla>
-                                  <FontAwesomeIcon
-                                    icon={faDollarSign}
-                                    className="mr-2"
-                                  />
-                                  Precio Servicio
-                                </Tabla>
-                                <Tabla>
-                                  {formatCurrency(venta.precio_servicio)}
-                                </Tabla>
-                              </tr>
-                              <tr>
-                                <Tabla>
-                                  <FontAwesomeIcon
-                                    icon={faCalendarDay}
-                                    className="mr-2"
-                                  />
-                                  Fecha Venta
-                                </Tabla>
-                                <Tabla>
-                                  {new Date(venta.createdAt).toLocaleDateString(
-                                    "es-ES",
-                                    {
-                                      year: "numeric",
-                                      month: "long",
-                                      day: "numeric",
-                                    }
-                                  )}
-                                </Tabla>
-                              </tr>
-                              <tr>
-                                <Tabla>
-                                  <FontAwesomeIcon
-                                    icon={faPen}
-                                    className="mr-2"
-                                  />
-                                  Descripción
-                                </Tabla>
-                                <Tabla>{venta.descripcion}</Tabla>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </Detalle>
+                          <div title="Ver detalle" className="ml-2">
+                            <Detalle
+                              metodo={() => getVentasServicios(venta._id)}
+                              id={venta._id}
+                            >
+                              <table className="min-w-full">
+                                <tbody>
+                                  <Titulo>
+                                    <FontAwesomeIcon
+                                      icon={faInfoCircle}
+                                      className="mr-2"
+                                    />
+                                    Detalles de la venta
+                                  </Titulo>
+                                  <tr>
+                                    <Tabla>
+                                      <FontAwesomeIcon
+                                        icon={faUser}
+                                        className="mr-2"
+                                      />
+                                      Mecánico
+                                    </Tabla>
+                                    <Tabla>{venta.mecanico.nombre_mecanico}</Tabla>
+                                  </tr>
+                                  <tr>
+                                    <Tabla>
+                                      <FontAwesomeIcon
+                                        icon={faUser}
+                                        className="mr-2"
+                                      />
+                                      Cliente
+                                    </Tabla>
+                                    <Tabla>{venta.cliente.nombre_cliente}</Tabla>
+                                  </tr>
+                                  <tr>
+                                    <Tabla>
+                                      <FontAwesomeIcon
+                                        icon={faPen}
+                                        className="mr-2"
+                                      />
+                                      Placa
+                                    </Tabla>
+                                    <Tabla>{venta.placa.toUpperCase()}</Tabla>
+                                  </tr>
+                                  <tr>
+                                    <Tabla>
+                                      <FontAwesomeIcon
+                                        icon={faDollarSign}
+                                        className="mr-2"
+                                      />
+                                      Precio Servicio
+                                    </Tabla>
+                                    <Tabla>
+                                      {formatCurrency(venta.precio_servicio)}
+                                    </Tabla>
+                                  </tr>
+                                  <tr>
+                                    <Tabla>
+                                      <FontAwesomeIcon
+                                        icon={faCalendarDay}
+                                        className="mr-2"
+                                      />
+                                      Fecha Venta
+                                    </Tabla>
+                                    <Tabla>
+                                      {new Date(venta.createdAt).toLocaleDateString(
+                                        "es-ES",
+                                        {
+                                          year: "numeric",
+                                          month: "long",
+                                          day: "numeric",
+                                        }
+                                      )}
+                                    </Tabla>
+                                  </tr>
+                                  <tr>
+                                    <Tabla>
+                                      <FontAwesomeIcon
+                                        icon={faPen}
+                                        className="mr-2"
+                                      />
+                                      Descripción
+                                    </Tabla>
+                                    <Tabla>{venta.descripcion}</Tabla>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </Detalle>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
+
+
               <div className="flex items-center justify-center mt-4 mx-auto">
                 <nav
                   className="relative z-0 inline-flex rounded-md shadow-sm shadow-sky-100 -space-x-px"
@@ -798,11 +810,10 @@ export default function PageVentaServicios() {
                 >
                   <button
                     onClick={() => handlePageChange(page - 1)}
-                    className={`relative inline-flex items-center px-4 py-2 rounded-l-lg text-white ${
-                      page === 1
+                    className={`relative inline-flex items-center px-4 py-2 rounded-l-lg text-white ${page === 1
                         ? "cursor-not-allowed opacity-50 bg-slate-800 text-white"
                         : "bg-blue-500"
-                    }`}
+                      }`}
                     disabled={page === 1}
                   >
                     <FontAwesomeIcon icon={faChevronLeft} />
@@ -811,22 +822,20 @@ export default function PageVentaServicios() {
                     <button
                       key={index + 1}
                       onClick={() => handlePageChange(index + 1)}
-                      className={`relative inline-flex items-center px-4 py-2 border border-gray-300 ${
-                        index + 1 === page
+                      className={`relative inline-flex items-center px-4 py-2 border border-gray-300 ${index + 1 === page
                           ? "z-10 font-bold bg-blue-600"
                           : "text-gray-500"
-                      }`}
+                        }`}
                     >
                       {index + 1}
                     </button>
                   ))}
                   <button
                     onClick={() => handlePageChange(page + 1)}
-                    className={`relative inline-flex items-center px-4 py-2 rounded-r-lg shadow   ${
-                      page === totalPages
+                    className={`relative inline-flex items-center px-4 py-2 rounded-r-lg shadow   ${page === totalPages
                         ? "cursor-not-allowed opacity-50 bg-slate-800"
                         : "bg-blue-500"
-                    }`}
+                      }`}
                     disabled={page === totalPages}
                   >
                     <FontAwesomeIcon icon={faChevronRight} />

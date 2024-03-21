@@ -482,6 +482,7 @@ export default function PageMecanico() {
                   className="bg-slate-700 shadow-lg shadow-blue-600/40 mx-16 my-4"
                   rows={mecanicos}
                   columns={columns}
+                  autoHeight
                   getRowId={(row) => row._id}
                   initialState={{
                     pagination: {
@@ -499,6 +500,10 @@ export default function PageMecanico() {
                     "& .MuiDataGrid-cell": {
                       fontSize: "15px",
                     },
+                    '& .MuiDataGrid-overlay': {
+                      background: 'linear-gradient(to right, #0f172a, #082f49, #0f172a)',
+                      fontSize: '20px'
+                    }
                   }}
                   slots={{ toolbar: GridToolbar }}
                   slotProps={{
@@ -581,7 +586,14 @@ export default function PageMecanico() {
                   </button>
                   </div>
                 </div>
-                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mx-4 md:mx-16">
+
+                <div>
+                  {mecanicoToShow.length === 0 ? (
+                    <div className="flex justify-center items-center h-full">
+                    <p className="text-center text-red-500">No se encontraron resultados</p>
+                  </div>
+                  ) : (
+                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mx-4 md:mx-16">
                   {mecanicoToShow.map((mecanico) => (
                     <div
                       key={mecanico._id}
@@ -676,6 +688,10 @@ export default function PageMecanico() {
                     </div>
                   ))}
                 </div>
+                  )}
+                </div>
+
+                
               </div>
               <div className="flex items-center justify-center mt-4 mx-auto">
                 <nav

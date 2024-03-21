@@ -200,7 +200,7 @@ export default function FormRepuesto() {
         });
         Toast.fire({
           icon: "error",
-          title: "Ya tienes un repuesto similar",
+          title: "Debe agregar o cambiar la referencia al nombre del repuesto",
         });
       }
     }

@@ -12,9 +12,6 @@ export default function HomePage() {
   ];
   return (
     <div>
-      <div className="w-[100%] pt-9">
-        <Carousel slides={slides} />
-      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 mt-10 items-center">
         <div className="mb-10 mx-10">
           <p className="text-white text-[30px] font-bold">MOTO RACER LA 36</p>
@@ -24,18 +21,14 @@ export default function HomePage() {
             mantenimiento de motos
           </p>
         </div>
-        <div className="flex justify-center mb-20">
-          <div className="h-[500px] w-[750px] p-2 rounded-[20px] bg-gradient-to-b from-blue-500  to-blue-300">
-            <img
-              src={CardImg}
-              className="h-full w-[850px] object-cover rounded-[20px]"
-            />
+        <div className="flex justify-center">
+          <div className="h-[500px] w-[750px] pt-16 rounded-[20px]">
+          <Carousel slides={slides}/>
           </div>
         </div>
-      </div>
-      
-      <footer className="bg-gray-900 text-white text-center py-6 fixed bottom-0 inset-x-0 ">
-        <p>Derechos de autor &copy; 2024 Moto Racer LA 36</p>
+      </div>     
+      <footer className="bg-gray-900 text-white text-center py-4 fixed bottom-0 inset-x-0 ">
+        <p>Derechos de autor &copy; 2024 MotorBike</p>
       </footer>
     </div>
   );
