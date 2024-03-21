@@ -11,7 +11,7 @@ export default function HomePage() {
       Imagen1,Imagen2,Imagen3,
   ];
   return (
-    <div>
+    <div className="mt-24">
       <div className="grid grid-cols-1 md:grid-cols-2 mt-10 items-center">
         <div className="mb-10 mx-10">
           <p className="text-white text-[30px] font-bold">MOTO RACER LA 36</p>

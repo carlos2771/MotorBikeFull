@@ -87,10 +87,26 @@ export default function ActualizarPassword () {
     setShowPassword(!showPassword);
   };
 
+  const generateRandomNumber = () => {
+    return Math.floor(Math.random() * (29 - 10 + 1)) + 10;
+  };
+
+  const generateSpans = (count) => {
+    const spans = [];
+    for (let i = 0; i < count; i++) {
+      spans.push(<span key={i} style={{ '--i': generateRandomNumber() }}></span>);
+    }
+    return spans;
+  };
+
+
   return (
-    <div>
-      <video src={video} autoPlay loop muted className="absolute inset-0 object-cover w-full h-full z-0" preload></video>
+    <div className='contenedor'>
+      {/* <video src={video} autoPlay loop muted className="absolute inset-0 object-cover w-full h-full z-0" preload></video> */}
       {/* <img src={backgroundImage} alt="Background" className="absolute inset-0 object-cover w-full h-full z-0" /> */}
+      <div className="bubbles ">
+      {generateSpans(50)}
+      </div>
       <div className="absolute inset-0 bg-gradient-to-tr from-[#0f172a] via-[#082f49] to-[#0f172a] opacity-30 z-10"></div> {/* Fondo azul semi-transparente */}
       <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
         <animated.div style={formAnimation} className="relative z-20" >

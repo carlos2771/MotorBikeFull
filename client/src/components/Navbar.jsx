@@ -20,6 +20,8 @@ import {
   faGears,
   faChevronDown,
   faChevronUp,
+  faCloudDownloadAlt,
+  faMobile,
 } from "@fortawesome/free-solid-svg-icons";
 import logo from "../pages/images/motorbike.png";
 import imgLogo from "../images/motorbike (3).png";
@@ -46,6 +48,8 @@ export default function Navbar() {
   };
 
   const permissions = user?.rol?.permissions || [];
+
+  const rolName = user?.rol?.name || []
 
   return (
     <div>
@@ -331,6 +335,21 @@ export default function Navbar() {
                     <Link to="/tasks" className="flex ms-8 p-3 text-white">
                       <FontAwesomeIcon icon={faTasks} className="mr-2" /> Tareas
                     </Link>
+                  </Render>
+                  <Render>
+                    {rolName === "administrador" ? (
+                      <a
+                        href="https://drive.google.com/uc?export=download&id=1zi1RMynj_zHvfPJ9LgGhvi0UHTs48xkF"
+                        download="MotorBike.apk"
+                        className="flex ms-8 p-3 text-white"
+                        target="_blank"
+                      >
+                        <FontAwesomeIcon icon={faMobile} className="mr-2" />{" "}
+                        Descargar apk
+                      </a>
+                    ) : (
+                      <div className="hidden" />
+                    )}
                   </Render>
 
                   {/* <Render>
