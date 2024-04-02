@@ -125,6 +125,9 @@ export default function FormRepuesto() {
 
   const onSubmit = handleSubmit(async (data) => {
     data.img = imageBase64;
+
+    console.log("datos aness", data);
+    console.log("img", data.img);
     if (params.id) {
       const res = await updateRepuesto(params.id, data);
       const Toast = Swal.mixin({
@@ -165,6 +168,7 @@ export default function FormRepuesto() {
         });
       }
     } else {
+      console.log("como se ven los datos", data);
       const res = await createRepuesto(data);
       const Toast = Swal.mixin({
         toast: true,
@@ -200,11 +204,12 @@ export default function FormRepuesto() {
         });
         Toast.fire({
           icon: "error",
-          title: "Debe agregar o cambiar la referencia al nombre del repuesto",
+          title: "Ya tienes un repuesto similar",
         });
       }
     }
   });
+
 
   const permissions = user?.rol?.permissions || [];
 
@@ -300,7 +305,7 @@ export default function FormRepuesto() {
                 <img
                   src={imageBase64}
                   alt="Preview"
-                  style={{ width: "40%",marginLeft: '100px', padding: '10px'}}
+                  style={{ width: "40%", marginLeft: '100px', padding: '10px' }}
                 />
               )}
 
