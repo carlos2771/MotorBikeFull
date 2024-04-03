@@ -260,7 +260,7 @@ export default function PageClientes() {
     {
       field: "acciones",
       headerName: "Acciones",
-      width: 150,
+      width: 200,
       headerClassName: "font-custom text-lg",
       renderCell: (params) => {
         const estado = params.row.estado;
